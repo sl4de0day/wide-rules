@@ -1,0 +1,13 @@
+id: wide/fmtstring-ruby-printf
+name: fmtstring-ruby-printf
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-134
+pattern: (?:(?:^|[^.\w])printf|(?:^|[^.\w])(?:\$stdout|\$stderr|STDOUT|STDERR)\.printf)\s*\(\s*(?!["'])[^)\s]
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Use a constant literal format and pass user values as arguments: printf("%s\n", user).'
+not-match: ^\s*#|\(\s*(?:\$std(?:out|err)|STDOUT|STDERR|io|out|f|file|dev)\s*,\s*["']|\bdef\s+(?:self\.)?printf\b
+why: printf is called with a non-literal format argument, letting user input act as the format string. The IO-first-arg branch still suppresses printf($stdout, "%d", n); added a def-guard so `def printf(...)` is not flagged while `def run; printf(user_fmt); end` still fires. sprintf and myprinter.printf are already excluded by the preceding-char class.
+confidence: high

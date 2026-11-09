@@ -1,0 +1,22 @@
+id: wide/protopollution-lodash-set-user-path
+name: protopollution-lodash-set-user-path
+category: PROTOTYPE
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-1321
+pattern: (?:\b(?:_|lodash|objectPath|dotProp|pathval)\s*\.\s*set(?:With)?|\b(?:dset|deepSet))\s*\(\s*[^,;()]+,\s*(?:\w+\.)?(?:req|request|ctx|body|query|params|payload|userPath|reqPath|userInput|input)\b
+message: Prototype pollution — attacker-controlled keys can reach Object.prototype via a recursive merge/set (CWE-1321).
+remediation: Do not derive the deep-set path from user input. Validate the path against an allowlist of permitted keys, reject any segment equal to __proto__/constructor/prototype, or use a set implementation that refuses those segments. Prefer setting known fields explicitly over path-string writes.
+not-match: __proto__|constructor|prototype|Object\.create\(\s*null\s*\)|sanitiz|isSafeKey|isValidPath
+why: 'lodash.set / objectPath.set / dotProp.set / dset / deepSet create intermediate objects for each segment of the path string. When the path argument (2nd arg) is attacker-controlled (e.g. req.body.path = ''__proto__.polluted''), the setter walks through Object.prototype and assigns onto it. The rule fires ONLY when the 2nd argument itself is request-derived, so a static path with a request value (_.set(config,''a.b'',req.body.value)), array-literal paths, and Map/redis/formData .set (non-deep-set receivers) do not fire. FIX vs original: deepSet was moved from the receiver-''.set'' group into the direct-call group alongside dset, so deepSet(config, req.body.path, val) now fires (it was a false negative before).'
+confidence: high

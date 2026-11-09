@@ -1,0 +1,24 @@
+id: wide/falsy-security-bypass
+name: falsy-security-bypass
+category: LOGIC
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-1284
+pattern: \bif\s*\(\s*!\s*(\w*(?:answer|token|otp|code|secret|captcha|pin|passw)\w*)\s*\|\|[^)]*\b\1\s*===?
+message: A missing/falsy value bypasses this security check.
+remediation: Reject when the value is missing (require it), then compare the real value with strict equality.
+why: if (!answer || answer === 'x') lets an absent, null, or empty value make !answer true, so the request passes without the answer/token/code ever being checked.
+confidence: high

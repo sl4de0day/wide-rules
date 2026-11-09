@@ -1,0 +1,24 @@
+id: wide/dynamic-script-element
+name: dynamic-script-element
+category: NETWORK
+severity: LOW
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-829
+pattern: createElement\s*\(\s*['"`]script['"`]
+message: A <script> element is being created dynamically.
+remediation: Load scripts only from static, predefined paths, and enforce a script-src Content-Security-Policy.
+why: If its src is later set from a URL parameter or other input, the page will fetch and run attacker-chosen JavaScript (dynamic script injection).
+confidence: high

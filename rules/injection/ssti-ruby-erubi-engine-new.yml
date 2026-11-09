@@ -1,0 +1,12 @@
+id: wide/ssti-ruby-erubi-engine-new
+name: ssti-ruby-erubi-engine-new
+category: INJECTION
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-1336
+pattern: ^(?!\s*#).*?\bErubi::\w*Engine\.new\s*\(\s*(?:[a-z_@][\w.:]*|"[^"]*#\{|(?:"[^"]*"|'[^']*')\s*(?:\+|%|<<)(?!\s*["']))
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Instantiate Erubi engines only from constant/literal template text or trusted files, and feed user data through the evaluated binding rather than into the engine's source argument.
+why: Erubi::Engine (and CaptureEnd/CaptureBlock variants) turns its first argument into Ruby source (.src) that is later evaluated; a dynamic template argument makes that generated code attacker-controlled.
+confidence: high

@@ -1,0 +1,13 @@
+id: wide/hpp-go-rawquery-forward
+name: hpp-go-rawquery-forward
+category: AUTH
+severity: HIGH
+languages:
+  - go
+cwe: CWE-235
+pattern: (?:\+\s*(?:r|req|request)\.URL\.RawQuery|(?:r|req|request)\.URL\.RawQuery\s*\+|[?&]%s["'`]\s*,\s*(?:r|req|request)\.URL\.RawQuery)
+message: HTTP parameter pollution — raw/duplicated request parameters forwarded so layers disagree (CWE-235).
+remediation: Re-serialize a validated url.Values (q.Encode()) built from canonicalised single values instead of forwarding the raw query string.
+not-match: QueryEscape|Sanitiz|EscapedPath|url\.Values
+why: The raw inbound query string (r.URL.RawQuery) is concatenated/formatted straight into a downstream URL, so a duplicated parameter (?a=1&a=2) is re-parsed by the backend with different first/last semantics than the gateway used, enabling parameter pollution. The sprintf branch now requires a query-position verb ([?&]%s) so a plain log format like "state=%s" no longer matches.
+confidence: high

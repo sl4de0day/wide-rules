@@ -1,0 +1,13 @@
+id: wide/weak-otp-go-mathrand
+name: weak-otp-go-mathrand
+category: CRYPTO
+severity: HIGH
+languages:
+  - go
+cwe: CWE-330
+pattern: \brand\s*\.\s*Intn\s*\(\s*(?:9000|9999|10000|90000|99999|100000|900000|999999|1000000)\s*\)
+message: GraphQL/dev misconfiguration — introspection or a dev endpoint exposed, or a weak/predictable secret (CWE-200/489/307/770/330).
+remediation: Use crypto/rand (rand.Int with a large modulus, or a CSPRNG helper) for verification codes.
+not-match: ^\s*(?:\/\/|\*)|crypto\/rand|crand\s*\.|rand\s*\.\s*Reader
+why: An OTP built from math/rand rand.Intn over a small range is predictable and seedable, so codes can be recovered or guessed.
+confidence: high

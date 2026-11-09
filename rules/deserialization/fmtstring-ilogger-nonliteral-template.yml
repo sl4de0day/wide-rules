@@ -1,0 +1,14 @@
+id: wide/fmtstring-ilogger-nonliteral-template
+name: fmtstring-ilogger-nonliteral-template
+category: DESERIALIZATION
+severity: LOW
+languages:
+  - cs
+  - csx
+cwe: CWE-134
+pattern: \.Log(?:Information|Warning|Error|Debug|Trace|Critical)\s*\(\s*(?!(?:\$@|@\$|\$|@)?["'])[A-Za-z_]
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Use a constant message template with named placeholders and pass values as arguments: _logger.LogInformation("Processed {UserId}", userId). Never pass user/dynamic text as the template.'
+not-match: ^\s*(?:\/\/|\*)|\.Log(?:Information|Warning|Error|Debug|Trace|Critical)\s*\(\s*[^,"'()]*(?:\([^)]*\))?[^,"']*,\s*(?:\$@|@\$|\$|@)?["']
+why: An ILogger LogInformation/LogWarning/LogError/etc. call uses a non-literal message template (a variable/expression, not a constant "..."/@"..."/$"..." literal) - the .NET analog of logging.info(user) and exactly what Roslyn CA2254 flags. A user-controlled template with {placeholder} tokens misparses into structured-log fields and can throw or forge log entries. notMatch excludes the EventId/Exception-first overloads whose actual message template is a following literal (e.g. LogError(ex, "msg"), LogInformation(eventId, "msg"), LogDebug(new EventId(5), "msg")); an int EventId literal first (LogInformation(0, ...)) is excluded by the [A-Za-z_] token requirement.
+confidence: high

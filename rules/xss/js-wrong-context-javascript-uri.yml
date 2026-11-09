@@ -1,0 +1,20 @@
+id: wide/js-wrong-context-javascript-uri
+name: js-wrong-context-javascript-uri
+category: XSS
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-79
+pattern: \b(?:href|src|action|formaction)\s*=\s*["']?javascript:[^"\n]*\breq\.(?:query|body|params|cookies|headers)
+message: Reflected / context-mismatched XSS — user input reaches HTML or JS output without proper contextual encoding (CWE-79/116).
+remediation: 'Never build javascript: URLs from user input. Use a normal http(s)/relative URL and validate the scheme against an allowlist; bind dynamic behavior through JS event listeners instead.'
+not-match: (?:^\s*(?:\/\/|\*)|encodeURIComponent|JSON\.stringify)
+why: 'User data is appended into a javascript: URL in an href/src/action attribute and stays within the attribute''s double-quoted value; the value runs as script when the link/form is activated. HTML-entity escaping is the wrong context and does not prevent execution -> XSS. The [^"] bound prevents a static javascript:void(0) href plus a separate data-* attribute carrying req from matching.'
+confidence: high

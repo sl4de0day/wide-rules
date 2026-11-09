@@ -1,0 +1,20 @@
+id: wide/ssrf-host-string-method-allowlist
+name: ssrf-host-string-method-allowlist
+category: NETWORK
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-918
+pattern: \b(?:hostname|host|url|origin|referer|referrer|domain)\b(?:\.[A-Za-z_$][\w$]*(?:\(\))?|\[[^\]]*\])*\.(?:endsWith|startsWith|includes|indexOf)\s*\(\s*['"`][^'"`\n]*(?:\w[\w-]*\.[A-Za-z]{2,}|\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}|:\/\/[\w-])
+message: Weak SSRF host allowlist — endsWith/startsWith/includes is a substring test, not a boundary check, so an attacker host passes (CWE-918).
+remediation: 'Parse the URL and compare the host exactly: host === base for a single host, or host === base || host.endsWith(''.'' + base) for a domain plus its subdomains, or test membership in an allowlist array with ===. For a URL prefix, require the full origin plus separator: url.startsWith(base + ''/'').'
+not-match: (?:===)|(?:\.startsWith\s*\(\s*['"`][A-Za-z][A-Za-z0-9+.\-]*:\/\/[^'"`/]+\/)|(?:\.(?:startsWith|endsWith)\s*\(\s*[A-Za-z_$][\w$.]*\s*\+)|(?:\.endsWith\s*\(\s*['"`]\.['"`]\s*\+)|(?:\.(?:endsWith|startsWith|includes|indexOf)\s*\(\s*['"`][^'"`\n]*\.(?:js|jsx|ts|tsx|css|scss|less|html?|xml|json|png|jpe?g|gif|svg|webp|ico|woff2?|ttf|eot|map|md|txt|csv|pdf|zip|gz|tar|mp4|mp3)['"`])|(?:^\s*(?:\/\/|#|\*|\/\*))
+why: endsWith/startsWith/includes/indexOf on a hostname/host/url/origin/referer var is a substring test, not a boundary test. host.endsWith('domain.com') also accepts attacker-owned evildomain.com; url.startsWith('https://api.internal') accepts https://api.internal.evil.com; host.includes('mycorp.com') accepts mycorp.com.attacker.net. Attacker-chosen host reaches an internal target (SSRF). The sink now requires the compared literal to look like a host (a dotted label, an IPv4, or scheme://authority) so ubiquitous path/character/extension checks on a var literally named url (url.startsWith('/'), url.endsWith('.js'), url.includes('?'), host.includes(':')) do not fire and get the whole rule dropped by the harness.
+confidence: high

@@ -1,0 +1,19 @@
+id: wide/cwe943-graphql-template-string-interpolation
+name: cwe943-graphql-template-string-interpolation
+category: INJECTION
+severity: CRITICAL
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-943
+pattern: \b(?:gql|graphql)`[^`]*\$\{
+message: GraphQL query/gql template literal interpolates a value directly into the query string.
+remediation: 'Use GraphQL variables: keep the query static and pass user data through the variables object (e.g. gql`query($id: ID!){ user(id:$id){...} }`).'
+why: Splicing data into the query text (rather than using GraphQL variables) lets an attacker alter the query — inject fields, arguments, or nested operations — bypassing the schema's parameter boundaries.
+confidence: high

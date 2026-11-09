@@ -1,0 +1,23 @@
+id: wide/debug-flag-exposes-data
+name: debug-flag-exposes-data
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+cwe: CWE-489
+pattern: \b(?:req|request|ctx|context)\.(?:query|params|body|headers|args|cookies|GET|POST|form)\b(?:\??\.|\[['"]|\.get\(\s*['"])\s*(?:x[-_]?)?debug(?:_?mode|Mode)?\b
+message: GraphQL/dev misconfiguration — introspection or a dev endpoint exposed, or a weak/predictable secret (CWE-200/489/307/770/330).
+remediation: Remove the debug branch, or require it be enabled only by a server-side production/admin check rather than a request parameter the caller controls.
+not-match: ^\s*(?:\/\/|#|\*|\/\*)|NODE_ENV|APP_ENV|isAdmin|is_admin|requireAdmin|require_admin|admin_required|hasRole|ensureAdmin|@admin|requireAuth|isDev|isDevelopment|IsDevelopment
+why: 'A handler that branches on a client-controlled debug flag (req.query.debug, x-debug header, request.args.get(''debug''), req.query?.debug) is a runtime backdoor: any user can flip it to unlock verbose errors, stack traces, or internal dumps in production. Boundary + Mode/_mode suffix logic keeps ''debugToken'', ''debugLabel'', ''debug_source'', ''debuggerConfig'' from firing.'
+confidence: high

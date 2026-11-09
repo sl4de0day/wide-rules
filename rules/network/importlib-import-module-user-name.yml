@@ -1,0 +1,15 @@
+id: wide/importlib-import-module-user-name
+name: importlib-import-module-user-name
+category: NETWORK
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-829
+pattern: (?:importlib\.import_module|__import__)\s*\(\s*(?:[A-Za-z_][\w.]*\s*[,)\[(]|['"][^'"]*['"]\s*\+|[rR]?f['"])
+message: Write-then-execute — code is loaded or run from a user-controlled or writable path (potential RCE, CWE-829/95/98/94).
+remediation: Map a validated key to a fixed module via an explicit dict of imports, or check the resolved name against an allow-list set before importing; do not import a name built from request data.
+not-match: ^\s*#|ALLOWED|allowed|[Ww]hitelist|WHITELIST
+why: importlib.import_module()/__import__() with a variable, a call result, a concatenated string, or an f-string imports and executes whatever module name is computed; if the name or a package search path is attacker-influenced (or points at a writable plugins dir), a planted module runs on import. The identifier branch now also matches a following call-paren so import_module(resolve_name(x)) is caught, while '.'.join(...) and plain literals stay inert.
+confidence: high

@@ -1,0 +1,15 @@
+id: wide/arginj-python-concat-arg-list
+name: arginj-python-concat-arg-list
+category: INJECTION
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-88
+pattern: ^(?=.*\b(?:subprocess\.(?:run|Popen|call|check_output|check_call)|Popen)\s*\()(?=.*\[)(?=.*(?:['"][^'"]*['"]\s*\+\s*[A-Za-z_]|[A-Za-z_][\w.\[\]]*\s*\+\s*['"]|\bf['"][^'"]*\{)).*
+message: Argument injection — a user value reaches a CLI argument that could be interpreted as an option/flag (CWE-88).
+remediation: Validate on the same line with an anchored re.fullmatch()/re.match() or .isdigit(), coerce with int()/float(), or add a literal '--' end-of-options element to the list before any user value.
+not-match: (?:re\.(?:fullmatch|match|search)\s*\(|\.isdigit\s*\(|\bint\s*\(|\bfloat\s*\(|['"]--['"]|^\s*#)
+why: 'A subprocess run/Popen/call/check_output/check_call argument LIST element is built by concatenation or an f-string holding a variable (e.g. ''output.'' + fmt, f''--out={x}''). The list form avoids the shell but not flag parsing: a value that starts with ''-'' becomes an option to the invoked program (argument/flag injection).'
+confidence: high

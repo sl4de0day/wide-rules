@@ -1,0 +1,22 @@
+id: wide/protopollution-lodash-setpath-tainted
+name: protopollution-lodash-setpath-tainted
+category: PROTOTYPE
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-1321
+pattern: \b(?:_|lodash)\.(?:set|setWith|update|updateWith)\s*\(\s*[^,]+,\s*(?:req|request|body|params|query|payload|input|ctx|args|argv|headers|cookies|userInput|userData|userKey|userPath|clientData|untrusted|tainted|external|dynamicKey|dynamicPath)\b
+message: Prototype pollution — attacker-controlled keys can reach Object.prototype via a recursive merge/set (CWE-1321).
+remediation: Do not feed request data straight into a path-set. Reject the segments '__proto__', 'constructor' and 'prototype' before setting (e.g. path.split('.').some(s => ['__proto__','constructor','prototype'].includes(s))), validate the path against an allowlist of expected keys, or store data in a Map / an Object.create(null) dictionary instead of a plain object.
+not-match: hasOwnProperty|Object\.create\(\s*null\s*\)|['"]__proto__['"]|['"]constructor['"]|['"]prototype['"]|isSafeKey|sanitizeKey|sanitizePath|validateKey|isValidKey|allowedKeys|allowlist|whitelist|denylist|blacklist|forbiddenKeys|dangerousKeys
+why: 'lodash _.set/_.setWith/_.update writes a value at a caller-supplied deep path; a request-derived path such as ''__proto__.polluted'' or ''constructor.prototype.x'' lands on Object.prototype and poisons every object in the process. AUDIT CHANGE: the second (path) argument''s taint keyword is now ANCHORED at the ROOT of the expression (immediately after the comma), so the rule fires on req.body.path / userInput.path / a destructured body.path, but NOT on an ordinary write where a benign local/config property merely happens to be named body/params/query (e.g. DEFAULTS.query, model.params.type) — that was the top over-broad risk. Quoted literal paths (''body.text'', ''req.body.path'') and array-literal paths ([''req'',''body'']) can''t start with a keyword so they no longer match; the guard notMatch still drops magic-key / hasOwnProperty / allowlist checks and Object.create(null) targets.'
+confidence: high

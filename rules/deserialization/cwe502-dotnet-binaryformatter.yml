@@ -1,0 +1,12 @@
+id: wide/cwe502-dotnet-binaryformatter
+name: cwe502-dotnet-binaryformatter
+category: DESERIALIZATION
+severity: CRITICAL
+languages:
+  - cs
+cwe: CWE-502
+pattern: new\s+(BinaryFormatter|LosFormatter|NetDataContractSerializer|SoapFormatter|ObjectStateFormatter)\s*\(
+message: A dangerous .NET binary/state deserializer is instantiated.
+remediation: Use System.Text.Json or DataContractJsonSerializer with known types instead of these formatters.
+why: BinaryFormatter and its relatives reconstruct arbitrary types from untrusted input, a documented remote-code-execution vector that Microsoft has deprecated.
+confidence: high

@@ -1,0 +1,13 @@
+id: wide/netauthz-origin-referer-as-auth-go
+name: netauthz-origin-referer-as-auth-go
+category: AUTH
+severity: HIGH
+languages:
+  - go
+cwe: CWE-346
+pattern: (?:r\.Header\.Get\(\s*"(?:Origin|Referer)"\s*\)\s*(?:==|!=)\s*"[^"]+"|strings\.HasPrefix\(\s*r\.Header\.Get\(\s*"(?:Origin|Referer)"\s*\)\s*,\s*"[^"]+")
+message: Broken access control — authorization based on network location or a spoofable client header (CWE-346/290).
+remediation: Do not authorize on Origin/Referer. Use a verified token/session for identity; use Origin only for CORS responses and add CSRF protection.
+not-match: ^\s*(?:\/\/|\*)|Access-Control|Allow-Origin|\.Set\(|\.Add\(|\bcors\b|[Aa]llowedOrigins|whitelist|\b[Ll]og|logrus|zap|[Mm]etric|audit|jwt|VerifyToken|Authenticate|[Ss]ession|csrf
+why: r.Header.Get("Origin"|"Referer") equals or HasPrefix-matches a trusted value to decide access. Both headers are client-set and forgeable, so an attacker supplies the expected Origin/Referer to reach the privileged branch. CORS Set/Add and logging are excluded by notMatch.
+confidence: high

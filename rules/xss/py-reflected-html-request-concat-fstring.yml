@@ -1,0 +1,15 @@
+id: wide/py-reflected-html-request-concat-fstring
+name: py-reflected-html-request-concat-fstring
+category: XSS
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-79
+pattern: (?:make_response|HttpResponse|Response|return|render_template_string)\b[^#]*?<\w[^#]*?(?:\+|\{|%)[^#]*?request\.(?:args|form|values|cookies|headers|data|GET|POST)
+message: Reflected / context-mismatched XSS — user input reaches HTML or JS output without proper contextual encoding (CWE-79/116).
+remediation: Escape with markupsafe.escape()/Markup or sanitize with bleach/nh3; rely on Jinja auto-escaping ({{ }}) via render_template rather than building HTML by concatenation, and return jsonify() for data.
+not-match: (?:^\s*#|\{\{|\bescape\(|markupsafe|Markup\.escape|bleach|render_template\(|jsonify|nh3\.|\.replace\(['"][<>&])
+why: 'Flask/Django reflection: request.* is concatenated, f-string/{}-format, or %-format interpolated into an HTML string returned or wrapped in make_response/HttpResponse/render_template_string with no escaping -> reflected XSS (and SSTI when fed to render_template_string).'
+confidence: high

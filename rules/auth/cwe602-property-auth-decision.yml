@@ -1,0 +1,24 @@
+id: wide/cwe602-property-auth-decision
+name: cwe602-property-auth-decision
+category: AUTH
+severity: LOW
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-602
+pattern: \bif\s*\([^)]*\.(?:isAdmin|isSuperUser|isSuperuser|isOwner|isRoot|hasRole|isModerator|isStaff)\b
+message: Branches on a client-held isAdmin/isOwner/hasRole flag, a heuristic that authorization may rest on tamperable state.
+remediation: Confirm the privilege server-side on each sensitive operation; use client-side flags only for non-security UI hints.
+why: If the object comes from client state, storage, or an unverified API field, an attacker can set the flag and bypass the access-control decision made here.
+confidence: high

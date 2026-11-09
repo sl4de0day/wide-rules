@@ -1,0 +1,15 @@
+id: wide/fmtstring-logging-nonliteral-first-arg
+name: fmtstring-logging-nonliteral-first-arg
+category: DESERIALIZATION
+severity: MEDIUM
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-134
+pattern: \b(?:logging|logger|log|_logger|_log|self\.log(?:ger)?|LOG(?:GER)?)\.(?:debug|info|warning|warn|error|exception|critical)\s*\(\s*(?!["'frbuFRBU]*["'])[A-Za-z_]\w*
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Pass a constant literal format string as the first argument and the variable data as subsequent args: logging.info("user=%s", user). Never log a user-built string as the format itself.'
+not-match: ^\s*#
+why: The first argument to a logging call is a non-literal identifier (not a quoted/f-/r-/b-/u- string). logging treats its first argument as the %-format template and applies the remaining args to it, so a user-controlled first arg is a format-string injection and, with lazy %-args, can raise or leak (CWE-134). The negative lookahead (?!["'frbuFRBU]*["']) rejects any leading string/f-string/byte/raw literal, isolating the dynamic-template case, and .getLogger/.setLevel are excluded by the method list.
+confidence: high

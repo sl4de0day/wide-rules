@@ -1,0 +1,24 @@
+id: wide/pbkdf2-iterations-webcrypto
+name: pbkdf2-iterations-webcrypto
+category: CRYPTO
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-916
+pattern: iterations\s*:\s*\d{1,5}\b
+message: A PBKDF2 iteration count under 100,000 is too low.
+remediation: Use at least 600,000 iterations for PBKDF2-HMAC-SHA256, or switch to bcrypt/scrypt/argon2.
+why: Few iterations make each password guess cheap, so leaked hashes are brute-forced quickly.
+confidence: high

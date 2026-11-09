@@ -1,0 +1,19 @@
+id: wide/cwe89-knex-where-raw-interpolated
+name: cwe89-knex-where-raw-interpolated
+category: INJECTION
+severity: CRITICAL
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-89
+pattern: \.(?:whereRaw|havingRaw|orderByRaw|joinRaw)\s*\(\s*(?:`[^`]*\$\{|["'][^"']*["']\s*\+)
+message: A knex raw fragment is built by interpolation or concatenation.
+remediation: 'Pass bindings as the second argument: .whereRaw(''id = ?'', [id]).'
+why: The Raw builders splice their argument into the statement verbatim, so an interpolated value is read as SQL.
+confidence: high

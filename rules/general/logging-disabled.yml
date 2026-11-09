@@ -1,0 +1,32 @@
+id: wide/logging-disabled
+name: logging-disabled
+category: GENERAL
+severity: LOW
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+  - py
+  - pyi
+  - pyw
+  - go
+  - java
+  - cs
+  - csx
+cwe: CWE-778
+pattern: \blogging\.disable\s*\(|\blogger\.(?:level|setLevel)\s*[=(]\s*['"]?(?:silent|off|none)|\.setLevel\s*\(\s*(?:Level\.)?(?:OFF|NONE)|(?:log|logrus)\.SetOutput\s*\(\s*(?:io|ioutil)\.Discard|\bdisable_existing_loggers\b\s*[:=]\s*True
+message: Logging is turned off or discarded.
+remediation: Keep security-relevant logging enabled in production (auth successes/failures, access-control denials, input-validation failures) and forward it to monitoring; only reduce verbosity, never silence it.
+not-match: ^\s*(?:\/\/|\*|\/\*|#)
+why: 'Disabling logging or routing it to a null sink removes the audit trail: authentication failures, authorization denials, and errors that reveal an attack in progress are never recorded, so incidents go undetected and cannot be investigated afterwards.'
+confidence: low

@@ -1,0 +1,36 @@
+id: wide/service-auth-explicitly-disabled
+name: service-auth-explicitly-disabled
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - rb
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - java
+  - kt
+  - kts
+  - go
+  - cs
+  - csx
+cwe: CWE-1188
+pattern: \bauth\b\s*[:=]\s*false\b|\bauthentication\b\s*[:=]\s*(?:['"]?none|false)\b|\bAUTH_DISABLED\b\s*[:=]\s*['"]?(?:true|1)\b|--no-?auth\b|\b(?:skip|disable|no)[_-]?auth\b\s*[:=]\s*['"]?true\b|\brequire[_-]?auth\b\s*[:=]\s*['"]?false\b
+message: Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.
+remediation: 'Remove the auth-off flag and require authentication (auth: true / authentication configured / drop --noauth). Enforce identity at the service on every request rather than assuming a trusted network.'
+not-match: ^\s*(?:\/\/|#|\*|<!--|;|\/\*)|\b(?:test|spec|fixture|mock|example)\b|\b(?:visible|display|hidden|render|css|classname|classlist|tooltip|placeholder|modal|button|icon|menu|badge|banner|dropdown|sidebar|navbar|breadcrumb|toolbar|tab)\b
+why: 'An explicit configuration flag disables authentication for a service or client (auth: false, authentication: ''none'', AUTH_DISABLED=true, --noauth, skipAuth: true, requireAuth: false). Turning auth off by config is an insecure-by-design decision that leaves the service open. The \bauth\b anchoring means result/state vars such as authorized:false, isAuthenticated:false, requiresAuth:false and the strict-equality check auth===false are not flagged, and the visual/nav notMatch list suppresses purely-visual client toggles.'
+confidence: high

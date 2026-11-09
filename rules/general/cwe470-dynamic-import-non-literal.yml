@@ -1,0 +1,25 @@
+id: wide/cwe470-dynamic-import-non-literal
+name: cwe470-dynamic-import-non-literal
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-470
+pattern: \bimport\s*\(
+message: Dynamic import() is called with a non-literal (variable, concatenated, or interpolated) module specifier.
+remediation: Import a fixed string literal, or resolve untrusted input against an explicit allowlist before importing.
+not-match: import\s*\(\s*(['"`])[^'"`$]*\1\s*\)
+why: A computed import path lets externally controlled input load arbitrary modules and execute their top-level code.
+confidence: high

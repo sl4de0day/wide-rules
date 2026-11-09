@@ -1,0 +1,13 @@
+id: wide/idor-versioned-api-id-route
+name: idor-versioned-api-id-route
+category: AUTH
+severity: LOW
+languages:
+  - rb
+cwe: CWE-639
+pattern: \b(?:get|post|put|patch|delete|match)\s+["']\/?(?:api\/)?v\d+\/[^"']*:(?:id|\w+_id)\b
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: Confirm the controller action for this versioned route scopes the lookup to the current principal and/or authorizes the object (Pundit/CanCan). Retire deprecated API versions and ensure every versioned member route enforces the same ownership checks as the current version.
+not-match: authenticate|authorize|admin_only|require_login|require_admin|logged_in|^\s*#
+why: 'Aggravator (informational): a route under a versioned API path (/api/v1, /v2, ...) that takes an :id (or :*_id) member parameter is a high-surface IDOR target and older/deprecated versions often lag on authorization. This flags the exposure for review; it does not by itself prove the handler is missing an ownership check. The member-param match was tightened from :\w*id to :(?:id|\w+_id) so it matches the documented :id / :*_id intent and stops flagging incidental params ending in ''id'' such as :valid, :uuid, :paid.'
+confidence: low

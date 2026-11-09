@@ -1,0 +1,19 @@
+id: wide/ssti-vue-compile
+name: ssti-vue-compile
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-1336
+pattern: \b[Vv]ue\.compile\s*\(\s*(?:[^\s'"`)]|(?:'[^']*'|"[^"]*"|`[^`]*`)\s*\+|`[^`]*\$\{)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Compile only static template literals and bind user input through component data/props; never pass a user-controlled string to Vue.compile.
+why: Vue.compile turns its string argument into a render function that evaluates the template's binding expressions, so a user-controlled template compiles attacker JavaScript expressions (client-side template injection / XSS).
+confidence: high

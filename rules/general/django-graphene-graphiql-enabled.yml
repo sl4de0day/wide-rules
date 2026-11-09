@@ -1,0 +1,15 @@
+id: wide/django-graphene-graphiql-enabled
+name: django-graphene-graphiql-enabled
+category: GENERAL
+severity: MEDIUM
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-489
+pattern: \bgraphiql\s*=\s*True\b
+message: GraphQL/dev misconfiguration — introspection or a dev endpoint exposed, or a weak/predictable secret (CWE-200/489/307/770/330).
+remediation: 'Bind to DEBUG: `GraphQLView.as_view(graphiql=settings.DEBUG)`, or omit the view entirely in production routing. Never ship `graphiql=True` unconditionally.'
+not-match: ^\s*#|\bTrue\s+if\b
+why: graphene's `GraphQLView.as_view(graphiql=True)` (and Strawberry's `GraphQLRouter(..., graphiql=True)`) serves the GraphiQL IDE with introspection at the GraphQL URL. A hardcoded True enables it in production. The added leading \b keeps a differently-named kwarg such as `enable_graphiql=True` (word char `_` before the token) from matching, while `.graphiql=`/`(graphiql=`/` graphiql=` still match. Safe variants pass a settings/flag value (no True literal); the guarded `True if DEBUG else False` is suppressed by notMatch.
+confidence: high

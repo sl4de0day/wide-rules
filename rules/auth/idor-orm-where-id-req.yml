@@ -1,0 +1,20 @@
+id: wide/idor-orm-where-id-req
+name: idor-orm-where-id-req
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-639
+pattern: (\.(findOne|findFirst|findUnique|update|delete|destroy|findAll|count)\s*\(\s*\{[^}]*\bwhere\s*:\s*\{[^}]*\bid\s*:\s*req\.(params|query|body)|\.findOneBy\s*\(\s*\{[^}]*\bid\s*:\s*req\.(params|query|body))
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: 'Add the owner constraint to the where object, e.g. where: { id: req.params.id, userId: req.user.id }, or enforce a route guard/policy that verifies the fetched row belongs to the requester.'
+not-match: req\.(user|session|auth)|current[_-]?[Uu]ser|\b(ownerId|owner_id|userId|user_id|tenantId|tenant_id|accountId|account_id|organizationId|organization_id|orgId|org_id|companyId|company_id|teamId|team_id|workspaceId|workspace_id|createdBy|created_by|authorId|author_id|memberId|member_id)\s*:|isOwner|checkOwner|verifyOwner|assertOwner|@UseGuards|authorize|Pundit|\bcan\(|^\s*(?:\/\/|\*|\/\*)
+why: 'A TypeORM/Prisma/Sequelize where clause keys on { id: <client value> } (findOne/findUnique/findOneBy/update/delete) with no ownership column in the same where object, so records are addressed purely by a client-chosen id.'
+confidence: high

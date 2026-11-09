@@ -1,0 +1,15 @@
+id: wide/vue-svelte-html
+name: vue-svelte-html
+category: XSS
+severity: MEDIUM
+languages:
+  - vue
+  - svelte
+  - html
+  - htm
+cwe: CWE-79
+pattern: \bv-html\s*=|\{@html\s
+message: This renders a value as raw HTML.
+remediation: Bind text instead, or sanitise the HTML before rendering it.
+why: Vue's v-html and Svelte's {@html} both skip escaping, so any markup in the value becomes live elements.
+confidence: high

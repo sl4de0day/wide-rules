@@ -1,0 +1,20 @@
+id: wide/header-value-var-interpolation
+name: header-value-var-interpolation
+category: INJECTION
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-113
+pattern: \.(?:setHeader|header|set|append)\s*\(\s*['"`][A-Za-z][A-Za-z0-9-]*['"`]\s*,\s*(?:`[^`]*\$\{[A-Za-z_$]|['"][^'"]*['"]\s*\+\s*[A-Za-z_$]|[A-Za-z_$][\w$.]*\s*\+\s*['"`])
+message: User input in a response header value or a CLI argument array (header injection / argument injection).
+remediation: Strip CR/LF from any user-derived header value (or reject it), and prefer a library that encodes header values; for filenames use encodeURIComponent and the RFC 5987 filename* form.
+not-match: encodeURIComponent|\bNumber\s*\(|\bparseInt\s*\(|\.replace\s*\(\s*\/[^/]*[\\]?[rn]|^\s*(?:\/\/|\*|\/\*)|\bmessage:|\bwhy:|new RegExp\(|\$\{\s*(?:count|seconds?|size|len|length|num|total|idx|index|age|port|ms|bytes?|status|width|height|offset|limit|page|retries?|attempts?|expires?|maxAge|ttl)\b
+why: A response header value is built from a template literal or concatenation that interpolates a variable (often derived from request input, e.g. a filename in Content-Disposition). If the value contains CR/LF, an attacker splits the response and injects headers or a body (HTTP response splitting / header injection). Broadens the req.*-direct rule to the common one-hop-removed variable case.
+confidence: high

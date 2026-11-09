@@ -1,0 +1,18 @@
+id: wide/pathwrite-php-fileputcontents-superglobal
+name: pathwrite-php-fileputcontents-superglobal
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-22
+pattern: \bfile_put_contents\s*\(\s*[^,]*\$_(GET|POST|REQUEST|FILES|COOKIE)\b|\bfopen\s*\(\s*[^,]*\$_(GET|POST|REQUEST|FILES|COOKIE)\b[^)]*,\s*['"][wax]
+message: Path traversal on write — a file is written to a user-controlled path without a containment check (CWE-22).
+remediation: Strip the user segment with basename()/an allowlist and verify realpath(dirname(target)) is inside the intended base (strpos===0) before writing; never concatenate a superglobal into a write path.
+not-match: basename|realpath|sanitiz|preg_replace|str_replace|whitelist|allowlist|pathinfo|^\s*(\/\/|#|\/\*|\*)
+why: file_put_contents / fopen(...,'w'|'a'|'x') builds the target PATH (first argument) from $_GET/$_POST/$_REQUEST/$_FILES/$_COOKIE, so '../' or an absolute path in the request writes anywhere the PHP process can (e.g. drop a webshell in the docroot -> RCE). The [^,] guard keeps the match on the path argument, not a superglobal used only as write content.
+confidence: high

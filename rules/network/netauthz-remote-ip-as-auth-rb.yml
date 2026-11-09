@@ -1,0 +1,13 @@
+id: wide/netauthz-remote-ip-as-auth-rb
+name: netauthz-remote-ip-as-auth-rb
+category: NETWORK
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-290
+pattern: \b(?:request\.remote_ip|request\.ip|remote_ip)\b\s*(?:(?:==|!=)\s*['"](?:127\.0\.0\.1|::1|localhost)['"]|\.start_with\?\(\s*['"](?:127\.|10\.|192\.168\.|172\.(?:1[6-9]|2\d|3[01])\.))
+message: Broken access control — authorization based on network location or a spoofable client header (CWE-346/290).
+remediation: Gate privilege on Devise/session or a verified token, never on request.remote_ip. Enforce internal-only endpoints at the infrastructure layer.
+not-match: ^\s*#|\b(?:log|logger|metric|audit|throttle|rack_attack)\b|rate[_-]?limit|\b(?:jwt|verify_token|authenticate|current_user|logged_in|devise|csrf)\b|session\[|\?\s*['"]
+why: Rails request.remote_ip / request.ip compared to a loopback or private-range literal makes authorization depend on network location. remote_ip is computed from X-Forwarded-For / Client-IP headers, which are client-settable, so an attacker can forge a trusted value and reach the privileged action.
+confidence: high

@@ -1,0 +1,12 @@
+id: wide/ssti-ruby-haml-template-new
+name: ssti-ruby-haml-template-new
+category: INJECTION
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-1336
+pattern: ^(?!\s*#).*?\bHaml::Template\.new\s*(?:\((?:[^()]|\([^()]*\))*\))?\s*\{\s*(?:[a-z_@][\w.:]*|"[^"]*#\{|(?:"[^"]*"|'[^']*')\s*(?:\+|%|<<)(?!\s*["']))
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Give Haml::Template.new a fixed filename or a constant literal block, and route user data through the render scope, not into the template source.
+why: Haml::Template.new (Tilt-style) compiles the string returned by its block into Ruby; a dynamic block value makes the compiled Haml attacker-controlled, enabling SSTI/RCE.
+confidence: high

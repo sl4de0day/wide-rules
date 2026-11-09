@@ -1,0 +1,15 @@
+id: wide/java-scriptengine-groovy-eval-file-contents
+name: java-scriptengine-groovy-eval-file-contents
+category: INJECTION
+severity: CRITICAL
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-94
+pattern: \b(?:eval|evaluate)\s*\(\s*(?:new\s+(?:File|FileReader|InputStreamReader)|Files\.(?:read|newBufferedReader)|new\s+String\s*\(\s*Files)
+message: Write-then-execute — code is loaded or run from a user-controlled or writable path (potential RCE, CWE-829/95/98/94).
+remediation: Do not evaluate script files sourced from untrusted or writable locations; if scripting is required, run only fixed trusted scripts and sandbox the engine (SecureASTCustomizer / restricted bindings).
+not-match: ^\s*(?:\/\/|\*|\/\*)|new\s+(?:File|FileReader|InputStreamReader)\s*\(\s*"[^"]*"\s*\)
+why: GroovyShell.evaluate()/ScriptEngine.eval() over a File, FileReader, or Files.read* result executes the script contents; when that file is an upload or lives in a writable path, writing the file is RCE. A File/FileReader built from a plain string literal is suppressed, and evaluateExpression(...)/logger.eval(...) fail the eval-open boundary.
+confidence: high

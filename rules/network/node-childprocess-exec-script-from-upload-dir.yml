@@ -1,0 +1,20 @@
+id: wide/node-childprocess-exec-script-from-upload-dir
+name: node-childprocess-exec-script-from-upload-dir
+category: NETWORK
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-829
+pattern: \b(?:exec|execSync|execFile|execFileSync|spawn|spawnSync|fork)\s*\(.*(?:\/tmp\/|os\.tmpdir|req\.files?\.|(?:upload|writable)[A-Za-z]*(?:Dir|Path|dir|path)|uploaded[A-Za-z]*)
+message: Write-then-execute — code is loaded or run from a user-controlled or writable path (potential RCE, CWE-829/95/98/94).
+remediation: Only spawn interpreters/scripts from fixed, non-writable application paths; never pass an uploads/tmp path or req.file.path as the command or first argument, and validate any dynamic segment against an allow-list.
+not-match: ^\s*(?:\/\/|\*|\/\*|#)
+why: child_process exec/spawn/fork of a program or script located in an uploads/tmp/writable directory (or taken from req.file) runs whatever an attacker uploaded there, converting a file-write into code execution. The keyword set was tightened from bare 'upload'/'writable' to variable-shaped tokens (upload*/writable* with Dir/Path suffix, uploaded*, os.tmpdir, req.file(s)., /tmp/), so benign data-path args in quoted literals (exec('rsync uploads/ backup/'), a script named 'upload_report.js') no longer flood.
+confidence: high

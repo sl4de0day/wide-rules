@@ -1,0 +1,25 @@
+id: wide/client-njwt-create-mint
+name: client-njwt-create-mint
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+  - html
+  - htm
+  - xhtml
+cwe: CWE-602
+pattern: \bnjwt\.create\s*\(
+message: Client-side token signing or embedded signing key — a secret/decision shipped to the browser is attacker-forgeable.
+remediation: Create tokens with njwt on the server and return .compact() output to the client. Store the signing key in server-only config. The client should only verify against a server (or treat tokens as opaque), never call njwt.create().
+not-match: ^\s*(?:\/\/|\*|\/\*|<!--)
+why: njwt's njwt.create(claims, signingKey) constructs a signed JWT and requires the signing key in scope. In a client-language file the key ships to the browser and token creation is attacker-controllable, so issued tokens are forgeable. njwt is a server library; use on the client is the red flag.
+confidence: high

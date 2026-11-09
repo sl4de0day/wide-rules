@@ -1,0 +1,18 @@
+id: wide/cwe89-php-query-interpolated
+name: cwe89-php-query-interpolated
+category: INJECTION
+severity: CRITICAL
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-89
+pattern: (?:mysqli_query|pg_query|->query|->exec)\s*\([^)]*"[^"]*\$\w
+message: A PHP variable is interpolated straight into a query string.
+remediation: Use a prepared statement with bound parameters rather than interpolating.
+not-match: prepare\s*\(
+why: Double-quoted PHP strings expand variables, so the value lands inside the statement before the database sees it.
+confidence: high

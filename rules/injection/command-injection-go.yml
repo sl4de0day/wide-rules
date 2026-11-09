@@ -1,0 +1,12 @@
+id: wide/command-injection-go
+name: command-injection-go
+category: INJECTION
+severity: CRITICAL
+languages:
+  - go
+cwe: CWE-78
+pattern: exec\.Command\s*\(\s*[`"][^`"]*(?:sh|bash|cmd)['"`]?\s*,\s*[`"]?-c|exec\.Command\s*\([^)]*\+
+message: An OS command is built from input (exec.Command with sh -c or a joined string).
+remediation: Call the program directly with separate, fixed arguments; do not route through sh -c.
+why: exec.Command with a shell and a concatenated argument lets interpolated input inject further commands.
+confidence: high

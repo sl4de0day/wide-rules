@@ -1,0 +1,15 @@
+id: wide/fmtstring-request-percent-format
+name: fmtstring-request-percent-format
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-134
+pattern: \brequest\.(?:args|form|values|json|GET|POST|query_params|data|headers|cookies)(?:\[[^\]]*\]|\.get\([^)]*\))?\s*%\s*(?:\[|\([^)]*,)
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: Use a constant literal format string with the user value as an argument, or f-strings/str.format with a fixed template. Never place user input on the left of the % operator.
+not-match: ^\s*#
+why: 'A request attribute is the LEFT operand of the %-formatting operator with a tuple or list on the right (request.args[...] % (a, b) / % [x]), so the user controls the format string while trusted values are the arguments - classic %-format-string injection (CWE-134). Requiring the right operand to be a list (''% ['') or a comma-bearing parenthesis (''% (a, b)'' / ''% (x,)'') is the fix for the original rule''s false positive on arithmetic modulo with a parenthesised expression: ''request.args[n] % (base * 2)'' has no comma and no longer matches.'
+confidence: high

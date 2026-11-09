@@ -1,0 +1,15 @@
+id: wide/idor-django-orm-findbyid-request
+name: idor-django-orm-findbyid-request
+category: AUTH
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-639
+pattern: \.objects\.(?:get|filter|get_or_create)\(\s*(?:pk|id|_id|uuid|slug|token)\s*=\s*(?:int\(|str\()?\s*request\.(?:GET|POST|data|query_params|args|form|values)\b
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: Constrain the query to the current principal, e.g. Model.objects.get(pk=request.GET['id'], user=request.user), or use get_object_or_404(Model.objects.filter(user=request.user), pk=...), or enforce an object-level permission check.
+not-match: request\.user|current_user|g\.user|session\[|\buser_id\s*=|\buser\s*=|\bowner(?:_id)?\s*=|\baccount(?:_id)?\s*=|\bcreated_by\s*=|\btenant(?:_id)?\s*=|\bcompany(?:_id)?\s*=|\borg(?:anization)?(?:_id)?\s*=|\bteam(?:_id)?\s*=|\bgroup(?:_id)?\s*=|\bworkspace(?:_id)?\s*=|\bmember(?:_id)?\s*=|\bauthor(?:_id)?\s*=|\bprofile\s*=|^\s*#
+why: A Django/MongoEngine object is fetched by a primary-key/slug taken straight from the request, with no ownership column constraining the lookup — any authenticated user can read another user's row by changing the id.
+confidence: high

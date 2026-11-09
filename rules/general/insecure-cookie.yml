@@ -1,0 +1,28 @@
+id: wide/insecure-cookie
+name: insecure-cookie
+category: GENERAL
+severity: LOW
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-1004
+pattern: httpOnly\s*:\s*false|secure\s*:\s*false|sameSite\s*:\s*['"]none['"]
+message: A cookie flag weakens the cookie's protection.
+remediation: 'Prefer httpOnly: true, secure: true, and a SameSite of Lax or Strict.'
+why: Without HttpOnly a script can read the cookie; without Secure it can travel over http; SameSite=None permits cross-site sending.
+confidence: high

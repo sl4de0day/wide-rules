@@ -1,0 +1,20 @@
+id: wide/graphql-batch-link-enabled
+name: graphql-batch-link-enabled
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-770
+pattern: new\s+BatchHttpLink\s*\(|^(?=.*(?:apollo|graphql|httplink|batchhttplink))(?=.*\bbatch\s*:\s*true\b)
+message: GraphQL/dev misconfiguration — introspection or a dev endpoint exposed, or a weak/predictable secret (CWE-200/489/307/770/330).
+remediation: Set a small batchMax bound and ensure the server enforces per-operation rate limiting and query cost limits; use a non-batching HttpLink for sensitive mutations.
+not-match: ^\s*(?:\/\/|\*)|batch\s*:\s*false
+why: Apollo BatchHttpLink / batch:true coalesces multiple GraphQL operations into a single HTTP request; against an unprotected server this enables request-count rate-limit bypass and amplification.
+confidence: high

@@ -1,0 +1,20 @@
+id: wide/yoga-masked-errors-disabled
+name: yoga-masked-errors-disabled
+category: GENERAL
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-200
+pattern: \bmaskedErrors\s*:\s*false\b
+message: GraphQL/dev misconfiguration — introspection or a dev endpoint exposed, or a weak/predictable secret (CWE-200/489/307/770/330).
+remediation: 'Keep masking on in production. Remove `maskedErrors: false`, or gate it: `maskedErrors: process.env.NODE_ENV !== ''production''`. To customize safely, pass a `maskError` function returning sanitized messages.'
+not-match: ^\s*(\/\/|#|\*|\/\*)
+why: 'graphql-yoga masks unexpected errors by default so raw exception messages and stack traces never reach clients. `maskedErrors: false` turns masking off, leaking internal error details (DB errors, stack traces) to every caller. A hardcoded false disables the protection in production. A JS ternary (`isDev ? false : true`) or a variable places the value away from the separator so no literal false immediately follows; case-sensitivity keeps `disableMaskedErrors:` (capital M) from matching.'
+confidence: high

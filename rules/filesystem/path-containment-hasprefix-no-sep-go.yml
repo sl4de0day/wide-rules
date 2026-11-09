@@ -1,0 +1,13 @@
+id: wide/path-containment-hasprefix-no-sep-go
+name: path-containment-hasprefix-no-sep-go
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - go
+cwe: CWE-22
+pattern: \bstrings\.HasPrefix\s*\(\s*(?:(?:resolvedPath|resolved|cleanPath|absPath|realPath|fullPath|canonicalPath|targetPath|filePath|normalizedPath|normalized)\b[^,]*,\s*[^,)]+|[^,)]+,\s*(?:[A-Za-z_]\w*(?:Dir|Root|Base)\b|\b(?:baseDir|rootDir|uploadDir|base|root)\b))\s*\)
+message: Path-containment bypass — a startsWith/indexOf prefix check with no trailing separator lets a sibling directory escape (CWE-22).
+remediation: 'Append the separator after filepath.Clean: strings.HasPrefix(resolved, base+string(os.PathSeparator)); or rel, err := filepath.Rel(base, target) and reject on err != nil or strings.HasPrefix(rel, "..").'
+not-match: ^\s*\/\/|\+\s*(?:string\s*\(\s*os\.PathSeparator|['"][\/\\]['"]|filepath\.Separator|os\.PathSeparator)|os\.PathSeparator|filepath\.Rel\b|[\/\\]"\s*\)|filepath\.Separator
+why: 'strings.HasPrefix(resolved, base) confines a cleaned/absolute path to a base but omits the trailing separator, so /var/www/uploads_backup satisfies HasPrefix for /var/www/uploads (CWE-22). Tightened: the second (generic-first-arg) branch dropped its bare string-literal needle — it fired on `strings.HasPrefix(r.URL.Path, "/api")` HTTP-middleware routing, which is everywhere in Go and would have gotten the rule dropped; base literals are still caught when the FIRST arg is a resolved/clean-path name. Bare `dir` needle removed (too generic). notMatch clears base+string(os.PathSeparator) / base+"/", filepath.Rel, and // comments.'
+confidence: high

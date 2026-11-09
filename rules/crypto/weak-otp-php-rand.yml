@@ -1,0 +1,18 @@
+id: wide/weak-otp-php-rand
+name: weak-otp-php-rand
+category: CRYPTO
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-330
+pattern: \b(?:mt_rand|rand)\s*\(\s*\d+\s*,\s*(?:9000|9999|10000|90000|99999|100000|900000|999999|1000000)\s*\)
+message: GraphQL/dev misconfiguration — introspection or a dev endpoint exposed, or a weak/predictable secret (CWE-200/489/307/770/330).
+remediation: Use random_int() (PHP 7+) for verification codes and add attempt throttling.
+not-match: ^\s*(?:\/\/|#|\*)|random_int|openssl_random|random_bytes
+why: An OTP produced by rand()/mt_rand() (non-CSPRNG) over a 4-6 digit range is predictable and its Mersenne-Twister state can be recovered.
+confidence: high

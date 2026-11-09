@@ -1,0 +1,22 @@
+id: wide/client-route-guard-client-boolean
+name: client-route-guard-client-boolean
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-602
+pattern: (?:\b(?:canActivate|canActivateChild|canLoad|canMatch|beforeEnter|beforeRouteEnter)\b[^\n]*\b(?:isLoggedIn|isAuthenticated|isAdmin|loggedIn|authenticated|getItem)\b)|(?:\b(?:isLoggedIn|isAuthenticated|isAdmin|loggedIn|authenticated)\s*\?[^\n]*<\s*(?:Navigate|Redirect|Route|Outlet)\b)|(?:\b(?:PrivateRoute|ProtectedRoute|RequireAuth|AuthGuard|requireAuth|withAuth)\b[^\n]*\b(?:isLoggedIn|isAuthenticated|isAdmin|getItem|token)\b)
+message: Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.
+remediation: 'Keep client route guards for UX only and make the server the authority: every protected API the guarded view calls must independently authenticate and authorize the request. Base the guard on a freshly server-verified session rather than a client-held flag or the mere presence of a token.'
+not-match: (?:^\s*(?:\/\/|\*|\/\*|<!--|#))|(?:\.spec\.|\.test\.|__tests__|\bexpect\s*\(|\bmock\w*|\bdescribe\s*\(|\brender\s*\(|\bit\s*\()|(?:\bawait\s+[\w.$]*(?:verify|validateSession|checkAuth|introspect|getSession|fetchUser)\w*\s*\()|new RegExp\(|\|(?:requireAuth|ensureAuth|isAuthenticated|isAdmin|authorize|authenticat|passport)
+why: A client-side route guard (Angular canActivate, Vue beforeEnter, a React PrivateRoute/RequireAuth) allows or denies navigation to a protected view based on a local boolean or a token merely present in storage. This only hides UI; the underlying data endpoints are still reachable and the boolean is user-controllable, so the protected route grants no real access control.
+confidence: high

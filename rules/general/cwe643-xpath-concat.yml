@@ -1,0 +1,20 @@
+id: wide/cwe643-xpath-concat
+name: cwe643-xpath-concat
+category: GENERAL
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-643
+pattern: (["'])\/{1,2}(?:(?!\1).)*\[(?:(?!\1).)*=(?:(?!\1).)*\1\s*\+
+message: An XPath expression with a predicate is built by string concatenation.
+remediation: Use a parameterized/variable-bound XPath (e.g. XPathExpression with a resolver) or escape the value before embedding it.
+not-match: (escapeXPath|xpathEscape|xpath\.escape|encodeXPath|escapeForXPath)
+why: Injecting quotes or ' or 1=1'-style payloads into an XPath predicate lets an attacker alter the node selection and read data outside the intended scope of the document.
+confidence: high

@@ -1,0 +1,29 @@
+id: wide/lfi-md-html-inline-image-user-src
+name: lfi-md-html-inline-image-user-src
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-73
+pattern: \b(?:readFileSync|readFile|readfile|createReadStream|fopen|file_get_contents|open)\s*\([^)]*(?:\.src\b|\[['"]src['"]\]|\.href\b|getAttribute\(['"]src['"]\)|attrib\[['"]src['"]\]|\.get\(['"]src['"]\))
+message: Renderer resource embedding — a document/PDF/image converter resolves a user-controlled resource, enabling LFI or SSRF (CWE-918/73/611).
+remediation: Resolve the attribute against a fixed asset root and enforce containment (path.resolve + startsWith(baseDir) or basename-only), reject absolute/traversal/file:// values, and allowlist permitted directories.
+not-match: (?:^\s*(?:\/\/|#|\*)|startsWith|realpath|\bbasename\s*\(|allowlist|ALLOWED|window\.open)
+why: A Markdown/HTML renderer that inlines images/assets reads a local file whose path is the src/href attribute parsed from user content (to base64-embed it); an attacker sets src to /etc/passwd or a traversal path, yielding local file inclusion (LFI). Added PHP fopen/readfile to the read-sink set; containment/realpath/basename/allowlist guards and window.open are suppressed.
+confidence: high

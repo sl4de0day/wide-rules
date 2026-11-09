@@ -1,0 +1,39 @@
+id: wide/referrer-policy-unsafe-url-downgrade
+name: referrer-policy-unsafe-url-downgrade
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - java
+  - kt
+  - kts
+  - go
+  - rb
+  - cs
+  - csx
+  - html
+  - htm
+  - xhtml
+cwe: CWE-693
+pattern: (Referrer-?Policy|\bname\s*=\s*["']?referrer).{0,25}unsafe-url
+message: Data leakage — a downgraded Referrer-Policy or a secret carried in the URL (CWE-693/598).
+remediation: Use a protective referrer policy such as no-referrer, same-origin, strict-origin, or strict-origin-when-cross-origin instead of unsafe-url.
+not-match: ^\s*(?:\/\/|#|\*|<!--|\/\*)
+why: Setting Referrer-Policy to unsafe-url (via an HTTP header, a <meta name=referrer>, a fetch referrerPolicy option, or a referrerpolicy attribute) downgrades referrer protection, causing the full URL (path plus query string, which may hold session ids or tokens) to leak in the Referer header to cross-origin and plain-HTTP destinations. The keyword is anchored within a 25-char window of the literal unsafe-url so safe policy values (no-referrer, strict-origin, same-origin) never match. The meta alternative now carries a word boundary (\bname) so the 'name' substring inside filename/pathname/hostname/basename/username assignments no longer matches a nearby 'unsafe-url' literal.
+confidence: high

@@ -1,0 +1,15 @@
+id: wide/idor-jdbc-sql-concat-id
+name: idor-jdbc-sql-concat-id
+category: AUTH
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-639
+pattern: '"\s*(select|update|delete)\b[^"]*\bwhere\b[^"]*\b\w*id\b\s*=\s*"\s*\+'
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: Use a bound parameter (WHERE id = ?) AND add an ownership predicate (AND owner_id = ?) bound to the authenticated user, rather than concatenating a client-supplied id into the query.
+not-match: \b(owner_?id|user_?id|account_?id|tenant_?id|org_?id|customer_?id|client_?id|member_?id|created_?by|modified_?by|belongs_?to)\b\s*=|session\.|principal|current_user|securitycontext|getuserid|\blog(?:ger)?\.|^\s*(?:\/\/|\/\*|\*)
+why: A raw SQL / JPQL string that filters a record by an id column via string concatenation of a request value, with no ownership column also present in the WHERE clause, both exposes an insecure direct object reference and opens SQL injection. The string must begin with SELECT/UPDATE/DELETE (so prose and log messages that merely mention 'WHERE id =' are excluded), and lines routed through a logger are suppressed.
+confidence: high

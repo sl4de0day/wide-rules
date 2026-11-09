@@ -1,0 +1,20 @@
+id: wide/graphql-batched-http-requests-enabled
+name: graphql-batched-http-requests-enabled
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-770
+pattern: allowBatchedHttpRequests["']?\s*[:=]\s*true\b
+message: GraphQL/dev misconfiguration — introspection or a dev endpoint exposed, or a weak/predictable secret (CWE-200/489/307/770/330).
+remediation: Set allowBatchedHttpRequests:false, or cap the batch length and enforce per-operation rate limiting plus query cost/complexity limits.
+not-match: ^\s*(?:\/\/|\*)|allowBatchedHttpRequests["']?\s*[:=]\s*false
+why: Apollo Server with allowBatchedHttpRequests:true accepts an array of operations in one HTTP request, so an attacker can pack many login/OTP mutations into a single request and bypass per-request rate limiting and brute-force throttles.
+confidence: high

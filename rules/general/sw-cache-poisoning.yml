@@ -1,0 +1,24 @@
+id: wide/sw-cache-poisoning
+name: sw-cache-poisoning
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-345
+pattern: \.put\s*\(\s*[^,]+,\s*new\s+Response\b
+message: A synthetic Response is written into Cache Storage.
+remediation: Only cache Responses fetched from trusted origins; never store an attacker-controlled body.
+why: A Response stored in caches is served offline for the life of the service worker; if its body is attacker-influenced, one XSS persistently poisons the app's offline cache.
+confidence: high

@@ -1,0 +1,15 @@
+id: wide/ssrf-flyingsaucer-setdocumentfromstring
+name: ssrf-flyingsaucer-setdocumentfromstring
+category: NETWORK
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-918
+pattern: \.setDocumentFromString\s*\(
+message: Renderer resource embedding — a document/PDF/image converter resolves a user-controlled resource, enabling LFI or SSRF (CWE-918/73/611).
+remediation: Render only trusted HTML, install a UserAgentCallback/URI resolver that rejects file:// and non-allowlisted hosts, and set a restricted base URL.
+not-match: (?:^\s*(?:\/\/|#|\*)|\.setDocumentFromString\s*\(\s*['"`][^'"`$]*['"`]\s*[,)])
+why: Flying Saucer (org.xhtmlrenderer) ITextRenderer.setDocumentFromString(userHtml) resolves images/stylesheets and external references from attacker markup via its user-agent/URI resolver, enabling internal URL fetches (SSRF) and local file reads (LFI).
+confidence: high

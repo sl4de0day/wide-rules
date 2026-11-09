@@ -1,0 +1,12 @@
+id: wide/ssti-go-template-parsefiles-parseglob
+name: ssti-go-template-parsefiles-parseglob
+category: INJECTION
+severity: HIGH
+languages:
+  - go
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*\.Parse(?:Files|Glob)\(\s*(?:[A-Za-z_]|[\x22\x60][^\x22\x60]*[\x22\x60]\s*\+)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Resolve template file paths from a fixed allowlist, never from request-derived variables or concatenated paths, and pass user input only as data to Execute.
+why: ParseFiles/ParseGlob load and compile the template SOURCE from a filesystem path, so a user-controlled first path argument (variable or concatenation) lets an attacker point the engine at attacker-influenced or unintended files that are then rendered.
+confidence: high

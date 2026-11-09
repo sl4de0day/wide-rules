@@ -1,0 +1,13 @@
+id: wide/zipslip-java-newfile-getname
+name: zipslip-java-newfile-getname
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - java
+cwe: CWE-22
+pattern: new\s+File\s*\([^)]*\.getName\s*\(\s*\)
+message: Zip Slip / insecure archive extraction — an archive entry name escapes the destination, arbitrary file write (CWE-22/59).
+remediation: 'Resolve and canonicalize the target: File f = new File(destDir, name); if (!f.getCanonicalPath().startsWith(destDir.getCanonicalPath()+File.separator)) throw new IOException(). Reject ''..'' and absolute names; do not follow symlink entries.'
+not-match: ^\s*(\/\/|\/\*|\*)|getCanonicalPath|getCanonicalFile|\.startsWith\(|\.normalize\(\)|sanitiz|isInside|validatePath|toRealPath
+why: new File(destDir, zipEntry.getName()) builds the output file directly from the untrusted ZIP/tar entry name; a getName() value such as ../../../opt/app.jar makes the File resolve outside destDir, and the subsequent FileOutputStream/Files.copy performs an arbitrary file write.
+confidence: high

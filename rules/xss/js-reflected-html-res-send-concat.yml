@@ -1,0 +1,20 @@
+id: wide/js-reflected-html-res-send-concat
+name: js-reflected-html-res-send-concat
+category: XSS
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-79
+pattern: \bres(?:\.\w+\([^)]*\)){0,2}\.(?:send|write|end)\s*\((?=[^)]*<\w)(?=[^)]*req\.(?:query|body|params|cookies|headers))[^)]*\+
+message: Reflected / context-mismatched XSS — user input reaches HTML or JS output without proper contextual encoding (CWE-79/116).
+remediation: HTML-escape the value for text context (escapeHtml/he.encode) or run it through a sanitizer (DOMPurify/sanitize-html) before concatenation, or render via an auto-escaping template instead of string building.
+not-match: (?:^\s*(?:\/\/|\*)|escapeHtml|htmlEscape|escapeHTML|encodeHTML|sanitize|DOMPurify|\bhe\.encode|\bxss\(|\.replace\((?:\/|['"])[<>&])
+why: Express handler concatenates user input (req.query/body/params/cookies/headers) into an HTML fragment emitted by res.send/write/end (optionally via a res.status(...).send() chain) with no HTML-entity encoding, so tags and attributes in the input are reflected verbatim -> reflected XSS.
+confidence: high

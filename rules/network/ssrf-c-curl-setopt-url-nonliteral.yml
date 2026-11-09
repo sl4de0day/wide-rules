@@ -1,0 +1,19 @@
+id: wide/ssrf-c-curl-setopt-url-nonliteral
+name: ssrf-c-curl-setopt-url-nonliteral
+category: NETWORK
+severity: HIGH
+languages:
+  - c
+  - h
+  - cpp
+  - cc
+  - cxx
+  - hpp
+  - hh
+cwe: CWE-918
+pattern: \bcurl_easy_setopt\s*\(\s*[^,()]+,\s*CURLOPT_URL\s*,\s*[*&]?[A-Za-z_]\w*(?:(?:->|\.)\w+|\[[^\]]*\])*\s*\)
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Resolve and validate the host against an allowlist before the request, or pin a constant base URL and only append a validated path. Do not pass raw user input to CURLOPT_URL.
+not-match: (?:allowlist|whitelist|allow_list|is_allowed|isallowed|validate_host|check_host|checkhost|is_whitelisted|in_whitelist|url_allow)
+why: libcurl fetches the URL passed to CURLOPT_URL. When the third argument is a variable (request-derived) rather than a hardcoded literal, the request target is attacker-influenced, enabling SSRF to internal services or cloud metadata. The regex fires only when arg3 is a plain variable expression, structurally excluding a literal URL ("https://...") and a ternary/function-call form like validate_host(url)?url:def (which ends in '(' not ',)/)'); the notMatch guard additionally suppresses lines performing an inline allowlist/whitelist/validate_host check or a variable already named as allowlisted.
+confidence: high

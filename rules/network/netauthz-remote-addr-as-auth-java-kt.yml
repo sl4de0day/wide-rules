@@ -1,0 +1,15 @@
+id: wide/netauthz-remote-addr-as-auth-java-kt
+name: netauthz-remote-addr-as-auth-java-kt
+category: NETWORK
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-290
+pattern: (?:(?:getRemoteAddr\(\)|getRemoteHost\(\)|\bremoteAddr(?:ess)?\b)\s*(?:\.equals\(\s*"(?:127\.0\.0\.1|::1|localhost)"|\.startsWith\(\s*"(?:127\.|10\.|192\.168\.|172\.(?:1[6-9]|2\d|3[01])\.)|==\s*"(?:127\.0\.0\.1|::1|localhost)")|\.(?:isLoopbackAddress|isSiteLocalAddress|isAnyLocalAddress)\(\))
+message: Broken access control — authorization based on network location or a spoofable client header (CWE-346/290).
+remediation: Use Spring Security / a verified token or session for authorization. If an endpoint must be internal-only, enforce it via network ACLs or a bind address, not an in-servlet remote-address comparison.
+not-match: ^\s*(?:\/\/|\*|\/\*)|\b(?:log|logger|Logger|slf4j|audit|throttle|whitelist)\b|[Mm]etric|[Rr]ate[Ll]imit|\b(?:jwt|verifyToken|authenticate|getSession|isAuthenticated|hasRole|hasAuthority|csrf)\b|SecurityContext|\.bind\(|\?\s*["0-9]
+why: request.getRemoteAddr()/getRemoteHost() equals or startsWith a loopback/private literal, or InetAddress.isLoopbackAddress()/isSiteLocalAddress() gating privilege, authorizes by network location. Behind a load balancer getRemoteAddr() returns the proxy address and forwarded headers are attacker-controlled, so the check is bypassable.
+confidence: high

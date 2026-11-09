@@ -1,0 +1,25 @@
+id: wide/cwe183-weak-host-regex-match
+name: cwe183-weak-host-regex-match
+category: GENERAL
+severity: LOW
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-183
+pattern: \.match\s*\(\s*\/[^/\n]*\\\.[A-Za-z][^/\n]*\/
+message: Matches a host/URL against a scheme-less regex that allows arbitrary subdomains (via String.match).
+remediation: Anchor the pattern to the full host and require the scheme, or parse with new URL() and compare hostname exactly.
+not-match: \^https?|\^wss?|:\\\/\\\/|:\/\/
+why: A pattern like host.match(/[a-z0-9.-]+\.example\.com/) matches attacker.example.com.evil.net because it is unanchored, so host checks can be bypassed.
+confidence: high

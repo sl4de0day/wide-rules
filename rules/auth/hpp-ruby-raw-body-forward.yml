@@ -1,0 +1,13 @@
+id: wide/hpp-ruby-raw-body-forward
+name: hpp-ruby-raw-body-forward
+category: AUTH
+severity: MEDIUM
+languages:
+  - rb
+cwe: CWE-235
+pattern: (?:\bNet::HTTP\.\w+|\bHTTParty\.\w+|\bRestClient\.\w+|\bFaraday\.\w+)[^\n]*(?:request\.raw_post|request\.body\.(?:read|string))
+message: HTTP parameter pollution — raw/duplicated request parameters forwarded so layers disagree (CWE-235).
+remediation: Deserialize, validate and re-encode the body from a canonical object rather than forwarding request.raw_post/request.body.read.
+not-match: (?:encode_www_form|to_query|build_(?:nested_)?query|CGI\.escape|URI\.encode|\.to_json|JSON\.parse|\.slice\(|\.permit\(|\.only\(|parse(?:_nested)?_query|deep_symbolize)|^\s*#
+why: The raw request body is proxied unchanged to a downstream service, allowing duplicate-parameter pollution between the two parsers. Added \b (MyRestClient); narrowed bare request.body to request.body.(read|string) so guard uses like request.body.present?/.rewind stop firing; added JSON.parse suppression for the parse-then-forward safe case.
+confidence: high

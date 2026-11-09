@@ -1,0 +1,13 @@
+id: wide/ssrf-ruby-follow-redirects
+name: ssrf-ruby-follow-redirects
+category: NETWORK
+severity: MEDIUM
+languages:
+  - rb
+cwe: CWE-918
+pattern: (?:\bHTTParty\.\w+|\bRestClient\.\w+|\bFaraday\.\w+|\bNet::HTTP)[^\n]*\b(?:params\b|request\.|cookies\b|@?\w*(?:url|uri|host|endpoint|target)\w*)\b[^\n]*follow_redirects?\s*(?::\s*|=>\s*|=\s*)true
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: 'Disable automatic redirects (follow_redirects: false) or re-validate every redirect target host against the allowlist.'
+not-match: (?:allow_?list|white_?list|allowed_?hosts?|permitted|safe_?hosts?|valid_?hosts?)|^\s*#
+why: A request to a user-controlled URL follows redirects, so even an allowlisted first hop can be redirected to an internal target without re-validation. Added \b so MyHTTParty and a plain options hash without a lib call do not match.
+confidence: high

@@ -1,0 +1,20 @@
+id: wide/idor-sql-where-id-req
+name: idor-sql-where-id-req
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-639
+pattern: WHERE\s+[\w.'"`]*id\w*\s*=\s*(['"`]\s*\+\s*|\$\{\s*)req\.(params|query|body)
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: Use a parameterized query AND include an ownership column, e.g. WHERE id = $1 AND owner_id = $2 bound to [id, req.user.id]; never string-concat request values into the WHERE clause.
+not-match: req\.(user|session|auth)|owner_id|ownerId|user_id|tenantId|tenant_id|accountId|account_id|orgId|org_id|current[_-]?[Uu]ser|authorize|isOwner|checkOwner|\bAND\b[^;]*(owner|user|tenant|account)|^\s*(?:\/\/|\*|\/\*)
+why: A SQL statement concatenates/interpolates a client-supplied id directly into a WHERE id = ... clause with no owner predicate, letting the caller read or change any row by id (and, secondarily, inject SQL).
+confidence: high

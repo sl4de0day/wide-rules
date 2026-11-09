@@ -1,0 +1,24 @@
+id: wide/cwe915-lodash-set-dynamic-path
+name: cwe915-lodash-set-dynamic-path
+category: PROTOTYPE
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-915
+pattern: \b(?:_|lodash)\.(?:set|setWith)\s*\(\s*[^,()]+,\s*[^'"`\s]
+message: lodash set/setWith is called with a non-literal (dynamic) property path.
+remediation: Use a literal path, or reject any path whose segments include __proto__, prototype, or constructor.
+why: A user-controlled path such as '__proto__.isAdmin' passed to _.set writes onto the prototype chain, enabling prototype pollution.
+confidence: high

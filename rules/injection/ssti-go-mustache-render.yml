@@ -1,0 +1,12 @@
+id: wide/ssti-go-mustache-render
+name: ssti-go-mustache-render
+category: INJECTION
+severity: MEDIUM
+languages:
+  - go
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*\bmustache\.(?:RenderInLayoutPartials|RenderInLayout|Render|ParseString)\(\s*(?:[A-Za-z_]|[\x22\x60][^\x22\x60]*[\x22\x60]\s*\+)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Pass a fixed literal template (or use RenderFile with a trusted path) and supply user input only through the data argument.
+why: mustache.Render/RenderInLayout/RenderInLayoutPartials/ParseString take the template SOURCE as their first argument, so a dynamic value there is template injection (data/context disclosure and, via partials/lambdas, further abuse) even though Mustache is logic-less.
+confidence: high

@@ -1,0 +1,13 @@
+id: wide/idor-ar-find-by-params
+name: idor-ar-find-by-params
+category: AUTH
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-639
+pattern: \b[A-Z]\w*\.find_by\w*!?[^\n)]*params\s*(?:\[|\.fetch|\.dig)
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: 'Anchor the finder to the owner: current_user.documents.find_by(id: params[:id]), or add the owning key to the finder itself: Model.find_by(id: params[:id], user_id: current_user.id), or gate with authorize/Pundit policy after loading.'
+not-match: current_user|current_account|current_admin|current_customer|current_member|current_organization|current_company|current_team|current_tenant|current_shop|current_site|current_workspace|current_project|current_owner|current_person|current_ability|@current_\w+|session\[|cookies\.signed|cookies\.encrypted|authorize|Pundit|policy\(|policy_scope|CanCan|can\?|cannot\?|accessible_by|owned_by|for_current|scoped_to|belonging_to|^\s*#
+why: 'Model.find_by(attr: params[...]) and the dynamic Model.find_by_<attr>(params[...]) finders resolve a single record from a client-controlled reference (id, token, uuid, number) on the global class scope with no ownership constraint; an attacker enumerates or guesses the value to reach records they do not own. The \w*!? tail covers find_by, find_by!, and dynamic find_by_id / find_by_uuid variants. The argument bridge was tightened from [^\n]* to [^\n)]* so the finder cannot reach across a closing paren into an unrelated params[...] later on the same line (cross-call false positive).'
+confidence: high

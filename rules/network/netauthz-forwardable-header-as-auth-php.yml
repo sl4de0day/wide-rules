@@ -1,0 +1,18 @@
+id: wide/netauthz-forwardable-header-as-auth-php
+name: netauthz-forwardable-header-as-auth-php
+category: NETWORK
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-290
+pattern: (?:\$_SERVER\s*\[\s*['"]HTTP_X_(?:FORWARDED_FOR|FORWARDED_HOST|FORWARDED_USER|REAL_IP|INTERNAL|IS_ADMIN|ADMIN|AUTH_TOKEN|AUTH|API_KEY|USER_ID|USER_ROLE|USER|ROLE|TRUSTED|BACKEND|GATEWAY)['"]\s*\]\s*(?:===?|!==?)\s*(?:['"][^'"]*['"]|true|false)|(?:isset|empty)\s*\(\s*\$_SERVER\s*\[\s*['"]HTTP_X_(?:FORWARDED_FOR|FORWARDED_HOST|FORWARDED_USER|REAL_IP|INTERNAL|IS_ADMIN|ADMIN|AUTH_TOKEN|AUTH|API_KEY|USER_ID|USER_ROLE|USER|ROLE|TRUSTED|BACKEND|GATEWAY)['"]\s*\]\s*\)[^;\n]{0,40}?\b(?:grant\w*|allow\w*|authoriz\w*|isAdmin|bypass)\b|(?:isset|empty)\s*\(\s*\$_SERVER\s*\[\s*['"]HTTP_X_(?:FORWARDED_FOR|FORWARDED_HOST|FORWARDED_USER|REAL_IP|INTERNAL|IS_ADMIN|ADMIN|AUTH_TOKEN|AUTH|API_KEY|USER_ID|USER_ROLE|USER|ROLE|TRUSTED|BACKEND|GATEWAY)['"]\s*\]\s*\)[^;\n]{0,40}?\$(?:admin|internal|is_admin)\s*=)
+message: Broken access control — authorization based on network location or a spoofable client header (CWE-346/290).
+remediation: Never authorize on HTTP_X_* request headers. Use a real session ($_SESSION after login) or verified token. If a trusted proxy injects the header, strip and re-set it at the edge and verify a signed proxy secret.
+not-match: ^\s*(?:\/\/|#|\*)|\b(?:log|logger|error_log|syslog|audit|throttle|whitelist|proxy)\b|metric|rate[_-]?limit|explode\(|clientIp|client_ip|password_verify|jwt|authenticate|csrf|\$_SESSION
+why: $_SERVER['HTTP_X_FORWARDED_FOR'|'HTTP_X_ADMIN'|'HTTP_X_INTERNAL'|...] compared to a value, or isset()/!empty() gating grant/allow/authorize/$admin=, authorizes on a client-settable header (PHP maps X-* request headers into HTTP_X_*). These headers pass through non-stripping proxies, so an external client forges one. notMatch excludes logging/rate-limit/IP-extraction.
+confidence: high

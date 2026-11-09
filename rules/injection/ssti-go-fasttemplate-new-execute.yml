@@ -1,0 +1,12 @@
+id: wide/ssti-go-fasttemplate-new-execute
+name: ssti-go-fasttemplate-new-execute
+category: INJECTION
+severity: LOW
+languages:
+  - go
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*\bfasttemplate\.(?:NewTemplate|New|ExecuteStringStd|ExecuteString|ExecuteFuncStringWithErr|ExecuteFuncString)\(\s*(?:[A-Za-z_]|[\x22\x60][^\x22\x60]*[\x22\x60]\s*\+)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Build the fasttemplate from a fixed literal source and pass user input only through the substitution map given to Execute/ExecuteString (the t.ExecuteString(map) method call, which has no fasttemplate. prefix, is safe).
+why: fasttemplate.New/NewTemplate/ExecuteString take the template SOURCE as their first argument; it does only tag substitution (no expression evaluation) so impact is limited, but a user-controlled source is still template-source injection that can splice attacker placeholders/output.
+confidence: high

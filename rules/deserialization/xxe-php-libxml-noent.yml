@@ -1,0 +1,18 @@
+id: wide/xxe-php-libxml-noent
+name: xxe-php-libxml-noent
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-776
+pattern: \b(?:simplexml_load_string|simplexml_load_file|loadXML)\s*\([^;]*(?:\$_(?:POST|GET|REQUEST|FILES|COOKIE|SERVER)\b|php:\/\/input|file_get_contents|\$request\b|\$data\b|\$xml\b|\$body\b|\$input\b|LIBXML_(?:NOENT|DTDLOAD))
+message: XML entity expansion / XXE — an XML parser resolves entities on untrusted input (CWE-776/611).
+remediation: Do not pass LIBXML_NOENT/LIBXML_DTDLOAD when parsing untrusted XML (the defaults do not expand entities); on PHP < 8 call libxml_disable_entity_loader(true), keep LIBXML_NONET set to block network fetches, and reject documents containing a DOCTYPE.
+not-match: ^\s*(?:\/\/|#|\*|\/\*)|^(?!.*LIBXML_NOENT).*\bLIBXML_NONET\b
+why: simplexml_load_string/simplexml_load_file/DOMDocument::loadXML on request-controlled input, or any such call passing LIBXML_NOENT / LIBXML_DTDLOAD, substitutes entities and loads DTDs, enabling billion-laughs entity-expansion DoS and, with network access, XXE. A hardened call using LIBXML_NONET without LIBXML_NOENT (negative-lookahead excluded), trusted/literal input with no tainted-var token, loadXMLSchema, and comment lines are all suppressed.
+confidence: high

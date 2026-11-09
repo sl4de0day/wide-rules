@@ -1,0 +1,19 @@
+id: wide/cwe611-js-libxmljs-noent
+name: cwe611-js-libxmljs-noent
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-611
+pattern: noent\s*:\s*true
+message: libxmljs is configured with noent:true, which substitutes XML entities during parsing.
+remediation: Parse with noent:false (the default) and reject documents containing a DOCTYPE.
+why: Enabling entity substitution lets a crafted document pull in external files (XXE) or trigger billion-laughs entity expansion, leaking data or exhausting memory.
+confidence: high

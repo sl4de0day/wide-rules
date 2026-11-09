@@ -1,0 +1,24 @@
+id: wide/insert-adjacent-html
+name: insert-adjacent-html
+category: XSS
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-79
+pattern: ^insertAdjacentHTML$
+message: insertAdjacentHTML parses its argument as HTML.
+remediation: Build nodes with the DOM API, or sanitise before inserting.
+why: Like innerHTML, any markup in the value is turned into live elements.
+confidence: high

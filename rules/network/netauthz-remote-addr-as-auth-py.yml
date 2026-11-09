@@ -1,0 +1,15 @@
+id: wide/netauthz-remote-addr-as-auth-py
+name: netauthz-remote-addr-as-auth-py
+category: NETWORK
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-290
+pattern: \b(?:request\.remote_addr|remote_addr|request\.access_route|environ\[['"]REMOTE_ADDR['"]\])(?:\[[-\d]+\])?\s*(?:(?:==|!=)\s*['"](?:127\.0\.0\.1|::1|localhost)['"]|\.startswith\(\s*['"](?:127\.|10\.|192\.168\.|172\.(?:1[6-9]|2\d|3[01])\.)|in\s+[\(\[][^)\]]*127\.0\.0\.1)
+message: Broken access control — authorization based on network location or a spoofable client header (CWE-346/290).
+remediation: Authenticate with a session or verified token, not the client IP. If localhost-only access is required, bind the socket to 127.0.0.1; never gate privilege on remote_addr / access_route.
+not-match: ^\s*#|\b(?:log(?:ger|ging)?|print|metric|analytics|audit|throttle|whitelist|allowlist)\b|rate[_-]?limit|\b(?:jwt|verify_jwt|verify_token|login_required|current_user|authenticate|check_password|g\.user)\b|session\[|app\.run\(|\.bind\(|\belse\s+['"]
+why: Flask/WSGI request.remote_addr, access_route[0], or environ['REMOTE_ADDR'] compared to a loopback/private literal makes authorization depend on network location. remote_addr is trivially spoofed when a proxy sets it from a forwarded header, and access_route derives from X-Forwarded-For which is fully client-controlled.
+confidence: high

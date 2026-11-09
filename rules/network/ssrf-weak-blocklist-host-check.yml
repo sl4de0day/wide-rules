@@ -1,0 +1,14 @@
+id: wide/ssrf-weak-blocklist-host-check
+name: ssrf-weak-blocklist-host-check
+category: NETWORK
+severity: MEDIUM
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-918
+pattern: (?:contains|indexOf|equalsIgnoreCase|equals|startsWith|endsWith|matches)\s*\(\s*["'](?:127\.0\.0\.1|169\.254\.169\.254|169\.254|localhost|0\.0\.0\.0|::1)["']
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Replace the blocklist with a positive allowlist of permitted hosts, and resolve+validate the final IP after DNS rather than string-matching the input.
+why: A blocklist that only rejects 127.0.0.1/localhost/169.254 is trivially bypassed (DNS rebinding, decimal/hex IPs, alternate representations), so the SSRF guard is ineffective.
+confidence: high

@@ -1,0 +1,13 @@
+id: wide/ssrf-ruby-net-http
+name: ssrf-ruby-net-http
+category: NETWORK
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-918
+pattern: \bNet::HTTP\.(?:get|get_response|get_print|post|post_form|start|request_get|request_post|request_head)\s*\(\s*(?:URI[.(]|params\b|request\.|cookies\b|@?\w*(?:url|uri|host|hostname|link|endpoint|target|addr|address|domain)\w*(?!:))
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Resolve and validate the host against a strict allowlist before the request; reject private/link-local IPs and non-http(s) schemes.
+not-match: (?:allow_?list|white_?list|allowed_?hosts?|permitted_?hosts?|permit_?list|safe_?hosts?|valid_?hosts?|is_allowed|host_allowed)|URI(?:\.parse|\.join|\.encode|\.escape)?\s*\(\s*(?:["']https?:|ENV\b)|^\s*#
+why: Net::HTTP request target (URI/host) is built from request input with no allowlist, letting an attacker pivot to internal services or cloud metadata. Added a left \b so MyNet::HTTP does not match, and extended the URI-literal notMatch branch to also suppress URI(ENV[...]) config.
+confidence: high

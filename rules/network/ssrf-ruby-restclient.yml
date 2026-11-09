@@ -1,0 +1,13 @@
+id: wide/ssrf-ruby-restclient
+name: ssrf-ruby-restclient
+category: NETWORK
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-918
+pattern: \bRestClient(?:\.(?:get|post|put|patch|delete|head|options)\s*\(\s*|::Request\.execute\s*\([^\n]*\burl:\s*)(?:URI[.(]|params\b|request\.|cookies\b|@?\w*(?:url|uri|host|hostname|link|endpoint|target|addr|address|domain)\w*(?!:))
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Constrain the destination host to an allowlist and reject internal/metadata addresses before the RestClient call.
+not-match: (?:allow_?list|white_?list|allowed_?hosts?|permitted_?hosts?|permit_?list|safe_?hosts?|valid_?hosts?|is_allowed|host_allowed)|URI(?:\.parse|\.join|\.encode|\.escape)?\s*\(\s*(?:["']https?:|ENV\b)|^\s*#
+why: 'RestClient sends a request to a user-controlled URL (including the RestClient::Request.execute url: form) without an allowlist, allowing SSRF. Added \b and ENV suppression.'
+confidence: high

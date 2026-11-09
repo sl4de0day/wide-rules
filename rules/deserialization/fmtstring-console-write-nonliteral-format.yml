@@ -1,0 +1,14 @@
+id: wide/fmtstring-console-write-nonliteral-format
+name: fmtstring-console-write-nonliteral-format
+category: DESERIALIZATION
+severity: MEDIUM
+languages:
+  - cs
+  - csx
+cwe: CWE-134
+pattern: \bConsole\.(?:Write|WriteLine)\s*\(\s*(?!(?:\$@|@\$|\$|@)?["'])[A-Za-z_][\w.]*(?:\[[^\]]*\])?\s*,
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Use a constant literal format and pass the user value as a trailing argument: Console.WriteLine("{0}", userValue); or print the user string alone with a single argument.'
+not-match: ^\s*(?:\/\/|\*)
+why: 'Console.Write/WriteLine is called on its composite-format overload - a non-literal first argument (variable, not a "..."/@"..."/$"..." literal) followed by additional value arguments. When the format-string variable is user-controlled, extra/mismatched placeholders throw FormatException (DoS). Requiring a top-level comma limits matches to the true format overload (not benign single-string prints), and the [\w.] token with an optional [..] indexer rejects a nested call like Console.WriteLine(GetMessage(a, b)). Console.Write/WriteLine has no IFormatProvider overload, so no provider suppression is needed (and the first arg is always the format). Known residual: the char[]-buffer overload Console.Write(buffer, index, count) is indistinguishable by regex and will match.'
+confidence: high

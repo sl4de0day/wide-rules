@@ -1,0 +1,15 @@
+id: wide/ariadne-graphql-debug-enabled
+name: ariadne-graphql-debug-enabled
+category: GENERAL
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-200
+pattern: GraphQL\([^\n]*\bdebug\s*=\s*True\b
+message: GraphQL/dev misconfiguration — introspection or a dev endpoint exposed, or a weak/predictable secret (CWE-200/489/307/770/330).
+remediation: 'Bind debug to your settings flag: `GraphQL(schema, debug=settings.DEBUG)`, and keep DEBUG False in production so tracebacks are stripped from responses.'
+not-match: ^\s*#|\bTrue\s+if\b
+why: 'ariadne''s ASGI/WSGI `GraphQL(schema, debug=True)` includes Python tracebacks in the GraphQL error extensions, exposing stack traces, file paths and internal state. Requiring `GraphQL(` (immediate paren) on the same line keeps it precise: it does not fire on `app.run(debug=True)`, `GraphQLLogger(debug=True)`, or `GraphQLHTTPHandler(debug=True)`. Safe values pass `settings.DEBUG`/a flag (no True literal); the guarded `True if DEBUG else False` is suppressed by notMatch. Note: per-line matching does not catch a multi-line `GraphQL(` constructor whose `debug=True` is on its own line.'
+confidence: high

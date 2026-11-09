@@ -1,0 +1,15 @@
+id: wide/server-presence-only-auth-header-java
+name: server-presence-only-auth-header-java
+category: AUTH
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-287
+pattern: \bif\s*\(\s*(?:request|req|httpRequest|httpServletRequest|exchange|ctx|servletRequest)\.(?:getHeader|getFirstHeader|header)\s*\(\s*"(?:Authorization|X-Api-Key|X-Auth-Token|Cookie)"\s*\)\s*!=\s*null\s*\)
+message: Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.
+remediation: 'Parse and verify the token inside the guard: Jwts.parserBuilder()...parseClaimsJws(token) (or validateToken/an introspection call) and only continue the chain when verification succeeds. A present-but-invalid token must be rejected.'
+not-match: (?:\.verify\(|verifyToken|validateToken|parseClaimsJws|parseSignedClaims|\.isValid\(|SignatureVerifier|jwtDecoder\.decode|^\s*\/\/|^\s*\*|^\s*\/\*)
+why: A servlet filter/interceptor treats the request as authenticated whenever getHeader("Authorization") != null, i.e. the header merely exists. The token is not parsed or signature-checked, so any value bypasses the filter. The sink requires the != null to close the if directly, so a compound '!= null && validateToken(...)' does not match.
+confidence: high

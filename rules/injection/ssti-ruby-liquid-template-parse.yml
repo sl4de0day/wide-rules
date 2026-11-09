@@ -1,0 +1,12 @@
+id: wide/ssti-ruby-liquid-template-parse
+name: ssti-ruby-liquid-template-parse
+category: INJECTION
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-1336
+pattern: ^(?!\s*#).*?\bLiquid::Template\.parse\s*\(\s*(?:[a-z_@][\w.:]*|"[^"]*#\{|(?:"[^"]*"|'[^']*')\s*(?:\+|%|<<)(?!\s*["']))
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Parse only fixed, literal Liquid templates and pass user input as the assigns hash to render; never call parse on request-derived strings.
+why: Liquid::Template.parse compiles its argument as a Liquid template; parsing an attacker-controlled string is SSTI (data disclosure, DoS, and RCE via exposed/unsafe drops or filters) rather than passing input as render data.
+confidence: high

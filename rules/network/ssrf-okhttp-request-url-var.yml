@@ -1,0 +1,15 @@
+id: wide/ssrf-okhttp-request-url-var
+name: ssrf-okhttp-request-url-var
+category: NETWORK
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-918
+pattern: (?:\.url|HttpUrl\s*\.\s*(?:parse|get))\s*\(\s*(?!["'])(?![A-Z][A-Z0-9_]{2,}\s*[,)])[A-Za-z_$]
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Build the URL from a fixed base and validate the resolved host against an allowlist before calling .url()/HttpUrl.parse().
+not-match: '"https?:\/\/|allow-?list|white-?list|isAllowed|permittedHost|ALLOWED_'
+why: OkHttp Request.Builder().url(var) / HttpUrl.parse(var) builds an outbound request to a user-derived URL, enabling SSRF.
+confidence: high

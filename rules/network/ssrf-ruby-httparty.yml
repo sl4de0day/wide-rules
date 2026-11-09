@@ -1,0 +1,13 @@
+id: wide/ssrf-ruby-httparty
+name: ssrf-ruby-httparty
+category: NETWORK
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-918
+pattern: \bHTTParty\.(?:get|post|put|patch|delete|head|options)\s*\(\s*(?:URI[.(]|params\b|request\.|cookies\b|@?\w*(?:url|uri|host|hostname|link|endpoint|target|addr|address|domain)\w*(?!:))
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Validate the parsed host against an allowlist and block RFC1918/link-local addresses before calling HTTParty.
+not-match: (?:allow_?list|white_?list|allowed_?hosts?|permitted_?hosts?|permit_?list|safe_?hosts?|valid_?hosts?|is_allowed|host_allowed)|URI(?:\.parse|\.join|\.encode|\.escape)?\s*\(\s*(?:["']https?:|ENV\b)|^\s*#
+why: HTTParty issues a request to a user-controlled URL with no allowlist, enabling SSRF. Added \b so MyHTTParty.get does not match, and ENV suppression for URI(ENV[...]).
+confidence: high

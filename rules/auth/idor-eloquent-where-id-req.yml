@@ -1,0 +1,18 @@
+id: wide/idor-eloquent-where-id-req
+name: idor-eloquent-where-id-req
+category: AUTH
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-639
+pattern: '::where\s*\(\s*[''"](\w+_)?id[''"]\s*,\s*(\$request\b|request\s*\(|\$_(GET|POST|REQUEST|COOKIE)\b)'
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: Add an ownership constraint to the same query — ->where('user_id', auth()->id()), ->whereBelongsTo(auth()->user()), a tenant scope — or authorize via a policy after loading.
+not-match: user_?id|owner|auth\s*\(|Auth::|->user\b|->getUser\b|Gate::|authorize|policy|current_?user|scope|whereBelongsTo|->id\(\)|abort_unless|abort_if|\bcannot\b|session|Session::|isGranted|tenant|team_?id|account_?id|org_?id|organi|company_?id|group_?id|customer_?id|^\s*(\/\/|#(?!\[)|\*)
+why: Model::where('id', $request->id)->first() looks a record up by an id column driven by client input with no second predicate binding it to the current user, so an attacker can enumerate other users' rows. The ownership twin chains a second where('user_id', auth()->id()) / whereBelongsTo / a tenant column, which notMatch drops. The id-key was tightened to (\w+_)?id so columns like 'paid'/'valid'/'uuid' no longer match by ending in 'id'.
+confidence: high

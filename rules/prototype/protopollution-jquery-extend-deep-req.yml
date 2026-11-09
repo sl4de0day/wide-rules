@@ -1,0 +1,22 @@
+id: wide/protopollution-jquery-extend-deep-req
+name: protopollution-jquery-extend-deep-req
+category: PROTOTYPE
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-1321
+pattern: ^(?=.*(?:\$|jQuery)\s*\.\s*extend\s*\(\s*true\b)(?=.*(?:req(?:uest)?\.(?:body|query|params|headers|cookies)|ctx\.(?:request\.body|query|params|body)|JSON\.parse\s*\(|\bpayload\b|\buserInput\b))
+message: Prototype pollution — attacker-controlled keys can reach Object.prototype via a recursive merge/set (CWE-1321).
+remediation: Avoid deep-extending untrusted input. Use a shallow $.extend (no leading true) after schema validation, extend into an Object.create(null) target, strip __proto__/constructor/prototype keys first, or upgrade to jQuery >= 3.4.0 which guards __proto__.
+not-match: (?:__proto__|constructor|prototype|Object\.create\s*\(\s*null\s*\)|structuredClone)
+why: jQuery.extend/$.extend becomes a RECURSIVE deep copy only when the first argument is true. A deep $.extend(true, target, req.body) walks nested attacker keys into target and, via a __proto__ key, pollutes Object.prototype (jQuery <3.4.0 CVE-2019-11358). The `(\s*true\b` anchor requires the boolean-true first arg so shallow $.extend({}, ...) and $.extend(false, ...) are not flagged, and $ or jQuery must directly precede .extend so _.extend / element.extend are left alone.
+confidence: high

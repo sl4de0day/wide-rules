@@ -1,0 +1,18 @@
+id: wide/server-presence-only-auth-header-php
+name: server-presence-only-auth-header-php
+category: AUTH
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-287
+pattern: (?:\bif\s*\(\s*(?:isset\s*\(\s*|!\s*empty\s*\(\s*)?\$_(?:SERVER|COOKIE|REQUEST|GET)\s*\[\s*['"](?:HTTP_AUTHORIZATION|Authorization|PHPSESSID|session|sessionid|token|api_?key|HTTP_X_API_KEY|HTTP_X_AUTH_TOKEN)['"]\s*\]\s*\)?\s*\)|\bif\s*\(\s*\$request->(?:bearerToken\s*\(\s*\)|(?:header|hasHeader|cookie)\s*\(\s*['"](?:Authorization|X-Api-Key|X-Auth-Token|session|sessionid|token|api_?key|PHPSESSID)['"]\s*\))\s*\))
+message: Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.
+remediation: 'After confirming presence, verify the credential: firebase/php-jwt JWT::decode with the key (throws on bad signature), a token validator, or Laravel''s auth guard. Return 401 on both absence and verification failure.'
+not-match: (?:->verify|verifyToken|verifyJwt|validateToken|JWT::decode|->isValid|verify_signature|passport|introspect|^\s*\/\/|^\s*#|^\s*\*)
+why: Access is granted because an auth header/cookie is set or non-empty (isset($_SERVER['HTTP_AUTHORIZATION']) / !empty(...) / truthy / $request->bearerToken() / $request->header('Authorization')). The credential itself is never verified, so any attacker-supplied value authenticates. The Laravel branch is name-restricted to auth headers/cookies so a $request->header('Content-Type') presence check does not match.
+confidence: high

@@ -1,0 +1,35 @@
+id: wide/session-id-from-client-input
+name: session-id-from-client-input
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - py
+  - pyi
+  - pyw
+  - java
+cwe: CWE-384
+pattern: \b(?:session[_-]?id|jsessionid|phpsessid|sid)\s*=\s*(?:req(?:uest)?\.(?:query|params|body|cookies|get)\b|\$_(?:GET|POST|REQUEST|COOKIE)\b|params\[|query\[|request\.(?:GET|POST|args|cookies))|req\.session(?:\.id|\[['"]id['"]\])\s*=\s*req\.
+message: A session identifier is taken from client-controlled input — session fixation.
+remediation: Never accept a session id from the client. Let the session store generate it, mark the cookie HttpOnly/Secure/SameSite, and regenerate the session on login.
+not-match: ^\s*(?:\/\/|\*|\/\*|#)
+why: If the session id is set from a request parameter, a cookie the client already controls, or a URL value, an attacker can fix a victim's session to a known id (session fixation) and hijack the authenticated session after the victim logs in.
+confidence: medium

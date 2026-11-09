@@ -1,0 +1,16 @@
+id: wide/cwe113-php-header-superglobal
+name: cwe113-php-header-superglobal
+category: INJECTION
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+cwe: CWE-113
+pattern: \bheader\s*\([^;]*\$_(?:GET|POST|REQUEST|COOKIE)\b
+message: An HTTP response header is built from an unvalidated request value.
+remediation: Validate against a strict allowlist and reject any CR/LF characters before calling header().
+why: 'HTTP response splitting / header injection: CR or LF in the input lets an attacker inject extra headers or split the response, enabling cache poisoning or XSS.'
+confidence: high

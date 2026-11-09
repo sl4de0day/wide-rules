@@ -1,0 +1,31 @@
+{
+  "name": "wide-rules",
+  "version": "0.191126",
+  "description": "Unified Vulnerability and AST Pattern Database for the Wide Ecosystem",
+  "type": "module",
+  "main": "dist/rules.json",
+  "scripts": {
+    "validate": "node scripts/validate.cjs",
+    "test": "node scripts/test-rules.cjs",
+    "bundle": "node scripts/bundle.cjs"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sl4de0day/wide-rules.git"
+  },
+  "keywords": [
+    "security-rules",
+    "sast",
+    "ast-patterns",
+    "vulnerability-database",
+    "appsec",
+    "devsecops",
+    "wide",
+    "wide-ecosystem"
+  ],
+  "author": "sl4de0day",
+  "license": "MIT",
+  "devDependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}

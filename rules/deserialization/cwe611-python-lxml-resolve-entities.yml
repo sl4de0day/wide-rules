@@ -1,0 +1,14 @@
+id: wide/cwe611-python-lxml-resolve-entities
+name: cwe611-python-lxml-resolve-entities
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-611
+pattern: resolve_entities\s*=\s*True
+message: lxml XMLParser is created with resolve_entities=True.
+remediation: Use resolve_entities=False plus no_network=True, or parse untrusted XML with defusedxml.
+why: Resolving entities lets malicious XML reference external DTDs and local files (XXE) or nest entities for a billion-laughs memory-exhaustion attack.
+confidence: high

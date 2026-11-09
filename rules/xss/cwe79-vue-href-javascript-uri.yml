@@ -1,0 +1,14 @@
+id: wide/cwe79-vue-href-javascript-uri
+name: cwe79-vue-href-javascript-uri
+category: XSS
+severity: HIGH
+languages:
+  - vue
+  - html
+  - htm
+cwe: CWE-79
+pattern: '(?::href|v-bind:href)\s*=\s*(["''])(?:(?!\1).)*javascript:'
+message: 'Vue :href / v-bind:href binds a javascript: URL.'
+remediation: Bind only http(s)/relative URLs, validate the scheme against an allowlist before binding, and never build hrefs from a 'javascript:' string.
+why: 'A bound href containing the javascript: scheme executes script when the link is clicked; if any part of the URL comes from data, an attacker can run arbitrary JS in the page.'
+confidence: high

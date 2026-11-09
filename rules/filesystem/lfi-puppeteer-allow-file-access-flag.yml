@@ -1,0 +1,23 @@
+id: wide/lfi-puppeteer-allow-file-access-flag
+name: lfi-puppeteer-allow-file-access-flag
+category: FILESYSTEM
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+cwe: CWE-73
+pattern: '--(?:allow-file-access-from-files|disable-web-security)\b'
+message: Renderer resource embedding — a document/PDF/image converter resolves a user-controlled resource, enabling LFI or SSRF (CWE-918/73/611).
+remediation: Remove these flags; keep default web-security and no local-file access, and gate remote fetches with request interception.
+not-match: ^\s*(?:\/\/|#|\*)
+why: Launching the headless-Chrome converter with --allow-file-access-from-files or --disable-web-security lets user-supplied HTML read local files via file:// (LFI) and bypass same-origin protections when rendered to PDF/image. Prose mentions without the leading '--' do not match.
+confidence: high

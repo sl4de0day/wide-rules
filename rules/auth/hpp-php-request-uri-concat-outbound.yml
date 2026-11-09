@@ -1,0 +1,18 @@
+id: wide/hpp-php-request-uri-concat-outbound
+name: hpp-php-request-uri-concat-outbound
+category: AUTH
+severity: MEDIUM
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-235
+pattern: \b(curl_setopt\s*\(\s*\$\w+\s*,\s*CURLOPT_URL|file_get_contents|fopen|get_headers)\s*[(,][^;]*\$_SERVER\s*\[\s*['"]REQUEST_URI['"]
+message: HTTP parameter pollution — raw/duplicated request parameters forwarded so layers disagree (CWE-235).
+remediation: Extract only the needed, validated parameters from the parsed request and reconstruct the downstream URL with http_build_query rather than concatenating the raw REQUEST_URI.
+not-match: http_build_query|rawurlencode|urlencode|parse_url|basename
+why: A downstream URL is built by concatenating the raw $_SERVER['REQUEST_URI'] (path plus raw query string) into an outbound curl/stream request. Duplicate/encoded parameters pass through unnormalized, enabling parameter pollution on the backend. The sink function is required, so header()/logging/echo of REQUEST_URI does not match; notMatch suppresses sanitized/reconstructed forms (http_build_query, rawurlencode, urlencode, parse_url, basename).
+confidence: high

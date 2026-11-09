@@ -1,0 +1,22 @@
+id: wide/client-authz-storage-auth-flag-write
+name: client-authz-storage-auth-flag-write
+category: AUTH
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-602
+pattern: (?:localStorage|sessionStorage|window\.localStorage|window\.sessionStorage|globalThis\.localStorage)\s*(?:\.\s*setItem\s*\(\s*['"](?:isLoggedIn|loggedIn|isLogin|isLogIn|isAuthenticated|isAuthed|isAdmin|admin|role|userRole|user_role|authenticated|auth|isSuperuser|accessLevel|permission|permissions|isAuthorized)['"]|\.\s*(?:isLoggedIn|isAdmin|isAuthenticated|isAuthed|role|authenticated|isSuperuser|isAuthorized)\s*=(?!=)|\[\s*['"](?:isLoggedIn|isAdmin|isAuthenticated|role|authenticated|isSuperuser|isAuthorized)['"]\s*\]\s*=(?!=))
+message: Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.
+remediation: Do not store authentication/authorization state on the client. Keep the session server-side (httpOnly cookie or opaque token) and re-authorize each request on the server; store at most non-sensitive UI preferences client-side.
+not-match: (?:^\s*(?:\/\/|\*|\/\*|<!--|#))|(?:\.spec\.|\.test\.|__tests__|\bexpect\s*\(|\bmock\w*|toHaveBeenCalled|\bdescribe\s*\(|\bit\s*\()
+why: An authentication/authorization flag (isLoggedIn, isAdmin, role) is persisted to localStorage/sessionStorage. Web storage is fully readable and writable by the user and any script on the origin, so a stored auth flag becomes client-controlled security state that later code trusts — the classic insecure-by-design pattern where the client holds the decision.
+confidence: high

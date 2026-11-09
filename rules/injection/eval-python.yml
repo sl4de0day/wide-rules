@@ -1,0 +1,14 @@
+id: wide/eval-python
+name: eval-python
+category: INJECTION
+severity: MEDIUM
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-95
+pattern: ^(eval|exec)$
+message: eval() and exec() run whatever string they are given.
+remediation: ast.literal_eval parses a literal without the ability to execute anything.
+why: A crafted string becomes code running with the interpreter's authority.
+confidence: high

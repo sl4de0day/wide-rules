@@ -1,0 +1,20 @@
+id: wide/zipslip-node-concat-entry-write
+name: zipslip-node-concat-entry-write
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-22
+pattern: (createWriteStream|writeFileSync|writeFile|mkdirSync)\s*\([^)]*\+\s*(entry|header|file|zipEntry|ze)\.(entryName|fileName|path|name)
+message: Zip Slip / insecure archive extraction — an archive entry name escapes the destination, arbitrary file write (CWE-22/59).
+remediation: Never concatenate entry names into write paths. Resolve with path.resolve(dest, entry.path), assert startsWith(path.resolve(dest)+path.sep), reject symlink/absolute entries, then write.
+not-match: ^\s*(\/\/|\/\*|\*)|\.startsWith\(|path\.relative\(|isPathInside|withinDir|sanitiz|safeJoin|realpath
+why: A file write/mkdir target is built by string-concatenating the destination with an archive entry name (dest + entry.path); string concat bypasses even path.join normalization and lets ../ or an absolute entry name write outside the destination directory.
+confidence: high

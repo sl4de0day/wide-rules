@@ -1,0 +1,25 @@
+id: wide/cwe1022-window-open-missing-noopener
+name: cwe1022-window-open-missing-noopener
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-1022
+pattern: window\.open\s*\([^)]*,\s*['"`]_blank['"`]
+message: window.open opens a _blank target without the 'noopener' feature.
+remediation: Add "noopener" (and "noreferrer") to the window.open feature string, or set the returned window's opener to null.
+not-match: noopener
+why: Without noopener the newly opened page keeps a live window.opener reference and can navigate the original tab to a phishing page (reverse tabnabbing).
+confidence: high

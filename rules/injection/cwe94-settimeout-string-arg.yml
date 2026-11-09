@@ -1,0 +1,24 @@
+id: wide/cwe94-settimeout-string-arg
+name: cwe94-settimeout-string-arg
+category: INJECTION
+severity: CRITICAL
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-94
+pattern: \b(?:window\.|self\.|globalThis\.)?set(?:Timeout|Interval)\s*\(\s*['"`]
+message: setTimeout/setInterval is called with a string first argument, which is compiled and run as code like eval().
+remediation: Pass a function reference or an arrow function as the first argument instead of a string.
+why: A string timer callback is passed to the JS compiler at fire time; any attacker-influenced portion becomes arbitrary code execution in the page or process.
+confidence: high

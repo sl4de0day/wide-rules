@@ -1,0 +1,12 @@
+id: wide/ssti-ruby-erb-new
+name: ssti-ruby-erb-new
+category: INJECTION
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-1336
+pattern: ^(?!\s*#).*?\bERB\.new\s*\(\s*(?:[a-z_@][\w.:]*|"[^"]*#\{|(?:"[^"]*"|'[^']*')\s*(?:\+|%|<<)(?!\s*["']))
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Keep the ERB template source a fixed string literal (or a trusted file) and pass user input only as data through the binding/hash given to result/result_with_hash, never spliced into the template string.
+why: 'ERB.new compiles its first argument into executable Ruby; a dynamic template source (variable, concatenation, #{} interpolation, or % formatting) lets attacker input run arbitrary code via <%= %>/<% %> tags.'
+confidence: high

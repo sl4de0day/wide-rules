@@ -1,0 +1,31 @@
+id: wide/proxy-raw-body-forward
+name: proxy-raw-body-forward
+category: GENERAL
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - py
+  - pyi
+  - pyw
+  - go
+  - java
+  - rs
+cwe: CWE-444
+pattern: \b(?:http\.(?:Post|NewRequest)|(?:requests|axios|fetch|got|httpx|client|http)\.(?:post|Post|request)|\.(?:Post|Do)\s*\()[^\n]*(?:bytes\.New(?:Buffer|Reader)\s*\(\s*\w*(?:body|payload|raw|reqbody)\w*|data\s*=\s*\w*(?:body|raw)\w*|=\s*request\.(?:data|body|get_data)\b)
+message: A proxy forwards the client's raw body downstream after validating a parsed copy.
+remediation: Re-serialise the validated data and forward that, not the original bytes; reject duplicate/unknown fields.
+why: This parser and the downstream one can disagree on a body with duplicate keys — the check passes on one reading, the dangerous action runs on the other (HTTP parameter pollution).
+confidence: high

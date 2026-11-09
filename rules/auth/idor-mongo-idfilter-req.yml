@@ -1,0 +1,18 @@
+id: wide/idor-mongo-idfilter-req
+name: idor-mongo-idfilter-req
+category: AUTH
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-639
+pattern: '->(findOneBy|findOne|find)\s*\(\s*\[[^\]]*?[''"]_id[''"]\s*=>[^\]]*(\$request\b|\$_(GET|POST|REQUEST|COOKIE)\b|request\s*\()'
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: Add an owner discriminator to the filter, e.g. ['_id' => new ObjectId($request->id), 'userId' => (string) auth()->id()], or authorize the loaded document with a policy/voter.
+not-match: user_?id|owner|current_?user|auth\s*\(|Auth::|->user\b|->getUser\b|getUser\s*\(|session\s*\(|Session::|Gate::|authorize|policy|isGranted|denyAccessUnlessGranted|->can\b|\bcannot\b|abort_unless|abort_if|whereBelongsTo|tenant|team_?id|account_?id|org_?id|organi|company_?id|group_?id|customer_?id|^\s*(\/\/|#(?!\[)|\*)
+why: A Mongo/ODM filter selects a document by _id taken directly from the request, with no owner key (userId/owner/tenant) in the same filter array, so any user can read another's document by supplying its _id. notMatch now also covers Symfony ownership idioms (getUser, isGranted, denyAccessUnlessGranted) and the tenant vocabulary so scoped filters are not flagged.
+confidence: high

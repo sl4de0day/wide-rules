@@ -1,0 +1,25 @@
+id: wide/client-decoded-scope-permission-access
+name: client-decoded-scope-permission-access
+category: CRYPTO
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+  - html
+  - htm
+  - xhtml
+cwe: CWE-347
+pattern: \b(jwtDecode|jwt_decode|jwt\.decode|decodeJwt|decodeToken|parseJwt|parseToken)\s*\((?:[^()]|\([^()]*\))*\)\s*\??\.(scopes?|permissions|roles|grants|entitlements|authorities)\b
+message: Client-side token signing or embedded signing key — a secret/decision shipped to the browser is attacker-forgeable.
+remediation: Treat decoded scopes as untrusted. Verify the signature and, for enforcement, check permissions on the server for each protected call. If you must read scopes client-side for UI, do it only after jwt.verify/jwtVerify and never as the sole gate.
+not-match: ^\s*(\/\/|\*|\/\*)|\bjwt\.verify\b|\.verify\s*\(
+why: Scopes/permissions/roles are pulled from an unverified decoded token. Because decode skips signature verification, the user can edit the payload to add any grant and this read will trust it — an authorization input taken from a forgeable claim.
+confidence: high

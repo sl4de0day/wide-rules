@@ -1,0 +1,15 @@
+id: wide/ssrf-xslt-external-stylesheet-permissive
+name: ssrf-xslt-external-stylesheet-permissive
+category: NETWORK
+severity: MEDIUM
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-918
+pattern: (?:ACCESS_EXTERNAL_(?:STYLESHEET|SCHEMA)\s*,\s*["'](?:all|https?|file)|accessExternal(?:Stylesheet|Schema)["']\s*,\s*["'](?:all|https?|file))
+message: Renderer resource embedding — a document/PDF/image converter resolves a user-controlled resource, enabling LFI or SSRF (CWE-918/73/611).
+remediation: Set ACCESS_EXTERNAL_STYLESHEET and ACCESS_EXTERNAL_SCHEMA to "" (empty) to forbid external resolution, or restrict to an explicit allowlisted protocol/host.
+not-match: ^\s*(?:\/\/|#|\*)
+why: A TransformerFactory / XSLT-FO processor set to allow external stylesheets/schemas (accessExternalStylesheet=all|http|file) fetches xsl:import/xsl:include and schema URLs from user-controlled documents, causing SSRF to internal hosts and file:// reads during rendering. Empty-string (disabled), symbolic constants (EMPTY), and bare references without a permissive value do not match.
+confidence: high

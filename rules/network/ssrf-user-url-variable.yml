@@ -1,0 +1,20 @@
+id: wide/ssrf-user-url-variable
+name: ssrf-user-url-variable
+category: NETWORK
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-918
+pattern: \b(?:fetch|axios|got|needle|superagent|request)\s*(?:\.\s*(?:get|post|put|patch|delete|del|head|request))?\s*\(\s*(?:user|target|remote|external|input|redirect|dest|destination|next|return|callback|webhook|proxy|unsafe|untrusted|supplied|provided)_?url\b
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Validate the URL against a fixed allowlist of permitted hosts before the request (parse with `new URL()`, compare host exactly), reject non-http(s) schemes, and re-validate after DNS resolution against private/link-local/loopback ranges. If the value is genuinely a constant base, rename it (e.g. apiBaseUrl) and keep it out of user control.
+not-match: allow[_]?list|white[_]?list|isAllowed|validateHost|allowedHost
+why: An outbound HTTP client call is made with a variable whose name strongly signals externally-controlled intent (userUrl, targetUrl, redirectUrl, webhookUrl, callbackUrl, proxyUrl, remoteUrl, external_url, ...). These names almost always denote a URL sourced from request input, so the destination host is attacker-influenced. The keyword must sit immediately after `(` and be immediately followed by `_?url`, so `userProfile.url` (user not adjacent to url) and unrelated names (`baseUrl`, `apiEndpointUrl`) are not flagged. Complements the taint engine for the common case where the value was assigned to a suggestively-named local a line or two earlier.
+confidence: high

@@ -1,0 +1,24 @@
+id: wide/path-prefix-bypass
+name: path-prefix-bypass
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-22
+pattern: \.startsWith\s*\(\s*(?:path\.(?:join|resolve)|__dirname)\b
+message: A path is validated with startsWith on a base directory (prefix bypass).
+remediation: Compare against the base plus a separator, or check path.relative(base, resolved) does not start with '..'.
+why: startsWith('/app/views') also matches '/app/views_secret', so '../views_secret/x' passes the check and a sibling directory is read — the boundary is not enforced.
+confidence: high

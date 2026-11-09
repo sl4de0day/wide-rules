@@ -1,0 +1,12 @@
+id: wide/ssti-ruby-mustache-render
+name: ssti-ruby-mustache-render
+category: INJECTION
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-1336
+pattern: ^(?!\s*#).*?\bMustache\.render\s*\(\s*(?:[a-z_@][\w.:]*|"[^"]*#\{|(?:"[^"]*"|'[^']*')\s*(?:\+|%|<<)(?!\s*["']))
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Pass a constant literal template as the first argument and put all user input in the data hash (second argument); never make the template string itself from request data.
+why: Mustache.render treats its first argument as the template body; when that source is dynamic/user-controlled it is SSTI (template-tag injection, context/method exposure) instead of the intended data-passing via the second argument.
+confidence: high

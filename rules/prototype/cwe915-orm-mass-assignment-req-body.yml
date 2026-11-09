@@ -1,0 +1,19 @@
+id: wide/cwe915-orm-mass-assignment-req-body
+name: cwe915-orm-mass-assignment-req-body
+category: PROTOTYPE
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-915
+pattern: \.(?:update|create|build|save|insert|assign|merge)\s*\(\s*(?:[A-Za-z_$][\w$.]*\s*,\s*)?req\.(?:body|query|params)\b
+message: ORM persistence call (Sequelize/TypeORM/Object.assign) is fed req.body/query/params directly.
+remediation: Whitelist allowed fields before persisting (pick/destructure the expected keys, or use the ORM's `fields`/allowlist option) instead of the whole request object.
+why: Passing the raw request object into update/save/create/assign lets an attacker set fields the form never exposed — role, isAdmin, ownerId — a mass-assignment privilege escalation.
+confidence: high

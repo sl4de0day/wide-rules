@@ -1,0 +1,30 @@
+id: wide/jwt-none
+name: jwt-none
+category: CRYPTO
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - go
+  - java
+cwe: CWE-347
+pattern: alg(?:orithm)?['"]?\s*(?::|={1,3})\s*['"]none['"]|algorithms?\s*[:=]\s*\[\s*['"]none['"]
+message: A JWT is accepted with algorithm 'none'.
+remediation: Pin a real algorithm (e.g. RS256/HS256) and never allow 'none'.
+why: The 'none' algorithm means no signature, so anyone can forge a token the server will trust.
+confidence: high

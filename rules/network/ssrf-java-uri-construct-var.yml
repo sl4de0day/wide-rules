@@ -1,0 +1,15 @@
+id: wide/ssrf-java-uri-construct-var
+name: ssrf-java-uri-construct-var
+category: NETWORK
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-918
+pattern: (?:URI\s*\.\s*create|new\s+URI)\s*\(\s*(?!["'])(?![A-Z][A-Z0-9_]{2,}\s*[,)])[A-Za-z_$]
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Construct the URI from a constant base and validated components, and validate the host against an allowlist before issuing the request.
+not-match: '"https?:\/\/|allow-?list|white-?list|isAllowed|permittedHost|ALLOWED_'
+why: URI.create(var) / new URI(var) constructs the target URI for HttpClient/WebClient/RestTemplate from user input, the core of an SSRF chain. (new URIBuilder(...) is excluded, since new\s+URI must be immediately followed by '(').)
+confidence: high

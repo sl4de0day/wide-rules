@@ -1,0 +1,20 @@
+id: wide/js-numeric-isnan-money-no-bound
+name: js-numeric-isnan-money-no-bound
+category: LOGIC
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-1284
+pattern: isNaN\s*\(\s*[^)]*(?:price|amount|discount|qty|quantity|total|balance|cost|credit|points|refund)[^)]*\)
+message: Unsafe numeric validation — isNaN/Number accepts Infinity and negatives without a range guard (CWE-1284).
+remediation: 'Do not validate money/quantity with isNaN() alone. Require finiteness and a sign bound: `if (!Number.isFinite(x) || x < 0) reject()` (or x > 0), clamp with `Math.max(0, x)`, or enforce a schema bound such as zod `z.number().finite().nonnegative()` / `.positive()` or `Joi.number().min(0)`.'
+not-match: Number\.isFinite|[<>]=?\s*0|Math\.max\s*\(\s*0|\.(?:positive|min|nonnegative)\s*\(|^\s*(?:\/\/|\/\*|\*)
+why: isNaN() only rejects NaN; it returns false for Infinity (isNaN(Infinity) === false) and for every negative number. When it is the sole validator for a money/quantity value (price, amount, discount, qty/quantity, total, balance, cost, credit, points, refund), an attacker can submit a negative value or Infinity that passes the check, enabling negative-total abuse, credited/free purchases, and downstream overflow. This is CWE-1284 (Improper Validation of Specified Quantity in Input). The rule fires on isNaN(<money-ish var>) only when the SAME line carries no Number.isFinite() check, no 0-bound comparison (<0/<=0/>=0/>0), no Math.max(0,...) clamp, and no zod/Joi .positive()/.min()/.nonnegative() schema, and it is not a comment line.
+confidence: high

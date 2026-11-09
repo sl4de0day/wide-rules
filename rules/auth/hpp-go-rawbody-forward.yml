@@ -1,0 +1,13 @@
+id: wide/hpp-go-rawbody-forward
+name: hpp-go-rawbody-forward
+category: AUTH
+severity: HIGH
+languages:
+  - go
+cwe: CWE-235
+pattern: \b(?:http|client)\.(?:Post|PostForm|NewRequest)\s*\((?:[^()]|\([^()]*\))*,\s*(?:[A-Za-z_][\w.]*\()?\b(?:r|req|request)\.Body\b
+message: HTTP parameter pollution — raw/duplicated request parameters forwarded so layers disagree (CWE-235).
+remediation: Parse and validate the body, then re-serialize a canonical body (e.g. bytes.NewReader(json.Marshal(v))) for the downstream request rather than forwarding r.Body verbatim.
+not-match: bytes\.NewReader|bytes\.NewBuffer|strings\.NewReader|json\.Marshal
+why: The raw inbound request body (r.Body) is streamed unmodified into an outbound request; if it carries duplicated form parameters, the downstream service re-parses them with different precedence than the frontend, enabling parameter pollution. The body must appear as a real argument of the outbound call (balanced-paren match), optionally wrapped in one no-op adaptor like io.NopCloser, so an r.Body mentioned in a trailing comment or a separate statement on the same line no longer matches.
+confidence: high

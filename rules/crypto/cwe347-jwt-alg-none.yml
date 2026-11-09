@@ -1,0 +1,19 @@
+id: wide/cwe347-jwt-alg-none
+name: cwe347-jwt-alg-none
+category: CRYPTO
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-347
+pattern: \balgorithms?\s*:\s*(?:\[\s*)?["']none["']
+message: JWT verification accepts the 'none' algorithm (unsigned tokens).
+remediation: 'Never list ''none''; pin a concrete algorithm such as algorithms: [''RS256''] or [''HS256''].'
+why: The 'none' algorithm skips signature verification entirely, so any attacker can craft a token with an arbitrary payload that is accepted as valid.
+confidence: high

@@ -1,0 +1,20 @@
+id: wide/session-store-indexed-by-raw-client-id-js
+name: session-store-indexed-by-raw-client-id-js
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-807
+pattern: \b(sessions|session|users|user|accounts|account|roles|role|currentUser|current_user)\s*\[\s*req\.(cookies|headers|query|params|body)\s*(\.\s*|\[\s*['"])(x[-_])?(user(name|id|_id|_name|Id)?|uid|login|account|acct)\b
+message: Broken session management — identity/role from an unverified client value or a writable store (CWE-807/302).
+remediation: 'Resolve the session from a verified credential: a random session id issued server-side and looked up in a server session store, or a signed/verified token (req.signedCookies, jwt.verify, express-session req.session.userId).'
+not-match: signedCookies|req\.session\.|jwt\.verify|^\s*(\/\/|\*|\/\*)
+why: A session/user/role object is looked up by directly indexing a collection with a raw client-controlled identifier (req.cookies/headers/query/params/body username/uid). The client can set that value to any account, so this is a full authentication/authorization bypass with no verified token gating the lookup.
+confidence: high

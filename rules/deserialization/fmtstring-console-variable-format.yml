@@ -1,0 +1,19 @@
+id: wide/fmtstring-console-variable-format
+name: fmtstring-console-variable-format
+category: DESERIALIZATION
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-134
+pattern: \b(?:console\s*\.\s*(?:log|error|warn|info|debug|trace)|(?:logger|log|winston)\s*\.\s*(?:log|info|warn|error|debug|verbose|silly)|debug)\s*\(\s*(?:user|input|fmt|format|template|msg|message|payload|untrusted|unsafe|tainted)[\w.$\[\]]*\s*,
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Log with a constant literal template and pass the dynamic value as a subsequent argument: `console.log(''%s'', userMessage)`. Do not put a user-derived or externally-sourced string in the first argument when other arguments follow it.'
+why: 'A console/logger/debug call whose FIRST argument is a non-literal variable whose name signals user-controlled or format content (userInput, msgFormat, unsafeFmt, payload, templateStr, ...) AND is followed by further value arguments. Node treats that first string as a util.format template, so %-directives inside the attacker-influenced variable consume the trailing arguments — the same disclosure/log-forgery risk as passing a raw user string as the format. HARDENING vs the original: the suspicious keyword must be the PREFIX of the first-argument identifier (not a substring), which removes the huge benign suffix-collision class (`errorMessage`, `logMessage`, `warnMsg` no longer fire); a function-call first arg (`formatDate(d),`) is excluded because `(` isn''t in the identifier class; a leading quoted literal is rejected because the keyword alternation can''t match a quote. KNOWN RESIDUAL: because `userInput` (TP) and `payloadSize` (benign) are structurally identical keyword+CapWord, prefix names like `payloadSize`/`formatOptions` and a bare `message,` still fire — an inherent name-heuristic limit.'
+confidence: high

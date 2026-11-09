@@ -1,0 +1,13 @@
+id: wide/rb-reflected-html-params-interp
+name: rb-reflected-html-params-interp
+category: XSS
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-79
+pattern: '"[^"]*<\w[^"]*#\{[^}]*params\s*\['
+message: Reflected / context-mismatched XSS — user input reaches HTML or JS output without proper contextual encoding (CWE-79/116).
+remediation: Escape with CGI.escapeHTML / ERB::Util.html_escape (or the h() view helper, or Rails' default ERB auto-escaping via <%= %>); cast numeric params with .to_i; avoid html_safe/raw on user-controlled data.
+not-match: (?:^\s*#|CGI\.escapeHTML|ERB::Util|html_escape|sanitize|\bh\(|<%=|\.to_i\b|\.to_f\b)
+why: params[...] is interpolated into an HTML string literal (Sinatra route / inline render) with no escaping, reflecting attacker markup into the response -> reflected XSS.
+confidence: high

@@ -1,0 +1,20 @@
+id: wide/arginj-node-concat-arg-array
+name: arginj-node-concat-arg-array
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-88
+pattern: ^(?=.*\b(?:execFileSync|execFile|spawnSync|spawn|fork)\s*\()(?=.*\[)(?=.*(?:['"][^'"]*['"]\s*\+\s*[A-Za-z_$]|[A-Za-z_$][\w$.\[\]]*\s*\+\s*['"]|\x60[^\x60]*\$\{)).*
+message: Argument injection — a user value reaches a CLI argument that could be interpreted as an option/flag (CWE-88).
+remediation: Allowlist the value with an anchored regex .test() on the same line before use, coerce numerics with Number()/parseInt, or place a literal '--' end-of-options separator in the array before any user/positional value. Never assemble option strings out of raw input.
+not-match: (?:\.test\s*\(|\.includes\s*\(|['"]--['"]|\bNumber\s*\(|\bparseInt\b|\bparseFloat\b|^\s*(?:\/\/|\/\*|\*))|new RegExp\(|message:\s*['"]|\bwhy:|\bfix:|\bsinkRegex\b|text:\s*new
+why: 'A spawn-family call (execFile/execFileSync/spawn/spawnSync/fork) receives an args-array element built by string concatenation or template interpolation of a variable (e.g. ''output.'' + format or `--out=${x}`). An args array avoids the shell but is NOT flag-safe: when the user portion can begin the argument (var-first concat like pattern + ''.txt'', or a whole interpolated element), a value starting with ''-'' is read by the child as an option (e.g. -O/etc/passwd, --output=/evil), turning unvalidated input into argument/flag injection.'
+confidence: high

@@ -1,0 +1,15 @@
+id: wide/ssrf-blocklist-only-validation
+name: ssrf-blocklist-only-validation
+category: NETWORK
+severity: MEDIUM
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-918
+pattern: (?:blacklist|blocklist|denylist|blocked|forbidden|banned|deny_?list|block_?list)\w*.*['"](?:127\.0\.0\.1|localhost|169\.254|0\.0\.0\.0|::1|metadata\.google)
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Replace the blocklist with a positive allowlist of permitted destination hosts. If you must block internal ranges, do it after DNS resolution against the resolved IP and cover all private/link-local/loopback CIDRs, not string patterns.
+not-match: ^\s*#
+why: A blocklist/denylist that only enumerates internal addresses (127.0.0.1, localhost, 169.254.x, ::1, cloud metadata) is trivially bypassed via alternate encodings, DNS names that resolve to those IPs, IPv6, or redirects - it is not a valid SSRF defense (CWE-918). Requiring the internal address to be quote-delimited ('127.0.0.1', not a bare word in prose) keeps free-text log/error messages that merely mention 'blocked ... localhost' from firing.
+confidence: high

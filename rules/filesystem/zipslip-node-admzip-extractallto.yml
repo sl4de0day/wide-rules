@@ -1,0 +1,20 @@
+id: wide/zipslip-node-admzip-extractallto
+name: zipslip-node-admzip-extractallto
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-22
+pattern: \.extractAllTo(Async)?\s*\(
+message: Zip Slip / insecure archive extraction — an archive entry name escapes the destination, arbitrary file write (CWE-22/59).
+remediation: Do not call extractAllTo on untrusted archives. Iterate entries and, for each, compute path.resolve(dest, entry.entryName) and confirm it startsWith(path.resolve(dest)+path.sep) before writing; reject absolute names and symlink entries.
+not-match: ^\s*(\/\/|\/\*|\*)|\.startsWith\(|path\.relative\(|realpath|getCanonicalPath|sanitiz|isPathInside|withinDir|safeExtract|assertInside
+why: adm-zip extractAllTo()/extractAllToAsync() writes every entry to disk using the archive-internal entry names; a crafted name like ../../etc/cron.d/x escapes the destination directory, giving an attacker arbitrary file write from an untrusted upload.
+confidence: high

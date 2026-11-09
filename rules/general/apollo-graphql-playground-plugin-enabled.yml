@@ -1,0 +1,20 @@
+id: wide/apollo-graphql-playground-plugin-enabled
+name: apollo-graphql-playground-plugin-enabled
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-489
+pattern: ApolloServerPluginLandingPageGraphQLPlayground
+message: GraphQL/dev misconfiguration — introspection or a dev endpoint exposed, or a weak/predictable secret (CWE-200/489/307/770/330).
+remediation: 'Select the landing page by environment: `plugins: [process.env.NODE_ENV === ''production'' ? ApolloServerPluginLandingPageProductionDefault() : ApolloServerPluginLandingPageLocalDefault()]`. Never use the GraphQLPlayground landing-page plugin in production.'
+not-match: ^\s*(\/\/|#|\*|\/\*)|NODE_ENV|ProductionDefault|isProd|isProduction|process\.env
+why: 'The GraphQL Playground landing-page plugin ships an interactive query IDE (with introspection) as the server''s landing page. Wiring `ApolloServerPluginLandingPageGraphQLPlayground()` unconditionally serves that dev tool in production. The safe pattern picks `...ProductionDefault()` in prod; notMatch suppresses lines carrying a prod guard (NODE_ENV, ProductionDefault, isProd, process.env) or comments. (Trade-off: a plugin line mentioning process.env for an unrelated reason is suppressed — accepted to protect the env-guarded twin.)'
+confidence: high

@@ -1,0 +1,20 @@
+id: wide/apollo-include-stacktrace-in-error-responses
+name: apollo-include-stacktrace-in-error-responses
+category: GENERAL
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-200
+pattern: includeStacktraceInErrorResponses\s*:\s*true\b
+message: GraphQL/dev misconfiguration — introspection or a dev endpoint exposed, or a weak/predictable secret (CWE-200/489/307/770/330).
+remediation: 'Leave unset (Apollo hides stack traces in production) or set a dev-only guard: `includeStacktraceInErrorResponses: process.env.NODE_ENV !== ''production''`.'
+not-match: ^\s*(\/\/|#|\*|\/\*)|\btrue\s+if\b
+why: 'Apollo Server 4''s `includeStacktraceInErrorResponses: true` returns full server stack traces to clients in the GraphQL error extensions, leaking file paths, framework internals and resolver logic. Hardcoding true overrides the safe default (which hides stacks when NODE_ENV is production). Env-guarded values place an expression after the colon and never form the literal true; a `=== true` comparison sits far from the separator so it is not matched.'
+confidence: high

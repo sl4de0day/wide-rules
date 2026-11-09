@@ -1,0 +1,14 @@
+id: wide/ssti-bottle-template-function
+name: ssti-bottle-template-function
+category: INJECTION
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-1336
+pattern: (?<![\w.])(?:bottle\.)?template\s*\(\s*(?:(?!(?:filename|file|uri|lookup|name|encoding)\s*=)[A-Za-z_]\w*\s*=\s*)?(?:[rbuRBU]{0,2}f['"]|['"][^'"\n]*['"]\s*(?:\+|%|\.\s*format)|(?![rbufRBUF]{0,2}['"])[A-Za-z_][\w.]*(?![\w.])(?!\s*=[^=]))
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Call template('name', **data) with a constant template name and pass all user input as keyword data, never as an inline or concatenated template body.
+why: Bottle's template() helper treats a first argument that is not a bare template-name literal as inline SimpleTemplate source, so a dynamic first argument compiles attacker input as template code; a (?<![\w.]) guard limits matches to the bare template( / bottle.template( forms and rejects unrelated .template() method calls.
+confidence: high

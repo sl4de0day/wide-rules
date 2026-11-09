@@ -1,0 +1,14 @@
+id: wide/cwe79-angular-innerhtml-binding
+name: cwe79-angular-innerhtml-binding
+category: XSS
+severity: MEDIUM
+languages:
+  - ts
+  - html
+  - htm
+cwe: CWE-79
+pattern: \[innerHTML\]\s*=
+message: Angular [innerHTML] property binding renders its expression as live DOM.
+remediation: Bind text with interpolation {{ }} or [textContent], or pass untrusted HTML through DomSanitizer.sanitize(SecurityContext.HTML, x) — never bypassSecurityTrustHtml.
+why: Any value that reaches [innerHTML] is injected as HTML; if it is user-controlled (or a DomSanitizer.bypass* value), attacker markup and event handlers execute in the app's origin.
+confidence: high

@@ -1,0 +1,15 @@
+id: wide/xxe-xslt-secure-processing-disabled
+name: xxe-xslt-secure-processing-disabled
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-611
+pattern: (?:FEATURE_SECURE_PROCESSING\s*,\s*false\b|ACCESS_EXTERNAL_DTD\s*,\s*["'](?:all|https?|file)|accessExternalDTD["']\s*,\s*["'](?:all|https?|file)|setExpandEntityReferences\s*\(\s*true\b|XMLInputFactory\.SUPPORT_DTD\s*,\s*(?:true\b|Boolean\.TRUE))
+message: Renderer resource embedding — a document/PDF/image converter resolves a user-controlled resource, enabling LFI or SSRF (CWE-918/73/611).
+remediation: Enable FEATURE_SECURE_PROCESSING(true), set ACCESS_EXTERNAL_DTD to "", keep setExpandEntityReferences(false) / SUPPORT_DTD false, and disallow DOCTYPE declarations on untrusted input.
+not-match: ^\s*(?:\/\/|#|\*)
+why: Disabling FEATURE_SECURE_PROCESSING, allowing external DTDs, expanding entity references, or supporting DTDs in the XML/XSLT/FO parser lets a user-supplied document declare external entities/DTDs, yielding XXE-based local file disclosure (LFI) and out-of-band internal fetches (SSRF) during conversion. Added \b after true/false so identifiers like trueMode, trueByDefault, falseIfLegacy no longer match.
+confidence: high

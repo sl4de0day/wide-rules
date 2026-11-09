@@ -1,0 +1,19 @@
+id: wide/cwe601-location-header-from-input
+name: cwe601-location-header-from-input
+category: NETWORK
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-601
+pattern: \.setHeader\s*\(\s*["']location["']\s*,\s*(?:req|request|ctx|params|query|body)\b|writeHead\s*\([^)]*\blocation["']?\s*:\s*(?:req|request|ctx|params|query|body)\b
+message: An HTTP Location redirect header is built directly from request input.
+remediation: Redirect only to an allowlist of known internal paths, or verify the target is same-origin before setting Location.
+why: Reflecting user input into the Location header lets an attacker craft trusted-looking links that redirect victims to a malicious site (open redirect / phishing).
+confidence: high

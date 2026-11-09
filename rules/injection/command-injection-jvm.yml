@@ -1,0 +1,16 @@
+id: wide/command-injection-jvm
+name: command-injection-jvm
+category: INJECTION
+severity: CRITICAL
+languages:
+  - java
+  - kt
+  - kts
+  - scala
+  - sc
+cwe: CWE-78
+pattern: Runtime\.getRuntime\(\)\.exec\s*\(|(?:new\s+)?ProcessBuilder\s*\(
+message: This runs an operating-system command (Runtime.exec / ProcessBuilder).
+remediation: Pass a fixed program plus an argument array, and never concatenate untrusted input into the command.
+why: If any argument is built from a request, the request can run commands on the host; a single string form is parsed by a shell.
+confidence: high

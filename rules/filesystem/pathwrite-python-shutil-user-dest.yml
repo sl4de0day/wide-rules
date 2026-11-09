@@ -1,0 +1,15 @@
+id: wide/pathwrite-python-shutil-user-dest
+name: pathwrite-python-shutil-user-dest
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-22
+pattern: \bshutil\.(copy|copy2|copyfile|move)\s*\([^;]*os\.path\.join\s*\([^)]*(\.filename\b|\brequest\.(args|form|values|files|GET|POST)\b)
+message: Path traversal on write — a file is written to a user-controlled path without a containment check (CWE-22).
+remediation: Sanitize the destination name (secure_filename/os.path.basename) and canonicalize+contain the resolved destination under the base directory before copying/moving.
+not-match: secure_filename|basename|sanitiz|uuid|realpath|\.startswith\(|whitelist|allowlist|^\s*#
+why: shutil.copy/copy2/copyfile/move writes to a destination os.path.join(dir, <request/upload filename>); a traversing user segment relocates the written file outside the intended directory. The method name is anchored with '(' so copytree/copyfileobj do not match, and the source requires a .filename attribute or request.* so unrelated names are ignored.
+confidence: high

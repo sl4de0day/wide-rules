@@ -1,0 +1,31 @@
+id: wide/header-value-crlf-injection
+name: header-value-crlf-injection
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - go
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - java
+cwe: CWE-113
+pattern: (?:\b(?:res|resp|response|reply|ctx|context|w|writer)\.(?:setHeader|writeHead|putHeader|addHeader|set_header|append|header|set)|\bheader)\s*\(\s*[^)]*?(?:req\.|request\.|\.query\b|\.body\b|\.params\b|\.headers\b|\$_GET|\$_POST|\$_REQUEST|getParameter)
+message: HTTP response splitting / header injection — user input placed into a response header without stripping CRLF (CWE-113).
+remediation: Never place raw request data into a header value. Strip CR/LF (value.replace(/[\r\n]/g, '')) or validate against a strict allowlist/enum, and for filenames use encodeURIComponent or a sanitized basename that is actually the value written. Prefer library helpers (e.g. res.attachment/res.download) that encode header values.
+not-match: encodeURIComponent|encodeURI\b|\.replace\s*\([^)]*\\[rn]|\bparseInt\b|\bNumber\s*\(|\.includes\s*\(|sanitiz|escapeHeader|stripCRLF|allowlist|^\s*(?:\/\/|\*|\/\*|#)
+why: A response-header setter (res.setHeader/header/set/append/writeHead/putHeader/addHeader, or PHP header()) receives a value argument built from raw request input (req./request./query/body/params/headers/$_GET/getParameter) via concatenation or a backtick template. Because CR/LF are not stripped, an attacker can embed %0d%0a to inject additional headers or split the response (CWE-113). The classic critical sample applies path.basename to a decoy variable while the header template still embeds the raw req.query.filename.
+confidence: high

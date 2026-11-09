@@ -1,0 +1,32 @@
+id: wide/weak-hash
+name: weak-hash
+category: CRYPTO
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - go
+  - java
+  - cs
+  - rb
+cwe: CWE-327
+pattern: createHash\s*\(\s*['"](md5|sha1)['"]|hashlib\.(md5|sha1)\s*\(|MessageDigest\.getInstance\s*\(\s*"(MD5|SHA-?1)"|\bmd5\s*\(|crypto\/md5|crypto\/sha1
+message: MD5 and SHA-1 are broken for security use.
+remediation: Use SHA-256+ for integrity, and bcrypt/scrypt/argon2 for passwords.
+why: Both have practical collisions and are far too fast for password hashing.
+confidence: high

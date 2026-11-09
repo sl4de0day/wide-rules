@@ -1,0 +1,19 @@
+id: wide/hpp-c-raw-querystring-forwarded
+name: hpp-c-raw-querystring-forwarded
+category: AUTH
+severity: MEDIUM
+languages:
+  - c
+  - h
+  - cpp
+  - cc
+  - cxx
+  - hpp
+  - hh
+cwe: CWE-235
+pattern: \b(?:strcat|strncat|strlcat|sprintf|snprintf|asprintf|curl_easy_setopt)\s*\([^;]*getenv\s*\(\s*["']QUERY_STRING["']
+message: HTTP parameter pollution — raw/duplicated request parameters forwarded so layers disagree (CWE-235).
+remediation: Parse the query string into typed parameters, validate each, and re-serialise a canonical single-value-per-key query for the downstream request rather than forwarding the raw string.
+not-match: (?:curl_easy_escape|url_encode|urlencode|canonical|sanitiz|escape|validate|parse_qs|parse_query|http_build_query)
+why: The raw CGI QUERY_STRING (getenv("QUERY_STRING")) is concatenated/formatted directly into an outbound URL or handed to curl on the same statement without re-parsing. A duplicated parameter (?id=1&id=2) the gateway read one way is re-parsed differently downstream — HTTP Parameter Pollution. The regex requires a string-builder/curl sink AND the raw getenv("QUERY_STRING") on the same statement; the \b anchor prevents substring matches (xsprintf/myasprintf); the notMatch guard clears lines that first URL-encode / canonicalise / validate / parse it.
+confidence: high

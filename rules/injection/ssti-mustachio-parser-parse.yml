@@ -1,0 +1,13 @@
+id: wide/ssti-mustachio-parser-parse
+name: ssti-mustachio-parser-parse
+category: INJECTION
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*\bParser\.Parse\s*\(\s*(?:(?:\$@?|@\$)"|@?"[^"]*"\s*\+|[A-Za-z_][\w.]*\s*[\[(+,)])
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Parse a fixed literal template and supply user input as the data dictionary passed to the returned template, not as the parsed source.
+why: Mustachio's Parser.Parse compiles its argument into a Mustache template delegate; a dynamic template source lets an attacker inject sections and disclose model data (SSTI).
+confidence: high

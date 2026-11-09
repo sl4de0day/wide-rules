@@ -1,0 +1,24 @@
+id: wide/ws-connection-auth
+name: ws-connection-auth
+category: AUTH
+severity: LOW
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-306
+pattern: \.on\s*\(\s*['"`]connection['"`]
+message: A WebSocket connection handler — verify the client is authenticated.
+remediation: Authenticate the connection (a token in the upgrade request / first message) before honouring any action.
+why: WebSocket upgrades are not covered by the page's auth by default, so a handler that trusts an in-band action like {action:'AUTH', user:'admin'} without checking a token lets anyone claim any identity.
+confidence: high

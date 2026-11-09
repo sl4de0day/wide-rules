@@ -1,0 +1,13 @@
+id: wide/nosqli-mongo-filter-decoded-map
+name: nosqli-mongo-filter-decoded-map
+category: INJECTION
+severity: CRITICAL
+languages:
+  - go
+cwe: CWE-943
+pattern: \.(?:FindOneAndUpdate|FindOneAndDelete|FindOneAndReplace|FindOne|Find|UpdateOne|UpdateMany|DeleteOne|DeleteMany|ReplaceOne|CountDocuments)\(\s*[^,]*,\s*bson\.[MD]\{[^}]*\b(?:body|payload|params|data|req|reqData|request|input|jsonBody|reqBody|jsonData|form|query)\b\[
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: Decode request input into a typed struct, or coerce each field to the expected scalar before use (body["user"].(string), strconv.Atoi, fmt.Sprint, cast.ToString). Reject non-string values instead of passing the raw interface{} into the filter.
+not-match: ^\s*\/\/|^\s*\*\s|\.\((?:string|int\d*|uint\d*|float\d+|bool)\)|fmt\.Sprint|String\(|strconv\.|cast\.
+why: 'A mongo filter that reads a value straight out of a JSON-decoded request map (body["x"], payload["x"], req["x"], form/query values) whose values are interface{}. An attacker can send {"password": {"$ne": null}} so the value becomes a query operator object rather than a scalar, bypassing auth or matching arbitrary documents. Covers Find/FindOne/FindOneAnd*/UpdateOne/DeleteOne/ReplaceOne filters.'
+confidence: high

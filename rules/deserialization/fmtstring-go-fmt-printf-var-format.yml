@@ -1,0 +1,12 @@
+id: wide/fmtstring-go-fmt-printf-var-format
+name: fmtstring-go-fmt-printf-var-format
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - go
+cwe: CWE-134
+pattern: \bfmt\.(?:Printf|Sprintf|Errorf|Sprintln)\s*\(\s*(?!["'`])[A-Za-z_][A-Za-z0-9_.]*\s*[,)]
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Pass a constant format string and the user data as a value argument: fmt.Printf("%s", user) instead of fmt.Printf(user).'
+why: The first argument to fmt.Printf/Sprintf/Errorf/Sprintln is a non-literal identifier used as the format string; attacker-controlled verbs (%s/%v, %!(...) noise, out-of-range arg panics) let the input control formatting and can leak adjacent arguments. A string/rune/raw literal first arg is excluded by the negative lookahead, and a function-call first arg (e.g. err.Error()) is excluded because '(' is not a ',' or ')'.
+confidence: high

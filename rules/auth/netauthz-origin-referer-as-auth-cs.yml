@@ -1,0 +1,14 @@
+id: wide/netauthz-origin-referer-as-auth-cs
+name: netauthz-origin-referer-as-auth-cs
+category: AUTH
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-346
+pattern: (?:Request\.Headers\[\s*"(?:Origin|Referer)"\s*\]|Request\.Headers\.(?:Origin|Referer))(?:\.ToString\(\))?\s*(?:(?:==|!=)\s*"[^"]+"|\.StartsWith\(\s*"[^"]+"|\.Equals\(\s*"[^"]+")
+message: Broken access control — authorization based on network location or a spoofable client header (CWE-346/290).
+remediation: Use ASP.NET authentication/authorization (cookie/JWT, [Authorize]) rather than the Origin/Referer header. Use Origin only for CORS and antiforgery-token CSRF defense.
+not-match: ^\s*(?:\/\/|\*|\/\*)|Access-Control|Allow-Origin|\.Append\(|\.Add\(|\bcors\b|AllowedOrigins|whitelist|\b(?:Log|log|logger|ILogger|metric|audit)\b|jwt|VerifyToken|Authenticate|Session|IsAuthenticated|csrf
+why: ASP.NET Request.Headers["Origin"|"Referer"] equals/StartsWith/Equals a trusted value to decide access. These are client-controlled headers, forgeable off-browser, so an attacker supplies the expected value to bypass the gate. CORS Append/Add and logging are excluded by notMatch.
+confidence: high

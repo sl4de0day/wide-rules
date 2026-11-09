@@ -1,0 +1,20 @@
+id: wide/client-presence-only-auth-header-express
+name: client-presence-only-auth-header-express
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-287
+pattern: \bif\s*\(\s*(?:req|request|ctx|context)(?:\.headers?\.authorization|\.headers?\[['"][Aa]uthorization['"]\]|\.get\(['"][Aa]uthorization['"]\)|\.header\(['"][Aa]uthorization['"]\))\s*\)
+message: Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.
+remediation: 'Extract the credential and re-verify it on the server: jwt.verify(token, key) / passport.authenticate / an introspection call, and branch on the verified result. Reject (401) when the header is absent OR when verification fails; never grant on presence alone.'
+not-match: (?:jwt\.verify|\.verify\(|jwtVerify|verifyToken|verifyJwt|verifyIdToken|verifyAsync|validateToken|passport\.authenticate|introspect|checkSignature|^\s*\/\/|^\s*\*|^\s*\/\*)
+why: The guard grants access on the mere presence (truthiness) of the Authorization header. An attacker sends any non-empty Authorization value and passes the check; the token's signature, expiry, issuer, and claims are never verified, so this is a full authentication bypass.
+confidence: high

@@ -1,0 +1,30 @@
+id: wide/weak-cipher
+name: weak-cipher
+category: CRYPTO
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - go
+  - java
+cwe: CWE-327
+pattern: \b(DES|RC4|3DES|des-ecb|aes-\d+-ecb)\b|createCipheriv?\s*\(\s*['"](des|rc4|aes-\d+-ecb)
+message: This is a weak or ECB-mode cipher.
+remediation: Use AES-GCM (or another authenticated mode) with a random nonce.
+why: DES/RC4 are broken, and ECB leaks structure because equal blocks encrypt equally.
+confidence: high

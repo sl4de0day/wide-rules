@@ -1,0 +1,25 @@
+id: wide/client-bare-sign-elevated-claim
+name: client-bare-sign-elevated-claim
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+  - html
+  - htm
+  - xhtml
+cwe: CWE-602
+pattern: \bsign\s*\(\s*\{[^}]*['"]?\b(?:role['"]?\s*:\s*['"](?:admin|superadmin|root|owner)['"]|(?:isAdmin|admin|is_admin)['"]?\s*:\s*true\b|permissions['"]?\s*:\s*\[)
+message: Client-side token signing or embedded signing key — a secret/decision shipped to the browser is attacker-forgeable.
+remediation: Remove token signing from client code entirely; import sign only in server modules and populate privilege claims from the authenticated user. The browser should receive tokens, not create them.
+not-match: ^\s*(\/\/|\*|\/\*)|\bjwt\.verify\b|server[-\s]side
+why: A destructured/bare sign({...}) from jsonwebtoken mints a token with an elevated role/isAdmin/permissions claim in client code. The signing secret must be present in the bundle, so the user can forge the same elevated token — a client-side authorization decision. The \bsign word boundary excludes Object.assign, redesign, cosign and crypto.subtle.sign (which lacks the elevated-claim payload shape).
+confidence: high

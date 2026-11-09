@@ -1,0 +1,19 @@
+id: wide/cwe326-weak-tls-version
+name: cwe326-weak-tls-version
+category: CRYPTO
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-326
+pattern: (?:secureProtocol\s*:\s*["'](?:SSLv2|SSLv3|TLSv1(?:_1)?)_method|(?:min|max)Version\s*:\s*["']TLSv1(?:\.1)?["'])
+message: A TLS connection is pinned to an obsolete protocol version (SSLv2/SSLv3/TLS 1.0/1.1).
+remediation: 'Require TLS 1.2 or higher (minVersion: ''TLSv1.2'') and remove any secureProtocol override.'
+why: These versions have known breaks (POODLE, BEAST) and are deprecated, letting a network attacker downgrade and decrypt or tamper with traffic.
+confidence: high

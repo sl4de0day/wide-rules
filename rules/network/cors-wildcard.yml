@@ -1,0 +1,30 @@
+id: wide/cors-wildcard
+name: cors-wildcard
+category: NETWORK
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - go
+  - java
+cwe: CWE-942
+pattern: Access-Control-Allow-Origin['"]?\s*[:,]\s*['"]\*|origin\s*:\s*['"]\*['"]
+message: CORS is opened to any origin.
+remediation: Reflect only an allow-list of trusted origins.
+why: A wildcard origin lets any site read the response; combined with credentials it exposes authenticated data cross-site.
+confidence: high

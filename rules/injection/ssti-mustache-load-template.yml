@@ -1,0 +1,17 @@
+id: wide/ssti-mustache-load-template
+name: ssti-mustache-load-template
+category: INJECTION
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/[/*]|#|\*)).*?->loadTemplate\s*\(\s*(?:\$|(?:'[^']*'|"[^"]*")\s*\.\s*[\$A-Za-z_]|"[^"]*\$\{?[A-Za-z_])
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Load a named/fixed template and pass user input as the data context to render(); do not build the template source from request data.
+why: Mustache_Engine::loadTemplate() compiles its argument as Mustache template source, so a dynamic string lets an attacker inject template syntax (and, via lambdas/partials, escalate) instead of supplying data.
+confidence: high

@@ -1,0 +1,19 @@
+id: wide/cwe209-express-error-to-client
+name: cwe209-express-error-to-client
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-209
+pattern: \bres\.(?:status\([^)]*\)\.)?(?:send|json|end|write)\s*\((?:[^)]*(?:\.stack\b|(?:err|error|e)\.(?:message|stack|name))|\s*(?:err|error|e)\s*\))
+message: An error object, its stack, or its message is written directly into the HTTP response.
+remediation: Log the error server-side and send a generic message; expose err.message only for validated, client-safe errors.
+why: 'Information exposure: stack traces and error internals reveal file paths, dependency versions, and application logic that aid an attacker.'
+confidence: high

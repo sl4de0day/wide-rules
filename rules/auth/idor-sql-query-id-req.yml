@@ -1,0 +1,13 @@
+id: wide/idor-sql-query-id-req
+name: idor-sql-query-id-req
+category: AUTH
+severity: HIGH
+languages:
+  - go
+cwe: CWE-639
+pattern: \.(?:QueryRowContext|QueryContext|QueryRow|Query|SelectContext|GetContext|Select|Get)\(\s*(?:[^,"\x60]*,\s*)*["\x60]\s*SELECT\b[^"\x60]*WHERE\b[^"\x60]*\bid\s*=\s*(?:\?|\$\d+)[^"\x60]*["\x60]\s*,\s*[^;]*(?:\.(?:Param|Params|Query|QueryParam|PostFormValue|PostForm|FormValue|DefaultQuery)\(|Vars\(\w+\)\[|URLParam\(|Params\.ByName\()
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: 'Add an ownership predicate bound to the session user: WHERE id = $1 AND owner_id = $2, passing the authenticated user id as the second parameter; treat an empty result as not-authorized.'
+not-match: ^\s*\/\/|^\s*\*\s|[Uu]ser_?[Ii][Dd]|[Oo]wner|[Aa]ccount_?[Ii][Dd]|[Tt]enant|[Oo]rg_?[Ii][Dd]|[Oo]rganization|[Cc]ompany_?[Ii][Dd]|[Tt]eam_?[Ii][Dd]|[Ww]orkspace_?[Ii][Dd]|[Gg]roup_?[Ii][Dd]|[Cc]ustomer_?[Ii][Dd]|[Cc]urrent_?[Uu]ser|[Ss]ession|[Aa]uthoriz|[Ee]nforce|Pundit|CanCan|\.Can\(|[Pp]olic|[Cc]laims|\.Scopes\(|[Oo]wned_?[Bb]y|[Cc]reated_?[Bb]y|[Bb]elongs_?[Tt]o
+why: A database/sql, pgx or sqlx Query/QueryRow/Get/Select whose SELECT ... WHERE id = ?/$1 is parameterized with a client-supplied value (double-quote or backtick SQL). The placeholder blocks SQL injection but the row is still addressed by object id alone, with no owner_id/user_id term in the WHERE clause, so it is an IDOR.
+confidence: high

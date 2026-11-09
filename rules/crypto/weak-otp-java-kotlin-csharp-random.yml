@@ -1,0 +1,17 @@
+id: wide/weak-otp-java-kotlin-csharp-random
+name: weak-otp-java-kotlin-csharp-random
+category: CRYPTO
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+  - cs
+  - csx
+cwe: CWE-330
+pattern: \.\s*(?:nextInt|Next)\s*\(\s*(?:\d+\s*,\s*)?(?:9000|9999|10000|90000|99999|100000|900000|999999|1000000)\s*\)
+message: GraphQL/dev misconfiguration — introspection or a dev endpoint exposed, or a weak/predictable secret (CWE-200/489/307/770/330).
+remediation: Use SecureRandom (Java/Kotlin) or RandomNumberGenerator.GetInt32 (.NET) for verification codes.
+not-match: ^\s*(?:\/\/|\*)|SecureRandom|RandomNumberGenerator|RNGCrypto|GetInt32|getInstanceStrong
+why: An OTP from java.util.Random / Kotlin Random / System.Random over a small range is predictable and its seed/internal state can be recovered from a few outputs.
+confidence: high

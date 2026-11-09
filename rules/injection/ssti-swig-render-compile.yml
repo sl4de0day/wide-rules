@@ -1,0 +1,19 @@
+id: wide/ssti-swig-render-compile
+name: ssti-swig-render-compile
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-1336
+pattern: \bswig\.(?:render|compile)\s*\(\s*(?:[^\s'"`)]|(?:'[^']*'|"[^"]*"|`[^`]*`)\s*\+|`[^`]*\$\{)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Use swig.renderFile with a fixed template path and pass user input as locals; never call render/compile on a template string built from user input.
+why: swig.render/compile parse their first argument as a Swig (Django/Jinja-style) template, and a dynamic source lets an attacker inject tags/filters that reach JavaScript execution on the server.
+confidence: high

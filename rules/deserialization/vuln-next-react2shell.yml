@@ -1,0 +1,12 @@
+id: wide/vuln-next-react2shell
+name: vuln-next-react2shell
+category: DESERIALIZATION
+severity: CRITICAL
+languages:
+  - json
+cwe: CWE-502
+pattern: '"next"\s*:\s*"[~^>= ]*(?:16\.0\.[0-6]\b|15\.5\.[0-6]\b|15\.4\.[0-7]\b|15\.3\.[0-5]\b|15\.2\.[0-5]\b|15\.1\.[0-8]\b|15\.0\.[0-4]\b|1[34]\.\d)'
+message: This Next.js version is vulnerable to React2Shell (CVE-2025-55182 / CVE-2025-66478).
+remediation: Upgrade Next.js to 16.0.7 (or 15.5.7 / 15.4.8 / 15.3.6 / 15.2.6 / 15.1.9 / 15.0.5).
+why: Unauthenticated RCE via insecure deserialisation of the RSC Flight reply — a __proto__/constructor gadget reaches the Function constructor and runs OS commands. No app code is needed; a static app is affected.
+confidence: high

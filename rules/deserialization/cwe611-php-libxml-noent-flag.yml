@@ -1,0 +1,16 @@
+id: wide/cwe611-php-libxml-noent-flag
+name: cwe611-php-libxml-noent-flag
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+cwe: CWE-611
+pattern: LIBXML_NOENT
+message: The LIBXML_NOENT flag enables XML entity substitution in this parser call.
+remediation: Remove LIBXML_NOENT and parse with LIBXML_NONET so entities are not resolved.
+why: LIBXML_NOENT expands defined entities, which allows XXE file disclosure and billion-laughs denial of service on attacker-supplied XML.
+confidence: high

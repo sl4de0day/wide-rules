@@ -1,0 +1,14 @@
+id: wide/cwe377-py-tempfile-mktemp
+name: cwe377-py-tempfile-mktemp
+category: FILESYSTEM
+severity: MEDIUM
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-377
+pattern: \bmktemp\s*\(
+message: tempfile.mktemp() returns a predictable temp filename with a time-of-check/time-of-use race.
+remediation: Use tempfile.mkstemp() or tempfile.NamedTemporaryFile(), which create the file atomically.
+why: Between mktemp() returning a name and the code opening it, an attacker can pre-create or symlink that path, causing insecure temp-file handling.
+confidence: high

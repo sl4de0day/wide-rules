@@ -1,0 +1,19 @@
+id: wide/importmap-runtime
+name: importmap-runtime
+category: NETWORK
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-829
+pattern: '[''"`]importmap[''"`]'
+message: An import map is referenced/created from JavaScript at runtime.
+remediation: Define the import map statically in HTML before any module loads; never build it from input at runtime.
+why: If a bare-module alias in the import map is set from input, every subsequent bare import is redirected to an attacker-controlled module URL — total code control (module hijacking).
+confidence: high

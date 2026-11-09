@@ -1,0 +1,34 @@
+id: wide/server-jwt-signature-verification-disabled
+name: server-jwt-signature-verification-disabled
+category: AUTH
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - java
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - rb
+  - go
+  - cs
+  - csx
+cwe: CWE-287
+pattern: (?:[,(]\s*verify\s*=\s*False\b|["']verify_signature["']\s*:\s*(?:False|false)|\bverify_signature\s*=\s*(?:False|false)|\bverifySignature\s*:\s*false|\balgorithms?\s*[:=]\s*(?:\[\s*)?["']none["']|\balgorithm\s*[:=]\s*["']none["'])
+message: Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.
+remediation: Never disable signature verification. Verify with the signing key and an explicit allow-list of strong algorithms (e.g. RS256/ES256/HS256); reject 'none' and any token that fails verification.
+not-match: (?:zip|gzip|deflate|compress|cipher|encrypt|^\s*#|^\s*\/\/|^\s*\*|^\s*\/\*)
+why: Signature verification is explicitly turned off (verify=False / verify_signature:false / alg 'none'). The server accepts any token payload as authentic, letting an attacker forge arbitrary identity and role claims - a complete authentication bypass. The verify=False branch is anchored to a call context ([,(]) so a bare 'const verify = false' variable toggle does not match, and compression algorithm:'none' is suppressed by the notMatch.
+confidence: high

@@ -1,0 +1,18 @@
+id: wide/ssrf-c-weak-blocklist-loopback
+name: ssrf-c-weak-blocklist-loopback
+category: NETWORK
+severity: MEDIUM
+languages:
+  - c
+  - h
+  - cpp
+  - cc
+  - cxx
+  - hpp
+  - hh
+cwe: CWE-918
+pattern: \b(?:strcmp|strcasecmp|strncmp|strncasecmp|strstr|strcasestr|memcmp)\s*\(\s*[^;]*?["'](?:[a-z]+:\/\/)?(?:127\.0\.0\.1|localhost|169\.254|0\.0\.0\.0|::1|metadata\.google\.internal)
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Replace the denylist with an allowlist of permitted hosts, and enforce it AFTER DNS resolution on the resolved IP (block all private/link-local/loopback ranges), not on the pre-resolution string.
+why: Comparing a host/URL against loopback or link-local literals (127.0.0.1, localhost, 169.254.x, 0.0.0.0, ::1, cloud metadata) is a denylist trivially bypassed by decimal/octal/hex IP encodings, alternate DNS names resolving to loopback, IPv6-mapped forms, or a redirect. The regex flags str*cmp/strstr/memcmp comparisons whose quoted literal is one of these sensitive constants, optionally behind a scheme:// prefix so "http://127.0.0.1/" is also caught; an allowlist compares real allowed hostnames and does not match. The \b anchor avoids matching wrapper names like mystrcmp; the literal must sit directly after the quote (optionally after scheme://), so version strings ("1.2.7.0"), "local", and "10.0.0.1" do not fire.
+confidence: high

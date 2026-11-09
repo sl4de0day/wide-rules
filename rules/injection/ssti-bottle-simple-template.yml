@@ -1,0 +1,14 @@
+id: wide/ssti-bottle-simple-template
+name: ssti-bottle-simple-template
+category: INJECTION
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-1336
+pattern: \bSimpleTemplate\s*\(\s*(?:(?!(?:filename|file|uri|lookup|name|encoding)\s*=)[A-Za-z_]\w*\s*=\s*)?(?:[rbuRBU]{0,2}f['"]|['"][^'"\n]*['"]\s*(?:\+|%|\.\s*format)|(?![rbufRBUF]{0,2}['"])[A-Za-z_][\w.]*(?![\w.])(?!\s*=[^=]))
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Create SimpleTemplate from a constant template string or a trusted template file (name=/lookup) and supply request data only as render keyword variables.
+why: Bottle's SimpleTemplate compiles its source argument into Python-backed template code, so constructing it from a dynamic string executes attacker-controlled template/Python expressions.
+confidence: high

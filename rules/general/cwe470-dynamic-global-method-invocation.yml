@@ -1,0 +1,21 @@
+id: wide/cwe470-dynamic-global-method-invocation
+name: cwe470-dynamic-global-method-invocation
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+cwe: CWE-470
+pattern: \b(?:window|globalThis|self|top|parent)\s*\[[^\]"']+\]\s*(?:\.(?:call|apply|bind)\s*)?\(
+message: A global object is indexed by a dynamic key and immediately invoked (e.g. window[name](), window[name].call()).
+remediation: Dispatch through an explicit map of permitted functions keyed by validated input; never call window[userValue](...).
+why: Selecting a global function by an untrusted name and calling it is unsafe reflection — an attacker can invoke eval, Function, alert, or any global, turning input into arbitrary behavior in the page's origin.
+confidence: high

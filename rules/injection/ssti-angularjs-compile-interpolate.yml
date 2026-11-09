@@ -1,0 +1,19 @@
+id: wide/ssti-angularjs-compile-interpolate
+name: ssti-angularjs-compile-interpolate
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-1336
+pattern: (?:^|[^\w$])\$(?:compile|interpolate)\s*\(\s*(?:[^\s'"`)]|(?:'[^']*'|"[^"]*"|`[^`]*`)\s*\+|`[^`]*\$\{)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Only $compile/$interpolate fixed template strings and bind user input through scope properties with ng-bind/text interpolation; never compile HTML built from user input.
+why: AngularJS $compile/$interpolate parse their string argument as an Angular template and evaluate its {{ }} expressions, so a user-controlled string is client-side template injection that historically bypasses the expression sandbox to run arbitrary JS.
+confidence: high

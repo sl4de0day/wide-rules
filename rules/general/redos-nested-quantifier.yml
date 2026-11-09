@@ -1,0 +1,24 @@
+id: wide/redos-nested-quantifier
+name: redos-nested-quantifier
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-1333
+pattern: \/(?![*/])[^\n]*\([^)\s]*[+*][^)\s]*\)[+*][^\n]*\/[gimsuy]*
+message: This regular expression has nested quantifiers (catastrophic backtracking / ReDoS).
+remediation: Rewrite without a quantifier applied to an already-quantified group; prefer a linear, possessive, or anchored pattern.
+why: A pattern like ([a-z0-9]+)+ can take exponential time on a long non-matching string, freezing the thread — a denial of service an attacker triggers with one crafted input.
+confidence: high

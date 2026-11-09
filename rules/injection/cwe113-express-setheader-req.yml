@@ -1,0 +1,20 @@
+id: wide/cwe113-express-setheader-req
+name: cwe113-express-setheader-req
+category: INJECTION
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-113
+pattern: \bres\.(setHeader|writeHead|header|append|location|set)\s*\([^)]*\breq\.(query|params|body|headers|cookies)\b
+message: A response header value is set directly from request data.
+remediation: Strip or reject CR/LF and encode the value (e.g. encodeURIComponent) before placing user input in a header.
+not-match: encodeURIComponent
+why: Embedded CR/LF in the value splits the response, letting an attacker inject headers, forge cookies, or poison caches (CWE-113/93).
+confidence: high

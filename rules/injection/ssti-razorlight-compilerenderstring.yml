@@ -1,0 +1,13 @@
+id: wide/ssti-razorlight-compilerenderstring
+name: ssti-razorlight-compilerenderstring
+category: INJECTION
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*\.CompileRenderStringAsync\s*\(\s*[^,]+,\s*(?:(?:\$@?|@\$)"|@?"[^"]*"\s*\+|[A-Za-z_][\w.]*\s*[\[(+,)])
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Give CompileRenderStringAsync a fixed literal content template and pass user input through the model parameter only.
+why: In CompileRenderStringAsync(key, content, model) the second argument IS the Razor template source; a dynamic content string compiles attacker input as executable Razor.
+confidence: high

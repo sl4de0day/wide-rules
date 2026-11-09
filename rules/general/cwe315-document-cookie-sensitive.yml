@@ -1,0 +1,24 @@
+id: wide/cwe315-document-cookie-sensitive
+name: cwe315-document-cookie-sensitive
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-315
+pattern: document\.cookie\s*=\s*['"`]?\s*(?:token|password|passwd|pwd|secret|jwt|api[_-]?key|access[_-]?token|refresh[_-]?token|sessionid|session|credential)
+message: A secret-named cookie is being set from client-side JavaScript via document.cookie.
+remediation: Set sensitive cookies from the server with the HttpOnly, Secure, and SameSite attributes instead of assigning document.cookie in the browser.
+why: A cookie written with document.cookie can never carry the HttpOnly flag, so the session token or credential stays readable by scripts and is stolen by any XSS on the page.
+confidence: high

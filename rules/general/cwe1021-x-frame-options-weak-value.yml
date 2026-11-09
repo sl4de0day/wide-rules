@@ -1,0 +1,19 @@
+id: wide/cwe1021-x-frame-options-weak-value
+name: cwe1021-x-frame-options-weak-value
+category: GENERAL
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-1021
+pattern: X-Frame-Options['"`]\s*[,:]\s*['"`](?:ALLOWALL|ALLOW-?FROM)
+message: X-Frame-Options is set to a non-protective value (ALLOWALL or ALLOW-FROM).
+remediation: Set X-Frame-Options to DENY or SAMEORIGIN, or use a Content-Security-Policy frame-ancestors directive.
+why: ALLOWALL is not a valid directive and ALLOW-FROM is ignored by modern browsers, so both leave the page framable by any site and open to clickjacking.
+confidence: high

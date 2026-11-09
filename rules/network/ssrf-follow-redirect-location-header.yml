@@ -1,0 +1,14 @@
+id: wide/ssrf-follow-redirect-location-header
+name: ssrf-follow-redirect-location-header
+category: NETWORK
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-918
+pattern: (?:\bWebRequest\.Create|\.(?:GetAsync|GetStringAsync|GetByteArrayAsync|GetStreamAsync|PostAsync|SendAsync|DownloadString|DownloadData|OpenRead|DownloadStringAsync))\s*\(\s*[^;]*(?:\.Headers\s*\[\s*["']Location["']\s*\]|\.Headers\.Location|GetResponseHeader\s*\(\s*["']Location["'])
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Re-run the same host allowlist validation on the redirect target before requesting it, or disable automatic redirects (HttpClientHandler.AllowAutoRedirect = false) and reject/allowlist any Location before following it.
+not-match: ^\s*(?:\/\/|\*)|[Aa]llow[Ll]ist|[Ww]hite[Ll]ist|[Ii]sAllowed|[Rr]evalidat|[Ii]sSafe
+why: A second outbound request is made to a redirect Location header taken from a prior response (response.Headers.Location / Headers["Location"] / GetResponseHeader("Location")) without re-validating the new target. Manually following a redirect this way lets an attacker-controlled first hop redirect the fetch to an internal host, bypassing any check done only on the original URL.
+confidence: high

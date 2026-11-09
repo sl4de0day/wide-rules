@@ -1,0 +1,18 @@
+id: wide/pathwrite-php-move-uploaded-userfilename
+name: pathwrite-php-move-uploaded-userfilename
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-73
+pattern: \bmove_uploaded_file\s*\(\s*[^,]*,\s*[^,]*\$_(FILES|GET|POST|REQUEST|COOKIE)\b
+message: Path traversal on write — a file is written to a user-controlled path without a containment check (CWE-22).
+remediation: Choose the destination name server-side (uniqid()/hash + validated extension) or run $_FILES name through basename()/an allowlist, and confirm the resolved destination stays under the upload dir before moving.
+not-match: basename|realpath|sanitiz|preg_replace|str_replace|uniqid|md5|sha1|whitelist|allowlist|pathinfo|^\s*(\/\/|#|\/\*|\*)
+why: move_uploaded_file()'s destination (second argument) is built from the client-supplied name ($_FILES[...]['name'] or another superglobal), so an attacker-chosen name with '../' or a target extension lands the upload in the webroot (webshell) or overwrites arbitrary files. The [^,] structure requires the superglobal in the destination arg, not merely in the tmp_name source arg.
+confidence: high

@@ -1,0 +1,14 @@
+id: wide/idor-efcore-lambda-request
+name: idor-efcore-lambda-request
+category: AUTH
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-639
+pattern: \.(SingleOrDefault|FirstOrDefault|Single|First|Where)(Async)?\s*\([^;]*(Request\.(Query|Form|RouteValues|Cookies|Headers)|RouteData\.Values)\s*\[
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: Add an ownership term to the same predicate (=> d.Id == id && d.OwnerId == currentUserId) or apply resource-based authorization before returning the entity.
+not-match: '[Uu]serId|[Oo]wnerId|[Cc]reatedBy|[Aa]uthorId|[Tt]enantId|[Cc]ustomerId|[Aa]ccountId|[Oo]rgId|OrganizationId|[Cc]urrentUser|GetUserId|User\.FindFirst|User\.Identity|NameIdentifier|IsInRole|\[Authorize|AuthorizeAsync|\bForbid\b|\bUnauthorized\b|\bChallenge\b|CanAccess|\.Owns\b|^\s*\/\/'
+why: EF Core SingleOrDefault/FirstOrDefault/Single/First/Where builds a predicate that compares an entity key to a client-supplied value (Request.*/RouteData) with no ownership constraint in the same statement, selecting arbitrary rows by client id (CWE-639). notMatch suppresses predicates that also constrain the row to the caller (&& d.OwnerId == currentUserId, TenantId, ...), carry an authorization gate, or are commented out.
+confidence: high

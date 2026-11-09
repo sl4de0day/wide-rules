@@ -1,0 +1,15 @@
+id: wide/idor-jpa-repo-findbyid-req
+name: idor-jpa-repo-findbyid-req
+category: AUTH
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-639
+pattern: \.(findById|getReferenceById|getOne|findOneById)\s*\(\s*[^;]*\b(getParameter|pathParam|queryParam|call\.parameters|request\.get|req\.get)
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: 'Scope the lookup to the caller: use a derived query such as findByIdAndOwnerId(id, principal.getId()), add an ownership check after loading, or gate the handler with @PreAuthorize/@PostAuthorize(returnObject.owner == principal).'
+not-match: '[Pp]rincipal|[Cc]urrentUser|getCurrentUser|getUserId|SecurityContext|Authentication|@PreAuthorize|@PostAuthorize|authoriz|AndUserId|AndOwner|AndAccount|AndTenant|session\.getAttribute|getOwner|checkOwner|verifyOwner|ensureOwner|isOwner|checkAccess|verifyAccess|ensureAccess|hasAccess|^\s*(?:\/\/|\/\*|\*)'
+why: A Spring Data repository fetch (findById/getReferenceById/getOne/findOneById) whose key argument is taken straight from the HTTP request (getParameter, path/query param, Ktor call.parameters) with no co-located ownership or authorization predicate lets any authenticated user read another user's record by changing the id. Owner-scoped derived methods (findByIdAndOwnerId, findByIdAndUserId) are naturally excluded because 'findById' is no longer immediately followed by '('.
+confidence: high

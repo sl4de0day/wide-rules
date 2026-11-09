@@ -1,0 +1,13 @@
+id: wide/idor-mongoid-objectid-params
+name: idor-mongoid-objectid-params
+category: AUTH
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-639
+pattern: \b[A-Z]\w*\.(?:find_by|find|where)\b[^\n)]*BSON::ObjectId(?:\.from_string)?\s*\(\s*params\s*(?:\[|\.fetch|\.dig)
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: 'Query from an owner-scoped criteria (current_user.documents.find(params[:id])) or include the owner in the selector (Model.where(_id: BSON::ObjectId(params[:id]), owner_id: current_user.id)); or authorize the loaded document.'
+not-match: current_user|current_account|current_admin|current_customer|current_member|current_organization|current_company|current_team|current_tenant|current_shop|current_site|current_workspace|current_project|current_owner|current_person|current_ability|@current_\w+|session\[|cookies\.signed|cookies\.encrypted|authorize|Pundit|policy\(|policy_scope|CanCan|can\?|cannot\?|accessible_by|owned_by|for_current|scoped_to|belonging_to|^\s*#
+why: 'In Mongoid a document is fetched by casting a client-supplied value to an ObjectId (Model.find(BSON::ObjectId(params[:id])) or where(_id: BSON::ObjectId(params[:id]))) with no owner field in the query. The ObjectId cast defeats the Class.find(params[:id]) rule (argument is not literally params), so this rule catches the wrapped form; it is still IDOR because no ownership is enforced. The pre-cast bridge was tightened to [^\n)]* to prevent matching an ObjectId cast belonging to a different call later on the line.'
+confidence: high

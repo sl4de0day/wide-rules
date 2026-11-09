@@ -1,0 +1,20 @@
+id: wide/netauthz-forwardable-header-as-auth-js
+name: netauthz-forwardable-header-as-auth-js
+category: NETWORK
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-290
+pattern: \breq(?:uest)?\.(?:headers?\[['"]x-(?:forwarded-for|forwarded-host|forwarded-user|real-ip|internal|is-admin|admin|auth-token|auth|api-key|user-id|user-role|user|role|client-id|trusted|backend|gateway)['"]\]|(?:get|header)\(\s*['"]x-(?:forwarded-for|forwarded-host|forwarded-user|real-ip|internal|is-admin|admin|auth-token|auth|api-key|user-id|user-role|user|role|client-id|trusted|backend|gateway)['"]\s*\))\s*(?:(?:===?|!==?)\s*(?:['"`][^'"`]*['"`]|true|false)|[)\s]{0,4}[^;\n]{0,50}?\b(?:grant(?:access|admin)?|allow(?:access)?|authoriz\w*|isinternal|isadmin|adminonly|bypass|skipauth|next\(\)))
+message: Broken access control — authorization based on network location or a spoofable client header (CWE-346/290).
+remediation: Never trust X-Forwarded-* or custom X-* headers for access control. Authenticate with a verified token/session. If a trusted proxy injects such a header, have the proxy strip it on ingress and validate a proxy-signed secret, not a plain presence/equality check.
+not-match: ^\s*(?:\/\/|\*|\/\*)|\b(?:logger|log|console|metric|analytics|track|audit|throttle|whitelist|allowlist|proxy)\b|[Rr]ate[_-]?[Ll]imit|\.split\(|\.push\(|clientip|client_ip|realip|jwt\.verify|verifytoken|passport|req\.session|req\.user|req\.isauthenticated|csrf|redirect
+why: A forwardable/custom request header (X-Forwarded-For, X-Internal, X-Admin, X-User-Role, X-Auth-Token, etc.) is compared to a value, or its mere presence gates grant/allow/authorize/next(). These headers are fully client-settable and pass untouched through proxies that do not strip them, so any external client forges one to gain privilege. X-Forwarded-Proto was removed from the header list because its === 'https' compare drives HTTPS-redirect logic, not auth; notMatch also excludes IP-extraction, logging, rate-limiting, and redirect lines.
+confidence: high

@@ -1,0 +1,19 @@
+id: wide/ssti-dustjs-compile-rendersource
+name: ssti-dustjs-compile-rendersource
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-1336
+pattern: \bdust\.(?:compile|renderSource)\s*\(\s*(?:[^\s'"`)]|(?:'[^']*'|"[^"]*"|`[^`]*`)\s*\+|`[^`]*\$\{)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Compile fixed template literals (or load named precompiled templates) and pass user input only through the context object; never build the source string from user input.
+why: dust.compile/renderSource parse their first argument as a Dust template, so a user-controlled source lets an attacker inject sections, helpers and context references that leak data and can reach registered helper code.
+confidence: high

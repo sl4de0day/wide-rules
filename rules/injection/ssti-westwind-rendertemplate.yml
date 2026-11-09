@@ -1,0 +1,13 @@
+id: wide/ssti-westwind-rendertemplate
+name: ssti-westwind-rendertemplate
+category: INJECTION
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*\.RenderTemplate(?:FromString)?\s*\(\s*(?:(?:\$@?|@\$)"|@?"[^"]*"\s*\+|[A-Za-z_][\w.]*\s*[\[(+,)])
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Render a fixed literal Razor template and pass user input via the model argument; use RenderTemplateFromFile with a fixed path rather than building the source from input.
+why: Westwind.RazorHosting's RenderTemplate/RenderTemplateFromString compiles its first argument as Razor source, so a dynamic template string runs arbitrary C#/.NET code (RCE).
+confidence: high

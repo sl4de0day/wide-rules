@@ -1,0 +1,24 @@
+id: wide/cwe1177-with-statement
+name: cwe1177-with-statement
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-1177
+pattern: (?:^|[\s;{}])with\s*\(
+message: The `with` statement is used, resolving bare identifiers against a runtime object.
+remediation: Remove the with block and reference object members explicitly (e.g. obj.prop).
+why: with disables lexical scoping (and is forbidden in strict mode); when the object is dynamic, identifier lookups can silently resolve to unexpected or attacker-supplied properties.
+confidence: high

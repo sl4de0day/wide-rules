@@ -1,0 +1,20 @@
+id: wide/graphql-playground-option-enabled
+name: graphql-playground-option-enabled
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-489
+pattern: \bplayground\s*:\s*true\b
+message: GraphQL/dev misconfiguration — introspection or a dev endpoint exposed, or a weak/predictable secret (CWE-200/489/307/770/330).
+remediation: 'Disable in production: `playground: process.env.NODE_ENV !== ''production''`, or migrate to Apollo Server 3/4 and use the environment-aware landing-page plugins. Prefer `playground: false` for prod builds.'
+not-match: ^\s*(\/\/|#|\*|\/\*)|\btrue\s+if\b
+why: 'Apollo Server 2''s `playground: true` (and equivalent configs) turns on the embedded GraphQL Playground IDE, exposing an interactive schema explorer and introspection to anyone hitting the endpoint. A hardcoded true means on in every environment. Env-guarded values put a variable/ternary after the colon, so no literal true follows; `optionsPlayground` / `playgroundEnabled:` require a separator that the boundary+colon prevents from matching.'
+confidence: high

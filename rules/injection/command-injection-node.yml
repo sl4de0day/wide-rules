@@ -1,0 +1,19 @@
+id: wide/command-injection-node
+name: command-injection-node
+category: INJECTION
+severity: CRITICAL
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-78
+pattern: \b(exec|execSync)\s*\(\s*(?:[`"'][^`"']*(?:\$\{|"\s*\+|'\s*\+|`\s*\+)|[A-Za-z_$][\w$.]*\s*\+|`[^`]*\$\{)
+message: A shell command is built from a variable.
+remediation: Use execFile/spawn with an argument array, so the input can never be parsed as shell syntax.
+why: child_process.exec runs its argument through a shell, so anything interpolated into the command string can inject further commands.
+confidence: high

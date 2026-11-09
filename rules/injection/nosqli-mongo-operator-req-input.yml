@@ -1,0 +1,13 @@
+id: wide/nosqli-mongo-operator-req-input
+name: nosqli-mongo-operator-req-input
+category: INJECTION
+severity: CRITICAL
+languages:
+  - go
+cwe: CWE-943
+pattern: bson\.[MD]\{[^}]*"\$(?:where|regex|expr|function)"\s*[:,]\s*[^}]*(?:\.(?:Param|Params|Query|QueryParam|PostFormValue|PostForm|FormValue|DefaultQuery)\(|Vars\(\w+\)\[|URLParam\(|Params\.ByName\()
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: Escape regex input with regexp.QuoteMeta before building the $regex operand (or use an anchored, validated pattern), and avoid $where/$function on user data. Prefer typed field equality over operator objects driven by request values.
+not-match: ^\s*\/\/|^\s*\*\s|QuoteMeta|regexp\.Quote|\.\(string\)|primitive\.Regex|strconv\.
+why: Client input is placed directly as the operand of a dangerous mongo operator ($where JS, $regex, $expr, $function) read from a request accessor. Unescaped input in $regex enables regex injection / ReDoS, and in $where/$expr/$function it enables query or code injection.
+confidence: high

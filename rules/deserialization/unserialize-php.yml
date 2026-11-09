@@ -1,0 +1,17 @@
+id: wide/unserialize-php
+name: unserialize-php
+category: DESERIALIZATION
+severity: CRITICAL
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-502
+pattern: ^unserialize$
+message: unserialize() on untrusted data can be exploited.
+remediation: 'Use json_decode() for data, or pass allowed_classes: false.'
+why: Object-injection gadgets let a crafted string trigger code paths during deserialisation.
+confidence: high

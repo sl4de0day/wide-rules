@@ -1,0 +1,23 @@
+id: wide/js-redos-quantified-group-within-quantified-group
+name: js-redos-quantified-group-within-quantified-group
+category: GENERAL
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+cwe: CWE-1333
+pattern: \)[*+][^()a-zA-Z0-9]*\)[*+]
+message: ReDoS — a regex with nested or overlapping quantifiers can backtrack catastrophically on crafted input, freezing the process (CWE-1333).
+remediation: Collapse the nested quantifiers into one (anchor the pattern and use a single bounded, non-overlapping subpattern for each label/segment), validate and length-limit the input before matching, or run the pattern through a linear-time engine (RE2/node-re2).
+not-match: RE2|node-re2|\bre2\b|^\s*(?:\/\/|#|\*)
+why: 'Two stacked quantified groups — an inner (...)+/(...)* nested inside an outer (...)+/(...)*, separated only by a short literal delimiter — is the canonical catastrophic shape (the email/hostname (([...])+\.)+ and (([...])*_)* forms). Ambiguous partitioning of a long near-match drives exponential backtracking; feeding it request data is a single-request DoS. The sink flags a quantified group close )+ or )* followed, with no intervening parenthesis, by another )+ / )*. The separator between the two closes is restricted to non-alphanumeric chars ([^()a-zA-Z0-9]*): real ReDoS separators are punctuation/escapes (\. - _ @ / :), whereas nested arithmetic such as ((a+b)*c)*d or ((x+1)*2)+3 puts an operand (word char) between the two )*/)+ and is therefore not flagged.'
+confidence: high

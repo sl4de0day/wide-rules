@@ -1,0 +1,19 @@
+id: wide/cwe1333-dynamic-regexp
+name: cwe1333-dynamic-regexp
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-1333
+pattern: new\s+RegExp\s*\(\s*[A-Za-z_$]
+message: A RegExp is compiled from a non-literal (variable) pattern rather than a static literal.
+remediation: Use a static regex literal, or validate/escape the input and cap its length; never compile an untrusted pattern.
+why: A user-controlled pattern can trigger catastrophic backtracking, so a short crafted input hangs the event loop (ReDoS).
+confidence: high

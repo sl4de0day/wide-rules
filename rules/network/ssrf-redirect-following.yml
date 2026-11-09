@@ -1,0 +1,20 @@
+id: wide/ssrf-redirect-following
+name: ssrf-redirect-following
+category: NETWORK
+severity: LOW
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-918
+pattern: \b(?:followRedirect|followAllRedirects|followRedirects|follow_redirects|allow_redirects)\s*[:=]\s*true\b|\bmaxRedirects\s*[:=]\s*[1-9]\d*|\.redirects\s*\(\s*[1-9]
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: 'Set maxRedirects: 0 (or redirect: ''manual'' for fetch) and handle redirects yourself, re-running the full host allowlist + private-IP check on each Location before re-issuing the request; or supply a beforeRedirect/validateRedirect hook that re-validates every hop.'
+not-match: beforeRedirect|onRedirect|validateRedirect|checkRedirect|revalidate|maxRedirects\s*[:=]\s*0\b|redirect\s*:\s*["'`]manual
+why: 'The HTTP client is configured to follow redirects (maxRedirects > 0 / followRedirect:true / followAllRedirects:true / .redirects(n)) with no redirect-time re-validation hook. Even if the initial URL passed an allowlist check, a permitted server can 30x-redirect the client to an internal host, defeating front-door validation. maxRedirects requires `[1-9]` so `maxRedirects: 0` and `.redirects(0)` are excluded, and notMatch suppresses a beforeRedirect/validateRedirect hook or `redirect:''manual''`.'
+confidence: high

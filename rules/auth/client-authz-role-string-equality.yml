@@ -1,0 +1,22 @@
+id: wide/client-authz-role-string-equality
+name: client-authz-role-string-equality
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-602
+pattern: (?:[\w$]+(?:\.[\w$]+)*\.(?:role|roles|userRole|user_role|accountType|accessLevel|permission|permissions|privilege|privileges|userType|authority|authorities|memberType|accountLevel|group|groups)\s*(?:===?|!==?)\s*['"](?:admin|administrator|superuser|superadmin|super_admin|super-admin|sysadmin|root|owner|manager|moderator|staff|elevated)['"])|(?:[\w$]+(?:\.[\w$]+)*\.(?:roles|permissions|privileges|scopes|groups|authorities|grants)\s*\.\s*(?:includes|indexOf|contains|has)\s*\(\s*['"](?:admin|administrator|superuser|superadmin|root|owner)['"])
+message: Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.
+remediation: Remove role comparisons from client access decisions. Enforce role/permission on the server for each request and return 403 when unauthorized; use any client-side role only to adjust presentation, never to unlock privileged data or operations.
+not-match: (?:^\s*(?:\/\/|\*|\/\*|<!--|#))|(?:\bexpect\s*\(|\btoBe\b|\btoEqual\b|\btoContain\b|\bassert\w*\s*\(|\bdescribe\s*\(|\bit\s*\(|\.spec\.|\.test\.|__tests__|\bmock\w*)|(?:\.(?:filter|map|forEach|reduce|sort|findIndex|find)\s*\()|(?:className|classList|\bstyle\b|textContent|innerText|placeholder|<option|aria-|\blabel\s*[:=])
+why: A privileged role is decided in the browser by comparing a client-held role/permission value to a hard-coded privileged string (user.role === 'admin', roles.includes('admin')). The role field is client-controllable, so this comparison is not an authorization boundary; the server must re-check the caller's role for the specific resource.
+confidence: high

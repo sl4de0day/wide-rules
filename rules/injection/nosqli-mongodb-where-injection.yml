@@ -1,0 +1,14 @@
+id: wide/nosqli-mongodb-where-injection
+name: nosqli-mongodb-where-injection
+category: INJECTION
+severity: CRITICAL
+languages:
+  - cs
+  - csx
+cwe: CWE-943
+pattern: '"\$where"\s*,\s*[^;]*("\s*\+|\+\s*"|Request\.(Query|Form|Body|Headers|Cookies)|\$"|[Ss]tring\.(Format|Concat))'
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: Do not use $where. Express the condition with typed comparison filters (Builders<T>.Filter). If $where is truly required, use a constant function with bound scope variables and never concatenate request input.
+not-match: int\.Parse|Int32\.Parse|Convert\.To(Int|Double|Decimal|Int32|Int64)|\(int\)|\(long\)|\(double\)|^\s*\/\/
+why: 'A MongoDB $where clause evaluates a server-side JavaScript string. Concatenating or interpolating user input into that string is direct code injection: an attacker breaks out of the predicate to run arbitrary JS or force full-collection scans (CWE-943). The concat trigger is tightened to a + adjacent to a string quote ("\s*\+ or \+\s*"), so a constant JS expression that merely contains arithmetic ("this.a + this.b") no longer false-fires; interpolation ($") and String.Format/Concat are still caught. notMatch drops values coerced to a number ((int)/int.Parse/Convert.To*) before use, or commented-out lines. Regex.Escape was removed from notMatch because escaping regex metacharacters does not neutralize JavaScript $where injection and would mask real bugs.'
+confidence: high

@@ -1,0 +1,15 @@
+id: wide/ssrf-webclient-httpclient-uri-var
+name: ssrf-webclient-httpclient-uri-var
+category: NETWORK
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-918
+pattern: \.uri\s*\(\s*(?!["'])(?!URI\s*\.\s*create)(?!new\s+URI)(?![A-Za-z_$][\w$]*\s*->)(?![A-Z][A-Z0-9_]{2,}\s*[,)])[A-Za-z_$]
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Use a fixed base URL with .uri(pathTemplate, values) or validate the host against an allowlist; do not pass a raw user string to .uri().
+not-match: '"https?:\/\/|allow-?list|white-?list|isAllowed|permittedHost|ALLOWED_'
+why: WebClient/HttpRequest .uri(var) with a user-derived String target issues an outbound request to an attacker-chosen host (SSRF). A single-parameter uriBuilder lambda is excluded in the sink lookahead so that a real .uri(userUrl) call with a downstream lambda elsewhere on the line is no longer suppressed.
+confidence: high

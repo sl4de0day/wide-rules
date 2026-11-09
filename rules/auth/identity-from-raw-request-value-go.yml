@@ -1,0 +1,13 @@
+id: wide/identity-from-raw-request-value-go
+name: identity-from-raw-request-value-go
+category: AUTH
+severity: HIGH
+languages:
+  - go
+cwe: CWE-807
+pattern: \.(Header\.Get|Cookie|FormValue|PostFormValue|Query\(\)\.Get)\s*\(\s*"(x-)?(username|userid|user[-_]?id|user|uid|login|role|remote-user|auth-user)\b
+message: Broken session management — identity/role from an unverified client value or a writable store (CWE-807/302).
+remediation: Resolve identity from a verified session (a random session id in a server store) or a validated token (jwt.Parse with verification / securecookie.Decode).
+not-match: '[Uu]ser-?[Aa]gent|^\s*\/\/'
+why: 'Identity/role is read from a spoofable request source (r.Header.Get("X-User"), r.Cookie("user"), Query().Get("user_id")) and trusted as the acting user. Fixed a real gap: the original alternation missed snake_case user_id (no word boundary before an underscore) so Query().Get("user_id")/Cookie("user_id") slipped through; added user[-_]?id.'
+confidence: high

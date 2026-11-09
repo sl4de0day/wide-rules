@@ -1,0 +1,15 @@
+id: wide/pathwrite-python-pathlib-write
+name: pathwrite-python-pathlib-write
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-22
+pattern: \bPath\s*\([^)]*\)\s*(\/\s*|\.joinpath\s*\()[^)]*\brequest\.(args|form|values|json|GET|POST|files)\b[^\n]*\.write_(text|bytes)\s*\(
+message: Path traversal on write — a file is written to a user-controlled path without a containment check (CWE-22).
+remediation: Compute (Path(base)/name).resolve() and assert it .is_relative_to(base.resolve()) (or use relative_to in a try/except) before writing, and reduce the user value to a basename/allowlisted name.
+not-match: secure_filename|basename|sanitiz|uuid|realpath|relative_to|\.startswith\(|whitelist|allowlist|^\s*#
+why: A pathlib target is built as Path(dir) / request... (or .joinpath(request...)) and then .write_text/.write_bytes is called; the '/' operator lets a traversing or absolute user segment escape the base, yielding arbitrary write.
+confidence: high

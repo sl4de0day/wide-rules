@@ -1,0 +1,20 @@
+id: wide/require-node-literal-concat-userpath
+name: require-node-literal-concat-userpath
+category: NETWORK
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-829
+pattern: \brequire\s*\(\s*(?:['"][^'"]*['"]\s*\+|`[^`]*\$\{)
+message: Write-then-execute — code is loaded or run from a user-controlled or writable path (potential RCE, CWE-829/95/98/94).
+remediation: Resolve to an allow-listed literal instead of concatenating user input into the specifier; if a directory of plugins is loaded, enumerate a fixed read-only directory and validate each basename against a whitelist.
+not-match: ^\s*(?:\/\/|\*|\/\*|#)|__dirname|__filename|node_modules
+why: require() built from a string prefix concatenated with a variable, or a template literal with an interpolation, forms a dynamic module path (base + userName, `plugins/${name}`); a writable target directory makes this file-write-to-code-execution. A ternary-of-literals never matches because the concat branch requires a quote-then-plus.
+confidence: high

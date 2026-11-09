@@ -1,0 +1,15 @@
+id: wide/fmtstring-java-messageformat-var
+name: fmtstring-java-messageformat-var
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-134
+pattern: \bMessageFormat\s*\.\s*format\s*\(\s*(?!["'])(?![Ll]ocale\b)[A-Za-z_$]|new\s+Formatter\s*\([^)]*\)\s*\.\s*format\s*\(\s*(?:(?!["'])(?![Ll]ocale\b)[A-Za-z_$]|[Ll]ocale\b[^,]*,\s*(?!["'])[A-Za-z_$])
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: Keep the MessageFormat/Formatter pattern a constant literal and supply user data only as the argument array.
+not-match: \b(?:MessageFormat\s*\.\s*format|Formatter\s*\([^)]*\)\s*\.\s*format)\s*\(\s*[A-Z][A-Z0-9_]{2,}\s*[,)]
+why: MessageFormat.format / Formatter.format with a user-controlled pattern lets an attacker inject format elements ({0,number}, quoting) that throw, leak, or corrupt output (CWE-134). The Formatter branch now excludes a leading Locale and an ALL_CAPS constant pattern (previously new Formatter().format(Locale.US, "%d") and new Formatter().format(FMT_CONST, x) both false-fired).
+confidence: high

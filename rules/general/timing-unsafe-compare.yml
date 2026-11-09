@@ -1,0 +1,25 @@
+id: wide/timing-unsafe-compare
+name: timing-unsafe-compare
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-208
+pattern: \b(?:signature|hmac|\w*[Ss]ig|digest|authTag|checksum|expectedHash|otp)\b(?:\[[^\]]*\])?\s*(?:===|!==|==|!=)
+message: A secret (signature/HMAC/digest) is compared with ===/!== (not constant-time).
+remediation: Compare with crypto.timingSafeEqual (Node) or a constant-time equality that always scans both fully.
+not-match: timingSafeEqual
+why: '=== and a char-by-char loop return as soon as they differ, so the time taken leaks how many leading bytes matched — an attacker recovers the value byte by byte (timing side channel).'
+confidence: high

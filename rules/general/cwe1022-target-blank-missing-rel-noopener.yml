@@ -1,0 +1,25 @@
+id: wide/cwe1022-target-blank-missing-rel-noopener
+name: cwe1022-target-blank-missing-rel-noopener
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - tsx
+  - ts
+  - mjs
+  - cjs
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-1022
+pattern: target\s*=\s*['"`{]*_blank
+message: A link uses target="_blank" without rel="noopener".
+remediation: Add rel="noopener noreferrer" to every target="_blank" link.
+not-match: noopener
+why: A _blank link without rel=noopener gives the destination page a window.opener handle to the source tab, letting it redirect that tab to a spoofed page (tabnabbing) and leaking referrer data.
+confidence: high

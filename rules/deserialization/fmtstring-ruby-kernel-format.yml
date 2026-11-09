@@ -1,0 +1,13 @@
+id: wide/fmtstring-ruby-kernel-format
+name: fmtstring-ruby-kernel-format
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-134
+pattern: (?:(?:^|[^.\w])(?:format|sprintf)|\bKernel\.(?:format|sprintf))\s*\(\s*(?!["'])[^)\s]
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Keep the format string a constant literal and pass user data only as trailing value arguments: format("%s", user).'
+not-match: ^\s*#|\(\s*:[A-Za-z_]|\bdef\s+(?:self\.)?(?:format|sprintf)\b
+why: format()/sprintf()/Kernel.format is called with a NON-LITERAL first argument, so user-controlled text is used as the format template (crash, info disclosure via mismatched specifiers). Added a targeted def-guard so a method DEFINITION `def format(...)`/`def sprintf(...)` is not flagged, while a one-line `def x; format(user_fmt); end` still fires (the guard only matches `def` immediately naming format/sprintf).
+confidence: high

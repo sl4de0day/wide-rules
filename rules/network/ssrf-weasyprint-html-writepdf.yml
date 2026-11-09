@@ -1,0 +1,15 @@
+id: wide/ssrf-weasyprint-html-writepdf
+name: ssrf-weasyprint-html-writepdf
+category: NETWORK
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-918
+pattern: \bHTML\s*\(\s*(?:string|url|filename)\s*=
+message: Renderer resource embedding — a document/PDF/image converter resolves a user-controlled resource, enabling LFI or SSRF (CWE-918/73/611).
+remediation: Render only trusted/literal sources, or pass a sandboxed url_fetcher= that rejects file:// and non-allowlisted hosts.
+not-match: (?:^\s*(?:#|\/\/|\*)|url_fetcher|HTML\s*\(\s*(?:string|url|filename)\s*=\s*['"`][^'"`$]*['"`])
+why: WeasyPrint HTML(string=/url=/filename=user).write_pdf() resolves external and local resources referenced by the document; user-controlled input enables file:// disclosure (LFI) and fetches of internal URLs (SSRF) unless a restricting url_fetcher is supplied. sinkRegex now tolerates whitespace before the '(' (HTML (string=...)).
+confidence: high

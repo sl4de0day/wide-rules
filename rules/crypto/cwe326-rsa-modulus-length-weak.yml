@@ -1,0 +1,19 @@
+id: wide/cwe326-rsa-modulus-length-weak
+name: cwe326-rsa-modulus-length-weak
+category: CRYPTO
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-326
+pattern: modulusLength\s*[:=]\s*(?:\d{1,3}|1\d{3})\b
+message: RSA/DSA/DH key is generated with a modulusLength below 2048 bits.
+remediation: Set modulusLength to at least 2048 (3072+ for long-lived keys).
+why: Keys of 1024 bits or smaller are factorable by well-resourced attackers, allowing the private key to be recovered and all traffic decrypted or forged.
+confidence: high

@@ -1,0 +1,18 @@
+id: wide/idor-eloquent-findbyid-req
+name: idor-eloquent-findbyid-req
+category: AUTH
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-639
+pattern: '::(find|findOrFail)\s*\(\s*(\$request\b|request\s*\(|\$_(GET|POST|REQUEST|COOKIE)\b)'
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: 'Scope the lookup to the owner instead of a bare primary-key fetch, e.g. auth()->user()->documents()->findOrFail($request->id) (which uses instance ->find, not the static ::find this rule flags), or add a policy check: $this->authorize(''view'', $doc).'
+not-match: auth\s*\(|Auth::|->user\b|user_?id|owner|Gate::|authorize|->can\b|\bcan\s*\(|\bcannot\b|policy|current_?user|\$this->user|session\s*\(|Session::|abort_unless|abort_if|Bouncer::|denies|allows|whereBelongsTo|tenant|team_?id|account_?id|org_?id|organi|company_?id|group_?id|customer_?id|^\s*(\/\/|#(?!\[)|\*)
+why: Model::find()/findOrFail() fetches a row solely by its primary key. When the key comes straight from the request ($request->id, $_GET['id'], request('id')) and no ownership/authorization predicate appears on the statement, any authenticated user can read another user's record by changing the id.
+confidence: high

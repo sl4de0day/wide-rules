@@ -1,0 +1,15 @@
+id: wide/idor-spring-controller-pathvar-access
+name: idor-spring-controller-pathvar-access
+category: AUTH
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-639
+pattern: '@(PathVariable|RequestParam|PathParam)\b[^;]*\.(findById|getReferenceById|getOne|deleteById|getById)\s*\('
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: Add @PreAuthorize/@PostAuthorize on the handler, switch to an owner-scoped repository method (findByIdAndOwnerId), or verify the loaded entity belongs to the authenticated principal before returning/deleting it.
+not-match: '@PreAuthorize|@PostAuthorize|@Secured|@RolesAllowed|hasPermission|[Pp]rincipal|Authentication|AndUserId|AndOwner|AndAccount|AndTenant|[Cc]urrentUser|SecurityContext|authoriz|getOwner|checkOwner|verifyOwner|ensureOwner|isOwner|checkAccess|verifyAccess|ensureAccess|hasAccess|^\s*(?:\/\/|\/\*|\*)'
+why: A terse Spring controller handler that binds an id from @PathVariable/@RequestParam and immediately fetches or deletes by that id in the same expression, with no method-security annotation or ownership variant, is a direct object reference an attacker can enumerate. @AuthenticationPrincipal / Authentication params, @Secured/@RolesAllowed admin routes, and owner-scoped derived methods are suppressed.
+confidence: high

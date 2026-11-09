@@ -1,0 +1,14 @@
+id: wide/zipslip-kotlin-file-entryname
+name: zipslip-kotlin-file-entryname
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - kt
+  - kts
+cwe: CWE-22
+pattern: File\s*\([^)]*\b(zipEntry|entry|tarEntry|ze)\.name\b
+message: Zip Slip / insecure archive extraction — an archive entry name escapes the destination, arbitrary file write (CWE-22/59).
+remediation: 'Build the file then verify containment: val f = File(destDir, entry.name); if (!f.canonicalPath.startsWith(destDir.canonicalPath + File.separator)) throw IOException(). Reject ''..''/absolute names and skip symlink entries.'
+not-match: ^\s*(\/\/|\/\*|\*)|canonicalPath|\.startsWith\(|normalize|sanitiz|toRealPath|isInside
+why: Kotlin File(destDir, entry.name) constructs the extraction target from the untrusted ZipEntry.name; a traversal name escapes destDir and the following outputStream()/copyTo writes attacker-controlled content to an arbitrary path. A leading word boundary keeps the short 'ze' token from matching inside identifiers like size/maze/blaze.
+confidence: high

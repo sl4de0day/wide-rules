@@ -1,0 +1,12 @@
+id: wide/cwe079-go-text-template-html
+name: cwe079-go-text-template-html
+category: XSS
+severity: MEDIUM
+languages:
+  - go
+cwe: CWE-79
+pattern: '"text\/template"'
+message: The text/template package is imported; unlike html/template it does not contextually escape output.
+remediation: Use the html/template package for any HTML output so values are auto-escaped by context.
+why: If text/template renders HTML served to browsers, interpolated data is emitted unescaped and yields cross-site scripting.
+confidence: high

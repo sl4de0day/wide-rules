@@ -1,0 +1,19 @@
+id: wide/cwe89-knex-raw-string-concat
+name: cwe89-knex-raw-string-concat
+category: INJECTION
+severity: CRITICAL
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-89
+pattern: \.raw\s*\(\s*(?:`[^`]*\$\{|["'][^"']*["']\s*\+)
+message: knex .raw() SQL is built with template interpolation or string concatenation.
+remediation: Use knex bindings — knex.raw('... WHERE id = ?', [id]) or named :bindings — so values are sent separately from the SQL text.
+why: Interpolating or concatenating values into raw SQL defeats parameterization, allowing classic SQL injection through the untrusted parts of the query.
+confidence: high

@@ -1,0 +1,16 @@
+id: wide/cwe22-php-include-superglobal
+name: cwe22-php-include-superglobal
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+cwe: CWE-22
+pattern: \b(include|include_once|require|require_once|fopen|readfile|file_get_contents|file_put_contents)\b[^;]*\$_(GET|POST|REQUEST|COOKIE)\b
+message: A PHP include/require/file function uses a request superglobal in its path.
+remediation: Never build include paths from input; map the value through a fixed allowlist of permitted files.
+why: User input flowing into include/require enables local/remote file inclusion and arbitrary code execution; into fopen/readfile it enables path traversal.
+confidence: high

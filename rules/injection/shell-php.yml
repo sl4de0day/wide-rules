@@ -1,0 +1,17 @@
+id: wide/shell-php
+name: shell-php
+category: INJECTION
+severity: CRITICAL
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-78
+pattern: ^(system|shell_exec|exec|passthru|popen|proc_open)$
+message: This runs an operating-system command.
+remediation: Avoid the shell; if unavoidable, pass fixed arguments and escapeshellarg() every value.
+why: If any part of the command comes from a request, the request can run commands on the server.
+confidence: high

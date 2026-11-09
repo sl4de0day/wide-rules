@@ -1,0 +1,15 @@
+id: wide/nosqli-mongo-where-js-concat
+name: nosqli-mongo-where-js-concat
+category: INJECTION
+severity: CRITICAL
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-943
+pattern: \$where"?\s*(\)\s*\.is\s*\(|:)[^;\n]*\+\s*[A-Za-z_$"']
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: Avoid $where entirely; express the predicate with typed Criteria operators. If a numeric bound is needed, coerce the input (Long.parseLong/Integer.parseInt/.toInt()) and never concatenate raw strings into the JS body.
+not-match: parseInt|parseLong|parseDouble|Integer\.|Long\.|Double\.|Number\(|String\.valueOf|\.toInt|\.toLong|\.toDouble|\.toBigInteger|\.toBigDecimal|BigDecimal|BigInteger|\bescape|sanitize|^\s*(?:\/\/|\/\*|\*)
+why: A Mongo $where clause whose server-side JavaScript is built by string-concatenating user input allows JavaScript/operator injection into the query engine. The '+' must be followed by an identifier or quote (a numeric literal concatenation like '"..." + 5' is naturally excluded), and both Java (Integer.parseInt/Long.valueOf) and Kotlin (.toInt/.toLong/.toBigDecimal) numeric coercions suppress.
+confidence: high

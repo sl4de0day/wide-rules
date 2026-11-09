@@ -1,0 +1,12 @@
+id: wide/ssti-ruby-slim-engine-call
+name: ssti-ruby-slim-engine-call
+category: INJECTION
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-1336
+pattern: ^(?!\s*#).*?\bSlim::Engine\.new(?:\s*\((?:[^()]|\([^()]*\))*\))?\.call\s*\(\s*(?:[a-z_@][\w.:]*|"[^"]*#\{|(?:"[^"]*"|'[^']*')\s*(?:\+|%|<<)(?!\s*["']))
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Only pass literal/trusted template text to Slim::Engine#call and evaluate it against a scope that carries user data, never compile request-derived template strings.
+why: 'Slim::Engine#call compiles a Slim template string into Ruby source; a dynamic argument means attacker-controlled Slim (with #{...} and code) is compiled and later evaluated.'
+confidence: high

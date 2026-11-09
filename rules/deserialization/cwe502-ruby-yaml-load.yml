@@ -1,0 +1,12 @@
+id: wide/cwe502-ruby-yaml-load
+name: cwe502-ruby-yaml-load
+category: DESERIALIZATION
+severity: CRITICAL
+languages:
+  - rb
+cwe: CWE-502
+pattern: YAML\s*\.\s*load\s*\(
+message: YAML.load deserializes untrusted YAML into arbitrary Ruby objects.
+remediation: Use YAML.safe_load with an explicit permitted_classes allowlist.
+why: YAML.load can instantiate arbitrary classes and, via known Psych/Rails gadgets, achieve remote code execution on attacker-supplied data.
+confidence: high

@@ -1,0 +1,15 @@
+id: wide/java-reflected-html-writer-getparameter
+name: java-reflected-html-writer-getparameter
+category: XSS
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-79
+pattern: \b(?:print|println|write)\s*\((?=[^;]*<\w)(?=[^;]*\b(?:getParameter|getHeader|getQueryString|getParameterValues)\b)[^;]*\+
+message: Reflected / context-mismatched XSS — user input reaches HTML or JS output without proper contextual encoding (CWE-79/116).
+remediation: Encode for the output context with OWASP Java Encoder (Encode.forHtml), Apache Commons StringEscapeUtils.escapeHtml4, or Spring HtmlUtils.htmlEscape; sanitize rich HTML with Jsoup.clean; cast numeric params with Integer.parseInt.
+not-match: (?:^\s*(?:\/\/|\*)|StringEscapeUtils|escapeHtml|Encode\.forHtml|forHtmlContent|ESAPI|HtmlUtils|Jsoup\.clean|Sanitizers\.|Integer\.parseInt|Long\.parseLong|Double\.parseDouble|\.replaceAll\("[<>&])
+why: A servlet response writer emits an HTML fragment concatenated with request.getParameter/getHeader/getQueryString with no output encoding, reflecting attacker markup -> reflected XSS.
+confidence: high

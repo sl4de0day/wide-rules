@@ -1,0 +1,15 @@
+id: wide/ssrf-urllib-urlopen-user-url
+name: ssrf-urllib-urlopen-user-url
+category: NETWORK
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-918
+pattern: \b(?:urllib\.request\.urlopen|urllib\.request\.Request|urllib\.request\.urlretrieve|urlopen|urlretrieve)\s*\(\s*(?:url\s*=\s*)?request\.(?:args|form|values|json|data|cookies|headers|get_json|query_params|GET|POST|body|META)
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Validate the URL against an allowlist and restrict the scheme to http/https before opening it; never hand request.* directly to urlopen. Prefer a hardened HTTP client that blocks internal IP ranges.
+not-match: ^\s*#|whitelist|allowlist|allowed_|ALLOWED|is_safe_url
+why: urllib.request.urlopen / Request / urlretrieve is invoked with a request attribute in the URL position (first argument or url=), fetching an attacker-chosen destination (CWE-918). urlopen also honours file:// and other schemes, widening the impact. Anchoring request.* to the first arg avoids flagging the safe case where request.* is passed as the POST data= or headers= of urlopen/Request.
+confidence: high

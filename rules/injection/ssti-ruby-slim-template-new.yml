@@ -1,0 +1,12 @@
+id: wide/ssti-ruby-slim-template-new
+name: ssti-ruby-slim-template-new
+category: INJECTION
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-1336
+pattern: ^(?!\s*#).*?\bSlim::Template\.new\s*(?:\((?:[^()]|\([^()]*\))*\))?\s*\{\s*(?:[a-z_@][\w.:]*|"[^"]*#\{|(?:"[^"]*"|'[^']*')\s*(?:\+|%|<<)(?!\s*["']))
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Pass a fixed template filename to Slim::Template.new, or return only a constant literal from the block; deliver user data through the render() scope/locals instead.
+why: Slim::Template.new compiles the string returned by its block into Ruby; when that block yields dynamic/user input, Slim's Ruby interpolation (#{...}) and embedded code make it SSTI/RCE.
+confidence: high

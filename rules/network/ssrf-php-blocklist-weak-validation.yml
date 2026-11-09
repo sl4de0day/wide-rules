@@ -1,0 +1,18 @@
+id: wide/ssrf-php-blocklist-weak-validation
+name: ssrf-php-blocklist-weak-validation
+category: NETWORK
+severity: MEDIUM
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-918
+pattern: (strpos|stripos|str_contains|preg_match|in_array)\s*\([^;]*(127\.0\.0\.1|169\.254\.169\.254|0\.0\.0\.0|::1|['"/#|]localhost)
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Replace the denylist with a positive host allowlist; resolve the target hostname and verify every resolved IP is publicly routable before connecting, and re-verify after each redirect.
+not-match: (?!)
+why: 'SSRF protection is implemented as a denylist of loopback/link-local/metadata literals. Denylists are trivially bypassed via octal/decimal/hex IPs, [::], DNS rebinding, wildcard DNS, or alternate metadata hostnames. Tightened from the original: the ''localhost'' alternative now requires a preceding string/regex delimiter (quote, slash, hash, or pipe) so an identifier such as $localhostname no longer matches, while all quoted and regex denylist forms still do. The dotted/colon IP literals cannot occur inside identifiers, so they stay bare.'
+confidence: high

@@ -1,0 +1,17 @@
+id: wide/ssti-blade-compile-string
+name: ssti-blade-compile-string
+category: INJECTION
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/[/*]|#|\*)).*?(?:Blade::|->)compileString\s*\(\s*(?:\$|(?:'[^']*'|"[^"]*")\s*\.\s*[\$A-Za-z_]|"[^"]*\$\{?[A-Za-z_])
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Only compile fixed, developer-authored template strings; keep user input out of the compiled source and bind it as data at render time.
+why: compileString() on the Blade compiler (and Phalcon Volt) turns a template string into executable PHP, so a dynamic argument compiles attacker-controlled directives that run as code.
+confidence: high

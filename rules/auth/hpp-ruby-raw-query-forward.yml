@@ -1,0 +1,13 @@
+id: wide/hpp-ruby-raw-query-forward
+name: hpp-ruby-raw-query-forward
+category: AUTH
+severity: MEDIUM
+languages:
+  - rb
+cwe: CWE-235
+pattern: (?:\bNet::HTTP\.|\bHTTParty\.|\bRestClient\.|\bFaraday\.|\bURI\.open|(?:^|[^.\w])open\s*\()[^\n]*(?:request\.query_string|\bQUERY_STRING\b)
+message: HTTP parameter pollution — raw/duplicated request parameters forwarded so layers disagree (CWE-235).
+remediation: Parse, validate and re-serialise only the parameters you need (e.g. URI.encode_www_form on a permitted hash) instead of forwarding the raw query string.
+not-match: (?:encode_www_form|to_query|build_(?:nested_)?query|CGI\.escape|URI\.encode|\.to_json|\.slice\(|\.permit\(|\.only\(|parse(?:_nested)?_query|deep_symbolize)|^\s*#
+why: The raw query string is forwarded verbatim into a downstream request, so duplicated parameters can be re-parsed differently by the backend (HTTP Parameter Pollution). Added \b (MyHTTParty) and generalised parse_nested_query to parse(?:_nested)?_query so a safe Rack::Utils.parse_query re-parse is suppressed.
+confidence: high

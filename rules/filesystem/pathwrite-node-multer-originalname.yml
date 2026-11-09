@@ -1,0 +1,20 @@
+id: wide/pathwrite-node-multer-originalname
+name: pathwrite-node-multer-originalname
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-73
+pattern: \b(cb|callback|done)\s*\(\s*(null|undefined)\s*,\s*[^;]*\.(originalname|originalFilename)\b|\b(?:filename|filepath|newFilename|savePath|destPath|targetPath|dest)\s*[:=][^;]*\.(originalname|originalFilename)\b
+message: Path traversal on write — a file is written to a user-controlled path without a containment check (CWE-22).
+remediation: Generate the stored name server-side (crypto.randomUUID + path.extname) or run the original through path.basename()/an allowlist; never persist originalname directly.
+not-match: basename|secure_filename|sanitiz|whitelist|allowlist|randomUUID|uuid|Date\.now|crypto\.|nanoid|extname|^\s*(\/\/|\*|\/\*)
+why: multer diskStorage / formidable use the client-supplied upload filename (file.originalname / originalFilename) verbatim as the stored filename or destination path, so a crafted name like '../../app.js' writes outside the upload folder.
+confidence: high

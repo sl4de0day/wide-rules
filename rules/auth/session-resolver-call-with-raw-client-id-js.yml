@@ -1,0 +1,20 @@
+id: wide/session-resolver-call-with-raw-client-id-js
+name: session-resolver-call-with-raw-client-id-js
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-807
+pattern: \b(get|load|find|fetch|lookup|resolve|read)(Session|User|Account|Role|Profile|Identity|Auth)s?\s*\(\s*req\.(cookies|headers|query|params|body)\s*(\.\s*|\[\s*['"])(x[-_])?(user(name|id|_id|_name|Id)?|uid|login|account|acct)\b
+message: Broken session management — identity/role from an unverified client value or a writable store (CWE-807/302).
+remediation: 'Pass a verified identity into the resolver: the subject of a validated JWT (jwt.verify), a value from req.signedCookies, or the user id stored in the server-side session (req.session.userId).'
+not-match: signedCookies|jwt\.verify|req\.session\.|^\s*(\/\/|\*|\/\*)
+why: An identity/session resolver (getSession, loadUser, findAccount, getRole, ...) is called with a raw client-supplied identifier straight from req.cookies/headers/query, so any caller can impersonate any user by setting that value. The resolver argument must sit directly after the call paren, so getUser(sanitize(...)) and getUser(jwt.verify(...)) are excluded.
+confidence: high

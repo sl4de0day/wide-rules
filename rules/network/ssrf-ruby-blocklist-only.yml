@@ -1,0 +1,13 @@
+id: wide/ssrf-ruby-blocklist-only
+name: ssrf-ruby-blocklist-only
+category: NETWORK
+severity: MEDIUM
+languages:
+  - rb
+cwe: CWE-918
+pattern: ^(?=.*\b(?:host|hostname|uri|url|ip|addr|address|domain)\b)(?=.*(?:127\.0\.0\.1|localhost|169\.254\.169\.254|169\.254|0\.0\.0\.0|::1|metadata\.google|metadata))(?=.*(?:\b(?:raise|return|next|deny|block|reject|blacklist|blocklist|denylist|forbid)\b|include\?|==)).+
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Replace the denylist with a positive allowlist of permitted hosts and resolve+validate the final IP; do not rely on blocking known-bad literals.
+not-match: (?:allow_?list|white_?list|allowed_?hosts?|permitted|safe_?hosts?|valid_?hosts?)|^\s*#
+why: 'SSRF protection that only denies 127.0.0.1/localhost/169.254/0.0.0.0/metadata is trivially bypassed (DNS rebinding, alternate IP encodings, IPv6, redirects). Tightened the third lookahead: it now requires an actual comparison (==), include?, or a deny verb, so config assignments like host = "127.0.0.1" if test_mode no longer false-fire on a bare if/unless.'
+confidence: high

@@ -1,0 +1,15 @@
+id: wide/java-class-forname-user-controlled
+name: java-class-forname-user-controlled
+category: GENERAL
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-470
+pattern: \bClass\.forName\s*\(
+message: Write-then-execute — code is loaded or run from a user-controlled or writable path (potential RCE, CWE-829/95/98/94).
+remediation: Resolve a validated key to a fixed Class via an explicit allow-list map instead of forName(userInput); never reflectively load a class named by request data.
+not-match: ^\s*(?:\/\/|\*|\/\*)|Class\.forName\s*\(\s*"[^"]*"\s*[,)]
+why: Class.forName() with a non-literal name selects a class from externally-controlled input (unsafe reflection); combined with newInstance()/getConstructor() it instantiates and runs attacker-chosen code, including gadget classes on the classpath or loaded from a writable location. A single string-literal name (one- or three-arg) is suppressed; a leading word-boundary stops it matching myClass.forName(...).
+confidence: high

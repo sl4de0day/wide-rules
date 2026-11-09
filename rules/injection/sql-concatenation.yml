@@ -1,0 +1,33 @@
+id: wide/sql-concatenation
+name: sql-concatenation
+category: INJECTION
+severity: CRITICAL
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - py
+  - pyi
+  - pyw
+  - go
+  - java
+  - cs
+  - rb
+cwe: CWE-89
+pattern: (select|insert|update|delete)\b[^;]*\b(from|into|set|where|values)\b[^;]*?(["'`]\s*(\+|\.)\s*[A-Za-z_$(]|\$\{)
+message: A SQL statement is built by concatenation.
+remediation: Use a parameterised query (placeholders + bound values) so input can never be parsed as SQL.
+not-match: \?\s*[,)]|:\w+|@\w+|\$\d|\bbind(?:param|_param|ing)
+why: 'Joining a query string with a variable is the classic SQL-injection shape: the value can change the query''s meaning, not just its data.'
+confidence: high

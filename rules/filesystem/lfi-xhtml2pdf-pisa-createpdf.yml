@@ -1,0 +1,15 @@
+id: wide/lfi-xhtml2pdf-pisa-createpdf
+name: lfi-xhtml2pdf-pisa-createpdf
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-73
+pattern: \bpisa\.(?:CreatePDF|pisaDocument)\s*\(
+message: Renderer resource embedding — a document/PDF/image converter resolves a user-controlled resource, enabling LFI or SSRF (CWE-918/73/611).
+remediation: Supply a link_callback that maps only allowlisted static/media directories and rejects absolute/traversal paths and file:// URIs; render fixed sources where possible.
+not-match: (?:^\s*(?:#|\/\/|\*)|link_callback|pisa\.(?:CreatePDF|pisaDocument)\s*\(\s*['"`][^'"`$]*['"`]\s*[,)])
+why: xhtml2pdf/pisa CreatePDF/pisaDocument on user-controlled HTML resolves image/link resources through its resource resolver; without a restricting link_callback an attacker references local files (LFI) via the src/href in the supplied markup.
+confidence: high

@@ -1,0 +1,16 @@
+id: wide/cwe098-php-include-superglobal
+name: cwe098-php-include-superglobal
+category: GENERAL
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+cwe: CWE-98
+pattern: \b(?:include|require)(?:_once)?\b[^;]*\$_(?:GET|POST|REQUEST|COOKIE|SERVER)\b
+message: A file is included/required using a request-controlled superglobal value.
+remediation: Map the input to a fixed allowlist of filenames instead of concatenating it into the include path.
+why: Local/remote file inclusion lets an attacker load arbitrary local files or, with allow_url_include, remote PHP, leading to code execution.
+confidence: high

@@ -1,0 +1,14 @@
+id: wide/hpp-manual-first-vs-last-duplicate
+name: hpp-manual-first-vs-last-duplicate
+category: AUTH
+severity: LOW
+languages:
+  - cs
+  - csx
+cwe: CWE-235
+pattern: \bRequest\.(?:Query|QueryString|Form)(?:\s*\[\s*["'][^"']+["']\s*\]|\.GetValues\s*\(\s*["'][^"']+["']\s*\))\s*(?:\.(?:First|Last|FirstOrDefault|LastOrDefault)\s*\(\s*\)|\[\s*\d+\s*\])
+message: HTTP parameter pollution — raw/duplicated request parameters forwarded so layers disagree (CWE-235).
+remediation: Reject requests that contain the parameter more than once, or canonicalise to a single documented value and use that everywhere; never let first-vs-last selection differ between tiers.
+not-match: ^\s*(?:\/\/|\*)
+why: 'Code explicitly picks one of several values for a specific, possibly-duplicated request parameter: it names the parameter (Request.Query["x"] or .GetValues("x")) and then selects First/Last/FirstOrDefault/LastOrDefault() or [index]. When one tier selects the first occurrence and another (WAF/proxy/backend) selects the last, a duplicated parameter is interpreted inconsistently - the classic HPP primitive. Tightened from the original: it now requires a named parameter access immediately before the first/last selection, so Request.Query.Keys.First() / Request.Query.First() (collection iteration, not value selection) no longer match, and .First(predicate) is excluded by requiring empty parens.'
+confidence: high

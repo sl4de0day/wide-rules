@@ -1,0 +1,20 @@
+id: wide/cwe470-require-non-literal
+name: cwe470-require-non-literal
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-470
+pattern: \brequire\s*\(
+message: require() is called with a non-literal (variable, concatenated, or interpolated) module specifier.
+remediation: require a fixed string literal, or map untrusted input through an explicit allowlist of permitted module names.
+not-match: require\s*\(\s*(['"`])[^'"`$]*\1\s*\)
+why: A dynamically built require path lets externally controlled input select and load unexpected modules, enabling remote code execution or path traversal.
+confidence: high

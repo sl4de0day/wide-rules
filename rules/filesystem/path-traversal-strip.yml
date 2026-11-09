@@ -1,0 +1,33 @@
+id: wide/path-traversal-strip
+name: path-traversal-strip
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - py
+  - pyi
+  - pyw
+cwe: CWE-22
+pattern: \.replace\s*\(\s*(?:['"]\.\.[\\/]|\/\\?\.\\?\.[\\/])
+message: Path traversal is being removed with a single-pass string replace.
+remediation: Resolve the path (path.resolve/realpath) and verify it stays inside a fixed canonical base, rather than stripping strings.
+why: 'Removing ''../'' once does not sanitise the path: an input such as ''....//'' becomes ''../'' after one replacement, so the traversal survives.'
+confidence: high

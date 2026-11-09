@@ -1,0 +1,13 @@
+id: wide/ssti-razorenginecore-compile
+name: ssti-razorenginecore-compile
+category: INJECTION
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*\b_?[Rr]azorEngine\.Compile(?:Async)?\s*\(\s*(?:(?:\$@?|@\$)"|@?"[^"]*"\s*\+|[A-Za-z_][\w.]*\s*[\[(+,)])
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Compile a constant literal template once and bind user input via the model at RunAsync time instead of building the compiled source from input.
+why: RazorEngineCore's razorEngine.Compile turns its string argument into a compiled Razor template that runs C#, so a dynamic source string is remote code execution.
+confidence: high

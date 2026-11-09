@@ -1,0 +1,18 @@
+id: wide/lfi-mpdf-writehtml-user
+name: lfi-mpdf-writehtml-user
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-73
+pattern: '->WriteHTML\s*\('
+message: Renderer resource embedding — a document/PDF/image converter resolves a user-controlled resource, enabling LFI or SSRF (CWE-918/73/611).
+remediation: Render only trusted/templated HTML, restrict allowed image roots, and disable remote resource loading; do not pass raw request input to WriteHTML.
+not-match: (?:^\s*(?:\/\/|#|\*)|->WriteHTML\s*\(\s*['"`][^'"`$]*['"`]\s*[,)])
+why: mPDF $mpdf->WriteHTML($userHtml) embeds images/stylesheets/backgrounds referenced by attacker markup; a local path in an <img>/CSS url() causes local file inclusion (LFI), and remote refs cause outbound fetches (SSRF). SetHTMLHeader/SetHTMLFooter are excluded because the sink requires the exact method WriteHTML.
+confidence: high

@@ -1,0 +1,20 @@
+id: wide/cwe89-js-query-template-literal
+name: cwe89-js-query-template-literal
+category: INJECTION
+severity: CRITICAL
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-89
+pattern: \.(?:query|execute)\s*\(\s*`[^`]*\$\{
+message: A query is built from a template literal that interpolates a value.
+remediation: 'Pass the values separately: db.query(''SELECT * FROM t WHERE id = ?'', [id]) — the driver then sends them as data the parser never reads as SQL.'
+not-match: \$\{\s*(?:table|schema|column|sort|order|dir|direction)\b
+why: Whatever the interpolated expression evaluates to becomes part of the SQL text, so a value carrying a quote or a comment marker rewrites the statement instead of filling a slot in it.
+confidence: high

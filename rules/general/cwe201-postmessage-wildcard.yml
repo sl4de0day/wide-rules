@@ -1,0 +1,24 @@
+id: wide/cwe201-postmessage-wildcard
+name: cwe201-postmessage-wildcard
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-201
+pattern: \.source\.postMessage\s*\(.*,\s*["']\*["']
+message: A postMessage reply to a received message uses '*' as the target origin.
+remediation: Reply to the specific expected origin (event.source.postMessage(data, expectedOrigin)) and verify event.origin before responding.
+why: A wildcard target origin delivers the (possibly sensitive) reply to any origin, including the malicious frame that sent the original message, leaking data cross-origin.
+confidence: high

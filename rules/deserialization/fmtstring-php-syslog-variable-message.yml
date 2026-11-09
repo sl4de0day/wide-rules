@@ -1,0 +1,18 @@
+id: wide/fmtstring-php-syslog-variable-message
+name: fmtstring-php-syslog-variable-message
+category: DESERIALIZATION
+severity: LOW
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-134
+pattern: \bsyslog\s*\(\s*[^,;()]+,\s*\$\w
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Format with a literal template first: syslog(LOG_ERR, sprintf(''%s'', $userData)); never pass raw user input as the message.'
+not-match: (?!)
+why: 'The syslog message argument (2nd arg, after the priority) is a non-literal, user-controlled variable. Passing untrusted data as the message risks format-specifier handling (%m) and log injection; the safe form uses a constant template with data supplied separately. Tightened from the original: the priority segment is [^,;()]+ (no parentheses) so a parenthesized priority expression like get_priority($lvl, $fac) can no longer have its inner argument mistaken for the message on an otherwise safe literal-message call.'
+confidence: high

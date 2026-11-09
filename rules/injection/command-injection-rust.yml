@@ -1,0 +1,12 @@
+id: wide/command-injection-rust
+name: command-injection-rust
+category: INJECTION
+severity: CRITICAL
+languages:
+  - rs
+cwe: CWE-78
+pattern: Command::new\s*\(\s*"(?:sh|bash|cmd)"\s*\)|\.arg\s*\(\s*&?format!
+message: A shell command is built from a value (Command::new("sh") / .arg(format!)).
+remediation: Run the target program directly with discrete .arg() values, not through a shell.
+why: Spawning a shell and passing a formatted argument lets input be parsed as shell syntax.
+confidence: high

@@ -1,0 +1,20 @@
+id: wide/graphql-formaterror-stacktrace-exposed
+name: graphql-formaterror-stacktrace-exposed
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-200
+pattern: '(formatError|customFormatErrorFn|formatErrorFn)\b[^\n]*\bstack(?:trace|Trace)?\s*:'
+message: GraphQL/dev misconfiguration — introspection or a dev endpoint exposed, or a weak/predictable secret (CWE-200/489/307/770/330).
+remediation: 'Return only client-safe fields: `formatError: (err) => ({ message: err.message, extensions: { code: err.extensions?.code } })`. Strip stack/stacktrace before returning, and include them only behind a dev-only guard.'
+not-match: ^\s*(\/\/|#|\*|\/\*)|\bdelete\b|stack\s*:\s*(undefined|null)|\bomit\b|process\.env|NODE_ENV|\bisDev\b|\bisProd
+why: 'A GraphQL error formatter (formatError / customFormatErrorFn / formatErrorFn) that returns an object with a `stack` / `stacktrace` / `stackTrace` KEY ships raw stack traces to clients, leaking source paths and internals. Tightened from the original (`...[^\n]*\bstack`, which fired on read-for-logging like `const s = err.stack` and on unrelated keys like `stackId`): the sink now requires the stack token to be an object key (immediately followed by a colon), so `stackId:`/`stackFrame:` and value-only reads no longer match. notMatch clears the sanitizing cases (`delete err.stack`, `stack: undefined/null`, `omit(err,[''stack''])`), comments, and env/isDev/isProd-guarded dev-only exposure.'
+confidence: high

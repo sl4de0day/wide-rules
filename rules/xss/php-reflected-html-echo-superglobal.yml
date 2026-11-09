@@ -1,0 +1,18 @@
+id: wide/php-reflected-html-echo-superglobal
+name: php-reflected-html-echo-superglobal
+category: XSS
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-79
+pattern: \b(?:echo|print)\b(?=[^;]*<\w)(?=[^;]*\$_(?:GET|POST|REQUEST|COOKIE|SERVER))
+message: Reflected / context-mismatched XSS — user input reaches HTML or JS output without proper contextual encoding (CWE-79/116).
+remediation: Wrap the value in htmlspecialchars($v, ENT_QUOTES, 'UTF-8') (or htmlentities/strip_tags) for the correct context, urlencode() only for URL positions, or cast numeric params with (int)/intval().
+not-match: (?:^\s*(?:\/\/|#|\*)|htmlspecialchars|htmlentities|strip_tags|filter_var|urlencode|htmlescape|intval|floatval|\(int\)|\(float\))
+why: echo/print emits an HTML fragment built from a request superglobal ($_GET/$_POST/$_REQUEST/$_COOKIE/$_SERVER) with no output encoding, reflecting attacker markup into the page -> reflected XSS.
+confidence: high

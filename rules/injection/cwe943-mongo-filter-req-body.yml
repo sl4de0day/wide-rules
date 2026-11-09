@@ -1,0 +1,19 @@
+id: wide/cwe943-mongo-filter-req-body
+name: cwe943-mongo-filter-req-body
+category: INJECTION
+severity: CRITICAL
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-943
+pattern: \.(find|findOne|count|countDocuments|deleteOne|deleteMany|updateOne|updateMany|findOneAndUpdate|findOneAndDelete|remove)\s*\(\s*req\.(body|query|params)\b
+message: A raw request object is passed straight in as a MongoDB query filter.
+remediation: 'Build the filter from named, type-checked fields (e.g. { email: String(req.body.email) }) instead of forwarding the whole request object.'
+why: req.body/query can carry operator objects like {"$ne":null} or {"$gt":""}, letting an attacker bypass the intended match and read or delete other users' documents.
+confidence: high

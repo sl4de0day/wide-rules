@@ -1,0 +1,24 @@
+id: wide/cwe1021-csp-frame-ancestors-wildcard
+name: cwe1021-csp-frame-ancestors-wildcard
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-1021
+pattern: frame-ancestors\s+['"`]?\*(?:\s|;|['"`]|$)
+message: The CSP frame-ancestors directive is set to the wildcard "*".
+remediation: Restrict frame-ancestors to 'self' or an explicit list of trusted origins, or use 'none' to forbid framing.
+why: frame-ancestors * lets any origin embed the page in an iframe, which defeats the directive's purpose and leaves the page open to clickjacking.
+confidence: high

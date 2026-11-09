@@ -1,0 +1,20 @@
+id: wide/cors-pkg-origin-reflect
+name: cors-pkg-origin-reflect
+category: NETWORK
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-942
+pattern: \borigin['"]?\s*:\s*true\b|(?:callback|cb|done|next)\s*\(\s*null\s*,\s*true\s*\)
+message: Insecure CORS — reflecting the request Origin (with credentials) instead of a fixed allowlist (CWE-942).
+remediation: 'Set `origin` to an explicit allowlist (array/string/regex) or a callback that checks the incoming origin against an allowlist and returns `false` (or an error) for unknown origins. Never use `origin: true` or callback(null, true) unconditionally, and especially not together with `credentials: true`.'
+not-match: ^\s*(?:\/\/|#|\*|\/\*)|\.includes\s*\(|\.indexOf\s*\(|\ballowed[_-]?origins?\b|white[_-]?list|allow[_-]?list
+why: 'The Express `cors` middleware option `origin: true` tells the package to reflect the request''s Origin header back in Access-Control-Allow-Origin, so every website is treated as allowed; the equivalent is an origin callback that unconditionally calls callback(null, true) (also cb/done/next). With `credentials: true` this exposes authenticated responses to any origin. The sink matches `origin: true` (quoted key or not) and the unconditional callback(null, true)/cb(null, true)/done(null, true)/next(null, true) forms. Case-sensitive matching (ignoreCase false) is deliberate: it keeps `\borigin` from matching React''s `crossOrigin` attribute (capital O, no word boundary) and JSX like `crossOrigin={true}` (which also uses `=`, not `:`). notMatch suppresses comments, membership checks (.includes/.indexOf), and allowlist/whitelist/allowed-origins names.'
+confidence: high

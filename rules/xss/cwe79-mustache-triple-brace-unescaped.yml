@@ -1,0 +1,17 @@
+id: wide/cwe79-mustache-triple-brace-unescaped
+name: cwe79-mustache-triple-brace-unescaped
+category: XSS
+severity: MEDIUM
+languages:
+  - html
+  - htm
+  - js
+  - jsx
+  - ts
+  - tsx
+cwe: CWE-79
+pattern: \{\{\{[^{}]+\}\}\}
+message: Mustache/Handlebars triple-brace {{{ }}} outputs its value without HTML escaping.
+remediation: Use double-brace {{ }} so the value is HTML-escaped; only use triple-brace for HTML you generated and sanitized server-side.
+why: Unlike {{ }}, the triple-mustache emits raw HTML; interpolating user-supplied data here injects attacker markup and scripts into the rendered page.
+confidence: high

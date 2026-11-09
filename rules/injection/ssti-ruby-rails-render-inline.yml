@@ -1,0 +1,12 @@
+id: wide/ssti-ruby-rails-render-inline
+name: ssti-ruby-rails-render-inline
+category: INJECTION
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-1336
+pattern: ^(?!\s*#).*?\brender(?:_to_\w+)?\b[^#{]*?(?:\binline:|:inline\s*=>)\s*(?:[a-z_@][\w.:]*|"[^"]*#\{|(?:"[^"]*"|'[^']*')\s*(?:\+|%|<<)(?!\s*["']))
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: 'Render a named template (render template:/partial:) with a fixed literal path and pass user input via locals:/assigns; never build the inline: string from request data.'
+why: 'render inline: (and render_to_string/render_to_body inline:) compiles the given string as an ERB template on the fly, so a dynamic value (params/variable/concatenation/interpolation) reaches the template compiler as source and yields SSTI/RCE.'
+confidence: high

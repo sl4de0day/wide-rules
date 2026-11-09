@@ -1,0 +1,13 @@
+id: wide/nosqli-mongoid-params-hash-filter
+name: nosqli-mongoid-params-hash-filter
+category: INJECTION
+severity: CRITICAL
+languages:
+  - rb
+cwe: CWE-943
+pattern: \.(?:where|and|or|nor|any_of|all_of)\(\s*params\b
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: 'Whitelist and coerce before querying: build the selector from strong params with explicit scalar keys (Model.where(status: params[:status].to_s)), or params.permit(:status).to_h / params.slice(:state); never pass an unfiltered hash as a Mongo selector.'
+not-match: \.permit\(|\.slice\(|\.symbolize_keys|transform_values|\.to_s\b|String\(|\.except\(|\.to_i\b|^\s*#
+why: Passing the raw params hash (or a params sub-hash) straight into a Mongoid criteria method (.where(params), .where(params[:filter]), .or(params[:query])) hands the attacker control of the whole selector. Because Rails parses query/body into nested hashes, a request like filter[age][$gt]=0 injects Mongo operators ($gt, $ne, $regex, $where), enabling filter bypass and data exposure with no key whitelisting or scalar coercion. The params\b boundary already excludes local vars named params_hash/parameters; strong-params and coercion idioms plus full-line comments are suppressed.
+confidence: high

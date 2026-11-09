@@ -1,0 +1,24 @@
+id: wide/static-iv-nonce
+name: static-iv-nonce
+category: GENERAL
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-329
+pattern: \b\w*(?:iv|nonce)\b\s*[:=]\s*(?:new\s+Uint8Array\s*\(\s*\d+\s*\)|Buffer\.alloc\s*\(\s*\d+|Buffer\.from\s*\(\s*['"]|new\s+Uint8Array\s*\(\s*\[\s*(?:0\s*,\s*){2,}|\[\s*(?:0\s*,\s*){3,}|['"][0-9a-fA-F]{6,}['"])
+message: The IV/nonce is a fixed/zero value rather than fresh random bytes.
+remediation: Generate a fresh random IV per message with crypto.getRandomValues()/randomBytes() and store it alongside the ciphertext.
+why: 'Reusing an IV with the same key in AES-GCM/CTR is catastrophic: it breaks confidentiality (XOR of two ciphertexts leaks plaintext) and, for GCM, lets an attacker forge the authentication tag.'
+confidence: high

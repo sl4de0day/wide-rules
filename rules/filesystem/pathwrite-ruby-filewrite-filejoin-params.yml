@@ -1,0 +1,13 @@
+id: wide/pathwrite-ruby-filewrite-filejoin-params
+name: pathwrite-ruby-filewrite-filejoin-params
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-22
+pattern: \bFile\.(?:write|binwrite)\s*\(\s*File\.join\s*\([^)]*(?:\bparams\s*\[|\boriginal_filename\b|request\.params\s*\[)|\bFile\.open\s*\(\s*File\.join\s*\([^)]*(?:\bparams\s*\[|\boriginal_filename\b|request\.params\s*\[)[^)]*\)\s*,\s*['"](?:w|a|r\+)
+message: Path traversal on write — a file is written to a user-controlled path without a containment check (CWE-22).
+remediation: Sanitize with File.basename()/an allowlist, then verify File.expand_path(target).start_with?(File.expand_path(base)) before opening the file for write.
+not-match: File\.basename|basename|sanitiz|secure|whitelist|allowlist|\.start_with\?|File\.expand_path|Pathname|^\s*#
+why: File.write/binwrite/open targets File.join(dir, params[:name] / uploaded.original_filename); File.join does not restrain '../', so a Rails/Rack param controls where the file is written. File.write/binwrite always write, while File.open is only flagged when opened with a write/append/update mode ('w'/'a'/'r+'), so read-mode File.open is out of scope.
+confidence: high

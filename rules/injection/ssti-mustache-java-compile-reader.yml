@@ -1,0 +1,12 @@
+id: wide/ssti-mustache-java-compile-reader
+name: ssti-mustache-java-compile-reader
+category: INJECTION
+severity: HIGH
+languages:
+  - java
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/[/*]|\*)).*?\.\s*compile\s*\(\s*new\s+StringReader\s*\(\s*(?:[A-Za-z_$]|(?:"[^"]*"|'[^']*')\s*(?:\+(?!\s*["'])|\.\s*(?:format|formatted)\s*\())
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Compile templates from fixed resource names and pass user input only in the scope object given to execute().
+why: MustacheFactory.compile(Reader, name) parses the Reader as a Mustache template; wrapping a dynamic string in a StringReader makes user input the template source, enabling context disclosure and lambda/section abuse.
+confidence: high

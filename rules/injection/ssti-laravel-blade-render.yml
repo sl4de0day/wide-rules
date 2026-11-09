@@ -1,0 +1,17 @@
+id: wide/ssti-laravel-blade-render
+name: ssti-laravel-blade-render
+category: INJECTION
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/[/*]|#|\*)).*?\bBlade::render\s*\(\s*(?:\$|(?:'[^']*'|"[^"]*")\s*\.\s*[\$A-Za-z_]|"[^"]*\$\{?[A-Za-z_])
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Render a fixed view with view('name', $data) or pass a constant Blade string, and supply user input only through the second data array.
+why: Blade::render() compiles its first argument as a Blade template, which can embed raw PHP, so a dynamic template string gives an attacker arbitrary code execution.
+confidence: high

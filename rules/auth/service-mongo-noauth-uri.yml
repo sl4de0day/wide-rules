@@ -1,0 +1,36 @@
+id: wide/service-mongo-noauth-uri
+name: service-mongo-noauth-uri
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - rb
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - java
+  - kt
+  - kts
+  - go
+  - cs
+  - csx
+cwe: CWE-306
+pattern: mongodb(?:\+srv)?:\/\/(?![^\/\s'"@]*@)
+message: Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.
+remediation: 'Enable MongoDB authorization (--auth) and connect with a per-service credential injected from a secret store: mongodb://<user>:<pass>@host. Never rely on network placement as the only access control.'
+not-match: ^\s*(?:\/\/|\*|#|<!--)|\b(?:test|spec|fixture|mock|dummy|sample|example|e2e)\b|:['"]\s*\+
+why: A mongodb:// or mongodb+srv:// URI with no user:pass@ userinfo connects to MongoDB with authentication effectively unused, leaving the datastore reachable by anyone who can reach the port. Network isolation is not authentication.
+confidence: high

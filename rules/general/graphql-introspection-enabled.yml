@@ -1,0 +1,23 @@
+id: wide/graphql-introspection-enabled
+name: graphql-introspection-enabled
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+cwe: CWE-200
+pattern: \bintrospection\s*[:=]\s*true\b
+message: GraphQL/dev misconfiguration — introspection or a dev endpoint exposed, or a weak/predictable secret (CWE-200/489/307/770/330).
+remediation: 'Gate on environment: `introspection: process.env.NODE_ENV !== ''production''` (Apollo) or `introspection=not settings.IS_PRODUCTION` (Python). For graphql-yoga/envelop add `useDisableIntrospection` in prod. Off by default; enable only in non-production.'
+not-match: ^\s*(\/\/|#|\*|\/\*)|\btrue\s+if\b
+why: 'Schema introspection lets any client download the full type graph (types, fields, args, deprecations), mapping the entire API surface. A hardcoded literal (Apollo `introspection: true`, ariadne/Strawberry `introspection=True`) leaves it on in production. The leading \b keeps safe `disableIntrospection: true` and `shouldEnableIntrospection: true` (word char before the token) from matching, and env-guarded values (`NODE_ENV !== ''production''`, `!isProd`, a ternary) place a variable after the separator so no literal true/True follows; the guarded `True if ... else` form is killed by notMatch.'
+confidence: high

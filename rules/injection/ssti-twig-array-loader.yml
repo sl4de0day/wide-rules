@@ -1,0 +1,17 @@
+id: wide/ssti-twig-array-loader
+name: ssti-twig-array-loader
+category: INJECTION
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/[/*]|#|\*)).*?\b(?:ArrayLoader|Twig_Loader_Array)\s*\(\s*(?:\[|array\s*\()[^\]]*=>\s*(?:\$|(?:'[^']*'|"[^"]*")\s*\.\s*[\$A-Za-z_]|"[^"]*\$\{?[A-Za-z_])
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Register only fixed, developer-authored template strings in the loader map and pass user input via the render() context; never as an array-loader value.
+why: Twig's in-memory string loader treats each array value as compilable template source, so a dynamic value registers attacker-controlled Twig source that is later executed.
+confidence: high

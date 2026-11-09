@@ -1,0 +1,18 @@
+id: wide/php-preg-replace-eval-modifier
+name: php-preg-replace-eval-modifier
+category: INJECTION
+severity: CRITICAL
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-94
+pattern: preg_replace\s*\(\s*(['"])([\/#~!@%|])(?:(?!\1)[^\\]|\\.)*?\2[a-zA-Z]*e[a-zA-Z]*\1
+message: Replacement-token injection — user input used as a replace() replacement or preg_replace /e is interpreted, not literal (CWE-116/94).
+remediation: The /e modifier was deprecated in PHP 5.5 and removed in 7.0 -- eliminate it. Use preg_replace_callback with the pattern minus the e modifier and a callback that builds the replacement safely from the matches, instead of eval'ing a string. Never let user input reach a pattern string carrying /e.
+not-match: ^\s*(?:\/\/|#|\*|\/\*)|preg_replace_callback
+why: 'The PCRE /e (PREG_REPLACE_EVAL) modifier makes preg_replace EXECUTE its replacement argument as PHP code after backreference substitution, so any attacker-influenced group interpolated into that eval''d string yields RCE. The sink matches a literal pattern (opening quote captured as \1, a delimiter captured as \2 from /#~!@%|, a body, the matching close delimiter \2, a trailing modifier run that contains the letter e, and the closing quote \1). Two precision fixes over the original: (1) the body is now (?:(?!\1)[^\\]|\\.)*? so it can never span past the pattern''s own closing quote -- this kills the cross-argument false positive where a plain replacement string that merely looks like /x/e (e.g. preg_replace(''/foo/'',''/replace/e'',$s)) was matched even though arg1 carried no e modifier; the (?!\1) still permits the OTHER quote char inside the pattern, so preg_replace(''/say "hi"/e'',...) stays a true positive. (2) the pipe delimiter was added. Patterns without an e modifier never match (the modifier run requires an e before the closing quote), and preg_replace_callback plus comment lines are suppressed by notMatch (# only anchored at line start, so it never suppresses a real # delimiter mid-line).'
+confidence: high

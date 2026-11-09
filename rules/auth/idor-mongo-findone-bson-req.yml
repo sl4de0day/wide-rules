@@ -1,0 +1,13 @@
+id: wide/idor-mongo-findone-bson-req
+name: idor-mongo-findone-bson-req
+category: AUTH
+severity: HIGH
+languages:
+  - go
+cwe: CWE-639
+pattern: \.(?:FindOneAndUpdate|FindOneAndDelete|FindOneAndReplace|FindOne|Find|UpdateOne|UpdateMany|DeleteOne|DeleteMany|ReplaceOne|CountDocuments)\(\s*[^,]*,\s*bson\.[MD]\{[^}]*(?:\.(?:Param|Params|Query|QueryParam|PostFormValue|PostForm|FormValue|DefaultQuery)\(|Vars\(\w+\)\[|URLParam\(|Params\.ByName\()
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: 'Include the owner in the filter: bson.M{"_id": objID, "userId": claims.UserID}, and convert the id with primitive.ObjectIDFromHex; reject the request if the ownership-scoped query matches nothing.'
+not-match: ^\s*\/\/|^\s*\*\s|[Uu]ser_?[Ii][Dd]|[Oo]wner|[Aa]ccount_?[Ii][Dd]|[Tt]enant|[Oo]rg_?[Ii][Dd]|[Oo]rganization|[Cc]ompany_?[Ii][Dd]|[Tt]eam_?[Ii][Dd]|[Ww]orkspace_?[Ii][Dd]|[Gg]roup_?[Ii][Dd]|[Cc]ustomer_?[Ii][Dd]|[Cc]urrent_?[Uu]ser|[Ss]ession|[Aa]uthoriz|[Ee]nforce|Pundit|CanCan|\.Can\(|[Pp]olic|[Cc]laims|\.Scopes\(|[Oo]wned_?[Bb]y|[Cc]reated_?[Bb]y|[Bb]elongs_?[Tt]o
+why: A mongo-go-driver Find/FindOne/FindOneAnd*/UpdateOne/DeleteOne/ReplaceOne whose bson.M/bson.D filter embeds a client-supplied reference inline (c.Param/c.Query/mux.Vars/URLParam/FormValue) fetches or mutates the document by id with no ownership key in the same filter, so any user can target another user's document.
+confidence: high

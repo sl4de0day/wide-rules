@@ -1,0 +1,13 @@
+id: wide/ssrf-go-blocklist-only-hosts
+name: ssrf-go-blocklist-only-hosts
+category: NETWORK
+severity: MEDIUM
+languages:
+  - go
+cwe: CWE-918
+pattern: (?:strings\.(?:Contains|HasPrefix|HasSuffix|EqualFold|Index)|==|!=|\[\]string\{|MustCompile)[^\n]*["'`](?:127\.0\.0\.1|localhost|169\.254|0\.0\.0\.0)
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Replace the denylist with a positive allowlist of permitted destination hosts, and resolve+re-check the IP after DNS resolution to defeat rebinding.
+not-match: allow(?:list|List|ed)|whitelist|permitted|isAllowed
+why: 'SSRF protection implemented as a denylist that only blocks 127.0.0.1/localhost/169.254/0.0.0.0 is trivially bypassed (decimal/hex IPs, alternate DNS, other RFC1918 ranges, IPv6), so it does not actually stop internal access. Note: this is a heuristic ''weak-defense'' rule (not a direct sink) and is the noisiest in the set, since a bare comparison against localhost/127.0.0.1 can also be an unrelated dev-mode or logging check.'
+confidence: high

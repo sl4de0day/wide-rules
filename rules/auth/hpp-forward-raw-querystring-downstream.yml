@@ -1,0 +1,14 @@
+id: wide/hpp-forward-raw-querystring-downstream
+name: hpp-forward-raw-querystring-downstream
+category: AUTH
+severity: MEDIUM
+languages:
+  - cs
+  - csx
+cwe: CWE-235
+pattern: (?:\bWebRequest\.Create|\.(?:GetAsync|GetStringAsync|GetByteArrayAsync|PostAsync|PutAsync|SendAsync|DownloadString|DownloadData|OpenRead)|new\s+Uri)\s*\(\s*[^;]*Request\.(?:QueryString(?!\s*\[|\s*\.Get)|Url\.Query|RawUrl)
+message: HTTP parameter pollution — raw/duplicated request parameters forwarded so layers disagree (CWE-235).
+remediation: Do not forward the raw query string. Parse the parameters, validate/allowlist each expected key to a single canonical value, and re-serialise (e.g. QueryHelpers.AddQueryString with a validated dictionary) before building the downstream URL.
+not-match: ^\s*(?:\/\/|\*)
+why: The RAW incoming query string (Request.QueryString as a whole, Request.Url.Query, or Request.RawUrl) is concatenated into a downstream request URL. Because the duplicated-parameter string is re-parsed by a different framework downstream, an attacker can supply ?role=user&role=admin so the tiers disagree on which value wins (HPP). Tightened lookahead (?!\s*\[|\s*\.Get) excludes the single-value indexed form Request.QueryString["x"] AND the single-value accessor Request.QueryString.Get("x")/GetValues("x"), which are not raw-forwarding.
+confidence: high

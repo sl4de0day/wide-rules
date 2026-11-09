@@ -1,0 +1,13 @@
+id: wide/cwe89-cs-executesql-interpolated
+name: cwe89-cs-executesql-interpolated
+category: INJECTION
+severity: CRITICAL
+languages:
+  - cs
+  - csx
+cwe: CWE-89
+pattern: \.(?:ExecuteSqlRaw|ExecuteSqlRawAsync|FromSqlRaw)\s*\(\s*(?:\$"|"[^"]*"\s*\+)
+message: An Entity Framework Raw call is given an interpolated or concatenated string.
+remediation: Use FromSqlInterpolated / ExecuteSqlInterpolated, which turn each interpolation into a parameter.
+why: The Raw variants take the SQL verbatim. The Interpolated variants are the ones that parameterise; these do not.
+confidence: high

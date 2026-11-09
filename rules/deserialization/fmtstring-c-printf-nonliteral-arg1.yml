@@ -1,0 +1,18 @@
+id: wide/fmtstring-c-printf-nonliteral-arg1
+name: fmtstring-c-printf-nonliteral-arg1
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - c
+  - h
+  - cpp
+  - cc
+  - cxx
+  - hpp
+  - hh
+cwe: CWE-134
+pattern: \b(?:printf|vprintf)\s*\(\s*[*&]?[A-Za-z_]\w*(?:(?:->|\.)\w+|\[[^\]]*\])*\s*[,)]
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Always pass a constant format literal and route user data through a value argument: printf("%s", user); never printf(user).'
+why: printf/vprintf take the format string as their FIRST argument. When arg1 is a bare variable/lvalue instead of a quoted literal, attacker-supplied specifiers (%s/%x/%n) are interpreted, leaking stack memory or writing memory (%n). The \b anchor plus requiring the variable to be immediately followed by ',' or ')' structurally rejects a leading string literal, wide-string literal (L"..."), i18n wrapper (_("..."), gettext(...)), any function-call format, and a bare expression (a+b), while a word boundary keeps myprintf/xprintf/printf_count from matching.
+confidence: high

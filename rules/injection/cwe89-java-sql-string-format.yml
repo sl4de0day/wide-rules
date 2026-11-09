@@ -1,0 +1,15 @@
+id: wide/cwe89-java-sql-string-format
+name: cwe89-java-sql-string-format
+category: INJECTION
+severity: CRITICAL
+languages:
+  - java
+  - kotlin
+  - kt
+  - scala
+cwe: CWE-89
+pattern: String\.format\s*\(\s*"[^"]*\b(?:SELECT|INSERT|UPDATE|DELETE)\b
+message: SQL is assembled with String.format().
+remediation: Build the statement with ? placeholders and bind the values through PreparedStatement.
+why: String.format produces the finished statement, so the substituted value is read as SQL, not as a bound parameter.
+confidence: high

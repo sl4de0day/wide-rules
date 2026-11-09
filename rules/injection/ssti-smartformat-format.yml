@@ -1,0 +1,13 @@
+id: wide/ssti-smartformat-format
+name: ssti-smartformat-format
+category: INJECTION
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*\bSmart\.Format\s*\(\s*(?:(?:\$@?|@\$)"|@?"[^"]*"\s*\+|[A-Za-z_][\w.]*\s*[\[(+,)])
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Use a constant literal format template and pass user input only in the args, never as the format string itself.
+why: SmartFormat's Smart.Format evaluates its first argument as a mini-template with reflection-based placeholders; a dynamic format string lets an attacker walk the object graph and disclose arbitrary member data (SSTI).
+confidence: high

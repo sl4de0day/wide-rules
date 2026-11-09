@@ -1,0 +1,24 @@
+id: wide/mutation-xss
+name: mutation-xss
+category: XSS
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-79
+pattern: querySelectorAll\s*\(\s*['"`][^'"`]*(?:\bsvg\b|\bmath\b|annotation-xml|foreignObject)
+message: Re-serialising SVG/MathML content can produce mutation XSS (mXSS).
+remediation: Never hand-serialise inside SVG/MathML; sanitise with a namespace-aware parser such as DOMPurify.
+why: When the parser crosses the SVG/MathML namespace boundary during re-serialisation, a payload in <annotation-xml> or a style element can mutate into an executable script attribute on insertion.
+confidence: high

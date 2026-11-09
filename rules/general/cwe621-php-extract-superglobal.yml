@@ -1,0 +1,16 @@
+id: wide/cwe621-php-extract-superglobal
+name: cwe621-php-extract-superglobal
+category: GENERAL
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+cwe: CWE-621
+pattern: \bextract\s*\(\s*\$_(?:GET|POST|REQUEST|COOKIE|SERVER|FILES|ENV)\b
+message: extract() is called directly on a request superglobal.
+remediation: Read the specific keys you need explicitly, and never extract() request data.
+why: 'Variable overwrite: attacker-named request keys become local variables and can clobber already-set variables such as $isAdmin or $authenticated.'
+confidence: high

@@ -1,0 +1,15 @@
+id: wide/hpp-forward-raw-body
+name: hpp-forward-raw-body
+category: AUTH
+severity: MEDIUM
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-235
+pattern: \b(?:requests\.(?:post|put|patch|request)|httpx\.(?:post|put|patch|request|stream)|session\.(?:post|put|patch|request))\s*\(.*\b(?:data|content|body)\s*=\s*(?:request\.(?:body|data|get_data|stream)|await\s+request\.body)
+message: HTTP parameter pollution — raw/duplicated request parameters forwarded so layers disagree (CWE-235).
+remediation: Parse and validate the body, then re-serialise a canonical payload (a clean dict via data=/json=). Do not pipe request.body/request.data straight to the outbound call.
+not-match: ^\s*#
+why: The raw request body (request.body / data / get_data() / stream, or awaited request.body()) is forwarded verbatim as the body of a downstream request. Duplicate keys in a urlencoded body are re-parsed downstream and may resolve differently than upstream - HTTP Parameter Pollution (CWE-235). The data=/content=/body= kwarg must be bound directly to request.body/data/get_data/stream, so re-serialised payloads (json.dumps, serialize(), a clean dict) and request.form/request.POST do not fire.
+confidence: high

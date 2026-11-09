@@ -1,0 +1,16 @@
+id: wide/cwe022-php-file-read-superglobal
+name: cwe022-php-file-read-superglobal
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+cwe: CWE-22
+pattern: \b(?:file_get_contents|fopen|readfile|highlight_file|show_source|fpassthru)\s*\([^;]*\$_(?:GET|POST|REQUEST|COOKIE)\b
+message: A filesystem path passed to a file API comes directly from a request superglobal.
+remediation: Reduce to basename()/realpath() and verify the resolved path stays inside an allowed base directory.
+why: 'Path traversal: ''../'' sequences let an attacker read files outside the intended directory, such as /etc/passwd or application secrets.'
+confidence: high

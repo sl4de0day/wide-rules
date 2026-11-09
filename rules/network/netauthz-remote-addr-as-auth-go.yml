@@ -1,0 +1,13 @@
+id: wide/netauthz-remote-addr-as-auth-go
+name: netauthz-remote-addr-as-auth-go
+category: NETWORK
+severity: HIGH
+languages:
+  - go
+cwe: CWE-290
+pattern: (?:\bRemoteAddr\b\s*(?:==|!=)\s*"(?:127\.0\.0\.1|\[::1\]|::1|localhost)(?::\d+)?"|strings\.HasPrefix\(\s*[A-Za-z0-9_.]*RemoteAddr[^,]*,\s*"(?:127\.|10\.|192\.168\.|172\.(?:1[6-9]|2\d|3[01])\.)|\.IsLoopback\(\)|\.IsPrivate\(\)|\.IsLinkLocalUnicast\(\))
+message: Broken access control — authorization based on network location or a spoofable client header (CWE-346/290).
+remediation: Authorize with a verified token/session. For internal-only services rely on network segmentation or a 127.0.0.1 listen address, not an r.RemoteAddr comparison in the handler.
+not-match: ^\s*(?:\/\/|\*)|\b[Ll]og|logrus|zap|[Mm]etric|audit|[Rr]ate[Ll]imit|throttle|\b(?:jwt|VerifyToken|Authenticate|[Ss]ession|IsAuthenticated|csrf)\b|\.Listen\(|ListenAndServe|net\.Listen
+why: r.RemoteAddr compared to (or HasPrefix-matched against) a loopback/private literal, or net.IP.IsLoopback()/IsPrivate() gating a branch, authorizes by network position. RemoteAddr is the TCP peer (the proxy behind a load balancer) and any forwarded-header-derived IP is client-controlled, so the gate is spoofable.
+confidence: high

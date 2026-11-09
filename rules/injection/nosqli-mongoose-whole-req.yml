@@ -1,0 +1,20 @@
+id: wide/nosqli-mongoose-whole-req
+name: nosqli-mongoose-whole-req
+category: INJECTION
+severity: CRITICAL
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-943
+pattern: \.(find|findOne|findOneAndUpdate|findOneAndDelete|findOneAndReplace|updateOne|updateMany|deleteOne|deleteMany|count|countDocuments|remove|distinct|aggregate)\s*\(\s*req\.(body|query|params)\s*[),]
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: Never pass a raw request object as a filter. Build the filter from explicitly named, type-coerced scalar fields (String(req.body.x)), or validate req.body against a Joi/zod schema (or a class-validator DTO) and use the sanitized result.
+not-match: String\s*\(|Number\s*\(|parseInt|parseFloat|sanitiz|Joi\.|zod|\.validate\(|matchedData|plainToClass|plainToInstance|\bpick\s*\(|\bomit\s*\(|^\s*(?:\/\/|\*|\/\*)
+why: 'The entire req.body/req.query object is passed as the query filter, so an attacker who sends { "$gt": "" } or { "$where": "..." } controls the query operators directly — the classic auth-bypass / data-exfiltration NoSQL injection.'
+confidence: high

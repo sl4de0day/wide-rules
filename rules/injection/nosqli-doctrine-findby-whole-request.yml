@@ -1,0 +1,18 @@
+id: wide/nosqli-doctrine-findby-whole-request
+name: nosqli-doctrine-findby-whole-request
+category: INJECTION
+severity: CRITICAL
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-943
+pattern: '->(findBy|findOneBy|matching)\s*\(\s*(\$request\s*->\s*(all|query|input|json|post|get|only|except|collect)\s*\(|\$_(GET|POST|REQUEST|COOKIE)\b)'
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: Pass a criteria array built from validated, type-cast scalars — findOneBy(['email' => (string) $data['email']]) — rather than $request->all()/$_POST.
+not-match: '->validated\s*\(|->validate\s*\(|->safe\s*\(|filter_var|array_map|iterator_to_array|^\s*(\/\/|#(?!\[)|\*)'
+why: 'A Doctrine ODM repository findBy/findOneBy receives the whole request array as its criteria. With the MongoDB driver the nested-array input becomes query operators, so an attacker can bypass the intended criteria ({field: {$ne: null}}) or dump collections. Like the driver twin, the sink requires the request bag as the immediate first argument, so wrapped/validated forms dodge it.'
+confidence: high

@@ -1,0 +1,19 @@
+id: wide/cwe89-prisma-raw-unsafe
+name: cwe89-prisma-raw-unsafe
+category: INJECTION
+severity: CRITICAL
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-89
+pattern: \$(?:queryRawUnsafe|executeRawUnsafe)\s*\(
+message: Prisma's Unsafe raw query is used.
+remediation: Use the tagged-template forms $queryRaw`...${value}` / $executeRaw`...${value}`, which parameterise every interpolation.
+why: 'queryRawUnsafe and executeRawUnsafe take the SQL as a plain string, which is why they carry Unsafe in the name: no part of it is parameterised.'
+confidence: high

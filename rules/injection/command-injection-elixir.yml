@@ -1,0 +1,13 @@
+id: wide/command-injection-elixir
+name: command-injection-elixir
+category: INJECTION
+severity: CRITICAL
+languages:
+  - ex
+  - exs
+cwe: CWE-78
+pattern: System\.cmd\s*\(|:os\.cmd\s*\(
+message: System.cmd / :os.cmd runs an operating-system command.
+remediation: Pass a fixed command plus an argument list to System.cmd; never interpolate untrusted input.
+why: A command assembled with interpolated input can run further commands on the host.
+confidence: high

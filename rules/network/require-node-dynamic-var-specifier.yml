@@ -1,0 +1,20 @@
+id: wide/require-node-dynamic-var-specifier
+name: require-node-dynamic-var-specifier
+category: NETWORK
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-829
+pattern: \brequire\s*\(\s*[^)\n]*(?:req(?:uest)?\.(?:query|body|params|cookies|headers)|process\.argv|\+)[^)\n]*\)
+message: Write-then-execute — code is loaded or run from a user-controlled or writable path (potential RCE, CWE-829/95/98/94).
+remediation: Never require() a computed name. Map an allow-listed key to a fixed literal module ({plugins}[name]) and reject anything else; keep plugin code in a read-only directory resolved with a literal under __dirname.
+not-match: '^\s*(?:\/\/|\*|\/\*|#)|__dirname|__filename|node_modules|allowed|[Ww]hitelist|WHITELIST|\?\s*[''"][^''"]*[''"]\s*:'
+why: require() called with a bare variable, member/index expression, or concatenation resolves the module path at runtime; if that value is influenced by untrusted input or points at a writable/uploads directory, an attacker who can write a file turns it into arbitrary code execution when it is required. String-literal specifiers never match (they do not start with an identifier char), so require('fs') is inert.
+confidence: high

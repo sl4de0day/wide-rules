@@ -1,0 +1,19 @@
+id: wide/ssti-twigjs-data-option
+name: ssti-twigjs-data-option
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-1336
+pattern: \b[Tt]wig(?:\.twig)?\s*\(\s*\{[^}]*\bdata\s*:\s*(?:[^\s'"`)]|(?:'[^']*'|"[^"]*"|`[^`]*`)\s*\+|`[^`]*\$\{)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Load templates via the `href`/`path` option or a constant `data` literal and pass user input only to .render(context); never set `data` from user input.
+why: Twig.js compiles the string given in the `data` option of twig({...}) as a Twig template, and a dynamic value there lets an attacker inject Twig expressions/filters that can leak data or escape the sandbox.
+confidence: high

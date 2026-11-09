@@ -1,0 +1,18 @@
+id: wide/netauthz-remote-addr-as-auth-php
+name: netauthz-remote-addr-as-auth-php
+category: NETWORK
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-290
+pattern: (?:(?:\$_SERVER\s*\[\s*['"]REMOTE_ADDR['"]\s*\]|->getClientIp\(\)|->ip\(\))\s*(?:===?|!==?)\s*['"](?:127\.0\.0\.1|::1|localhost)['"]|strpos\(\s*\$_SERVER\s*\[\s*['"]REMOTE_ADDR['"]\s*\][^,)]*,\s*['"](?:10\.|192\.168\.|172\.|127\.))
+message: Broken access control — authorization based on network location or a spoofable client header (CWE-346/290).
+remediation: Gate privilege on a verified session/token, not on REMOTE_ADDR. Restrict admin surfaces at the web-server/firewall layer if network isolation is required.
+not-match: ^\s*(?:\/\/|#|\*|\/\*)|\b(?:log|logger|error_log|syslog|audit|throttle|whitelist)\b|metric|rate[_-]?limit|\b(?:password_verify|jwt|verifyToken|authenticate|isAuthenticated|csrf)\b|\$_SESSION|\?\s*['"0-9]
+why: $_SERVER['REMOTE_ADDR'] (or Symfony getClientIp()/ip()) compared to a loopback/private literal, or strpos() prefix-matched against a private range, uses source IP as an authorization credential. Behind a proxy REMOTE_ADDR is the proxy, and getClientIp() honors forwarded headers when trusted proxies are configured, so this is spoofable.
+confidence: high

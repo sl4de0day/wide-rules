@@ -1,0 +1,13 @@
+id: wide/fmtstring-ruby-percent-operator
+name: fmtstring-ruby-percent-operator
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-134
+pattern: (?:params\[[^\]]*\]|cookies\[[^\]]*\]|@?(?:[A-Za-z_]\w*)?(?:fmt|format|template|tmpl|pattern)\w*)\s*%\s*[\[\(]
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: Make the template a constant literal ("%s" % user) or sanitise/whitelist the template; never let user input be the left operand of %.
+not-match: ^\s*#
+why: 'A user-controlled / format-named variable is the LEFT operand of the % operator, i.e. the template is attacker-controlled while the values are on the right. Kept as-is: requiring the bracket/paren after % (a Ruby format-array/tuple) means integer modulo (page % 2) is not flagged, and a string-LITERAL left operand ("%s" % [x]) never matches because a format-named identifier does not abut the % operator.'
+confidence: high

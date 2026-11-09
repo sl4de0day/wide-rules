@@ -1,0 +1,25 @@
+id: wide/prototype-pollution-merge
+name: prototype-pollution-merge
+category: PROTOTYPE
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-1321
+pattern: (\w+)\[\s*([A-Za-z_$][\w$]*)\s*\]\s*=\s*\w+\[\s*\2\s*\]
+message: This copies keys into an object without guarding __proto__.
+remediation: Skip the keys __proto__, constructor and prototype, or merge into an Object.create(null) target.
+not-match: \[\s*(i|j|k|n|m|idx|index|row|col|x|y)\s*\]|__proto__|hasOwnProperty|Object\.freeze
+why: A recursive merge that assigns target[key] = source[key] will, if the input carries a "__proto__" key, write onto Object.prototype — polluting every object in the program.
+confidence: high

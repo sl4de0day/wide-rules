@@ -1,0 +1,22 @@
+id: wide/protopollution-direct-prototype-write
+name: protopollution-direct-prototype-write
+category: PROTOTYPE
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-1321
+pattern: (?:(?:\[\s*['"](?:__proto__|constructor|prototype)['"]\s*\]|\.__proto__|(?:\.|\b)constructor\s*\.\s*prototype|\bObject\s*\.\s*prototype)(?:\s*\[[^\]]*\]|\s*\.\s*[\w$]+)*\s*=(?!=|>))|(?:(?:Object\s*\.\s*define(?:Property|Properties)|Reflect\s*\.\s*(?:set|defineProperty))\s*\(\s*Object\s*\.\s*prototype)
+message: Prototype pollution — attacker-controlled keys can reach Object.prototype via a recursive merge/set (CWE-1321).
+remediation: Never write a property onto __proto__, constructor.prototype, or Object.prototype from runtime data. If you must reassign an object's prototype use Object.setPrototypeOf with a fixed, trusted value; freeze Object.prototype (Object.freeze) at startup to make accidental pollution throw; and gate any dynamic key so it can never equal __proto__/constructor/prototype.
+not-match: '===|!==|typeof\s|instanceof\b|getPrototypeOf|isPrototypeOf|hasOwnProperty|Object\.create\(\s*null\s*\)|=\s*[A-Za-z_$][\w$]*\.prototype\b'
+why: 'A statement that assigns THROUGH a prototype-chain reference writes shared state: obj[''__proto__''].x=, x.__proto__[k]=, foo[''constructor''][''prototype''].y=, o.constructor.prototype.z=, or Object.prototype.p= all land on Object.prototype, as do Object.defineProperty/defineProperties and Reflect.set/defineProperty targeting Object.prototype. The single-''='' with a (?!=|>) lookahead means only real assignments match, not comparisons (=== ''__proto__'' / obj.__proto__ === Object.prototype) or arrow bodies, and reads (return o.__proto__) have no trailing ''=''. Benign NamedClass.prototype.method= augmentation is NOT matched (only Object.prototype / constructor.prototype / __proto__ bases are), a denylist array literal like [''__proto__'',''constructor'',''prototype''] and Map.set(''__proto__'', v) don''t match (no bracket-base + ''=''), and notMatch also drops comparisons, getPrototypeOf/isPrototypeOf, the Object.prototype.hasOwnProperty.call idiom, and legacy inheritance (this.__proto__ = Parent.prototype / x.__proto__ = Object.getPrototypeOf(y)). Verified robust — no change needed to the regex.'
+confidence: high

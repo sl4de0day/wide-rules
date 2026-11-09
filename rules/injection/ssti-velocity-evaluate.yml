@@ -1,0 +1,12 @@
+id: wide/ssti-velocity-evaluate
+name: ssti-velocity-evaluate
+category: INJECTION
+severity: HIGH
+languages:
+  - java
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/[/*]|\*)).*?\bevaluate\s*\(\s*[^;,]*,\s*[^;,]*,\s*"[^"]*"\s*,\s*(?:[A-Za-z_$]|(?:"[^"]*"|'[^']*')\s*(?:\+(?!\s*["'])|\.\s*(?:format|formatted)\s*\())
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Use Velocity.mergeTemplate with a named template file and pass user input only through the VelocityContext; never as the evaluate() template string.
+why: Velocity.evaluate(context, writer, logTag, instring) merges its final template argument as live VTL; a dynamic instring lets an attacker run VTL references that reach RCE via reflection.
+confidence: high

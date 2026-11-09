@@ -1,0 +1,19 @@
+id: wide/hpp-querystring-stringify-forward
+name: hpp-querystring-stringify-forward
+category: AUTH
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-235
+pattern: \b(?:qs|querystring|querystringify)\s*\.\s*(?:stringify|encode)\s*\(\s*(?:req|request|ctx)\s*\.\s*(?:query|body|params)\b
+message: HTTP parameter pollution — raw/duplicated request parameters forwarded so layers disagree (CWE-235).
+remediation: 'Build the downstream query from an explicit allowlist of keys with single validated values (e.g. `new URLSearchParams({ id: String(value) })`) rather than re-stringifying the entire user-parsed object. Decide and enforce one policy for duplicate keys before forwarding.'
+why: 'The whole parsed request query/body/params object is re-serialised with qs.stringify / querystring.stringify (or .encode) and forwarded downstream. `qs` expands duplicated keys into arrays, so the re-encoded string no longer matches the wire form the downstream parser expects and a duplicated parameter can be re-interpreted differently, enabling HPP. The sink requires req.query/body/params to be the DIRECT first argument (immediately after `(`), so a wrapped/validated object (`pick(req.query, ...)`, `sanitize(req.query)`, `{ id: req.query.id }`) is not flagged; `\b` on the object keyword rejects `myqs.stringify(...)` and `qs.stringify(reqData)`.'
+confidence: high

@@ -1,0 +1,13 @@
+id: wide/nosqli-mongoid-where-js-string
+name: nosqli-mongoid-where-js-string
+category: INJECTION
+severity: CRITICAL
+languages:
+  - rb
+cwe: CWE-943
+pattern: \.where\(\s*["'][^\n]*(?:#\{[^}\n]*params|["']\s*\+\s*params)
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: 'Never build a $where/JS string from input. Use a field criterion with a coerced scalar (Model.where(:age.gt => params[:min].to_i)) or a plain equality hash (Model.where(name: params[:name].to_s)); if a numeric threshold is unavoidable, wrap it in Integer(...) / .to_i.'
+not-match: to_i\b|to_f\b|to_r\b|Integer\(|Regexp\.escape|^\s*#
+why: 'Passing a String to Mongoid''s .where sends it to MongoDB as a $where JavaScript predicate that is eval''d server-side. Interpolating or concatenating user input into that string (.where("this.age > #{params[:min]}"), .where("...''" + params[:name] + "''")) lets an attacker inject arbitrary JS to bypass the filter, run heavy loops (DoS), or exfiltrate data. String coercion does not neutralize it; only numeric coercion / Regexp.escape is treated as safe here. Full-line comments are suppressed.'
+confidence: high

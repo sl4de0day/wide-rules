@@ -1,0 +1,12 @@
+id: wide/ssti-go-raymond-handlebars-render
+name: ssti-go-raymond-handlebars-render
+category: INJECTION
+severity: MEDIUM
+languages:
+  - go
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*\braymond\.(?:Render|MustParse|Parse)\(\s*(?:[A-Za-z_]|[\x22\x60][^\x22\x60]*[\x22\x60]\s*\+)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Compile a fixed literal (or a file from a trusted path via raymond.ParseFile) and pass user input only through the context/data argument to Render/Exec.
+why: raymond.Render/Parse/MustParse compile their first argument as Handlebars template SOURCE, so a dynamic value lets an attacker inject expressions and calls to registered helpers.
+confidence: high

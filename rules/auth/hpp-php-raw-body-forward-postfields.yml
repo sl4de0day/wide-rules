@@ -1,0 +1,18 @@
+id: wide/hpp-php-raw-body-forward-postfields
+name: hpp-php-raw-body-forward-postfields
+category: AUTH
+severity: MEDIUM
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-235
+pattern: curl_setopt\s*\(\s*\$\w+\s*,\s*CURLOPT_POSTFIELDS\s*,[^;]*(file_get_contents\s*\(\s*['"]php:\/\/input['"]|HTTP_RAW_POST_DATA)
+message: HTTP parameter pollution — raw/duplicated request parameters forwarded so layers disagree (CWE-235).
+remediation: Decode the body, validate and canonicalize each field, then re-serialize with http_build_query or json_encode before forwarding rather than piping php://input straight through.
+not-match: http_build_query|json_encode
+why: The raw request body (php://input / HTTP_RAW_POST_DATA) is forwarded as CURLOPT_POSTFIELDS without re-parsing, so duplicated body parameters reach the backend unchanged and can be parsed differently downstream - the raw-body HPP shape as a precise same-line sink. The [^;]* guard keeps a php://input read from an earlier statement on the same line from being joined; notMatch suppresses re-serialized bodies (http_build_query/json_encode).
+confidence: high

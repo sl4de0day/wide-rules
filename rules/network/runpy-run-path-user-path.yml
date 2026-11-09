@@ -1,0 +1,15 @@
+id: wide/runpy-run-path-user-path
+name: runpy-run-path-user-path
+category: NETWORK
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-829
+pattern: runpy\.run_path\s*\(
+message: Write-then-execute — code is loaded or run from a user-controlled or writable path (potential RCE, CWE-829/95/98/94).
+remediation: Only run_path() a fixed literal path to trusted code; if a path must be chosen at runtime, canonicalize it and verify it is contained within a read-only, non-writable code directory before running.
+not-match: ^\s*#|run_path\s*\(\s*['"][^'"]*['"]\s*[,)]
+why: runpy.run_path() executes the Python file (or zip/dir with __main__) at the given path in a fresh namespace; a non-literal path lets an attacker point it at an uploaded or writable script and gain code execution. A single string-literal first argument (with or without run_name=) is suppressed; a bare reference `x = runpy.run_path` has no call paren and never fires.
+confidence: high

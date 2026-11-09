@@ -1,0 +1,13 @@
+id: wide/ssti-razorengine-razor-parse-compile
+name: ssti-razorengine-razor-parse-compile
+category: INJECTION
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*\bRazor\.(?:Parse|Compile)\s*\(\s*(?:(?:\$@?|@\$)"|@?"[^"]*"\s*\+|[A-Za-z_][\w.]*\s*[\[(+,)])
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Keep the template source a constant literal and pass user input only through the model argument, never spliced into the parsed/compiled string.
+why: The Razor.Parse / Engine.Razor.Compile facade compiles its first argument as a Razor template, so a request-derived source string yields arbitrary code execution.
+confidence: high

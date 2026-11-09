@@ -1,0 +1,18 @@
+id: wide/fmtstring-c-fprintf-sprintf-nonliteral-arg2
+name: fmtstring-c-fprintf-sprintf-nonliteral-arg2
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - c
+  - h
+  - cpp
+  - cc
+  - cxx
+  - hpp
+  - hh
+cwe: CWE-134
+pattern: \b(?:fprintf|sprintf|vfprintf|vsprintf|dprintf|syslog)\s*\(\s*[^,()]+,\s*[*&]?[A-Za-z_]\w*(?:(?:->|\.)\w+|\[[^\]]*\])*\s*[,)]
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Use a constant format literal: fprintf(stderr, "%s", user); sprintf(buf, "%s", user); syslog(LOG_ERR, "%s", user). Never place user data in the format position.'
+why: fprintf/sprintf/vfprintf/vsprintf/dprintf/syslog take the format string as their SECOND argument (after the stream/buffer/priority). arg1 is matched as a simple paren-free token, then arg2 must be a variable expression, structurally rejecting a leading string literal, i18n wrapper, or function-call format. sprintf into a fixed buffer with a user %s/%n is also a memory-corruption primitive. The \b anchor keeps my_fprintf and snprintf (which has no 'sprintf' substring) from matching.
+confidence: high

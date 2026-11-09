@@ -1,0 +1,14 @@
+id: wide/server-presence-only-auth-header-csharp
+name: server-presence-only-auth-header-csharp
+category: AUTH
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-287
+pattern: \bif\s*\(\s*(?:(?:Request|request|HttpContext\.Request|context\.Request)\.Headers\s*\[\s*"(?:Authorization|X-Api-Key|X-Auth-Token)"\s*\]\s*!=\s*null|(?:Request|request|HttpContext\.Request|context\.Request)\.Headers\.ContainsKey\s*\(\s*"(?:Authorization|X-Api-Key|X-Auth-Token)"\s*\)|!\s*string\.IsNullOrEmpty\s*\(\s*(?:Request|request|HttpContext\.Request|context\.Request)\.Headers\s*\[\s*"(?:Authorization|X-Api-Key|X-Auth-Token)"\s*\]\s*\))\s*\)
+message: Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.
+remediation: Validate the token with JwtSecurityTokenHandler.ValidateToken and TokenValidationParameters (ValidateIssuerSigningKey = true) or the [Authorize] pipeline, and branch on the ClaimsPrincipal result. Reject present-but-invalid tokens.
+not-match: (?:\.Validate\(|ValidateToken|VerifyToken|\.Verify\(|JwtSecurityTokenHandler|TokenValidationParameters|ValidateIssuerSigningKey|introspect|^\s*\/\/|^\s*\*|^\s*\/\*)
+why: The middleware/action authorizes whenever Request.Headers["Authorization"] != null / ContainsKey / !IsNullOrEmpty - presence only. The bearer token's signature and claims are never validated, so any non-empty header authenticates the caller. The object is restricted to Request/HttpContext.Request so checking response.Headers or an unrelated dictionary does not match.
+confidence: high

@@ -1,0 +1,18 @@
+id: wide/arginj-php-concat-exec-arg
+name: arginj-php-concat-exec-arg
+category: INJECTION
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-88
+pattern: ^(?=.*\b(?:exec|shell_exec|system|passthru|proc_open|popen)\s*\()(?=.*(?:['"][^'"]*['"]\s*\.\s*\$|\$[A-Za-z_]\w*\s*\.\s*['"]|"[^"]*\$[A-Za-z_]|escapeshellarg\s*\()).*
+message: Argument injection — a user value reaches a CLI argument that could be interpreted as an option/flag (CWE-88).
+remediation: Validate with preg_match()/ctype_alnum()/ctype_digit(), cast numerics with intval()/(int), or add a ' -- ' end-of-options separator into the command before any user value. escapeshellarg alone does not prevent flag injection.
+not-match: (?:preg_match\s*\(|ctype_alnum\s*\(|ctype_digit\s*\(|intval\s*\(|\(int\)|['"]\s*--\s*['"]|\s--\s|^\s*(?:\/\/|#|\/\*|\*))
+why: An exec/shell_exec/system/passthru/proc_open/popen command string is built by concatenating or interpolating a $var argument. Note escapeshellarg() escapes shell metacharacters but does NOT neutralize a leading '-', so a wrapped value can still be read as an option/flag (argument/flag injection) even when it is 'properly' escaped.
+confidence: high

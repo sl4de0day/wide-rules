@@ -1,0 +1,24 @@
+id: wide/blob-worker-code
+name: blob-worker-code
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-95
+pattern: new\s+(?:Worker|SharedWorker)\s*\([^)]*(?:createObjectURL|blob:|new\s+Blob)
+message: A Web Worker is spawned from a Blob URL built from a code string.
+remediation: Load Worker scripts only from trusted, static, same-origin file URLs.
+why: 'Turning a string into a blob: URL and running it as a Worker executes that code with the page''s origin; if any of the string is attacker-influenced it is arbitrary code execution.'
+confidence: high

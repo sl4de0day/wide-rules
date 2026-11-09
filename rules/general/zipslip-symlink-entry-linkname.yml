@@ -1,0 +1,27 @@
+id: wide/zipslip-symlink-entry-linkname
+name: zipslip-symlink-entry-linkname
+category: GENERAL
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - go
+  - java
+  - cs
+  - csx
+cwe: CWE-59
+pattern: (os\.symlink|symlinkSync|createSymbolicLink|os\.Symlink|CreateSymbolicLink)\s*\([^)]*(linkname|Linkname|linkPath|LinkName|getLinkName|linkTarget)
+message: Zip Slip / insecure archive extraction — an archive entry name escapes the destination, arbitrary file write (CWE-22/59).
+remediation: Resolve the symlink's final target against dest and require it to stay inside (realpath/EvalSymlinks then prefix check); reject absolute link targets and any target that traverses out of dest, or refuse to materialize symlink entries from untrusted archives entirely.
+not-match: ^\s*(\/\/|#|\/\*|\*)|realpath|\.startswith\(|\.startsWith\(|start_with\?|isInside|is_within|EvalSymlinks|HasPrefix|getCanonicalPath|GetFullPath|sanitiz|validat
+why: A symlink is created from an untrusted archive entry's link target (member.linkname / header.Linkname / entry.getLinkName). An attacker can point the link at an absolute or ../ path (e.g. /etc or a parent dir) so a subsequent entry writes through the link, escaping the extraction directory - a link-following variant of zip slip.
+confidence: high

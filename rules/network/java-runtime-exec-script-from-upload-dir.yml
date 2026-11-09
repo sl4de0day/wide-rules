@@ -1,0 +1,15 @@
+id: wide/java-runtime-exec-script-from-upload-dir
+name: java-runtime-exec-script-from-upload-dir
+category: NETWORK
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-829
+pattern: (?:Runtime\.getRuntime\(\)\s*\.\s*exec|new\s+ProcessBuilder)\s*\(.*(?:\/tmp\/|getParameter|tmpdir|writableDir|(?:upload|Upload|UPLOAD)[A-Za-z_]*(?:Dir|Path|dir|_DIR|File|_PATH))
+message: Write-then-execute — code is loaded or run from a user-controlled or writable path (potential RCE, CWE-829/95/98/94).
+remediation: Execute only fixed, non-writable program paths; never build the command or first argument from request input or an uploads directory, and validate any dynamic component against an allow-list.
+not-match: ^\s*(?:\/\/|\*|\/\*)
+why: Runtime.exec()/ProcessBuilder running an interpreter or script whose path comes from an uploads/tmp/writable directory or a request parameter executes attacker-supplied code; the file-write primitive becomes RCE through the spawned process. The keyword set was tightened to variable-shaped upload tokens (Dir/Path/File suffix) plus getParameter/tmpdir/writableDir/'/tmp/', so a benign 'uploads' data argument to cp/tar no longer fires.
+confidence: high

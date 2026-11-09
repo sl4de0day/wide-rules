@@ -1,0 +1,15 @@
+id: wide/zipslip-python-tar-zip-extract-member
+name: zipslip-python-tar-zip-extract-member
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-22
+pattern: \.extract\s*\(\s*(member|name|filename|fname|info|zinfo|zipinfo|entry)\b
+message: Zip Slip / insecure archive extraction — an archive entry name escapes the destination, arbitrary file write (CWE-22/59).
+remediation: Before extracting a member, build target = os.path.join(dest, member.name), resolve with os.path.realpath, and require it to start with the resolved dest; skip absolute names, '..', and symlink/hardlink members (or use tarfile filter='data').
+not-match: ^\s*#|is_within_directory|is_safe_path|commonpath|commonprefix|realpath|\.startswith\(|safe_extract|filter\s*=
+why: tar.extract(member,...) / zip.extract(name,...) writes a single member using its in-archive name; without validating the destination, a traversal name or link member escapes the target directory and writes to an arbitrary location.
+confidence: high

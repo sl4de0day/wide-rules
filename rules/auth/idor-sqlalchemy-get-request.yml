@@ -1,0 +1,15 @@
+id: wide/idor-sqlalchemy-get-request
+name: idor-sqlalchemy-get-request
+category: AUTH
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-639
+pattern: (?:\.query\([^)]*\)\.get\(\s*|\.query\.get\(\s*|\bsession\.get\([^,]+,\s*|\.filter_by\(\s*(?:id|pk|_id|uuid|slug)\s*=\s*)(?:int\(|str\()?\s*request\.(?:GET|POST|args|form|values|data|query_params)\b
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: 'Add the ownership column to the query: session.query(Doc).filter_by(id=request.args[''id''], user_id=current_user.id).first(), and 404 when it returns None.'
+not-match: request\.user|current_user|g\.user|session\[|\buser_id\s*=|\buser\s*=|\bowner(?:_id)?\s*=|\baccount(?:_id)?\s*=|\bcreated_by\s*=|\btenant(?:_id)?\s*=|\bcompany(?:_id)?\s*=|\borg(?:anization)?(?:_id)?\s*=|\bteam(?:_id)?\s*=|\bgroup(?:_id)?\s*=|\bworkspace(?:_id)?\s*=|\bmember(?:_id)?\s*=|\bauthor(?:_id)?\s*=|\bprofile\s*=|^\s*#
+why: A SQLAlchemy row is loaded by primary key straight from request input (Query.get / Session.get / filter_by(id=...)) without an owner predicate, so an attacker can enumerate other users' records.
+confidence: high

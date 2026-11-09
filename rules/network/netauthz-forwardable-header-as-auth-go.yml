@@ -1,0 +1,13 @@
+id: wide/netauthz-forwardable-header-as-auth-go
+name: netauthz-forwardable-header-as-auth-go
+category: NETWORK
+severity: HIGH
+languages:
+  - go
+cwe: CWE-290
+pattern: r\.Header\.Get\(\s*"X-(?:Forwarded-For|Forwarded-Host|Forwarded-User|Real-IP|Internal|Is-Admin|Admin|Auth-Token|Auth|Api-Key|User-Id|User-Role|User|Role|Trusted|Backend|Gateway)"\s*\)\s*(?:(?:==|!=)\s*"[^"]*"|!=\s*""[^;\n]{0,50}?\b(?:grant\w*|allow\w*|authoriz\w*|isAdmin|isInternal|bypass)\b)
+message: Broken access control — authorization based on network location or a spoofable client header (CWE-346/290).
+remediation: Do not authorize on X-* request headers. Use a verified token/session. If a trusted proxy sets the header, strip it at ingress and verify a signed proxy secret rather than a plain equality/non-empty check.
+not-match: ^\s*(?:\/\/|\*)|\b[Ll]og|logrus|zap|[Mm]etric|audit|[Rr]ate[Ll]imit|throttle|proxy|strings\.Split|clientIP|jwt|VerifyToken|Authenticate|[Ss]ession|csrf
+why: r.Header.Get("X-Forwarded-For"|"X-Internal"|"X-Admin"|...) compared to a value, or a non-empty presence check (!= "") gating grant/allow/authorize/isAdmin, authorizes on a client-settable header. These survive non-stripping proxies, so an external client forges one for privilege. notMatch excludes logging, IP-splitting, and rate-limit uses.
+confidence: high

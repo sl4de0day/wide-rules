@@ -1,0 +1,19 @@
+id: wide/ssti-velocityjs-render
+name: ssti-velocityjs-render
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-1336
+pattern: \b[Vv]elocity\.render\s*\(\s*(?:[^\s'"`)]|(?:'[^']*'|"[^"]*"|`[^`]*`)\s*\+|`[^`]*\$\{)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Render only fixed template strings and pass user input through the context object; never build the Velocity template from user input.
+why: 'velocityjs Velocity.render evaluates its first argument as a Velocity template whose $references and #directives can reach method calls on context objects, so a dynamic template source is server-side template injection.'
+confidence: high

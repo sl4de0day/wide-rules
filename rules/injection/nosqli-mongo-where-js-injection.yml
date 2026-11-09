@@ -1,0 +1,18 @@
+id: wide/nosqli-mongo-where-js-injection
+name: nosqli-mongo-where-js-injection
+category: INJECTION
+severity: CRITICAL
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-943
+pattern: '[''"]\$where[''"]\s*=>.*(\$request\b|\$_(GET|POST|REQUEST|COOKIE)\b|request\s*\()'
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: Avoid $where with user data entirely; express the condition with normal operators ($gt, $eq). If unavoidable, coerce interpolated values to numbers (intval/(int)) and never build the JS string from raw request input.
+not-match: \(int\)|\(float\)|\(double\)|intval|floatval|is_numeric|filter_var|preg_quote|number_format|ctype_digit|^\s*(\/\/|#(?!\[)|\*)
+why: A $where clause concatenates request input into server-side JavaScript. An attacker closes the expression and injects arbitrary JS (0;return true, sleep loops), yielding data exfiltration or denial of service. Note (string) casting does NOT prevent this (attacker breaks out of quotes), so only numeric coercers (intval/(int)/(float)) and preg_quote/number_format appear in notMatch — string casts are deliberately excluded.
+confidence: high

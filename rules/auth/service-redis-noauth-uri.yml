@@ -1,0 +1,36 @@
+id: wide/service-redis-noauth-uri
+name: service-redis-noauth-uri
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - rb
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - java
+  - kt
+  - kts
+  - go
+  - cs
+  - csx
+cwe: CWE-306
+pattern: rediss?:\/\/(?![^\/\s'"@]*@)
+message: Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.
+remediation: Set requirepass / an ACL user on Redis and connect with redis://<user>:<pass>@host (or the password client option) sourced from a secret. Do not depend on the private network alone.
+not-match: ^\s*(?:\/\/|\*|#|<!--)|\b(?:test|spec|fixture|mock|dummy|sample|example|e2e|password|passwd|requirepass)\b|:['"]\s*\+
+why: A redis:// or rediss:// URI with no userinfo/password connects to Redis with no AUTH, so any client that can reach the port has full command access (KEYS, FLUSHALL, CONFIG). Redis has no auth by default and must be given a password.
+confidence: high

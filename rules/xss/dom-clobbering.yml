@@ -1,0 +1,25 @@
+id: wide/dom-clobbering
+name: dom-clobbering
+category: XSS
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-79
+pattern: \b(document|window|globalThis|self|top|parent)\[\s*[A-Za-z_$][\w$]*\s*\]
+message: A property is read off document/window by a dynamic name — DOM clobbering.
+remediation: Use an explicit API — document.getElementById()/querySelector() — and never index document/window by an untrusted name.
+not-match: Object\.keys|hasOwnProperty|in\s+(document|window)
+why: An attacker who can inject an element with a chosen id or name can add that property to the document/window, so this lookup resolves to an attacker-controlled DOM node whose .href/.value/.innerHTML then feeds a sink.
+confidence: high

@@ -1,0 +1,14 @@
+id: wide/ssrf-weak-blocklist-loopback-metadata
+name: ssrf-weak-blocklist-loopback-metadata
+category: NETWORK
+severity: MEDIUM
+languages:
+  - cs
+  - csx
+cwe: CWE-918
+pattern: \b(?:host|hostname|url|uri|target|address|addr|ip|domain)\w*\s*(?:==|\.Equals\s*\(|\.Contains\s*\(|\.StartsWith\s*\(|\.EndsWith\s*\(|\.IndexOf\s*\()\s*["'](?:127\.0\.0\.1|localhost|169\.254|0\.0\.0\.0|\[::1\]|::1)
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Replace the denylist with a positive allowlist of permitted destination hosts, and resolve+re-check the address after DNS resolution (and after any redirect) rather than string-matching known-bad literals.
+not-match: ^\s*(?:\/\/|\*)|[Aa]llow[Ll]ist|[Ww]hite[Ll]ist
+why: An SSRF guard compares a host/url/ip variable against a hardcoded loopback or link-local/metadata literal (127.0.0.1, localhost, 169.254, 0.0.0.0, ::1). Denylist validation is trivially bypassed via alternate encodings, DNS rebinding, 0x7f.0.0.1, [::ffff:127.0.0.1], or a redirect, so it does not actually stop SSRF. notMatch suppresses allowlist/whitelist guards (e.g. ipWhitelist.Contains("127.0.0.1")).
+confidence: high

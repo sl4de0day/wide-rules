@@ -1,0 +1,12 @@
+id: wide/ssti-go-text-html-template-parse
+name: ssti-go-text-html-template-parse
+category: INJECTION
+severity: HIGH
+languages:
+  - go
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*\.New\(.*?\)\.Parse\(\s*(?:[A-Za-z_]|[\x22\x60][^\x22\x60]*[\x22\x60]\s*\+)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Keep the Parse() source a fixed string literal and pass user input only as the data/context argument to Execute, never build the template source from request input.
+why: template.New(name).Parse(x) (and the template.Must(...New(...).Parse(x)) wrapper) compiles x as the template SOURCE, so a variable, concatenation, string() conversion or fmt.Sprintf result there lets an attacker inject template actions that read passed data and call exposed methods.
+confidence: high

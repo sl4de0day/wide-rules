@@ -1,0 +1,14 @@
+id: wide/fmtstring-kotlin-receiver-format
+name: fmtstring-kotlin-receiver-format
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-134
+pattern: \b(?:userFmt|userFormat|userInput|userPattern|userTemplate|userString|formatString|fmtString|fmtStr|fmt|template|tmpl)\s*\.\s*format\s*\(
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Invoke .format on a constant literal template and pass user data as arguments: "%s".format(userValue) — never userString.format(...).'
+why: Calling .format() on a user-controlled String receiver (Kotlin String.format extension) makes the receiver itself the format template, allowing format-specifier injection (CWE-134). Name-anchored so a literal receiver ("%s".format) or safe formatter objects (dateFormat/numberFormat/templateName) do not match.
+confidence: high

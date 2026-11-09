@@ -1,0 +1,22 @@
+id: wide/protopollution-named-deepmerge-req
+name: protopollution-named-deepmerge-req
+category: PROTOTYPE
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-1321
+pattern: ^(?=.*\b(?:deepmerge|deepMerge|mergeDeep(?:Right|Left)?|deepExtend|mergeOptions|assignDeep|deepAssign|extendDeep)\s*\()(?=.*(?:req(?:uest)?\.(?:body|query|params|headers|cookies)|ctx\.(?:request\.body|query|params|body)|JSON\.parse\s*\(|\bpayload\b|\buserInput\b))
+message: Prototype pollution — attacker-controlled keys can reach Object.prototype via a recursive merge/set (CWE-1321).
+remediation: Merge into an Object.create(null) target, filter out __proto__/constructor/prototype keys before merging, pin a version of the merge library that blocks those keys (deepmerge does; deep-extend/merge-options historically did not), or validate against an allow-listed schema first.
+not-match: (?:__proto__|constructor|prototype|Object\.create\s*\(\s*null\s*\)|structuredClone)
+why: Standalone recursive-merge utilities (deepmerge, deep-extend, merge-options, assign-deep, ramda mergeDeepRight/Left, and hand-named deepMerge/mergeDeep helpers) copy nested keys from source to target. Merging a client-controlled object through them lets a __proto__/constructor.prototype key reach and poison Object.prototype. Each token requires an immediately-following `(` so lookalikes (deepEqual, shallowMerge, mergeArrays, deepMergeArrays, assignDeepEqual) do not match, and comparisons/array merges stay out of the alternation.
+confidence: high

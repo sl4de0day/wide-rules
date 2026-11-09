@@ -1,0 +1,20 @@
+id: wide/xxe-fast-xml-parser-process-entities
+name: xxe-fast-xml-parser-process-entities
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-776
+pattern: \bprocessEntities\s*[:=]\s*true\b
+message: XML entity expansion / XXE — an XML parser resolves entities on untrusted input (CWE-776/611).
+remediation: Parse untrusted XML with processEntities:false and reject documents containing a <!DOCTYPE>/<!ENTITY>. Do not enable htmlEntities on attacker-controlled input either.
+not-match: processEntities\s*[:=]\s*false|^\s*(?:\/\/|\/\*|\*)
+why: fast-xml-parser's XMLParser resolves XML entity references only when processEntities is true; on untrusted input (e.g. parser.parse(req.body.data)) a document can declare recursively nested internal entities that expand exponentially, a billion-laughs denial of service that exhausts memory and CPU. The safe twin processEntities:false, `===` equality checks, the *Enabled/*Default identifier suffixes, and comment lines are all excluded.
+confidence: high

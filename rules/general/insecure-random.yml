@@ -1,0 +1,29 @@
+id: wide/insecure-random
+name: insecure-random
+category: GENERAL
+severity: LOW
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-338
+pattern: Math\.random\s*\(\)|\brandom\.random\s*\(|\bmt_rand\s*\(|\brand\s*\(
+message: This random number is not unpredictable.
+remediation: 'Use a CSPRNG: crypto.randomBytes / crypto.getRandomValues / secrets / random_bytes.'
+not-match: jitter|backoff|animation|delay|shuffle|sample|colou?r|particle
+why: Math.random / rand / mt_rand are for simulation, not secrecy — their output can be predicted, so a token built from them can be guessed.
+confidence: high

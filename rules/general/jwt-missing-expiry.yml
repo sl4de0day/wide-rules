@@ -1,0 +1,25 @@
+id: wide/jwt-missing-expiry
+name: jwt-missing-expiry
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-613
+pattern: \bjwt\.sign\s*\(
+message: jwt.sign is called without an expiry (expiresIn).
+remediation: 'Always pass an expiry, e.g. jwt.sign(payload, key, { expiresIn: ''15m'' }), and set exp explicitly if you build the payload yourself.'
+not-match: expiresIn|notBefore|\bexp\b|^\s*(?:\/\/|\*|\/\*)
+why: 'A JWT with no exp claim never expires: once issued it is valid forever, so a leaked token grants permanent access and cannot be aged out.'
+confidence: low

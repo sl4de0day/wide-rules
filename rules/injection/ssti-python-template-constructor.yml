@@ -1,0 +1,14 @@
+id: wide/ssti-python-template-constructor
+name: ssti-python-template-constructor
+category: INJECTION
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-1336
+pattern: \bTemplate\s*\(\s*(?:(?!(?:filename|file|uri|lookup|name|encoding)\s*=)[A-Za-z_]\w*\s*=\s*)?(?:[rbuRBU]{0,2}f['"]|['"][^'"\n]*['"]\s*(?:\+|%|\.\s*format)|(?![rbufRBUF]{0,2}['"])[A-Za-z_][\w.]*(?![\w.])(?!\s*=[^=]))
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Construct Template objects only from constant, developer-authored strings (or load them from trusted files via filename=) and pass user input exclusively as render/context data.
+why: The Template class in Jinja2, Django, Mako, Tornado and Cheetah compiles its source/text argument on construction, so building a Template from a dynamic string compiles attacker input as template code.
+confidence: high

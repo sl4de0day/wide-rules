@@ -1,0 +1,14 @@
+id: wide/idor-mongodb-filter-request
+name: idor-mongodb-filter-request
+category: AUTH
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-639
+pattern: \.Find(Async)?\s*\([^;]*(=>|Builders<|BsonDocument)[^;]*(Request\.(Query|Form|RouteValues|Cookies|Headers)|RouteData\.Values)\s*\[
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: 'Combine an owner filter: Builders<Doc>.Filter.And(Filter.Eq(d => d.Id, id), Filter.Eq(d => d.OwnerId, uid)), or authorize the returned document against the current principal before use.'
+not-match: '[Uu]serId|[Oo]wnerId|[Cc]reatedBy|[Aa]uthorId|[Tt]enantId|[Cc]ustomerId|[Aa]ccountId|[Oo]rgId|OrganizationId|[Cc]urrentUser|GetUserId|User\.FindFirst|User\.Identity|NameIdentifier|IsInRole|\[Authorize|AuthorizeAsync|\bForbid\b|\bUnauthorized\b|\bChallenge\b|CanAccess|\.Owns\b|^\s*\/\/'
+why: MongoDB.Driver Find with a lambda predicate, a Builders<T>.Filter expression, or a new BsonDocument filter keyed on a client-supplied _id/reference (Request.*/RouteData) and no owner predicate returns documents chosen entirely by the client (CWE-639). Requiring one of =>/Builders</BsonDocument keeps this to real Mongo filters. notMatch drops filters that also constrain by owner/tenant, carry an authorization gate or post-fetch guard, or are commented out.
+confidence: high

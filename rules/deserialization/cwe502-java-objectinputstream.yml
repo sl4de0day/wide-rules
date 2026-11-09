@@ -1,0 +1,12 @@
+id: wide/cwe502-java-objectinputstream
+name: cwe502-java-objectinputstream
+category: DESERIALIZATION
+severity: CRITICAL
+languages:
+  - java
+cwe: CWE-502
+pattern: new\s+ObjectInputStream\s*\(
+message: Native Java deserialization via ObjectInputStream is used.
+remediation: Deserialize with a safe format such as JSON, or install a strict ObjectInputFilter look-ahead allowlist.
+why: readObject on attacker-controlled bytes instantiates arbitrary classes and can trigger gadget chains that lead to remote code execution.
+confidence: high

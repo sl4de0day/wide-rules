@@ -1,0 +1,24 @@
+id: wide/regex-origin-anchor
+name: regex-origin-anchor
+category: GENERAL
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-183
+pattern: \/\^?https?\??:\\?\/\\?\/[^\n/]*(?:\.\*|\.\+)
+message: This origin/host regex uses a wildcard after the scheme and is bypassable.
+remediation: Compare new URL(origin).hostname to an allowlist, or anchor the pattern fully (…\.example\.com$).
+why: /^https?:\/\/.*app\.example\.com/ has no end anchor, so https://app.example.com.attacker.com and https://attacker-app.example.com both pass .test(origin) and defeat the cross-origin check.
+confidence: high

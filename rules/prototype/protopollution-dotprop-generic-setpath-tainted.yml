@@ -1,0 +1,22 @@
+id: wide/protopollution-dotprop-generic-setpath-tainted
+name: protopollution-dotprop-generic-setpath-tainted
+category: PROTOTYPE
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-1321
+pattern: (?:\bdotProp\.(?:set|setProperty|setValue)|(?<![.\w$])(?:setProperty|deepSet|setValue|setPath|setByPath|setPathValue|setIn|dset))\s*\(\s*(?!['"`])[^,]+,\s*(?:req|request|body|params|query|payload|input|ctx|args|argv|headers|cookies|userInput|userData|userKey|userPath|clientData|untrusted|tainted|external|dynamicKey|dynamicPath)\b[^,)]*,
+message: Prototype pollution — attacker-controlled keys can reach Object.prototype via a recursive merge/set (CWE-1321).
+remediation: Use dot-prop v6+ which throws on __proto__/constructor/prototype, or in the hand-rolled helper reject those key segments and use Object.prototype.hasOwnProperty.call before descending; prefer a null-prototype object or a Map for user-keyed data.
+not-match: hasOwnProperty|Object\.create\(\s*null\s*\)|['"]__proto__['"]|['"]constructor['"]|['"]prototype['"]|isSafeKey|sanitizeKey|sanitizePath|validateKey|isValidKey|allowedKeys|allowlist|whitelist|denylist|blacklist|forbiddenKeys|dangerousKeys
+why: 'dot-prop (dotProp.set / setProperty), dset, pathval (setPathValue) and hand-rolled deepSet/setValue/setPath/setIn helpers all take (object, path, value) and walk/create the path from a caller string; a tainted ''__proto__.x'' path pollutes the prototype. AUDIT CHANGE: to stop the heavy name-collision false positives, the generic-name shape now requires (a) a non-string-literal FIRST argument (?![''"`]) — so Formik/React-Hook-Form setValue(''email'', req.body.value), where the field is a literal and only the VALUE is tainted, no longer fires; (b) a THIRD argument (trailing comma after the path) — so the 2-arg setValue(fieldName, req.body.value) / state.setIn(keyPath, value) forms don''t fire; and (c) the taint keyword anchored at the ROOT of the path (2nd arg), so deepSet(obj, config.query, value) is ignored. A method-call negative lookbehind still rejects router.setPath(...) / obj.setIn(...), and the guard notMatch drops magic-key / hasOwnProperty / allowlist checks and Object.create(null) targets.'
+confidence: high

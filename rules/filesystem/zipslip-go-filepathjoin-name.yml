@@ -1,0 +1,13 @@
+id: wide/zipslip-go-filepathjoin-name
+name: zipslip-go-filepathjoin-name
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - go
+cwe: CWE-22
+pattern: filepath\.Join\s*\([^)]*\.(Name|Path)\b
+message: Zip Slip / insecure archive extraction — an archive entry name escapes the destination, arbitrary file write (CWE-22/59).
+remediation: 'After joining, check containment: rel, err := filepath.Rel(dest, target); reject when err != nil or strings.HasPrefix(rel, ".."); or require strings.HasPrefix(target, filepath.Clean(dest)+string(os.PathSeparator)). Use EvalSymlinks and skip link headers.'
+not-match: ^\s*(\/\/|\/\*|\*)|HasPrefix|filepath\.Rel\b|EvalSymlinks|isInside|withinDir|sanitiz|SecureJoin|securejoin
+why: filepath.Join(dest, f.Name) / filepath.Join(dest, header.Name) inside a zip.Reader/tar.Reader loop builds the output path from the untrusted entry name; filepath.Join cleans but does not confine, so a ../ prefix escapes dest and the following os.Create/io.Copy writes an arbitrary file.
+confidence: high

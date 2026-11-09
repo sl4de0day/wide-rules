@@ -1,0 +1,13 @@
+id: wide/server-presence-only-auth-header-ruby
+name: server-presence-only-auth-header-ruby
+category: AUTH
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-287
+pattern: \bif\s+(?:request|req)\.headers\[\s*['"](?:Authorization|HTTP_AUTHORIZATION|X-Api-Key|X-Auth-Token)['"]\s*\](?:\.present\?)?\s*(?:$|\bthen\b|\bdo\b)
+message: Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.
+remediation: 'Decode and verify the token before allowing the action: JWT.decode(token, key, true, { algorithm: ... }) or a verify_token helper, and reject on a decode error. Do not gate on presence with .present?.'
+not-match: (?:verify_jwt|verify_token|validate_token|decode_and_verify|authenticate!|\.verify\b|JWT\.decode|^\s*#)
+why: The controller/before_action grants access whenever request.headers['Authorization'] is truthy or .present? - presence only. The token is never decoded-and-verified, so any non-empty header authenticates the request. The sink requires end-of-line or a then/do block start after the header (optionally .present?), so a value comparison, a .split parse, or a compound '.present? && valid_token?' does not match.
+confidence: high

@@ -1,0 +1,18 @@
+id: wide/fmtstring-php-printf-literal-concat-user
+name: fmtstring-php-printf-literal-concat-user
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-134
+pattern: \b(printf|sprintf|vprintf|vsprintf)\s*\(\s*[^,;]*?['"]\s*\.\s*\$\w
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: Never concatenate user data into the format template; use printf('prefix %s', $user) so the value is a bound argument, not part of the format.
+not-match: (?!)
+why: A string literal is concatenated with a user variable to build the format argument (printf('prefix ' . $user)). Concatenation makes the user data part of the format template, so its conversion specifiers are interpreted. The quote-then-dot-then-$var shape distinguishes this from the safe literal-comma form printf('prefix %s', $user); the [^,;] bound stops the match at the first argument boundary so concatenation that occurs in a value argument (printf("%s", $a . $b)) is not flagged, and literal.literal or literal.CONSTANT concatenation (no $ after the dot) is not flagged.
+confidence: high

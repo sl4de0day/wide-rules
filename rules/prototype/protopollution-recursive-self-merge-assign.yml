@@ -1,0 +1,22 @@
+id: wide/protopollution-recursive-self-merge-assign
+name: protopollution-recursive-self-merge-assign
+category: PROTOTYPE
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-1321
+pattern: \w+\s*\[\s*\w+\s*\]\s*=\s*(?:\w+\.)?(?:deepMerge|mergeDeep|deepExtend|deepAssign|mergeRecursive|mergeWith|merge|extend)\s*\(\s*\w+\s*\[\s*\w+\s*\]
+message: Prototype pollution — attacker-controlled keys can reach Object.prototype via a recursive merge/set (CWE-1321).
+remediation: Guard the key before the recursive call (skip __proto__/constructor/prototype), gate with hasOwnProperty, or descend into a null-prototype accumulator. Where feasible replace the hand-rolled recursion with a vetted, pollution-safe merge utility.
+not-match: __proto__|constructor|prototype|hasOwnProperty|Object\.create\(\s*null\s*\)|isSafeKey|isValidKey|sanitiz
+why: 'The self-referential recursive descent that is the actual pollution sink inside a merge function: target[key] = merge(target[key], source[key]). It matches even when the for-in header is on a separate line (multi-line merge helpers). Precision comes from requiring the merge call''s FIRST argument to also be an index access (\w+[\w+]) so plain shallow copies, math/array ops, non-merge callees (reducer, concat, Object.assign) and merge-as-value references do not fire; no magic-key guard is present on the line.'
+confidence: high

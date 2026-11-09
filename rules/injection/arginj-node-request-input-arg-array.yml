@@ -1,0 +1,20 @@
+id: wide/arginj-node-request-input-arg-array
+name: arginj-node-request-input-arg-array
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-88
+pattern: ^(?=.*\b(?:execFileSync|execFile|spawnSync|spawn|fork)\s*\()(?=.*\[)(?=.*\breq(?:uest)?\.(?:query|body|params|headers|cookies)\b).*
+message: Argument injection — a user value reaches a CLI argument that could be interpreted as an option/flag (CWE-88).
+remediation: Validate the request value against an anchored allowlist (.test) on the same line, coerce it with Number()/parseInt when it is numeric, or insert a literal '--' end-of-options separator before it in the array so it can never be read as a flag.
+not-match: (?:\.test\s*\(|\.includes\s*\(|['"]--['"]|\bNumber\s*\(|\bparseInt\b|\bparseFloat\b|^\s*(?:\/\/|\/\*|\*))
+why: An HTTP request input (req.query/body/params/headers/cookies) flows straight into a spawn-family args array. The array form still passes the value verbatim as one argument, so an attacker value that starts with '-' is taken as a CLI option/flag (e.g. -o/tmp/pwn, --config=...). Directly attacker-controlled, hence critical.
+confidence: high

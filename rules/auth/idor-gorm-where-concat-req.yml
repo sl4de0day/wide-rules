@@ -1,0 +1,13 @@
+id: wide/idor-gorm-where-concat-req
+name: idor-gorm-where-concat-req
+category: AUTH
+severity: HIGH
+languages:
+  - go
+cwe: CWE-639
+pattern: \.Where\(\s*["\x60][^"\x60]*["\x60]\s*\+\s*[^;]*(?:\.(?:Param|Params|Query|QueryParam|PostFormValue|PostForm|FormValue|DefaultQuery)\(|Vars\(\w+\)\[|URLParam\(|Params\.ByName\()
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: 'Never concatenate request input into a Where condition. Use placeholders: db.Where("id = ? AND owner_id = ?", id, currentUser.ID), and let gorm bind the values.'
+not-match: ^\s*\/\/|^\s*\*\s|[Uu]ser_?[Ii][Dd]|[Oo]wner|[Aa]ccount_?[Ii][Dd]|[Tt]enant|[Oo]rg_?[Ii][Dd]|[Oo]rganization|[Cc]ompany_?[Ii][Dd]|[Tt]eam_?[Ii][Dd]|[Ww]orkspace_?[Ii][Dd]|[Gg]roup_?[Ii][Dd]|[Cc]ustomer_?[Ii][Dd]|[Cc]urrent_?[Uu]ser|[Ss]ession|[Aa]uthoriz|[Ee]nforce|Pundit|CanCan|\.Can\(|[Pp]olic|[Cc]laims|\.Scopes\(|[Oo]wned_?[Bb]y|[Cc]reated_?[Bb]y|[Bb]elongs_?[Tt]o
+why: 'A gorm .Where() built by string-concatenating client input into the condition (double-quote or backtick fragment). This is both an IDOR (record addressed by a client reference) and an outright SQL injection, since the input is spliced into the SQL text rather than bound as a parameter. Note: the shared ownership notMatch here suppresses concatenations that also carry an owner term to honor the IDOR corpus, but any concatenation of request input into Where is still a SQLi and should be caught by a dedicated SQLi rule.'
+confidence: high

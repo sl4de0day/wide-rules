@@ -1,0 +1,20 @@
+id: wide/dynamic-import-node-nonliteral-specifier
+name: dynamic-import-node-nonliteral-specifier
+category: NETWORK
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-829
+pattern: \bimport\s*\(\s*(?:[A-Za-z_$][\w$]*\s*(?:[.\[]|\+|\))|['"][^'"]*['"]\s*\+|`[^`]*\$\{)
+message: Write-then-execute — code is loaded or run from a user-controlled or writable path (potential RCE, CWE-829/95/98/94).
+remediation: Restrict dynamic import() to an allow-list of literal specifiers keyed by a validated identifier; never interpolate request input or an uploads path into the specifier.
+not-match: '^\s*(?:\/\/|\*|\/\*|#)|__dirname|__filename|node_modules|allowed|[Ww]hitelist|WHITELIST|\?\s*[''"][^''"]*[''"]\s*:'
+why: A dynamic import() with a non-literal specifier (variable, member/index, concatenation, or interpolated template) evaluates and executes the module's top-level code at load time; an attacker-controlled or writable path yields RCE, the ESM analogue of dynamic require(). Static `import x from './y'` and `import.meta` never match (no call paren after import).
+confidence: high

@@ -1,0 +1,19 @@
+id: wide/cwe943-mongo-where-operator
+name: cwe943-mongo-where-operator
+category: INJECTION
+severity: CRITICAL
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-943
+pattern: \$where["']?\s*:\s*(?:req\.\w|["'`][^;\n]*(?:\+|\$\{))
+message: MongoDB $where operator is given a dynamically-built string containing request data.
+remediation: Remove $where and express the condition with standard query operators ($eq, $gt, $regex on a specific field) built from validated values.
+why: $where runs its string as server-side JavaScript, so attacker-controlled input concatenated into it becomes arbitrary code execution against the database.
+confidence: high

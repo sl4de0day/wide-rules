@@ -1,0 +1,13 @@
+id: wide/hpp-ruby-manual-dup-parse
+name: hpp-ruby-manual-dup-parse
+category: AUTH
+severity: LOW
+languages:
+  - rb
+cwe: CWE-235
+pattern: (?:request\.query_string|\bQUERY_STRING\b)[^\n]*\.split\(\s*["']&["']
+message: HTTP parameter pollution — raw/duplicated request parameters forwarded so layers disagree (CWE-235).
+remediation: Use Rack::Utils.parse_nested_query / the framework params parser and decide duplicate handling explicitly; do not hand-split the raw query string.
+not-match: ^\s*#
+why: 'The query string is split manually on & instead of using a real parser, so first-vs-last duplicate handling diverges from the framework and downstream services (HPP). Kept as-is: the split-on-& literal keys the pattern tightly, so splits on ''/'', '','', ''='' or a real parser do not match.'
+confidence: high

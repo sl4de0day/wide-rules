@@ -1,0 +1,13 @@
+id: wide/netauthz-origin-referer-as-auth-rb
+name: netauthz-origin-referer-as-auth-rb
+category: AUTH
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-346
+pattern: \brequest\.(?:origin|referer|referrer|headers\[['"](?:Origin|Referer|Referrer)['"]\])\s*(?:(?:==|!=)\s*['"][^'"]+['"]|\.start_with\?\(\s*['"][^'"]+)
+message: Broken access control — authorization based on network location or a spoofable client header (CWE-346/290).
+remediation: Authorize with Devise/session or a verified token, not the Origin/Referer header. Reserve Origin for CORS and rely on Rails CSRF protection with SameSite cookies.
+not-match: ^\s*#|Access-Control|Allow-Origin|\bcors\b|allowed_origins|whitelist|\b(?:log|logger|metric|audit)\b|jwt|verify_token|authenticate|current_user|devise|csrf|session\[
+why: Rails request.origin/referer (or headers['Origin'/'Referer']) equals/start_with? a trusted value to authorize. These headers are client-supplied and forgeable, so an attacker sends the expected value to bypass the gate. CORS/logging lines are excluded by notMatch.
+confidence: high

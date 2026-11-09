@@ -1,0 +1,30 @@
+id: wide/lfi-pandoc-no-sandbox-user-input
+name: lfi-pandoc-no-sandbox-user-input
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - rb
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-73
+pattern: (?=.*\bpandoc\b)(?=.*(?:-o\b|--output|--to\b|-t\b|-f\b|\.pdf\b|\.docx\b|\.md\b|\.html?\b|\.epub\b))(?=.*(?:\$\{|#\{|\+\s*\w|\.\s*\$\w|,\s*[A-Za-z_]\w*\s*[,)\]]|\bf["']|[\[(]\s*[A-Za-z_$][\w.$]*\s*[,)\]])).*
+message: Renderer resource embedding — a document/PDF/image converter resolves a user-controlled resource, enabling LFI or SSRF (CWE-918/73/611).
+remediation: Run pandoc with --sandbox on untrusted input, restrict --resource-path to a safe directory, and disable raw HTML/TeX; avoid concatenating request data that selects the input file.
+not-match: (?:^\s*(?:\/\/|#|\*)|--sandbox|\bconsole\.|\blog(?:ger)?\.|System\.(?:out|err)|\bprintln\b|\bprint\s*\(|fmt\.Print|\becho\s)
+why: 'pandoc converting user-supplied documents can read arbitrary local files through include directives, raw LaTeX \input, and embedded image/resource paths, giving local file inclusion (LFI) when run without --sandbox. Taint gate now covers Ruby #{} and PHP ''. $var''; literal-only invocations with a trailing keyword arg (e.g. check=True) and log lines no longer fire.'
+confidence: high

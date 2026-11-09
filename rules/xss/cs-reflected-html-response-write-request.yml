@@ -1,0 +1,14 @@
+id: wide/cs-reflected-html-response-write-request
+name: cs-reflected-html-response-write-request
+category: XSS
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-79
+pattern: \bResponse\.(?:Write|Output\.Write)\s*\((?=[^;]*<\w)(?=[^;]*\bRequest\.(?:QueryString|Form|Params|Headers|Query|Cookies)\b)
+message: Reflected / context-mismatched XSS — user input reaches HTML or JS output without proper contextual encoding (CWE-79/116).
+remediation: Encode for the output context with HttpUtility.HtmlEncode / WebUtility.HtmlEncode (or AntiXss.HtmlEncode), cast numeric params with int.Parse, or use Razor's automatic encoding (@value) instead of Response.Write.
+not-match: (?:^\s*\/\/|HttpUtility\.HtmlEncode|Server\.HtmlEncode|WebUtility\.HtmlEncode|AntiXss|HtmlEncode|@Html\.Encode|int\.Parse|Int32\.Parse|Convert\.ToInt)
+why: Response.Write emits an HTML fragment concatenated with Request.QueryString/Form/Params/Headers/Query/Cookies with no output encoding, reflecting attacker markup -> reflected XSS.
+confidence: high

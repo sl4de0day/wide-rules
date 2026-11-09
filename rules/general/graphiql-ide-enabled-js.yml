@@ -1,0 +1,20 @@
+id: wide/graphiql-ide-enabled-js
+name: graphiql-ide-enabled-js
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-489
+pattern: \bgraphiql\s*:\s*(true|'playground'|"playground"|'graphiql'|"graphiql")
+message: GraphQL/dev misconfiguration — introspection or a dev endpoint exposed, or a weak/predictable secret (CWE-200/489/307/770/330).
+remediation: 'Guard by environment: `graphiql: process.env.NODE_ENV !== ''production''`. For graphql-yoga set `graphiql: false` in prod and disable introspection with `useDisableIntrospection`.'
+not-match: ^\s*(\/\/|#|\*|\/\*)|\btrue\s+if\b
+why: express-graphql, graphql-yoga, graphql-http and mercurius expose the GraphiQL in-browser IDE via a `graphiql` option. A literal true (or mercurius 'playground'/'graphiql' string) serves an interactive query console with introspection on the production endpoint. Env-guarded values place a variable/ternary after the colon and match neither the literal nor the string alternatives; a comparison like `process.env.GRAPHIQL === 'true'` puts the literal far from the separator so it is not matched.
+confidence: high

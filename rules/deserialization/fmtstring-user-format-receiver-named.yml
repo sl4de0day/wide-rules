@@ -1,0 +1,15 @@
+id: wide/fmtstring-user-format-receiver-named
+name: fmtstring-user-format-receiver-named
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-134
+pattern: \b\w*(?:user|request|untrusted|payload|attacker|malicious)\w*(?:\[[^\]]*\])?\s*\.format(?:_map)?\s*\(
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: Treat user strings only as .format() arguments, never as the template/receiver. Use a fixed literal template, or string.Template().safe_substitute for user-provided templates.
+not-match: ^\s*#
+why: A variable whose name marks it user-controlled (user*, request*, untrusted*, payload*, attacker*, malicious*) is the RECEIVER of .format()/.format_map(), meaning the attacker supplies the format template. Field-access payloads ({0.__init__.__globals__[...]}, {x[SECRET]}) then leak internals (CWE-134). The receiver is a bare identifier immediately before .format(, never a quoted literal, so "literal {}".format(user_name) and "{user}".format(user=data) do not fire.
+confidence: high

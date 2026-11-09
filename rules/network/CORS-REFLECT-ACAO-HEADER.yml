@@ -1,0 +1,31 @@
+id: wide/cors-reflect-acao-header
+name: cors-reflect-acao-header
+category: NETWORK
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - go
+  - java
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-942
+pattern: Access-Control-Allow-Origin['"`]\]?\s*[,:=]\s*[A-Za-z_$]
+message: Insecure CORS — reflecting the request Origin (with credentials) instead of a fixed allowlist (CWE-942).
+remediation: Keep a fixed server-side allowlist of trusted origins. Look up the incoming Origin in the allowlist and echo it back only on an exact match (otherwise omit the header or send one hard-coded origin). Never write res.setHeader('Access-Control-Allow-Origin', origin) with the raw request origin, and pair a reflected origin with Allow-Credentials only after the allowlist check.
+not-match: ^\s*(?:\/\/|#|\*|\/\*|<!--)|\ballowed[_-]?origins?\b|white[_-]?list|allow[_-]?list|\bvalid[_-]?origins?\b|\btrusted[_-]?origins?\b|\bpermitted[_-]?origins?\b|\bcors[_-]?origins?\b|\.(?:includes|indexOf|has|some|find|test|match|startsWith|endsWith)\s*\(
+why: Passing a request-derived value (a variable such as req.headers.origin, request.headers.get('Origin'), or an already-captured `origin`) straight into the Access-Control-Allow-Origin response header reflects whatever Origin the caller sent, echoing an attacker's origin back verbatim and defeating the Same-Origin Policy; combined with Allow-Credentials it lets any site read the victim's authenticated responses. The sink fires when the value after the ACAO header separator (comma / colon / equals across setHeader, res.header/set, writeHead objects, and dict/bracket assignment; header name quoted with ', " or backtick) starts as an identifier or member expression rather than a quoted literal. notMatch suppresses fixed-literal origins, allowlist/validation names (allowed/valid/trusted/permitted/cors origins, whitelist/allowlist even when underscore-suffixed like ORIGIN_ALLOWLIST), membership/validation calls (.includes/.indexOf/.has/.some/.find/.test/.match/.startsWith/.endsWith), and comment lines.
+confidence: high

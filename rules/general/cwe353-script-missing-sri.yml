@@ -1,0 +1,19 @@
+id: wide/cwe353-script-missing-sri
+name: cwe353-script-missing-sri
+category: GENERAL
+severity: MEDIUM
+languages:
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+  - jsx
+  - tsx
+cwe: CWE-353
+pattern: <script\b[^>]*\bsrc\s*=\s*["'](?:https?:)?\/\/
+message: An external <script> loads from a remote origin without an integrity (Subresource Integrity) attribute.
+remediation: Add integrity="sha384-..." (with crossorigin) computed from the exact file, or self-host the script.
+not-match: \bintegrity\s*=
+why: If the CDN, its DNS, or the transport is compromised, an altered script runs with full page privileges; SRI would refuse a tampered file.
+confidence: high

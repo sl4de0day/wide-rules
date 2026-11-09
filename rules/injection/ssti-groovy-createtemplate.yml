@@ -1,0 +1,12 @@
+id: wide/ssti-groovy-createtemplate
+name: ssti-groovy-createtemplate
+category: INJECTION
+severity: HIGH
+languages:
+  - java
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/[/*]|\*)).*?\.\s*createTemplate\s*\(\s*(?!new\s+(?:File|URL|FileReader|InputStreamReader|InputStream|Path)\b)(?!new\s+StringReader\s*\(\s*["'])(?:[A-Za-z_$]|(?:"[^"]*"|'[^']*')\s*(?:\+(?!\s*["'])|\.\s*(?:format|formatted)\s*\())
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Pass a File/URL/resource for the template and bind user input only through the binding map given to make(); never compile a user-supplied string.
+why: Groovy's template engines compile the String/Reader passed to createTemplate into Groovy code, so a dynamic template source is arbitrary Groovy execution (RCE) via ${...} and <% %> blocks.
+confidence: high

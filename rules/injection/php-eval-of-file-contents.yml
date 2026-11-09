@@ -1,0 +1,18 @@
+id: wide/php-eval-of-file-contents
+name: php-eval-of-file-contents
+category: INJECTION
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-95
+pattern: \beval\s*\(\s*(?:file_get_contents|fread|stream_get_contents)\s*\(
+message: Write-then-execute — code is loaded or run from a user-controlled or writable path (potential RCE, CWE-829/95/98/94).
+remediation: Do not eval file contents. Load data via a parser (json_decode) and drive behavior from an allow-listed set of fixed, trusted code paths instead of evaluating file bytes.
+not-match: ^\s*(?:\/\/|#|\*|\/\*)
+why: eval() of file_get_contents()/fread()/stream_get_contents() runs the contents of a file (or php://input) as PHP; if the source is user-supplied or sits in a writable/uploaded location, writing that file yields arbitrary code execution. The eval/read must be adjacent, so a split read-then-eval on one line and evaluate(...) / my_eval(...) do not match.
+confidence: high

@@ -1,0 +1,20 @@
+id: wide/js-reflected-html-send-unescaped-var
+name: js-reflected-html-send-unescaped-var
+category: XSS
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-79
+pattern: \b(?:res|reply|resp|response)(?:\.\w+\([^)]*\)){0,3}\.(?:send|write|end)\s*\((?=[^)]*<[a-zA-Z/])(?=[^)]*(?:\$\{\s*[A-Za-z_$]|['"`]\s*\+\s*[A-Za-z_$]|[A-Za-z_$][\w.$]*\s*\+\s*['"`]))
+message: Reflected XSS — an unescaped variable is interpolated into an HTML response (CWE-79).
+remediation: HTML-entity-encode the value for its context (escapeHtml/he.encode) or run it through a sanitiser (DOMPurify/sanitize-html) before it enters the markup, or render via an auto-escaping template engine instead of hand-building HTML; never interpolate or concatenate a raw string variable directly into a tag. Send structured data with res.json when the client expects data, not HTML.
+not-match: ^\s*(?:\/\/|\*|\/\*)|escapeHtml|htmlEscape|escapeHTML|encodeHTML|\bhe\.(?:encode|escape)|DOMPurify|sanitiz|\bxss\s*\(|encodeURI|\bescape\s*\(|\.replace(?:All)?\(\s*(?:\/\[?|['"`])[<>&]|res\.json|(?:\$\{[\w.\s]*|\+\s*)\b(?:count|length|id|index|total|idx|size|num|offset|limit)\b
+why: 'res.send/write/end (or reply.send, incl. a res.status(...).send() / res.type(''text/html'').send() chain) emits a backtick template OR a string concatenation that both contains an HTML tag (a ''<'' followed by a letter or slash) AND interpolates/concatenates a bare, un-escaped variable into element/attribute context. Both facts are required by two lookaheads, so it does not fire on a literal-only body or a bare non-HTML value. Broadens the req.*-only reflected-XSS rule: the tainted value is commonly one hop removed from the request (e.g. `replaced`, built by templateStr.replace(token, req.query.x)), which a literal-req.* match misses. Any unescaped string variable placed inside a tag is reflected/stored XSS. The concat branch anchors a string-literal quote adjacent to the + so it matches ''variable spliced into HTML'', not a bare var+var expression. notMatch drops escaped/sanitised values (escapeHtml/htmlEscape/encodeHTML/he.encode/he.escape/DOMPurify/sanitize/xss()/a .replace or .replaceAll that encodes <>& via a regex, char-class, or string literal), encodeURI(Component), the deprecated escape(), res.json, obviously-numeric interpolations or concatenations (count/length/id/index/total/idx/size/num/offset/limit, covered in both the ${...} and + var forms), auto-escaping template renders ({{ }} is not ${}), and comment lines.'
+confidence: high

@@ -1,0 +1,19 @@
+id: wide/cwe915-model-create-req-body
+name: cwe915-model-create-req-body
+category: PROTOTYPE
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-915
+pattern: \.(create|build|bulkCreate|insertMany|newDocument|register)\s*\(\s*req\.(?:body|query|params)\b
+message: An ORM create/build call is fed the entire request object.
+remediation: Construct the record from an explicit set of permitted fields instead of the raw request object.
+why: The ORM will persist any field present in the body, letting an attacker inject columns like isAdmin or ownerId that the form never exposed (mass assignment).
+confidence: high

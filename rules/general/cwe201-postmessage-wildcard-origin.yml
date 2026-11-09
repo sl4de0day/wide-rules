@@ -1,0 +1,19 @@
+id: wide/cwe201-postmessage-wildcard-origin
+name: cwe201-postmessage-wildcard-origin
+category: GENERAL
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-201
+pattern: \.postMessage\s*\(.*,\s*['"`]\*['"`]\s*\)
+message: postMessage is called with a wildcard "*" target origin.
+remediation: Pass the exact expected origin (for example "https://app.example.com") as the targetOrigin argument instead of "*".
+why: With "*" the message is delivered to whatever origin currently occupies the target frame or window, so if it has been navigated to an attacker page the payload (which may contain tokens or user data) is handed straight to them.
+confidence: high

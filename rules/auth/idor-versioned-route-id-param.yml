@@ -1,0 +1,13 @@
+id: wide/idor-versioned-route-id-param
+name: idor-versioned-route-id-param
+category: AUTH
+severity: LOW
+languages:
+  - go
+cwe: CWE-639
+pattern: '"[^"]*\/v\d+\/[^"]*(?::id\b|\{id\}|:\w*[Ii][Dd]\b|\{\w*[Ii][Dd]\})'
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: Audit versioned/deprecated handlers for the same ownership/authorization checks as the current API; retire or gate legacy versions rather than leaving object-by-id endpoints unscoped.
+not-match: ^\s*\/\/|^\s*\*\s
+why: 'Aggravator, not a standalone bug: a route registered under a versioned path (/v1/, /api/v2/, ...) that takes an id-style path parameter (:id, {fileId}). Versioned/legacy endpoints are frequently the ones missing the ownership checks their newer replacements added, so any IDOR here is higher-risk and worth a targeted look. Comment lines are excluded.'
+confidence: low

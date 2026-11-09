@@ -1,0 +1,32 @@
+id: wide/ssrf-htmlpdf-cli-wkhtmltopdf
+name: ssrf-htmlpdf-cli-wkhtmltopdf
+category: NETWORK
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - rb
+  - java
+  - go
+cwe: CWE-918
+pattern: (?=.*(?:\bwkhtmltopdf\b|\bwkhtmltoimage\b|\bprince\b|\bweasyprint\b))(?=.*(?:\.pdf|\.png|\.jpe?g|-o\b|--output|https?:|file:|\.html?\b|\bwkhtmltopdf\s*\(|\bwkhtmltoimage\s*\())(?=.*(?:\$\{|#\{|\+\s*\w|\.\s*\$\w|,\s*[A-Za-z_]\w*\s*[,)\]]|\bf["']|[\[(]\s*[A-Za-z_$][\w.$]*\s*[,)\]])).*
+message: Renderer resource embedding — a document/PDF/image converter resolves a user-controlled resource, enabling LFI or SSRF (CWE-918/73/611).
+remediation: Pass --disable-local-file-access (or enableLocalFileAccess:false in the node binding), render from a fixed template, and put a strict allowlist/network-egress guard in front of any remote fetch; never concatenate raw request input into the command line.
+not-match: (?:^\s*(?:\/\/|#|\*)|--disable-local-file-access|enableLocalFileAccess\s*[:=]?\s*false|\bconsole\.|\blog(?:ger)?\.|System\.(?:out|err)|\bprintln\b|\bprint\s*\(|fmt\.Print|\becho\s)
+why: 'wkhtmltopdf/wkhtmltoimage/prince/weasyprint invoked via shell or the node binding with a user-controlled URL/HTML argument. By default these engines resolve file:// and local paths and fetch remote/internal URLs, so an attacker embeds <iframe src=file:///etc/passwd> (LFI) or points the input at http://169.254.169.254/ (SSRF). Taint gate now also recognizes Ruby #{} interpolation and PHP ''. $var'' concatenation; a log/print/echo suppressor kills the ''prince'' English-word false positives on logging lines.'
+confidence: high

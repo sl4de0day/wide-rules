@@ -1,0 +1,19 @@
+id: wide/ssti-nunjucks-renderstring-compile
+name: ssti-nunjucks-renderstring-compile
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-1336
+pattern: (?:\b[Nn]unjucks\.(?:compile|renderString)|\b[A-Za-z_$][\w$]*\.renderString)\s*\(\s*(?:[^\s'"`)]|(?:'[^']*'|"[^"]*"|`[^`]*`)\s*\+|`[^`]*\$\{)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Call renderString/compile with a constant template literal and pass user input via the context object; render user-selected pages with env.render on a fixed template name instead.
+why: nunjucks.renderString / env.renderString / nunjucks.compile parse their string argument as a Nunjucks template, and a dynamic source lets an attacker inject expressions that reach the global scope and achieve RCE.
+confidence: high

@@ -1,0 +1,20 @@
+id: wide/netauthz-origin-referer-as-auth-js
+name: netauthz-origin-referer-as-auth-js
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-346
+pattern: \breq(?:uest)?\.(?:headers?\.(?:origin|referer|referrer)\b|headers?\[['"](?:origin|referer|referrer)['"]\]|get\(\s*['"](?:origin|referer|referrer)['"]\s*\))\s*(?:(?:===?|!==?)\s*['"`][^'"`]+['"`]|\.(?:startsWith|endsWith|indexOf|match)\(\s*['"`/][^'"`/]+)
+message: Broken access control — authorization based on network location or a spoofable client header (CWE-346/290).
+remediation: Never use Origin/Referer as an authentication or authorization signal. Use a session or verified token for identity; use Origin only for CORS response headers and CSRF defenses (alongside SameSite cookies and CSRF tokens).
+not-match: ^\s*(?:\/\/|\*|\/\*)|access-control|allow-origin|setheader|writehead|\bcors\b|\.vary\(|whitelist|allowlist|allowedorigins|\b(?:logger|log|console|metric|analytics|audit)\b|track|jwt\.verify|verifytoken|authenticate|passport|req\.session|req\.user|req\.isauthenticated|csrf
+why: The Origin/Referer request header equals or startsWith a trusted value and that decides access. Both headers are set by the client (or absent/forgeable off-browser), so treating them as identity lets an attacker send the expected Origin/Referer and take the privileged path. Distinct from CORS header-setting, which the notMatch excludes.
+confidence: high

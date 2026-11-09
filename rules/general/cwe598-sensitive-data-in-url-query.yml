@@ -1,0 +1,24 @@
+id: wide/cwe598-sensitive-data-in-url-query
+name: cwe598-sensitive-data-in-url-query
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-598
+pattern: '[?&](?:password|passwd|pwd|token|secret|api[_-]?key|access[_-]?token|refresh[_-]?token|jwt|session[_-]?id|sessionid|auth[_-]?token)='
+message: A password, token, or other secret is being placed in a URL query string.
+remediation: Send sensitive values in a POST request body or an Authorization header, never in the URL/query string.
+why: Query strings are logged in browser history, proxy and server access logs, and leaked via the Referer header, so any secret in the URL is exposed far beyond the intended recipient.
+confidence: high

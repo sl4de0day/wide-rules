@@ -1,0 +1,24 @@
+id: wide/cwe693-csp-unsafe-inline-eval
+name: cwe693-csp-unsafe-inline-eval
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-693
+pattern: Content-Security-Policy.*(?:unsafe-inline|unsafe-eval)
+message: A Content-Security-Policy is defined with 'unsafe-inline' or 'unsafe-eval'.
+remediation: Remove 'unsafe-inline'/'unsafe-eval' and use nonces or hashes for the scripts that legitimately need to run.
+why: Both keywords re-enable exactly the inline scripts and eval() that CSP exists to block, so the policy no longer meaningfully mitigates XSS.
+confidence: high

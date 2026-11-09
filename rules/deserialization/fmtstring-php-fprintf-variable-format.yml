@@ -1,0 +1,18 @@
+id: wide/fmtstring-php-fprintf-variable-format
+name: fmtstring-php-fprintf-variable-format
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-134
+pattern: \b(fprintf|vfprintf)\s*\(\s*[^,;()]+,\s*\$\w
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Use a literal format and pass data as a value argument: fprintf($fp, ''%s'', $userData).'
+not-match: (?!)
+why: 'The format argument of fprintf/vfprintf is the SECOND argument (after the stream). Here that second argument is a variable rather than a literal, so a user-controlled format string is interpreted by the printf engine. Tightened from the original: the stream segment is [^,;()]+ (no parentheses) so a parenthesized stream expression such as fopen($path, $mode) no longer lets its own inner argument ($mode) be mis-read as the format - that was a false positive on safe literal-format calls like fprintf(fopen($path,$mode), "%s", $x). A literal second argument (fprintf($fp, "%s", $x)) starts with a quote and is rejected.'
+confidence: high

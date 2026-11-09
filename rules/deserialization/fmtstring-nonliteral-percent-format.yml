@@ -1,0 +1,15 @@
+id: wide/fmtstring-nonliteral-percent-format
+name: fmtstring-nonliteral-percent-format
+category: DESERIALIZATION
+severity: MEDIUM
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-134
+pattern: \b\w*(?:fmt|format|template|tpl|msg|message|pattern|prompt|query|sql|cmd|command|error|user|input|banner|greeting|label|caption|notice|placeholder|text|output|report|line)\w*\s*%\s*\([^)]*,[^)]*\)
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: Bind user data as arguments to a constant literal format string; keep the format template a hard-coded literal. If the template must vary, whitelist it from a trusted set - never let request data become the left operand.
+not-match: ^\s*#|%\s*\(\s*[-+\d.,\s]+\)
+why: The left operand of % is a non-literal, message/format-named identifier applied to a tuple of arguments (fmt % (a, b)). Because %-by-a-tuple-with-a-comma is only valid for string formatting (int % (a,b) raises), the variable is a runtime-supplied format string; if it derives from user input this is format-string injection (CWE-134). A quoted literal ends in a quote, not a word char, so "literal %s" % (a, b) can never match the \w*keyword\w* left operand - that is the discriminator from the safe printf-style case; notMatch also drops purely-numeric tuples (arithmetic-looking modulo).
+confidence: high

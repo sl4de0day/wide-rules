@@ -1,0 +1,19 @@
+id: wide/cwe915-new-model-req-body
+name: cwe915-new-model-req-body
+category: PROTOTYPE
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-915
+pattern: new\s+\w+\s*\(\s*req\.(?:body|query|params)\s*\)
+message: A model is constructed directly from the whole request object.
+remediation: Pick an explicit allowlist of fields (e.g. { name, email } = req.body) before constructing the model.
+why: Passing the entire request body lets an attacker set fields that were never meant to be user-writable (role, isAdmin, balance), a classic mass-assignment escalation.
+confidence: high

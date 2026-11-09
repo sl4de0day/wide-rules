@@ -1,0 +1,12 @@
+id: wide/ssti-go-plush-render
+name: ssti-go-plush-render
+category: INJECTION
+severity: HIGH
+languages:
+  - go
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*\bplush\.(?:Render|Parse|BuildTemplate)\(\s*(?:[A-Za-z_]|[\x22\x60][^\x22\x60]*[\x22\x60]\s*\+)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Render a fixed literal template and pass user input only through the plush.Context set with ctx.Set, never as the template source.
+why: plush.Render/Parse/BuildTemplate compile their first argument as Plush template SOURCE, which supports rich Go-like expressions and method calls, so a dynamic value is high-impact server-side template injection.
+confidence: high

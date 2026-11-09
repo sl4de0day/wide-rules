@@ -1,0 +1,14 @@
+id: wide/netauthz-forwardable-header-as-auth-cs
+name: netauthz-forwardable-header-as-auth-cs
+category: NETWORK
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-290
+pattern: Request\.Headers\[\s*"X-(?:Forwarded-For|Forwarded-Host|Forwarded-User|Real-IP|Internal|Is-Admin|Admin|Auth-Token|Auth|Api-Key|User-Id|User-Role|User|Role|Trusted|Backend|Gateway)"\s*\](?:\.ToString\(\))?\s*(?:(?:==|!=)\s*"[^"]*"|\.Equals\(\s*"[^"]*"|\.Contains\(\s*"[^"]*"\)[^;\n]{0,50}?\b(?:Grant\w*|Allow\w*|Authoriz\w*|isAdmin|isInternal|bypass)\b)
+message: Broken access control — authorization based on network location or a spoofable client header (CWE-346/290).
+remediation: Do not authorize on X-* request headers; use ASP.NET auth (cookie/JWT, [Authorize]). If a trusted reverse proxy sets the header, strip it at ingress and verify a signed proxy secret rather than a presence/equality check.
+not-match: ^\s*(?:\/\/|\*|\/\*)|\b(?:Log|log|logger|ILogger|audit|throttle|proxy)\b|[Mm]etric|[Rr]ate[Ll]imit|\.Split\(|clientIp|[Aa]uthenticate|Session|IsAuthenticated|User\.Identity|jwt|csrf
+why: ASP.NET Request.Headers["X-Forwarded-For"|"X-Internal"|"X-Admin"|...] compared with ==/.Equals to a value (or .Contains gating a grant) authorizes on a client-settable header. With or without ForwardedHeaders these X-* values pass through non-stripping proxies and are forgeable, so an attacker gains privilege. notMatch excludes logging, IP-splitting, and existing real auth checks.
+confidence: high

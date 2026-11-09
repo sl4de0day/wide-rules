@@ -1,0 +1,13 @@
+id: wide/ssrf-go-checkredirect-follow-all
+name: ssrf-go-checkredirect-follow-all
+category: NETWORK
+severity: LOW
+languages:
+  - go
+cwe: CWE-918
+pattern: CheckRedirect\s*[:=]+.*func.*error\s*\{\s*return\s+nil
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Re-validate req.URL against the allowlist inside CheckRedirect, cap the redirect count, or return http.ErrUseLastResponse to stop following redirects.
+not-match: errors\.New|len\(via\)|ErrUseLastResponse|isAllowed|validate
+why: A CheckRedirect callback that unconditionally returns nil follows every redirect without re-validating the new target, so an allowlisted URL can 30x-redirect the client to an internal host (SSRF via redirect).
+confidence: high

@@ -1,0 +1,19 @@
+id: wide/fmtstring-req-input-as-format
+name: fmtstring-req-input-as-format
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-134
+pattern: \b(?:util\s*\.\s*format|console\s*\.\s*(?:log|error|warn|info|debug|trace)|(?:logger|log|winston)\s*\.\s*(?:log|info|warn|error|debug|verbose|silly))\s*\(\s*(?:req|request|ctx)\s*\.\s*(?:query|params|body|headers|cookies)\b
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Keep the format string a constant literal and pass user data only as a trailing value argument: `console.log(''%s'', req.query.msg)` or `util.format(''%s'', userValue)`. Never place user-controlled data in the first (template) position.'
+why: Request input (req.query/params/body/headers/cookies) is passed as the FIRST argument of util.format / console.* / a logger call — i.e. as the FORMAT TEMPLATE. Node's util.format interprets %s/%d/%j/%o in that first argument, so attacker-controlled specifiers can consume/mis-render later arguments (disclosing objects via %j/%o), corrupt structured logs, or cause type confusion. The user token must sit immediately after `(`, so a literal-format-then-user-value call (`console.log('%s', req.query.msg)`, `console.log('x', req.query)`) is not flagged, and `console.table`/`res.json` are outside the sink.
+confidence: high

@@ -1,0 +1,20 @@
+id: wide/cwe347-jwt-verify-no-algorithms
+name: cwe347-jwt-verify-no-algorithms
+category: CRYPTO
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-347
+pattern: jwt\.verify\s*\(\s*[^,()]+,\s*[^,(){}\[\]]+\)
+message: jwt.verify is called with only a token and key and no algorithms allowlist.
+remediation: 'Always pass an algorithms allowlist, e.g. jwt.verify(token, key, { algorithms: [''RS256''] }).'
+not-match: algorithms
+why: Without pinning algorithms, the verifier trusts the algorithm named in the attacker-controlled token header, opening algorithm-confusion and 'none' forgery.
+confidence: high

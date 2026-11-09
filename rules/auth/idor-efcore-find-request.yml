@@ -1,0 +1,14 @@
+id: wide/idor-efcore-find-request
+name: idor-efcore-find-request
+category: AUTH
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-639
+pattern: \.(Find|FindAsync)\s*\((?![^;]*=>)[^;]*(Request\.(Query|Form|RouteValues|Cookies|Headers)|RouteData\.Values)\s*\[
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: 'Scope the load to the caller: after Find, verify ownership (if (doc.OwnerId != _userManager.GetUserId(User)) return Forbid();), or query by owner directly with _context.Documents.FirstOrDefault(d => d.Id == id && d.OwnerId == currentUserId).'
+not-match: '[Uu]serId|[Oo]wnerId|[Cc]reatedBy|[Aa]uthorId|[Tt]enantId|[Cc]ustomerId|[Aa]ccountId|[Oo]rgId|OrganizationId|[Cc]urrentUser|GetUserId|User\.FindFirst|User\.Identity|NameIdentifier|IsInRole|\[Authorize|AuthorizeAsync|\bForbid\b|\bUnauthorized\b|\bChallenge\b|CanAccess|\.Owns\b|^\s*\/\/'
+why: EF Core Find/FindAsync resolves a row by primary key. When that key is read straight from Request.Query/Form/RouteValues/Cookies/Headers or RouteData with no co-located ownership predicate or authorization gate, any authenticated user can enumerate other users' records by changing the id (CWE-639). The negative lookahead (?![^;]*=>) keeps this to scalar-key Find and excludes MongoDB lambda Find. notMatch drops lines that also carry an ownership term (UserId/OwnerId/TenantId/...), a post-fetch guard (Forbid/Unauthorized/Challenge), an [Authorize]/GetUserId/User.Identity/NameIdentifier check, or that are fully commented out (^\s*//).
+confidence: high

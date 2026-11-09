@@ -1,0 +1,25 @@
+id: wide/client-jsrsasign-jws-sign
+name: client-jsrsasign-jws-sign
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+  - html
+  - htm
+  - xhtml
+cwe: CWE-602
+pattern: \bKJUR\.jws\.JWS\.sign\s*\(
+message: Client-side token signing or embedded signing key — a secret/decision shipped to the browser is attacker-forgeable.
+remediation: Sign tokens on a server and hand the compact JWS to the client. Use KJUR.jws.JWS.verify with a public key only when verifying, and never embed a secret or private key in browser code. Prefer opaque server-issued sessions.
+not-match: ^\s*(?:\/\/|\*|\/\*|<!--)
+why: jsrsasign's KJUR.jws.JWS.sign(alg, header, payload, key) signs a JWS/JWT in the browser. Because jsrsasign is a client-side crypto library, this pattern almost always means the HMAC secret or RSA/EC private key is embedded in the shipped code, allowing anyone to mint valid tokens. The signature offers no authenticity when the key is public.
+confidence: high

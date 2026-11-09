@@ -1,0 +1,15 @@
+id: wide/pathwrite-python-werkzeug-save-no-secure
+name: pathwrite-python-werkzeug-save-no-secure
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-22
+pattern: \.save\s*\(\s*os\.path\.join\s*\([^)]*(\.filename\b|\brequest\.(files|args|form|values)\b)
+message: Path traversal on write — a file is written to a user-controlled path without a containment check (CWE-22).
+remediation: Wrap the upload name in werkzeug.utils.secure_filename() (or os.path.basename + allowlist) before joining, and confirm the resolved path stays under the upload root.
+not-match: secure_filename|basename|sanitiz|uuid|realpath|\.startswith\(|whitelist|allowlist|^\s*#
+why: A werkzeug/Flask FileStorage is saved to os.path.join(dir, file.filename) where filename is the raw client upload name; without secure_filename() a name such as '../../wsgi.py' writes outside the upload directory. The sink now requires a .filename attribute or a request.* source so it does not fire on unrelated local variables merely named 'name'.
+confidence: high

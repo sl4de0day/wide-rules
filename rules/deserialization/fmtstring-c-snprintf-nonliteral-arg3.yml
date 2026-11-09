@@ -1,0 +1,18 @@
+id: wide/fmtstring-c-snprintf-nonliteral-arg3
+name: fmtstring-c-snprintf-nonliteral-arg3
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - c
+  - h
+  - cpp
+  - cc
+  - cxx
+  - hpp
+  - hh
+cwe: CWE-134
+pattern: \b(?:snprintf|vsnprintf)\s*\(\s*[^,()]+,\s*[^,()]*(?:\([^()]*\)[^,()]*)*,\s*[*&]?[A-Za-z_]\w*(?:(?:->|\.)\w+|\[[^\]]*\])*\s*[,)]
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Pass a constant format literal in the third position: snprintf(buf, sizeof(buf), "%s", user). Never snprintf(buf, sizeof(buf), user).'
+why: snprintf/vsnprintf take the format string as their THIRD argument (after buffer and size). arg2 (the size) is matched with a single-level balanced-paren token [^,()]*(?:\([^()]*\)[^,()]*)* so it tolerates sizeof(buf) AND a size expression that contains an internal comma such as min(a, b) or MIN(len, cap) without the comma inside the parens being mistaken for the arg2/arg3 boundary. arg3 must then be a variable expression; a leading string-literal, i18n wrapper, or function-call format is structurally rejected as safe.
+confidence: high

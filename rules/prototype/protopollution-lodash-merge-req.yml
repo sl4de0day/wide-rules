@@ -1,0 +1,22 @@
+id: wide/protopollution-lodash-merge-req
+name: protopollution-lodash-merge-req
+category: PROTOTYPE
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-1321
+pattern: ^(?=.*(?:\b_|\blodash)\s*\.\s*(?:mergeWith|merge|defaultsDeep|defaults|assignInWith)\s*\()(?=.*(?:req(?:uest)?\.(?:body|query|params|headers|cookies)|ctx\.(?:request\.body|query|params|body)|JSON\.parse\s*\(|\bpayload\b|\buserInput\b))
+message: Prototype pollution — attacker-controlled keys can reach Object.prototype via a recursive merge/set (CWE-1321).
+remediation: Never deep-merge attacker input directly. Merge into an Object.create(null) target, drop __proto__/constructor/prototype keys before merging, upgrade to a patched lodash and prefer _.mergeWith with a customizer that rejects those keys, or validate the body against an allow-listed schema (e.g. Ajv/Zod) so only known fields survive.
+not-match: (?:__proto__|constructor|prototype|Object\.create\s*\(\s*null\s*\)|structuredClone)
+why: lodash recursive merges (_.merge, _.mergeWith, _.defaultsDeep, _.defaults, _.assignInWith / lodash.merge) copy nested keys from the source into the target. When the source is a client-controlled object, a key named __proto__ (or constructor.prototype) walks the prototype chain and poisons Object.prototype process-wide (the classic lodash CVE-2018-3721 / CVE-2019-10744 pattern). Only deep/defaulting variants are flagged; the shallow _.assign / _.assignIn / _.cloneDeep are excluded by the token alternation, and the notMatch drops Object.create(null) targets, structuredClone copies, and lines that already reference __proto__/constructor/prototype (a guard or customizer).
+confidence: high

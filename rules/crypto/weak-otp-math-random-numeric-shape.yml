@@ -1,0 +1,20 @@
+id: wide/weak-otp-math-random-numeric-shape
+name: weak-otp-math-random-numeric-shape
+category: CRYPTO
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-330
+pattern: Math\s*\.\s*random\s*\(\s*\)\s*\*\s*(?:9000|10000|90000|100000|900000|1000000)\b|Math\s*\.\s*random\s*\(\s*\)\s*\.\s*toString\s*\([^)]*\)\s*\.\s*(?:slice|substr|substring)\s*\(|["']{2}\s*\+\s*Math\s*\.\s*random\s*\(\s*\)\s*\)\s*\.\s*(?:slice|substr|substring)\s*\(
+message: GraphQL/dev misconfiguration — introspection or a dev endpoint exposed, or a weak/predictable secret (CWE-200/489/307/770/330).
+remediation: Generate OTPs with crypto.randomInt(min, max) from node:crypto, and add short expiry plus attempt lockout.
+not-match: ^\s*(?:\/\/|\*)|toString\s*\(\s*(?:16|36|2|8)\s*\)|crypto\s*\.\s*randomInt|randomBytes|secrets\s*\.
+why: A verification code / OTP built from Math.random() over a tiny numeric range (4-6 digits) or by slicing digits off the decimal expansion is low-entropy and brute-forceable; Math.random is not a CSPRNG.
+confidence: high

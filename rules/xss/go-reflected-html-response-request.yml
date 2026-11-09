@@ -1,0 +1,13 @@
+id: wide/go-reflected-html-response-request
+name: go-reflected-html-response-request
+category: XSS
+severity: HIGH
+languages:
+  - go
+cwe: CWE-79
+pattern: \b(?:fmt\.Fprint(?:f|ln)?|w\.Write|io\.WriteString)\b(?=[^\n]*<\w)(?=[^\n]*\br\.(?:URL\.Query|FormValue|PostFormValue|Form|Header\.Get))
+message: Reflected / context-mismatched XSS — user input reaches HTML or JS output without proper contextual encoding (CWE-79/116).
+remediation: Render with the auto-escaping html/template package, or apply template.HTMLEscapeString / html.EscapeString (or bluemonday for rich HTML) to the value before writing it.
+not-match: (?:^\s*\/\/|template\.HTMLEscape|html\.EscapeString|bluemonday|EscapeString)
+why: HTML written to the http.ResponseWriter (via fmt.Fprint/Fprintf/Fprintln, w.Write, or io.WriteString) is built from r.URL.Query()/r.FormValue/r.PostFormValue/r.Header with no escaping, reflecting attacker markup -> reflected XSS.
+confidence: high

@@ -1,0 +1,15 @@
+id: wide/netauthz-origin-referer-as-auth-py
+name: netauthz-origin-referer-as-auth-py
+category: AUTH
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-346
+pattern: \brequest\.(?:headers\.get\(\s*['"](?:origin|referer|referrer)['"]\s*\)|headers\[['"](?:origin|referer|referrer)['"]\]|referrer)\s*(?:(?:==|!=)\s*['"][^'"]+['"]|\.startswith\(\s*['"][^'"]+)
+message: Broken access control — authorization based on network location or a spoofable client header (CWE-346/290).
+remediation: Do not authorize on Origin/Referer. Use Flask-Login/session or a verified token for identity; reserve Origin for CORS config and pair CSRF tokens with SameSite cookies.
+not-match: ^\s*#|access-control|allow-origin|\bcors\b|make_response|add_header|whitelist|allowed_origins|\b(?:logger|logging|log|print|metric|audit|analytics)\b|track|jwt|verify_token|login_required|current_user|authenticate|session\[
+why: Flask request.headers Origin/Referer (or request.referrer) equals/startsWith a trusted value to decide access. These headers are client-supplied and forgeable, so an attacker sends the expected value to reach the privileged branch. CORS/logging/analytics uses are excluded by notMatch.
+confidence: high

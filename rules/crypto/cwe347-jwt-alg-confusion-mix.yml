@@ -1,0 +1,19 @@
+id: wide/cwe347-jwt-alg-confusion-mix
+name: cwe347-jwt-alg-confusion-mix
+category: CRYPTO
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-347
+pattern: algorithms\s*:\s*\[[^\]]*(?:HS\d{3}[^\]]*(?:RS|ES|PS)\d{3}|(?:RS|ES|PS)\d{3}[^\]]*HS\d{3})
+message: A JWT verify allowlist mixes an HMAC (HS*) algorithm with an asymmetric (RS/ES/PS*) algorithm.
+remediation: 'Restrict algorithms to a single scheme that matches your key, e.g. algorithms: [''RS256''] only.'
+why: 'Allowing both schemes enables key-confusion: an attacker signs a token with HS* using the known RSA/EC public key as the HMAC secret, forging valid tokens.'
+confidence: high

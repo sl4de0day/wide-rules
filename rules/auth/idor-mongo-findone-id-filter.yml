@@ -1,0 +1,20 @@
+id: wide/idor-mongo-findone-id-filter
+name: idor-mongo-findone-id-filter
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-639
+pattern: \.(findOne|find|findOneAndUpdate|findOneAndDelete|findOneAndReplace|updateOne|updateMany|deleteOne|deleteMany)\s*\(\s*\{[^}]*_id\s*:\s*req\.(params|query|body)
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: 'Add an ownership constraint to the same filter object, e.g. findOne({ _id: req.params.id, userId: req.user.id }), so a non-owned id simply returns null instead of another user''s record.'
+not-match: req\.(user|session|auth)|current[_-]?[Uu]ser|\b(ownerId|owner_id|userId|user_id|tenantId|tenant_id|accountId|account_id|organizationId|organization_id|orgId|org_id|companyId|company_id|teamId|team_id|workspaceId|workspace_id|createdBy|created_by|authorId|author_id|memberId|member_id)\s*:|isOwner|checkOwner|verifyOwner|assertOwner|@UseGuards|authorize|Pundit|\bcan\(|^\s*(?:\/\/|\*|\/\*)
+why: 'A Mongo filter keys on { _id: <client value> } with no additional ownership field (userId/ownerId/tenantId/etc. co-present in the same filter object), so the document is fetched or mutated purely by a client-chosen id.'
+confidence: high

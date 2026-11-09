@@ -1,0 +1,12 @@
+id: wide/cwe611-dotnet-xmlurlresolver
+name: cwe611-dotnet-xmlurlresolver
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - cs
+cwe: CWE-611
+pattern: XmlResolver\s*=\s*new\s+XmlUrlResolver
+message: XmlResolver is assigned a live XmlUrlResolver, allowing external entity/DTD resolution.
+remediation: Set XmlResolver = null and DtdProcessing = DtdProcessing.Prohibit when parsing untrusted XML.
+why: A non-null URL resolver lets a DOCTYPE in untrusted XML load files or internal URLs, causing XXE information disclosure and SSRF.
+confidence: high

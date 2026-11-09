@@ -1,0 +1,15 @@
+id: wide/pathwrite-java-files-write-pathsget
+name: pathwrite-java-files-write-pathsget
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-22
+pattern: \bFiles\.(write|writeString|newOutputStream|newBufferedWriter|copy)\s*\(\s*(?:[^,;]*,\s*)?(Paths\.get|Path\.of)\s*\([^)]*\b(request\.getParameter|getSubmittedFileName|getOriginalFilename)\s*\(
+message: Path traversal on write — a file is written to a user-controlled path without a containment check (CWE-22).
+remediation: Normalize+resolve the target Path and confirm target.toRealPath()/normalize().startsWith(baseDir) before writing, and strip the name to a safe basename or allowlisted value.
+not-match: getCanonicalPath|toRealPath|FilenameUtils\.getName|startsWith|sanitiz|basename|whitelist|allowlist|^\s*(\/\/|\*|\/\*)
+why: java.nio Files.write/writeString/newOutputStream/copy targets Paths.get(dir, <request param|upload filename>); Paths.get resolves traversal segments, so untrusted input steers the write outside the base directory. The optional leading-arg group also catches Files.copy(in, Paths.get(...)) where the target is the second argument.
+confidence: high

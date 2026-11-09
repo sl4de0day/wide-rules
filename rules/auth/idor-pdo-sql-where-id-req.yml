@@ -1,0 +1,18 @@
+id: wide/idor-pdo-sql-where-id-req
+name: idor-pdo-sql-where-id-req
+category: AUTH
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-639
+pattern: \bWHERE\b.*\b\w*_?id\b\s*(=|LIKE|IN)\s*.*?(\$request\b|\$_(GET|POST|REQUEST|COOKIE)\b|request\s*\()
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: Include an ownership column bound to the session in the WHERE clause (AND user_id = :uid with auth()->id()), and use a bound parameter for the id rather than string interpolation.
+not-match: user_?id|owner|auth\s*\(|Auth::|session|current_?user|\$this->user|->getUser\b|tenant|team_?id|account_?id|org_?id|organi|company_?id|group_?id|customer_?id|^\s*(\/\/|#(?!\[)|\*)
+why: A raw SQL statement selects/updates/deletes a resource by an id column concatenated or interpolated from request input, with no owner/tenant column in the WHERE clause. Besides the SQLi risk (unbound interpolation of $_GET/$request into the string), any user can target another user's row by supplying a different id. notMatch now covers the full tenant vocabulary (org/team/account/company/group/customer) so multi-tenant scoping predicates are not flagged; table names like 'accounts'/'orders' still fire because the guards require the *_id suffix.
+confidence: high

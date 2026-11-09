@@ -1,0 +1,20 @@
+id: wide/weak-otp-context-noncrypto-js
+name: weak-otp-context-noncrypto-js
+category: CRYPTO
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-330
+pattern: ^(?=.*(?:\botp|passcode|one[_-]?time|verif(?:ication|ied|y)?[_-]?(?:code|token|otp|pin|pass)|2fa|mfa|sms[_-]?code|auth[_-]?code))(?=.*Math\s*\.\s*random\s*\()
+message: GraphQL/dev misconfiguration — introspection or a dev endpoint exposed, or a weak/predictable secret (CWE-200/489/307/770/330).
+remediation: Use crypto.randomInt() (node:crypto) for the code and gate any dev-only Math.random path behind an explicit env guard if kept at all.
+not-match: ^\s*(?:\/\/|\*)|crypto\s*\.\s*random|randomBytes|secrets\s*\.|\bisDev\b|isDevelopment|NODE_ENV|process\.env|__DEV__
+why: An OTP/verification/2FA value on a line that uses Math.random() derives an authentication code from a non-cryptographic RNG, making it predictable regardless of the exact numeric shape.
+confidence: high

@@ -1,0 +1,13 @@
+id: wide/ssti-razorengine-runcompile
+name: ssti-razorengine-runcompile
+category: INJECTION
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*\.RunCompile(?:Async)?\s*\(\s*(?:(?:\$@?|@\$)"|@?"[^"]*"\s*\+|[A-Za-z_][\w.]*\s*[\[(+,)])
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Pass user input as template DATA (the model/ViewBag), and give RunCompile a fixed string-literal template source, never a value derived from the request.
+why: Engine.Razor.RunCompile compiles its first argument as Razor source, so a dynamic template string lets an attacker execute arbitrary C#/.NET code (full RCE).
+confidence: high

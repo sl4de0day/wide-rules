@@ -1,0 +1,13 @@
+id: wide/nosqli-mongo-where-concat
+name: nosqli-mongo-where-concat
+category: INJECTION
+severity: CRITICAL
+languages:
+  - go
+cwe: CWE-943
+pattern: bson\.[MD]\{[^}]*"\$where"\s*[:,]\s*(?:["\x60][^"\x60]*["\x60]\s*\+|fmt\.Sprintf)
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: 'Avoid $where entirely; express the condition with native operators over typed fields (bson.M{"field": value}). If a computed match is unavoidable, use $expr with typed operands, never a concatenated JS string.'
+not-match: ^\s*\/\/|^\s*\*\s|strconv\.|Quote|String\(
+why: A bson $where filter whose JavaScript body is built by string concatenation (double-quote or backtick) or fmt.Sprintf. $where executes server-side JS, so any unescaped user value spliced into the string is arbitrary code / query injection (data exfiltration, DoS).
+confidence: high

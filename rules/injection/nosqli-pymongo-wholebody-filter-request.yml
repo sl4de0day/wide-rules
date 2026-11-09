@@ -1,0 +1,15 @@
+id: wide/nosqli-pymongo-wholebody-filter-request
+name: nosqli-pymongo-wholebody-filter-request
+category: INJECTION
+severity: CRITICAL
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-943
+pattern: \.(?:find|find_one|find_one_and_update|find_one_and_delete|delete_one|delete_many|update_one|update_many|count_documents|count)\(\s*(?:request\.get_json\(\)|request\.(?:json|data|args|form|values|POST|GET|query|query_params|params))\s*[,)]
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: 'Never pass request.* straight to a query. Validate with a schema (pydantic/marshmallow) and build the filter from coerced scalar fields: db.users.find_one({''username'': str(data[''username''])}).'
+not-match: \bstr\(|\bString\(|\bint\(|\bNumber\(|parseInt|schema\.load|\.validated_data|\bvalidate\(|sanitize|pydantic|marshmallow|jsonschema|^\s*#
+why: 'The entire request body/query dict is passed as a Mongo filter, so an attacker can substitute query operators ({"$ne": null}, {"$gt": ""}) for scalar values — classic authentication/authorisation bypass.'
+confidence: high

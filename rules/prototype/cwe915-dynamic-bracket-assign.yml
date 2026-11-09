@@ -1,0 +1,25 @@
+id: wide/cwe915-dynamic-bracket-assign
+name: cwe915-dynamic-bracket-assign
+category: PROTOTYPE
+severity: LOW
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-915
+pattern: '[A-Za-z_$][\w$]*\s*\[\s*[A-Za-z_$][\w$]*\s*\]\s*=(?!=)'
+message: Assigns to a property using a dynamic identifier key (obj[key] = ...), so a caller-controlled key can write arbitrary or prototype properties.
+remediation: Validate key against an allow-list or use a Map/Object.create(null), and reject __proto__/constructor/prototype before writing.
+not-match: \[\s*(?:i|j|k|n|idx)\s*\]
+why: If key can be '__proto__', 'constructor', or any attacker-chosen name, this mutates unintended object attributes, enabling prototype pollution or mass assignment.
+confidence: high

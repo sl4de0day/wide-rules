@@ -1,0 +1,13 @@
+id: wide/command-injection-erlang
+name: command-injection-erlang
+category: INJECTION
+severity: CRITICAL
+languages:
+  - erl
+  - hrl
+cwe: CWE-78
+pattern: os:cmd\s*\(
+message: os:cmd runs an operating-system command.
+remediation: Avoid os:cmd for untrusted input; use a port/executable with fixed arguments.
+why: os:cmd takes a single string parsed by the shell, so any concatenated input can inject commands.
+confidence: high

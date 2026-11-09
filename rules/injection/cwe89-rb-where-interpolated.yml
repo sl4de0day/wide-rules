@@ -1,0 +1,12 @@
+id: wide/cwe89-rb-where-interpolated
+name: cwe89-rb-where-interpolated
+category: INJECTION
+severity: CRITICAL
+languages:
+  - rb
+cwe: CWE-89
+pattern: \.(?:where|having|order|find_by_sql|select_all|execute)\s*\(?\s*"[^"]*#\{
+message: 'A Ruby query fragment interpolates a value with #{}.'
+remediation: 'Use the array or hash form: where(''id = ?'', id) or where(id: id).'
+why: Interpolation happens before ActiveRecord sees the string, so the value is part of the SQL and the usual escaping never runs.
+confidence: high

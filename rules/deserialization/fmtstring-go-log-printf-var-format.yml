@@ -1,0 +1,12 @@
+id: wide/fmtstring-go-log-printf-var-format
+name: fmtstring-go-log-printf-var-format
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - go
+cwe: CWE-134
+pattern: \blog\.(?:Printf|Fatalf|Panicf)\s*\(\s*(?!["'`])[A-Za-z_][A-Za-z0-9_.]*\s*[,)]
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Log with a constant format and the value as an argument: log.Printf("%s", user) instead of log.Printf(user).'
+why: log.Printf/Fatalf/Panicf take a format string as their first argument; passing a non-literal identifier there lets input inject format verbs (garbled logs, %!(EXTRA) noise, argument disclosure). Literal formats are excluded by the negative lookahead, log.Print/Println (no format string) are excluded by the alternation, a computed format (getMsg()) by the '(' guard, and a custom receiver like logger./slog. by the \blog\. word boundary.
+confidence: high

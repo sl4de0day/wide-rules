@@ -1,0 +1,18 @@
+id: wide/nosqli-mongo-whole-request-filter
+name: nosqli-mongo-whole-request-filter
+category: INJECTION
+severity: CRITICAL
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-943
+pattern: '->(findOne|find|countDocuments|deleteOne|deleteMany|updateOne|updateMany)\s*\(\s*(\$request\s*->\s*(all|query|input|json|post|get|only|except|collect)\s*\(|\$_(GET|POST|REQUEST|COOKIE)\b)'
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: Never pass a raw request array as a filter. Validate to a typed shape first ($request->validate([...]) / ->safe()) and build the filter from scalars you cast yourself, e.g. ['email' => (string) $data['email']].
+not-match: '->validated\s*\(|->validate\s*\(|->safe\s*\(|filter_var|array_map|iterator_to_array|^\s*(\/\/|#(?!\[)|\*)'
+why: 'The entire request bag ($request->all(), $request->query(), $_POST, $_GET) is passed as a Mongo query filter. PHP decodes user[$ne]=1 style input into nested arrays, so an attacker injects operators ({"$ne": null}, {"$gt": ""}) turning the filter into an auth bypass or full dump. The sink deliberately requires the request bag as the FIRST argument, so wrapped/validated variants (collect(...), array_map(...), $request->safe()) naturally dodge it and are also caught by notMatch.'
+confidence: high

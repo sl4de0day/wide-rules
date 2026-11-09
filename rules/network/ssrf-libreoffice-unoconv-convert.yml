@@ -1,0 +1,32 @@
+id: wide/ssrf-libreoffice-unoconv-convert
+name: ssrf-libreoffice-unoconv-convert
+category: NETWORK
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - rb
+  - go
+  - java
+cwe: CWE-918
+pattern: (?=.*\b(?:soffice|libreoffice|unoconv)\b)(?=.*(?:--convert-to|--headless|--outdir|-f\b|\.docx\b|\.odt\b|\.pptx\b))(?=.*(?:\$\{|#\{|\+\s*\w|\.\s*\$\w|,\s*[A-Za-z_]\w*\s*[,)\]]|\bf["']|[\[(]\s*[A-Za-z_$][\w.$]*\s*[,)\]])).*
+message: Renderer resource embedding — a document/PDF/image converter resolves a user-controlled resource, enabling LFI or SSRF (CWE-918/73/611).
+remediation: Convert in a sandboxed, network-isolated profile, strip/deny external references before conversion, and validate the input path; do not build the command line from raw request data pointing at attacker documents.
+not-match: (?:^\s*(?:\/\/|#|\*)|\bconsole\.|\blog(?:ger)?\.|System\.(?:out|err)|\bprintln\b|\bprint\s*\(|fmt\.Print|\becho\s)
+why: 'soffice/libreoffice/unoconv --convert-to on a user-supplied office document renders embedded external references (linked images, INCLUDETEXT/WEBSERVICE-style fields, OLE) which trigger outbound fetches to internal hosts (SSRF) and can pull local files (LFI) during conversion. Taint gate now covers Ruby #{} and PHP ''. $var''; log/print/echo lines are suppressed to avoid noise from status logging that concatenates a job id.'
+confidence: high

@@ -1,0 +1,12 @@
+id: wide/ssti-rythm-render
+name: ssti-rythm-render
+category: INJECTION
+severity: HIGH
+languages:
+  - java
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/[/*]|\*)).*?\b[Rr]ythm\w*\s*\.\s*render(?:String)?\s*\(\s*(?:[A-Za-z_$]|(?:"[^"]*"|'[^']*')\s*(?:\+(?!\s*["'])|\.\s*(?:format|formatted)\s*\())
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Render fixed template files by name and pass user input only as named render arguments, never as the inline template string.
+why: Rythm.render/renderString treats its first argument as an inline Rythm template compiled to Java, so a dynamic template string permits @-directive/Java injection and RCE.
+confidence: high

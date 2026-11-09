@@ -1,0 +1,22 @@
+id: wide/protopollution-forin-usercopy-req
+name: protopollution-forin-usercopy-req
+category: PROTOTYPE
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-1321
+pattern: ^(?=.*\bfor\s*\(\s*(?:var|let|const)?\s*([\w$]+)\s+in\s+(?:req(?:uest)?\.(?:body|query|params|headers|cookies)|ctx\.(?:request\.body|query|params|body)|JSON\.parse\s*\(|\bpayload\b|\buserInput\b))(?=.*\[\s*\1\s*\]\s*=(?![=>]))
+message: Prototype pollution — attacker-controlled keys can reach Object.prototype via a recursive merge/set (CWE-1321).
+remediation: 'Guard the loop: skip keys that are __proto__/constructor/prototype, gate the write behind Object.prototype.hasOwnProperty.call(src, key) or Object.hasOwn(src, key), copy into an Object.create(null) target, or replace the loop with an explicit allow-list of expected fields.'
+not-match: (?:__proto__|constructor|prototype|Object\.create\s*\(\s*null\s*\)|hasOwn|structuredClone)
+why: 'A hand-rolled deep merge: for..in iterating a client-controlled object and writing target[key] = ... keyed by the same loop variable on the same line. for..in enumerates inherited enumerable keys and an attacker-supplied __proto__ key makes target[key] assign onto the prototype, poisoning Object.prototype. The loop variable is captured and backreferenced (\1) in the write so an unrelated bracket-assignment on the same physical line (config[env]=1) no longer matches; the =(?![=>]) guard excludes ===/==/=> comparisons that previously false-fired (map[k] === val); and notMatch now suppresses hasOwn (covering both hasOwnProperty and Object.hasOwn), same-line __proto__/constructor/prototype skips, and Object.create(null) targets.'
+confidence: high

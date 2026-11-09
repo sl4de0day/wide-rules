@@ -1,0 +1,15 @@
+id: wide/ssrf-java-url-openconnection-var
+name: ssrf-java-url-openconnection-var
+category: NETWORK
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-918
+pattern: \bURL\s*\(\s*(?!["'])(?![A-Z][A-Z0-9_]{2,}\s*\))(?:[^()]|\([^()]*\))*\)\s*\.\s*(?:openConnection|openStream|getContent|readText)
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Resolve the host and validate it against an allowlist of permitted destinations before opening the connection; reject internal/link-local ranges.
+not-match: '"https?:\/\/|allow-?list|white-?list|isAllowed|permittedHost|ALLOWED_'
+why: new URL(userInput).openConnection()/openStream() opens an outbound connection to a host derived from user input, enabling SSRF against internal services and cloud metadata.
+confidence: high

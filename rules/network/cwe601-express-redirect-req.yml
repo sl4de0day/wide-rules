@@ -1,0 +1,19 @@
+id: wide/cwe601-express-redirect-req
+name: cwe601-express-redirect-req
+category: NETWORK
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-601
+pattern: \bres\.redirect\s*\(\s*(\d+\s*,\s*)?req\.(query|params|body|headers|cookies)\b
+message: res.redirect target is taken entirely from request data.
+remediation: Redirect only to a relative path or validate the target against an allowlist of permitted destinations.
+why: A fully user-controlled Location (e.g. //evil.com) turns your endpoint into an open redirect used for phishing and OAuth token theft.
+confidence: high

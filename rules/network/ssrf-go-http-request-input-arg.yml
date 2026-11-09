@@ -1,0 +1,13 @@
+id: wide/ssrf-go-http-request-input-arg
+name: ssrf-go-http-request-input-arg
+category: NETWORK
+severity: HIGH
+languages:
+  - go
+cwe: CWE-918
+pattern: \b(?:http|client)\.(?:Get|Post|Head|PostForm|NewRequest|Do)\s*\([^)]*(?:\b(?:r|req|request|ctx|c)\.(?:URL\.Query|FormValue|PostFormValue|Form|PostForm|Query|Param|Header|Cookie)|mux\.Vars)
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Parse the URL, resolve the host, and compare it against an allowlist of permitted hosts before issuing the request; reject internal/link-local addresses.
+not-match: allowlist|allowList|whitelist|isAllowed|allowedHosts?|validateHost|checkAllowed|isValidHost|validateURL|sanitiz
+why: An outbound http/client request is built directly from a request-input accessor (r.URL.Query().Get, r.FormValue, c.Query, mux.Vars, header/cookie) on the same line, so the attacker controls the target host without any allowlist.
+confidence: high

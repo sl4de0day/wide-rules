@@ -1,0 +1,15 @@
+id: wide/nosqli-query-annotation-spel
+name: nosqli-query-annotation-spel
+category: INJECTION
+severity: CRITICAL
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-943
+pattern: '@Query\s*\(\s*(value\s*=\s*)?"[^"]*\?#\{'
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: Use positional parameter binding (?0, ?1) which is bound as a value, not spliced into the query string. Reserve SpEL only for trusted server context (e.g. ?#{principal.id}, ?#{@authService.currentUserId()}), never for raw user input.
+not-match: '[Pp]rincipal|[Aa]uthentication|@security|@auth|SecurityContext|[Cc]urrentUser|[Cc]urrentTenant|\?#\{\s*@|\?#\{\s*T\(|^\s*(?:\/\/|\/\*|\*)'
+why: 'A Spring Data Mongo @Query that interpolates through SpEL (?#{[0]} / ?#{#arg}) rather than the safe positional binder (?0) inserts the raw evaluated value into the query document, letting attacker input land in operator position ($regex/$where). Trusted server-context SpEL is suppressed: principal/authentication ownership refs, bean references ?#{@svc...}, and type references ?#{T(...)}.'
+confidence: high

@@ -1,0 +1,14 @@
+id: wide/fmtstring-appendformat-nonliteral-format
+name: fmtstring-appendformat-nonliteral-format
+category: DESERIALIZATION
+severity: MEDIUM
+languages:
+  - cs
+  - csx
+cwe: CWE-134
+pattern: \.AppendFormat\s*\(\s*(?!(?:\$@|@\$|\$|@)?["'])[A-Za-z_][\w.]*(?:\[[^\]]*\])?\s*,
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Pass a constant literal template and supply user data as trailing arguments: sb.AppendFormat("{0}", userValue). Never place user input in the format position.'
+not-match: ^\s*(?:\/\/|\*)|\.AppendFormat\s*\(\s*(?:CultureInfo|[Cc]ulture[A-Za-z]*|provider|_provider|[Ff]ormatProvider|IFormatProvider)\b|\.AppendFormat\s*\(\s*[A-Za-z_][\w.]*\s*,\s*(?:\$@|@\$|\$|@)?["']
+why: StringBuilder.AppendFormat receives a non-literal format argument (a variable/expression, not a quoted literal) plus value arguments. A user-controlled template lets an attacker reference out-of-range indices (FormatException / DoS) or abuse format specifiers. The lookahead rejects the safe literal-format call; notMatch excludes the leading-IFormatProvider overload both by named types AND, generally, by the shape .AppendFormat(identifier, "literal", ...) - catching any provider variable (numberFormatInfo, etc.) before a literal format. The [\w.] token with optional indexer still fires on Request.Form["f"] because that first arg is not followed by a comma-then-literal.
+confidence: high

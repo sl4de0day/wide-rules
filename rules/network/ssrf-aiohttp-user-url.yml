@@ -1,0 +1,15 @@
+id: wide/ssrf-aiohttp-user-url
+name: ssrf-aiohttp-user-url
+category: NETWORK
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-918
+pattern: \b(?:aiohttp\.ClientSession\(\)|session|sess|client)\.(?:get|post|put|delete|patch|head|ws_connect)\s*\(\s*(?:url\s*=\s*)?request\.(?:args|form|values|json|data|cookies|headers|get_json|query_params|GET|POST|body|META)|\b(?:aiohttp\.ClientSession\(\)|session|sess|client)\.request\s*\(\s*(?:method\s*=\s*)?['"]?[A-Za-z]+['"]?\s*,\s*(?:url\s*=\s*)?request\.(?:args|form|values|json|data|cookies|headers|get_json|query_params|GET|POST|body|META)
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Validate the host/scheme against an allowlist before the session call; do not forward request.* directly. Consider a custom connector that refuses private/link-local addresses.
+not-match: ^\s*#|whitelist|allowlist|allowed_|ALLOWED|is_safe_url
+why: An aiohttp ClientSession request (session/sess/client .get/.post/.ws_connect, or .request with a method literal first) uses a request attribute in the URL position, so the async outbound fetch targets an attacker-controlled host (CWE-918). The URL-position anchor keeps request.* forwarded as json=/data=/params= from firing, and the \b before the receiver keeps db_session/other suffixed names out.
+confidence: high

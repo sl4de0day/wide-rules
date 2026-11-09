@@ -1,0 +1,15 @@
+id: wide/idor-raw-sql-id-request
+name: idor-raw-sql-id-request
+category: AUTH
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-639
+pattern: \b(?:execute|executescript|text|raw|read_sql|read_sql_query)\s*\(\s*(?:f['"][^'"]*WHERE[^'"]*\b(?:id|pk|_id|user_id|order_id|doc_id|uuid)\b[^'"]*\{[^}]*request\.(?:GET|POST|args|form|values|data|json|query|query_params)|['"][^'"]*WHERE[^'"]*\b(?:id|pk|_id|user_id|order_id|doc_id|uuid)\b[^'"]*['"]\s*(?:\+|%)\s*(?:int\(|str\()?\s*request\.(?:GET|POST|args|form|values|data|json|query|query_params))
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: 'Use a parameterised query with an ownership clause: cursor.execute(''SELECT * FROM docs WHERE id=%s AND user_id=%s'', (doc_id, current_user.id)).'
+not-match: current_user|request\.user|g\.user|session\[|\bAND\s+(?:user|owner|account|tenant|org|company|workspace|member)|owner_id\s*=|^\s*#
+why: A record is selected/updated by id built into a raw SQL string via f-string or concatenation from request input, with no owner predicate — a direct object reference (and a SQL-injection sink to boot).
+confidence: high

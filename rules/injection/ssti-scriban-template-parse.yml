@@ -1,0 +1,13 @@
+id: wide/ssti-scriban-template-parse
+name: ssti-scriban-template-parse
+category: INJECTION
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*\bTemplate\.Parse(?:Liquid)?\s*\(\s*(?:(?:\$@?|@\$)"|@?"[^"]*"\s*\+|[A-Za-z_][\w.]*\s*[\[(+,)])
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Parse a constant literal template and supply user input as model members in the TemplateContext/ScriptObject, not inside the parsed string.
+why: Scriban's Template.Parse/ParseLiquid compiles its argument as a Scriban/Liquid template; dynamic source enables object-graph traversal and, via exposed .NET members, data disclosure or code execution.
+confidence: high

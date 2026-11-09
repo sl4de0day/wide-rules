@@ -1,0 +1,19 @@
+id: wide/cwe943-mongoose-where-string-operator
+name: cwe943-mongoose-where-string-operator
+category: INJECTION
+severity: CRITICAL
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-943
+pattern: '["'']?\$where["'']?\s*:\s*["''`]'
+message: MongoDB/Mongoose $where operator is given a JavaScript string.
+remediation: Replace $where with standard query operators ($eq, $gt, $regex with anchored input); never build a $where string from user data.
+why: $where runs its string as JavaScript on the database server; concatenating user input into it allows NoSQL/JS injection, data exfiltration, and denial of service.
+confidence: high

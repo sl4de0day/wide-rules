@@ -1,0 +1,19 @@
+id: wide/cwe326-dh-weak-modp-group
+name: cwe326-dh-weak-modp-group
+category: CRYPTO
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-326
+pattern: (?:getDiffieHellman|createDiffieHellmanGroup)\s*\(\s*['"]modp[125]['"]
+message: A weak named Diffie-Hellman group (modp1/modp2/modp5, under 2048 bits) is selected.
+remediation: Use modp14 (2048-bit) or larger, or an ECDH curve.
+why: The modp1 (768-bit), modp2 (1024-bit) and modp5 (1536-bit) MODP groups are below modern strength and are precomputable, compromising key agreement.
+confidence: high

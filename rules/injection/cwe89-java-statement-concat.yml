@@ -1,0 +1,12 @@
+id: wide/cwe89-java-statement-concat
+name: cwe89-java-statement-concat
+category: INJECTION
+severity: CRITICAL
+languages:
+  - java
+cwe: CWE-89
+pattern: \.execute(?:Query|Update|LargeUpdate)?\s*\(\s*"[^"]*"\s*\+
+message: A JDBC Statement is executed on a concatenated string.
+remediation: Use PreparedStatement with ? placeholders and setString/setInt for the values.
+why: Statement sends the string as written. Once a value is inside it, the driver parses it as SQL and there is nothing left to bind.
+confidence: high

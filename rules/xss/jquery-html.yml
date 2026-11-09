@@ -1,0 +1,24 @@
+id: wide/jquery-html
+name: jquery-html
+category: XSS
+severity: LOW
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-79
+pattern: \$\([^)]*\)\.html\s*\(\s*[^)'"`]
+message: jQuery .html() with a variable parses it as HTML.
+remediation: Use .text() for text, or sanitise the HTML first.
+why: Passing anything but a constant string to .html() turns markup in the value into live elements.
+confidence: high

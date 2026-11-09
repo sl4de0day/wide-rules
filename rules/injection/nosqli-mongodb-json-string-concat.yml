@@ -1,0 +1,14 @@
+id: wide/nosqli-mongodb-json-string-concat
+name: nosqli-mongodb-json-string-concat
+category: INJECTION
+severity: CRITICAL
+languages:
+  - cs
+  - csx
+cwe: CWE-943
+pattern: \.(Find|CountDocuments|DeleteOne|DeleteMany|UpdateOne|UpdateMany|ReplaceOne)\w*\(\s*(?:"\{[^;]*"\s*\+|\$"\{\{[^;]*\{[^{])
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: Never assemble filter JSON from input. Use the typed Builders<T>.Filter API with scalar values (Builders<Doc>.Filter.Eq(d => d.Name, name)).
+not-match: int\.Parse|Int32\.Parse|Convert\.To(Int|Double|Decimal|Int32|Int64)|\(int\)|\(long\)|\(double\)|^\s*\/\/
+why: 'MongoDB.Driver implicitly converts a JSON string to a FilterDefinition. Building that JSON by string concatenation ("{ ... " + input) or interpolation with a placeholder ($"{{ ... {input} }}") lets an attacker inject query operators or extra clauses (CWE-943). The concat branch now requires a closing quote before the + ("\{[^;]*"\s*\+) so a literal + inside a value ("{ expr: ''a+b'' }") no longer false-fires, and the interpolation branch requires an actual placeholder (\$"\{\{[^;]*\{[^{]) so a placeholder-less interpolated constant ($"{{ status: ''active'' }}") no longer fires. notMatch drops values numerically coerced before insertion, and commented-out lines. Regex.Escape was removed from notMatch: it does not escape the JSON string-terminating quote and so does not stop this injection.'
+confidence: high

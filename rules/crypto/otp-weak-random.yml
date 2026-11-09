@@ -1,0 +1,36 @@
+id: wide/otp-weak-random
+name: otp-weak-random
+category: CRYPTO
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - rb
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - java
+  - kt
+  - kts
+  - go
+  - cs
+  - csx
+cwe: CWE-330
+pattern: ^(?=.*\b(?:otp|reset_?token|verification_?code|mfa_?code|totp|one_?time_?(?:code|password)|confirmation_?code|security_?code|two_?factor_?code)\b)(?=.*(?:Math\.random|random\.randint|random\.random\b|random\.choice|new\s+Random|\.nextInt|rand\.Intn|mt_rand|\brand\s*\(|Random\.next|Random\.Shared)).*$
+message: GraphQL/dev misconfiguration — introspection or a dev endpoint exposed, or a weak/predictable secret (CWE-200/489/307/770/330).
+remediation: 'Generate these values with a cryptographically secure source: crypto.randomInt/randomBytes, Python secrets, java.security.SecureRandom, crypto/rand, PHP random_int, or RandomNumberGenerator.'
+not-match: ^\s*(?:\/\/|#|\*|\/\*)|crypto\.randomInt|crypto\.randomBytes|crypto\.getRandomValues|getRandomValues|randomUUID|SecureRandom|secrets\.(?:token|choice|randbelow|SystemRandom|token_hex|token_urlsafe)|RNGCryptoServiceProvider|RandomNumberGenerator|crypto\/rand|random_int\b|openssl_random_pseudo_bytes|System\.Security\.Cryptography|GetInt32|new RegExp\(|\bsinkRegex\b|text:\s*new
+why: 'OTPs, reset tokens, and verification/MFA codes generated with a non-cryptographic PRNG (Math.random, random.randint, java.util.Random, math/rand, mt_rand/rand) are predictable: an attacker who knows the algorithm and a few outputs can forecast the next code and bypass verification. Requires both an OTP/token keyword and a weak-RNG call; suppressed by any crypto-strong source (crypto.randomInt/randomBytes, secrets.*, SecureRandom, RandomNumberGenerator.GetInt32, crypto/rand, random_int).'
+confidence: high

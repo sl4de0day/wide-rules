@@ -1,0 +1,17 @@
+id: wide/eval-php
+name: eval-php
+category: INJECTION
+severity: MEDIUM
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-95
+pattern: ^(eval|assert)$
+message: eval()/assert() run whatever string they are given.
+remediation: Remove it; there is almost always a narrower construct for the real need.
+why: In PHP this executes with the full rights of the web process; if any part of the string came from a request, so does the code.
+confidence: high

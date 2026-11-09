@@ -1,0 +1,12 @@
+id: wide/ssti-ruby-erubis-eruby-new
+name: ssti-ruby-erubis-eruby-new
+category: INJECTION
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-1336
+pattern: ^(?!\s*#).*?\bErubis::(?:\w+::)?\w*Eruby\.new\s*\(\s*(?:[a-z_@][\w.:]*|"[^"]*#\{|(?:"[^"]*"|'[^']*')\s*(?:\+|%|<<)(?!\s*["']))
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Build Erubis templates only from literal/trusted sources and supply user values as evaluation context, never concatenated or interpolated into the template string.
+why: Erubis::Eruby and its FastEruby/EscapedEruby/PI::Eruby variants compile the given string into evaluated Ruby; a dynamic template source lets user input execute code through the embedded expression tags.
+confidence: high

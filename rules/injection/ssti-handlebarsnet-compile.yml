@@ -1,0 +1,13 @@
+id: wide/ssti-handlebarsnet-compile
+name: ssti-handlebarsnet-compile
+category: INJECTION
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*\b_?[Hh]andlebars\.Compile\s*\(\s*(?:(?:\$@?|@\$)"|@?"[^"]*"\s*\+|[A-Za-z_][\w.]*\s*[\[(+,)])
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Compile a fixed literal template and pass user input as the DATA object when invoking the compiled delegate, not as the compiled source.
+why: Handlebars.Compile turns its string argument into a template delegate; a request-controlled source lets an attacker inject helpers/expressions and disclose context data (SSTI).
+confidence: high

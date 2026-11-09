@@ -1,0 +1,14 @@
+id: wide/idor-versioned-api-id-param
+name: idor-versioned-api-id-param
+category: AUTH
+severity: LOW
+languages:
+  - cs
+  - csx
+cwe: CWE-639
+pattern: \[(Route|HttpGet|HttpPost|HttpPut|HttpDelete|HttpPatch)\s*\(\s*"(?:[^"]*\/)?(v[0-9]+|deprecated|legacy)\/[^"]*\{[A-Za-z_]*[Ii]d\}
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: Confirm the handler enforces resource-based ownership/authorization for the id; retire deprecated/legacy versions or gate them behind [Authorize] with a resource policy (e.g. IAuthorizationService.AuthorizeAsync(User, resource, "Owner")).
+not-match: \[Authorize|^\s*\/\/
+why: 'Aggravator (info): a route mapped under a versioned (/v1/, /v2/) or deprecated/legacy path segment that binds an {id}-style route parameter is a frequent home for un-refactored, weakly-authorized direct object access. It flags the attack surface for manual per-object authorization review. The version token is now anchored to a path segment ((?:[^"]*/)?) so incidental substrings like srv2/ do not match; notMatch drops routes that carry an explicit [Authorize] gate on the same line or are commented out.'
+confidence: low

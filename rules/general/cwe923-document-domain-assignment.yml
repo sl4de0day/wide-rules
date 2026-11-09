@@ -1,0 +1,24 @@
+id: wide/cwe923-document-domain-assignment
+name: cwe923-document-domain-assignment
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-923
+pattern: document\.domain\s*=(?!=)
+message: document.domain is being assigned, relaxing the same-origin policy.
+remediation: Remove the document.domain assignment and use postMessage with an explicit origin for cross-subdomain communication.
+why: Setting document.domain widens same-origin checks to a shared parent domain, so any compromised page on a sibling subdomain gains scripting access to this document; the setter is deprecated for this reason.
+confidence: high

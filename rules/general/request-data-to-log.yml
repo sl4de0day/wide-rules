@@ -1,0 +1,34 @@
+id: wide/request-data-to-log
+name: request-data-to-log
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+  - py
+  - pyi
+  - pyw
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-532
+pattern: \b(?:console|logger|log|winston|pino|logging)\.(?:log|info|debug|warn|warning|error|trace|verbose)\s*\([^)]*\b(?:req(?:uest)?|ctx)\.(?:body|headers|cookies|query|params|user|session|authorization)\b|\bprint\s*\([^)]*\brequest\.(?:data|json|form|headers|cookies|args|values)\b
+message: A whole request object (body/headers/cookies) is written to the logs.
+remediation: Log only the specific non-sensitive fields you need; redact credentials, tokens, cookies and PII before logging.
+not-match: ^\s*(?:\/\/|\*|\/\*|#)
+why: Logging entire request bodies, headers, or cookies routinely captures passwords, tokens, session cookies, API keys and personal data into log files that are broadly readable, shipped to third parties, and retained far longer than the data should be, turning the log store into a soft breach target.
+confidence: medium

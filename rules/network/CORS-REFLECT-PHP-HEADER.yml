@@ -1,0 +1,18 @@
+id: wide/cors-reflect-php-header
+name: cors-reflect-php-header
+category: NETWORK
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-942
+pattern: Access-Control-Allow-Origin:.*\$
+message: Insecure CORS — reflecting the request Origin (with credentials) instead of a fixed allowlist (CWE-942).
+remediation: Validate $_SERVER['HTTP_ORIGIN'] against an explicit in_array() allowlist before echoing it, or emit a single fixed origin string. Do not assemble the ACAO header from an unchecked variable/superglobal.
+not-match: ^\s*(?:\/\/|#|\*|\/\*)|\bin_array\b|\barray_key_exists\b|\ballowed[_-]?origins?\b|white[_-]?list|allow[_-]?list|\bvalid[_-]?origins?\b|\btrusted[_-]?origins?\b|\bpermitted[_-]?origins?\b|\bcors[_-]?origins?\b|\bpreg_match\b|\bstrcmp\b|\bhash_equals\b
+why: 'PHP that builds the Access-Control-Allow-Origin header by concatenating or interpolating a PHP variable — classically $_SERVER[''HTTP_ORIGIN''] — reflects any Origin the client sent. The header("Access-Control-Allow-Origin: " . $var) / header("Access-Control-Allow-Origin: {$var}") forms echo the attacker origin, so cross-origin requests (and, with credentials, the authenticated responses) succeed from any site. The sink fires when a PHP `$` appears anywhere after the `Access-Control-Allow-Origin:` header text; a fixed literal or `*` has no `$` and is not matched. notMatch suppresses allowlist checks (in_array/array_key_exists/preg_match/strcmp/hash_equals), allowlist/whitelist and allowed/valid/trusted/permitted/cors origin variable names, and comment lines.'
+confidence: high

@@ -1,0 +1,19 @@
+id: wide/ssti-squirrelly-render-compile
+name: ssti-squirrelly-render-compile
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-1336
+pattern: \b(?:Sqrl|Squirrelly)\.(?:render|renderString|compile)\s*\(\s*(?:[^\s'"`)]|(?:'[^']*'|"[^"]*"|`[^`]*`)\s*\+|`[^`]*\$\{)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Pass a fixed template literal to render/compile and provide user input only in the data object; never construct the template from request input.
+why: Squirrelly's render/compile parse their first argument as a template whose helper and filter syntax can invoke JavaScript, so a user-controlled template string is a well-documented RCE vector.
+confidence: high

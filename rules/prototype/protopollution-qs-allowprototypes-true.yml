@@ -1,0 +1,22 @@
+id: wide/protopollution-qs-allowprototypes-true
+name: protopollution-qs-allowprototypes-true
+category: PROTOTYPE
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-1321
+pattern: allowPrototypes\s*:\s*true
+message: Prototype pollution — attacker-controlled keys can reach Object.prototype via a recursive merge/set (CWE-1321).
+remediation: Remove allowPrototypes (default false) or set it to false; never enable it on user-controlled query/body strings. If nested proto keys must round-trip, use plainObjects:true so results have a null prototype, and guard any downstream merge.
+not-match: allowPrototypes\s*:\s*false
+why: qs / query-string parse defaults to stripping __proto__ from decoded keys. Passing allowPrototypes:true re-enables prototype key names in the parsed output, so a request like ?a[__proto__][polluted]=1 can seed keys that a later deep-merge into config walks onto Object.prototype. This is the request-side half of the pollution bridge. The regex keys on the literal option-name=true pair; ignoreCase stays false because the qs option is camelCase.
+confidence: high

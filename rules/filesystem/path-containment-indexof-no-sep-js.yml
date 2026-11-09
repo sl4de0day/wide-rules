@@ -1,0 +1,20 @@
+id: wide/path-containment-indexof-no-sep-js
+name: path-containment-indexof-no-sep-js
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-22
+pattern: (?:\b(?:resolvedPath|resolved|realPath|realpath|real|absolutePath|absPath|absolute|abs|fullPath|filePath|filepath|normalizedPath|normalized|canonicalPath|canonical|targetPath|safePath|finalPath|requestedPath|joinedPath)\.indexOf\s*\([^)]*\)\s*(?:!==?|===?)\s*0|[A-Za-z_$][\w$.]*\.indexOf\s*\(\s*(?:[A-Za-z_$]\w*(?:Dir|Root)\b|(?:base|root|cwd)\b|(?:BASE_DIR|ROOT_DIR|UPLOAD_DIR|PUBLIC_DIR|STATIC_DIR|DATA_DIR)\b)[^)]*\)\s*(?:!==?|===?)\s*0)
+message: Path-containment bypass — a startsWith/indexOf prefix check with no trailing separator lets a sibling directory escape (CWE-22).
+remediation: 'Append the separator and accept exact equality: `p === base || p.indexOf(base + path.sep) === 0`; better, after path.resolve test `!path.relative(base, p).startsWith(''..'')` and reject otherwise.'
+not-match: ^\s*(?:\/\/|\*|\/\*|#)|\+\s*(?:path\.sep|os\.sep|['"][\/\\]['"]|\bsep\b|DIRECTORY_SEPARATOR|File\.separator)|path\.relative|[\/\\]['"]\s*\)|WithSep|WithSlash
+why: 'A resolved/absolute path is confined to a base with `path.indexOf(base) === 0` / `!== 0` — a prefix test with no trailing separator — so a sibling whose name only starts with the base (/var/www/uploads_backup vs /var/www/uploads) is treated as inside it (CWE-22). Tightened from the original: the generic-receiver branch no longer accepts a bare path string literal (only a dir-VARIABLE/const argument), because an absolute literal like ''/api'' is indistinguishable from a route-prefix check and made the rule fire on ordinary `reqPath.indexOf(''/api'')===0` routing code; path literals are still caught when the RECEIVER is a resolved-path name. Bare base/root/cwd are now `\b`-bounded so `baseUrl`/`baseName` no longer match.'
+confidence: high

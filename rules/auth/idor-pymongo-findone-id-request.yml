@@ -1,0 +1,15 @@
+id: wide/idor-pymongo-findone-id-request
+name: idor-pymongo-findone-id-request
+category: AUTH
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-639
+pattern: \.(?:find_one|find|find_one_and_update|find_one_and_delete|find_one_and_replace|delete_one|update_one|replace_one)\(\s*\{[^}]*['"](?:_id|id)['"]\s*:\s*(?:ObjectId\(|int\(|str\()?\s*(?:request\.(?:GET|POST|args|form|values|data|json|query|query_params)|self\.get_argument\(|self\.get_query_argument\()
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: 'Include the owner in the filter: db.docs.find_one({''_id'': ObjectId(request.args[''id'']), ''user_id'': session[''uid'']}), and treat a None result as not-found.'
+not-match: request\.user|current_user|g\.user|session\[|['"](?:user_id|userId|owner|owner_id|ownerId|account_id|accountId|created_by|createdBy|tenant_id|tenantId|org_id|orgId|organization_id|company_id|companyId|group_id|team_id|teamId|workspace_id|workspaceId|member_id|memberId|author_id|authorId)['"]\s*:|^\s*#
+why: A Mongo document is fetched/mutated by _id taken from the request with no ownership key in the filter; even wrapped in ObjectId() this is a direct object reference an attacker can point at anyone's document.
+confidence: high

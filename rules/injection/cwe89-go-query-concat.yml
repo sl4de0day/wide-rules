@@ -1,0 +1,12 @@
+id: wide/cwe89-go-query-concat
+name: cwe89-go-query-concat
+category: INJECTION
+severity: CRITICAL
+languages:
+  - go
+cwe: CWE-89
+pattern: (?:db|tx|conn)\.(?:Query|QueryRow|Exec)(?:Context)?\s*\([^)]*"[^"]*"\s*\+
+message: A query string is concatenated before it is run.
+remediation: Use $1 / ? placeholders and pass the values as further arguments.
+why: The value is joined into the SQL text, so it is parsed rather than bound.
+confidence: high

@@ -1,0 +1,14 @@
+id: wide/identity-from-raw-request-value-csharp
+name: identity-from-raw-request-value-csharp
+category: AUTH
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-807
+pattern: \bRequest\.(Cookies|Headers|Query|Form)\s*\[\s*"(X-)?(username|userid|user[-_]?id|user|uid|login|role|account)\b
+message: Broken session management — identity/role from an unverified client value or a writable store (CWE-807/302).
+remediation: Use the authenticated principal (User.Identity / HttpContext.User) or a validated token (TokenValidationParameters). Protect any identity cookie with the Data Protection API.
+not-match: '[Uu]ser-?[Aa]gent|^\s*(\/\/|\*|\/\*)'
+why: 'The acting user or role is read straight from Request.Cookies/Headers/Query/Form. These are client-controlled, so relying on them for session identity or authorization is a bypass. Fixed a real gap: snake_case user_id was missed (word boundary fails before underscore); added user[-_]?id. User.Identity / HttpContext.User are excluded (not Request.<source>).'
+confidence: high

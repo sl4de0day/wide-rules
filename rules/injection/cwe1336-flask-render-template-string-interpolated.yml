@@ -1,0 +1,14 @@
+id: wide/cwe1336-flask-render-template-string-interpolated
+name: cwe1336-flask-render-template-string-interpolated
+category: INJECTION
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-1336
+pattern: render_template_string\s*\(\s*(?:f["']|["'][^"']*["']\s*[+%]|["'][^"']*["']\s*\.\s*format)
+message: Flask render_template_string receives a template built with f-string/concatenation/format.
+remediation: 'Pass a constant template and supply user data only as render context variables: render_template_string(TEMPLATE, name=name).'
+why: The template string itself is evaluated by Jinja2; folding user data into it lets an attacker inject template syntax (e.g. {{7*7}} / config / __class__) for server-side template injection and RCE.
+confidence: high

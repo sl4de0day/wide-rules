@@ -1,0 +1,13 @@
+id: wide/ssrf-ruby-faraday
+name: ssrf-ruby-faraday
+category: NETWORK
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-918
+pattern: \bFaraday(?:\.(?:get|post|put|patch|delete|head)\s*\(\s*|\.new\s*\(\s*(?:url:\s*|:url\s*=>\s*)?)(?:URI[.(]|params\b|request\.|cookies\b|@?\w*(?:url|uri|host|hostname|link|endpoint|target|addr|address|domain)\w*(?!:))
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Pin Faraday to an allowlisted base and validate any user path/host; block private ranges.
+not-match: (?:allow_?list|white_?list|allowed_?hosts?|permitted_?hosts?|permit_?list|safe_?hosts?|valid_?hosts?|is_allowed|host_allowed)|URI(?:\.parse|\.join|\.encode|\.escape)?\s*\(\s*(?:["']https?:|ENV\b)|^\s*#
+why: 'A Faraday connection/request URL (Faraday.get or Faraday.new url:) is derived from user input with no allowlist, enabling SSRF. Added \b and ENV suppression; note Faraday.new(url: "literal") is already safe because the string-literal arg does not match the taint alternation.'
+confidence: high

@@ -1,0 +1,20 @@
+id: wide/netauthz-loopback-internal-ip-as-auth-js
+name: netauthz-loopback-internal-ip-as-auth-js
+category: NETWORK
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-290
+pattern: \b(?:req\??\.ip|(?:req\??\.)?(?:connection|socket|info)\.remoteAddress|remoteAddress|remoteAddr|clientIp|clientIP)\b\s*(?:(?:===?|!==?)\s*['"`](?:127\.0\.0\.1|::1|::ffff:127\.0\.0\.1|0:0:0:0:0:0:0:1|localhost)['"`]|\.(?:startsWith|indexOf|includes|match)\(\s*['"`/](?:127\.|10\.|192\.168\.|172\.(?:1[6-9]|2\d|3[01])\.|::1|fc|fd))
+message: Broken access control — authorization based on network location or a spoofable client header (CWE-346/290).
+remediation: Do not authenticate by source IP. Require a real credential (session, signed/verified token, mTLS). If a localhost-only surface is genuinely needed, enforce it by binding to 127.0.0.1 at the network layer, not with an in-request IP comparison.
+not-match: ^\s*(?:\/\/|\*|\/\*)|\b(?:log(?:ger)?|console|winston|pino|metric|analytics|track|audit)\b|[Rr]ate[_-]?[Ll]imit|[Tt]hrottle|[Ww]hitelist|[Aa]llowlist|\b(?:jwt\.verify|verifyToken|verifyJwt|authenticate|passport|req\.session|req\.user|req\.isAuthenticated|bcrypt|csrf)\b|\.listen\(|\.bind\(|\?\s*['"`0-9]
+why: Comparing req.ip / connection|socket.remoteAddress to a loopback (127.0.0.1, ::1) or private-range literal (10., 192.168., 172.16-31) treats network position as identity. Any client behind the same reverse proxy/NAT, or one that can influence the derived IP (e.g. via X-Forwarded-For when trust_proxy is set), reaches the privileged branch.
+confidence: high

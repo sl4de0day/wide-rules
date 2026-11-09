@@ -1,0 +1,13 @@
+id: wide/idor-ar-find-params
+name: idor-ar-find-params
+category: AUTH
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-639
+pattern: \b[A-Z]\w*\.find\s*\(?\s*params\s*(?:\[|\.fetch|\.dig)
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: 'Scope the query to the current principal instead of the global class: current_user.documents.find(params[:id]) (raises RecordNotFound for records you don''t own), or add an explicit authorization gate (Pundit authorize @document / CanCan authorize! :read, @document) on the same statement.'
+not-match: current_user|current_account|current_admin|current_customer|current_member|current_organization|current_company|current_team|current_tenant|current_shop|current_site|current_workspace|current_project|current_owner|current_person|current_ability|@current_\w+|session\[|cookies\.signed|cookies\.encrypted|authorize|Pundit|policy\(|policy_scope|CanCan|can\?|cannot\?|accessible_by|owned_by|for_current|scoped_to|belonging_to|^\s*#
+why: Model.find(params[:id]) performs a primary-key lookup on a class-level scope using a client-supplied id with no ownership/authorization predicate co-located, so any authenticated user can read another user's record by changing the id. The uppercase [A-Z]\w* receiver distinguishes an unscoped Model.find from the safe current_user.things.find (lowercase association receiver), which the regex intentionally does not match. notMatch was broadened to cover more Rails/Pundit/CanCan principal helpers (current_tenant/shop/site/workspace/project/owner, signed/encrypted cookies, policy(...)) and a full-line-comment guard was added so commented-out sinks do not fire.
+confidence: high

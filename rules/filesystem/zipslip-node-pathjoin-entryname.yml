@@ -1,0 +1,20 @@
+id: wide/zipslip-node-pathjoin-entryname
+name: zipslip-node-pathjoin-entryname
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-22
+pattern: path\.(join|resolve)\s*\([^)]*(entryName|fileName|(zipEntry|member|tarEntry)\.(name|path))
+message: Zip Slip / insecure archive extraction — an archive entry name escapes the destination, arbitrary file write (CWE-22/59).
+remediation: 'After joining, verify the resolved path stays inside dest: const full = path.resolve(dest, name); if (!full.startsWith(path.resolve(dest)+path.sep)) throw. Prefer a vetted safe-join helper and skip symlink/absolute entries.'
+not-match: ^\s*(\/\/|\/\*|\*)|\.startsWith\(|path\.relative\(|isPathInside|withinDir|safeJoin|sanitiz|assertInside|realpath
+why: A per-entry write path is built by joining the destination with an attacker-controlled archive entry name (entry.entryName/fileName/path) from an unzipper/tar/adm-zip loop; without a containment check the join resolves outside dest for names containing ../, enabling arbitrary file write.
+confidence: high

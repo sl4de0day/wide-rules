@@ -1,0 +1,15 @@
+id: wide/ssrf-httpx-user-url
+name: ssrf-httpx-user-url
+category: NETWORK
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-918
+pattern: \bhttpx\.(?:get|post|put|delete|patch|head|options)\s*\(\s*(?:url\s*=\s*)?request\.(?:args|form|values|json|data|cookies|headers|get_json|query_params|GET|POST|body|META)|\bhttpx\.(?:request|stream)\s*\(\s*(?:method\s*=\s*)?['"]?[A-Za-z]+['"]?\s*,\s*(?:url\s*=\s*)?request\.(?:args|form|values|json|data|cookies|headers|get_json|query_params|GET|POST|body|META)|\bhttpx\.(?:Client|AsyncClient)\([^)]*\)\.(?:get|post|put|delete|patch|head|options)\s*\(\s*(?:url\s*=\s*)?request\.(?:args|form|values|json|data|cookies|headers|get_json|query_params|GET|POST|body|META)
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Check the destination host/scheme against an allowlist before issuing the httpx request; construct the URL from validated components rather than request.* values.
+not-match: ^\s*#|whitelist|allowlist|allowed_|ALLOWED|is_safe_url
+why: An httpx call (module helper, request/stream with a method literal first, or a Client/AsyncClient(...) instance) takes a request attribute in the URL position, producing a server-side request to an attacker-controlled host (CWE-918). Requiring the request attribute at the URL slot (not inside params=/headers=/json=) is what suppresses the safe-URL-with-user-body twin.
+confidence: high

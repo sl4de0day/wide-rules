@@ -1,0 +1,24 @@
+id: wide/shared-web-lock-mutation
+name: shared-web-lock-mutation
+category: GENERAL
+severity: LOW
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-362
+pattern: lock[^;\n]*mode\s*:\s*['"]shared['"]|mode\s*:\s*['"]shared['"][^;\n]*lock
+message: A Web Lock is acquired in 'shared' mode.
+remediation: 'Use { mode: ''exclusive'' } (the default) whenever the locked section changes state.'
+why: A shared lock lets several tabs/threads hold it at once, so if the critical section mutates shared state they race and can corrupt it.
+confidence: high

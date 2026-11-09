@@ -1,0 +1,15 @@
+id: wide/pathwrite-python-open-join-reqinput
+name: pathwrite-python-open-join-reqinput
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-22
+pattern: \bopen\s*\(\s*os\.path\.join\s*\([^;]*\brequest\.(args|form|values|json|GET|POST|data|files)\b[^;]*,\s*(mode\s*=\s*)?['"](?:[wax]|r\+)
+message: Path traversal on write — a file is written to a user-controlled path without a containment check (CWE-22).
+remediation: Sanitize with werkzeug secure_filename() or os.path.basename(), then verify os.path.realpath(target) is inside os.path.realpath(base) (commonpath/startswith) before opening for write.
+not-match: secure_filename|os\.path\.basename|basename|sanitiz|realpath|commonpath|\.startswith\(|whitelist|allowlist|^\s*#
+why: open(os.path.join(dir, request.args/form/...), 'w'|'a'|'x'|'r+') opens a write/update handle at a path whose final segment is request input; os.path.join treats an absolute/traversing segment as escaping the base, giving arbitrary file write. The mode gate keeps read-only opens ('r'/'rb') out of scope.
+confidence: high

@@ -1,0 +1,31 @@
+id: wide/flagsan-dash-permissive-sanitizer
+name: flagsan-dash-permissive-sanitizer
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - rb
+  - go
+cwe: CWE-88
+pattern: (?:\.replace(?:All)?|preg_replace(?:_callback)?|\.g?subn?|(?:Must)?Compile|ReplaceAll\w*)\s*\(.*?\[\^(?:-|[^\]]*(?:\\-|-\]))
+message: Argument injection — a dash-permissive sanitizer lets a value become a CLI flag (CWE-88).
+remediation: 'Do not keep ''-'' in a shell-bound allowlist unless you also neutralize a leading dash: strip it after sanitizing (append .replace(/^-+/, '''')) or reject values where value.startsWith(''-'') / strings.HasPrefix(value, "-"). Better, avoid a shell entirely -- pass arguments as an array via execFile/spawn (Node), subprocess with a list (Python), or exec.Command (Go), and insert a ''--'' end-of-options separator before untrusted values so they can never be parsed as flags.'
+not-match: (?:^\s*(?:#|\/\/|\/\*|\*))|\/\^\\?-|startsWith\(\s*['"]-|HasPrefix\(|\bNumber\s*\(|\bparseInt\s*\(|\bparseFloat\s*\(|Number\.is(?:Finite|Integer|NaN)|\bint\s*\(|\bfloat\s*\(|strconv\.Ato|\.to_i\b|\.to_f\b
+why: 'A regex-replace allowlist sanitizer strips shell metacharacters but keeps a LITERAL hyphen in its negated character class: dash at class start ([^-...]), dash at class end (...-]), or an escaped dash (...\-...). The sanitized value can therefore still begin with ''-'' or ''--'', so when it is interpolated into a shell/CLI command string it is parsed as a command-line OPTION/FLAG rather than data (CWE-88 argument injection) -- e.g. sanitizedType = logType.replace(/[^a-zA-Z0-9_-]/g,'''') feeding find /var/log/<sanitizedType>, where a value like -delete or -newer becomes a find primary. Critically, the escaped-dash branch is written \\- (a real backslash followed by a dash) NOT \- : an unescaped \- in the compiled regex matches a plain dash and would make the rule fire on every ordinary range like a-z or 0-9, so range-only allowlists ([^a-z0-9], hex [^0-9A-Fa-f], [^\w.]) do NOT match. The rule fires on the dash-permissive sanitizer line itself (highest severity when exec/spawn is on the same line) and stays quiet on the safe twins.'
+confidence: high

@@ -1,0 +1,20 @@
+id: wide/cwe90-ldap-filter-concat
+name: cwe90-ldap-filter-concat
+category: GENERAL
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-90
+pattern: \((?:uid|cn|mail|sAMAccountName|userPrincipalName|givenName|member|memberOf|objectClass)=(?:["']\s*\+|\$\{)
+message: An LDAP search filter is assembled by concatenating or interpolating a value into an attribute clause.
+remediation: Escape the value with an RFC 4515 filter-escaping routine (e.g. ldapEscape) before inserting it, or use the driver's parameterized filter API.
+not-match: (escapeLDAP|ldapEscape|ldap\.escape|escapeFilter|escapeDN|sanitize)
+why: Special characters like *, ), and & injected into an LDAP filter let an attacker rewrite the query to bypass authentication or enumerate directory entries.
+confidence: high

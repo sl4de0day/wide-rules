@@ -1,0 +1,23 @@
+id: wide/js-redos-ambiguous-alternation-quantified
+name: js-redos-ambiguous-alternation-quantified
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+cwe: CWE-1333
+pattern: \(([\w\\]+)\|\1[\w\\|]*\)[*+]
+message: ReDoS — a regex with nested or overlapping quantifiers can backtrack catastrophically on crafted input, freezing the process (CWE-1333).
+remediation: Make the alternatives mutually exclusive (remove the duplicate branch, or reorder/anchor so they cannot both match the same prefix), or match with a linear-time engine (RE2/node-re2); always bound input length for user-supplied data.
+not-match: RE2|node-re2|\bre2\b|^\s*(?:\/\/|#|\*)
+why: A quantified alternation whose branches overlap — (a|a)*, (foo|foo)+, (a|ab)+, (\w|\w)* — lets the engine match the same text through multiple branches, so a long repeated-token input explodes into exponential backtracking. The sink uses a backreference \1 to require one alternative to be a literal duplicate or prefix of the next, inside a group that is immediately quantified by + or *, so disjoint alternations ((cat|dog)+, (GET|POST)+), logical/bitwise x || y and (a | ab) & mask, and unquantified ambiguous groups ((foo|foobar)) are all left alone. Case-sensitive (ignoreCase false) so the duplicate must be exact.
+confidence: high

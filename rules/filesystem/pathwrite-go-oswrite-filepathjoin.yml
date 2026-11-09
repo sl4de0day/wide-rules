@@ -1,0 +1,13 @@
+id: wide/pathwrite-go-oswrite-filepathjoin
+name: pathwrite-go-oswrite-filepathjoin
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - go
+cwe: CWE-22
+pattern: \b(os\.(Create|WriteFile|OpenFile)|ioutil\.WriteFile)\s*\(\s*filepath\.Join\s*\([^)]*\b(r\.FormValue|r\.PostFormValue|r\.URL\.Query|c\.Param|c\.Query|c\.PostForm|\.Filename)\b
+message: Path traversal on write — a file is written to a user-controlled path without a containment check (CWE-22).
+remediation: Clean+resolve and enforce containment (e.g. rel, err := filepath.Rel(base, target); reject if err or strings.HasPrefix(rel, "..")), or reduce the name via filepath.Base()/an allowlist before joining.
+not-match: filepath\.Base|filepath\.Clean|filepath\.Rel|strings\.HasPrefix|O_RDONLY|sanitiz|basename|whitelist|allowlist|^\s*\/\/
+why: os.Create/os.WriteFile/os.OpenFile/ioutil.WriteFile writes to filepath.Join(dir, r.FormValue(...)/multipart Header.Filename); filepath.Join cleans but still follows '../', so request input controls the write path. Read-only os.Open is excluded by the sink and O_RDONLY-only OpenFile is suppressed by notMatch.
+confidence: high

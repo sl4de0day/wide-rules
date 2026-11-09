@@ -1,0 +1,15 @@
+id: wide/idor-file-access-request
+name: idor-file-access-request
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-639
+pattern: \b(?:send_file|send_from_directory|open|FileResponse|static_file|serve)\s*\([^)]*request\.(?:GET|POST|args|form|values|data|json|query|query_params)\b
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: 'Scope the file to the owner and sanitise: send_from_directory(user_dir(current_user.id), secure_filename(request.args[''file''])).'
+not-match: secure_filename|safe_join|werkzeug\.utils|current_user|request\.user|g\.user|session\[|is_relative_to|realpath|abspath|whitelist|allowlist|\bvalidate|download_name\s*=\s*request|attachment_filename\s*=\s*request|^\s*#
+why: A file is served or opened using a name/path taken from the request without scoping it to the caller (or sanitising it), letting an attacker read another user's or an arbitrary file by id/path.
+confidence: high

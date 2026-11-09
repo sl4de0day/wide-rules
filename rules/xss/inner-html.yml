@@ -1,0 +1,24 @@
+id: wide/inner-html
+name: inner-html
+category: XSS
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-79
+pattern: ^(innerHTML|outerHTML)$
+message: Assigning to innerHTML parses the value as HTML.
+remediation: Use textContent to write characters without parsing, or sanitise the HTML first.
+why: Any markup in the value becomes real elements, including a script-bearing attribute.
+confidence: high

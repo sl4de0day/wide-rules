@@ -1,0 +1,13 @@
+id: wide/arginj-go-concat-exec-command
+name: arginj-go-concat-exec-command
+category: INJECTION
+severity: HIGH
+languages:
+  - go
+cwe: CWE-88
+pattern: ^(?=.*\bexec\.Command(?:Context)?\s*\()(?=.*(?:"[^"]*"\s*\+\s*[A-Za-z_]|[A-Za-z_][\w.\[\]]*\s*\+\s*"|fmt\.Sprintf\s*\(\s*"[^"]*-)).*
+message: Argument injection — a user value reaches a CLI argument that could be interpreted as an option/flag (CWE-88).
+remediation: Validate with an anchored regexp.MatchString on the same line, coerce numerics via strconv (Atoi/Itoa/ParseInt/FormatInt), or pass a literal "--" end-of-options argument before any user value.
+not-match: (?:MatchString\s*\(|strconv\.(?:Atoi|Itoa|ParseInt|ParseFloat|FormatInt|FormatFloat|Quote)|"--"|^\s*\/\/|\/\*)
+why: An exec.Command / exec.CommandContext variadic argument is built by string concatenation or by a fmt.Sprintf whose format string contains a dash (a flag such as "--out=%s"). Go runs args without a shell, but a value that begins with '-' is still parsed as an option by the target binary (argument/flag injection).
+confidence: high

@@ -1,0 +1,20 @@
+id: wide/client-jwt-decode-claim-without-verify
+name: client-jwt-decode-claim-without-verify
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-287
+pattern: (?:(?:jwt\.decode|jwtDecode|jwt_decode|decodeToken|jose\.decodeJwt)\s*\([^)]*\)\s*(?:\.\s*(?:role|roles|isAdmin|admin|sub|scope|scopes|permissions|perms|userId|uid|authorities|claims)\b|\[\s*['"](?:role|roles|isAdmin|admin|sub|scope|scopes|permissions|perms|userId|uid|authorities|claims)['"])|(?:const|let|var)\s+\{[^}]*(?:\brole\b|\bisAdmin\b|\badmin\b|\bscope\b|\bpermissions\b|\bsub\b)[^}]*\}\s*=\s*(?:jwt\.decode|jwtDecode|jwt_decode)\s*\()
+message: Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.
+remediation: Never make authorization decisions on a decoded-but-unverified payload. Use jwt.verify(token, key)/verifyToken and read the role/claim from the VERIFIED result. Reserve jwt.decode for non-security inspection (e.g. logging) only.
+not-match: (?:jwt\.verify|\.verify\(|verifyToken|validateToken|^\s*\/\/|^\s*\*|^\s*\/\*)
+why: jwt.decode()/jwtDecode() parse the payload WITHOUT checking the signature, yet the code reads an authorization claim (role/isAdmin/scope/sub) straight off it. An attacker forges a token with any claims (or uses alg 'none') and is granted the corresponding privileges.
+confidence: high

@@ -1,0 +1,18 @@
+id: wide/cwe89-php-query-concat
+name: cwe89-php-query-concat
+category: INJECTION
+severity: CRITICAL
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-89
+pattern: (?:mysqli_query|pg_query|->query|->exec)\s*\([^)]*["'][^"']*["']\s*\.
+message: A query is built with the concatenation operator.
+remediation: 'Use a prepared statement: $stmt = $pdo->prepare(''... WHERE id = :id''); $stmt->execute(['':id'' => $id]).'
+not-match: \?\s*[,)]|:\w+|prepare\s*\(
+why: Joining the statement to a variable with . puts the value into the SQL text, where a quote ends the literal and the rest is executed.
+confidence: high

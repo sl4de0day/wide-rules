@@ -1,0 +1,12 @@
+id: wide/ssti-go-velvet-render
+name: ssti-go-velvet-render
+category: INJECTION
+severity: HIGH
+languages:
+  - go
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*\bvelvet\.(?:Render|Parse|BuildTemplate)\(\s*(?:[A-Za-z_]|[\x22\x60][^\x22\x60]*[\x22\x60]\s*\+)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Render a fixed literal template and pass user input only through the velvet.Context set with ctx.Set, never as the template source.
+why: velvet.Render/Parse/BuildTemplate compile their first argument as Velvet (Handlebars-like) template SOURCE with helper support, so a dynamic value is server-side template injection.
+confidence: high

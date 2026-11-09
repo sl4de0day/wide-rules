@@ -1,0 +1,40 @@
+id: wide/empty-catch-swallow
+name: empty-catch-swallow
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - py
+  - pyi
+  - pyw
+  - java
+  - cs
+  - csx
+  - rb
+  - kt
+  - kts
+cwe: CWE-390
+pattern: \bcatch\s*(?:\([^)]*\))?\s*\{\s*\}|\bexcept\b[^:\n]*:\s*pass\b|\brescue\b[^\n]*;\s*end\b|\brescue\s+nil\b
+message: An exception is caught and silently swallowed (empty handler).
+remediation: Log the caught error with enough context to investigate, and re-throw or fail closed for security-critical operations. Never swallow exceptions silently.
+not-match: ^\s*(?:\/\/|\*|\/\*|#)
+why: An empty catch/except/rescue hides failures, including security-relevant ones like a failed authorization check, a signature-verification error, or a database fault. Nothing is logged, so an attack in progress leaves no trace and the failure is invisible to monitoring.
+confidence: medium

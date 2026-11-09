@@ -1,0 +1,18 @@
+id: wide/ssrf-dompdf-loadhtml-user
+name: ssrf-dompdf-loadhtml-user
+category: NETWORK
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-918
+pattern: '->loadHtml\w*\s*\('
+message: Renderer resource embedding — a document/PDF/image converter resolves a user-controlled resource, enabling LFI or SSRF (CWE-918/73/611).
+remediation: Set isRemoteEnabled to false, configure chroot to a safe directory, and only load fixed/trusted HTML; never feed raw request input to loadHtml/loadHtmlFile.
+not-match: (?:^\s*(?:\/\/|#|\*)|setIsRemoteEnabled\s*\(\s*false|isRemoteEnabled['"]?\s*,\s*false|->loadHtml\w*\s*\(\s*['"`][^'"`$]*['"`]\s*[,)])
+why: Dompdf $dompdf->loadHtml($userHtml)/loadHtmlFile($url) renders attacker markup; with isRemoteEnabled the engine fetches remote/internal URLs referenced by <img>/CSS (SSRF), and it has a history of local file disclosure (LFI) through resource references.
+confidence: high

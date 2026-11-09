@@ -1,0 +1,24 @@
+id: wide/postmessage-no-origin
+name: postmessage-no-origin
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-346
+pattern: addEventListener\s*\(\s*["'`]message["'`]
+message: A 'message' handler must verify event.origin.
+remediation: At the top of the handler, return unless event.origin is one you expect.
+why: Without an event.origin check, any page that can post to this window — an iframe, an opener, a malicious site — can drive this handler with attacker-controlled data.
+confidence: high

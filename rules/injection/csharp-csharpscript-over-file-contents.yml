@@ -1,0 +1,14 @@
+id: wide/csharp-csharpscript-over-file-contents
+name: csharp-csharpscript-over-file-contents
+category: INJECTION
+severity: CRITICAL
+languages:
+  - cs
+  - csx
+cwe: CWE-94
+pattern: CSharpScript\.(?:RunAsync|EvaluateAsync|Create|Run|Evaluate)\s*\(\s*(?:await\s+)?(?:System\.IO\.)?File\s*\.
+message: Write-then-execute — code is loaded or run from a user-controlled or writable path (potential RCE, CWE-829/95/98/94).
+remediation: Do not compile-and-run scripts read from untrusted or writable files; if dynamic scripting is required, restrict to trusted fixed scripts and constrain ScriptOptions (no unrestricted imports/references).
+not-match: ^\s*(?:\/\/|\*|\/\*)|File\s*\.\s*ReadAllText(?:Async)?\s*\(\s*@?"[^"]*"\s*\)
+why: Roslyn CSharpScript.Run/Evaluate over File.ReadAllText/ReadAllTextAsync compiles and executes the file's text as C#; a user-controlled or writable/uploaded source file means writing the file is RCE. A newly added notMatch suppresses a fixed literal-path read (File.ReadAllText("trusted.csx")), and script-from-a-string (RunAsync(code)) never matches the File. boundary.
+confidence: high

@@ -1,0 +1,13 @@
+id: wide/idor-ar-where-id-params
+name: idor-ar-where-id-params
+category: AUTH
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-639
+pattern: \b[A-Z]\w*\.where\(\s*(?:"|')?(?:id|_id|\w+_id)(?:"|')?\s*(?::|=>)\s*params\s*(?:\[|\.fetch|\.dig)
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: 'Add the ownership column to the same where (Model.where(id: params[:id], user_id: current_user.id)) or start from the scoped association (current_user.posts.where(id: params[:id])); alternatively apply policy_scope / accessible_by(current_ability).'
+not-match: current_user|current_account|current_admin|current_customer|current_member|current_organization|current_company|current_team|current_tenant|current_shop|current_site|current_workspace|current_project|current_owner|current_person|current_ability|@current_\w+|session\[|cookies\.signed|cookies\.encrypted|authorize|Pundit|policy\(|policy_scope|CanCan|can\?|cannot\?|accessible_by|owned_by|for_current|scoped_to|belonging_to|^\s*#
+why: 'Model.where(id: params[:id]) / where(post_id: params[:post_id]) selects a record by a client-supplied reference key on the global class scope with no owner column in the same filter, so the resulting record is not constrained to the requester. The key alternation (id|_id|\w+_id) targets reference-lookup shapes; presence of an ownership predicate or auth gate on the line suppresses. notMatch broadened with more principal helpers and a comment guard.'
+confidence: high

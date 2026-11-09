@@ -1,0 +1,15 @@
+id: wide/netauthz-forwardable-header-as-auth-java-kt
+name: netauthz-forwardable-header-as-auth-java-kt
+category: NETWORK
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-290
+pattern: getHeader\(\s*"X-(?:Forwarded-For|Forwarded-Host|Forwarded-User|Real-IP|Internal|Is-Admin|Admin|Auth-Token|Auth|Api-Key|User-Id|User-Role|User|Role|Trusted|Backend|Gateway)"\s*\)\s*(?:\.equals\(\s*"[^"]*"\)|==\s*"[^"]*"|!=\s*"[^"]*"|(?:!=|==)\s*null[^;\n]{0,50}?\b(?:grant\w*|allow\w*|authoriz\w*|isAdmin|isInternal|bypass)\b)
+message: Broken access control — authorization based on network location or a spoofable client header (CWE-346/290).
+remediation: Do not trust X-* request headers for authorization; use Spring Security / a verified token. If a trusted proxy sets the header, strip it at the edge and verify a signed proxy value instead of a presence/equality check.
+not-match: ^\s*(?:\/\/|\*|\/\*)|\b(?:log|logger|slf4j|audit|throttle|whitelist|proxy)\b|[Mm]etric|[Rr]ate[Ll]imit|\.split\(|clientIp|remoteAddr|jwt|verifyToken|authenticate|getSession|isAuthenticated|SecurityContext|hasRole|csrf
+why: request.getHeader("X-Forwarded-For"|"X-Internal"|"X-Admin"|...) compared with equals/==, or a != null presence check gating grant/allow/authorize/isAdmin, authorizes on a client-settable header. These pass through non-stripping proxies, so an attacker forges one. notMatch excludes logging, IP-extraction, and rate-limit uses.
+confidence: high

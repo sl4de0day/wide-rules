@@ -1,0 +1,12 @@
+id: wide/ssti-pebble-getliteraltemplate
+name: ssti-pebble-getliteraltemplate
+category: INJECTION
+severity: HIGH
+languages:
+  - java
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/[/*]|\*)).*?\.\s*getLiteralTemplate\s*\(\s*(?:[A-Za-z_$]|(?:"[^"]*"|'[^']*')\s*(?:\+(?!\s*["'])|\.\s*(?:format|formatted)\s*\())
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Use getTemplate(name) to load a fixed template and pass user input only in the evaluation context map.
+why: PebbleEngine.getLiteralTemplate compiles its String argument directly as template source, so a dynamic argument lets an attacker inject Pebble syntax that can escalate to RCE.
+confidence: high

@@ -1,0 +1,20 @@
+id: wide/hpp-raw-request-url-forward
+name: hpp-raw-request-url-forward
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-235
+pattern: \b(?:fetch|axios|got|needle|superagent|request|https?\.(?:get|request))\b(?:\s*\.\s*(?:get|post|put|patch|delete|del|head|request))?\s*\([^)]*\b(?:req|request|ctx)\s*\.\s*(?:originalUrl|_parsedUrl|rawQuery|rawUrl)\b
+message: HTTP parameter pollution — raw/duplicated request parameters forwarded so layers disagree (CWE-235).
+remediation: Do not forward the raw query string. Parse inbound parameters into a validated object, select the single intended value per expected key (rejecting or canonicalising duplicates), and re-serialise only allowlisted keys via URLSearchParams before building the downstream URL so upstream and downstream agree on parameter semantics.
+not-match: encodeURIComponent
+why: The RAW inbound request URL/query string (req.originalUrl / req._parsedUrl / req.rawQuery / req.rawUrl) is passed verbatim into a downstream outbound request, so duplicated parameters (?role=user&role=admin) survive untouched and the downstream service may pick a different occurrence than the gateway did — the core HTTP Parameter Pollution primitive for authz/filter bypass. Requires an outbound-client call on the same line, so `res.redirect(req.originalUrl)`, `logger.info(... req.originalUrl)`, and bare assignments (no client keyword) are not flagged; notMatch suppresses an encodeURIComponent-wrapped value.
+confidence: high

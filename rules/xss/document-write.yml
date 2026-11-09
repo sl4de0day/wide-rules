@@ -1,0 +1,24 @@
+id: wide/document-write
+name: document-write
+category: XSS
+severity: LOW
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-79
+pattern: ^write(ln)?$
+message: document.write() parses its argument as HTML.
+remediation: Build and append nodes instead.
+why: It also blocks the parser and, after load, replaces the whole document.
+confidence: high

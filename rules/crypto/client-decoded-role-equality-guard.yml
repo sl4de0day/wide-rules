@@ -1,0 +1,25 @@
+id: wide/client-decoded-role-equality-guard
+name: client-decoded-role-equality-guard
+category: CRYPTO
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+  - html
+  - htm
+  - xhtml
+cwe: CWE-347
+pattern: \b(jwtDecode|jwt_decode|jwt\.decode|decodeJwt|decodeToken|parseJwt|parseToken)\s*\((?:[^()]|\([^()]*\))*\)\s*\??\.role\s*(===?|!==?)\s*['"](admin|superadmin|super_admin|root|owner|superuser|moderator|staff)['"]
+message: Client-side token signing or embedded signing key — a secret/decision shipped to the browser is attacker-forgeable.
+remediation: Never authorize on jwt.decode() output. Verify the signature server-side (or with jwt.verify / jose jwtVerify against a public key) and, for real access control, enforce the role on the server for every protected request. Client checks are UI hints only.
+not-match: ^\s*(\/\/|\*|\/\*)|\bjwt\.verify\b|\.verify\s*\(
+why: jwt.decode()/jwtDecode() only base64-decodes the payload — it does NOT verify the signature. Comparing that decoded role to 'admin' to gate behavior trusts an unverified, user-editable claim, so a user can flip their role in the token and pass the check (improper signature verification driving an authorization decision).
+confidence: high

@@ -1,0 +1,14 @@
+id: wide/ssti-genshi-markup-template
+name: ssti-genshi-markup-template
+category: INJECTION
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-1336
+pattern: \bMarkupTemplate\s*\(\s*(?:(?!(?:filename|file|uri|lookup|name|encoding)\s*=)[A-Za-z_]\w*\s*=\s*)?(?:[rbuRBU]{0,2}f['"]|['"][^'"\n]*['"]\s*(?:\+|%|\.\s*format)|(?![rbufRBUF]{0,2}['"])[A-Za-z_][\w.]*(?![\w.])(?!\s*=[^=]))
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Instantiate MarkupTemplate from a fixed template string or a trusted template file and inject user data only through the generate()/context values.
+why: Genshi's MarkupTemplate parses its first argument as an XML/markup template with embedded Python expressions, so a dynamic source string allows attacker-controlled template directives to execute.
+confidence: high

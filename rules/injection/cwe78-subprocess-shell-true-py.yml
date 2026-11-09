@@ -1,0 +1,15 @@
+id: wide/cwe78-subprocess-shell-true-py
+name: cwe78-subprocess-shell-true-py
+category: INJECTION
+severity: CRITICAL
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-78
+pattern: \b(?:subprocess\s*\.\s*)?(?:Popen|run|call|check_call|check_output)\s*\(.*\bshell\s*=\s*True\b
+message: Command injection via shell:true — child_process/subprocess with the shell option re-parses arguments through the system shell (CWE-78).
+remediation: 'Pass an argument list and drop shell=True: subprocess.run([''ping'',''-c'',''1'', host]) invokes no shell so metacharacters are inert. If shell=True is unavoidable, wrap every interpolated value in shlex.quote() and strictly validate the input.'
+not-match: ^\s*#|\b(?:subprocess\s*\.\s*)?(?:Popen|run|call|check_call|check_output)\s*\(\s*(?:'[^']*'|"[^"]*"|\[(?:\s*(?:'[^']*'|"[^"]*")\s*,?)*\s*\])\s*,[^)]*\bshell\s*=\s*True
+why: 'subprocess run/Popen/call/check_call/check_output with shell=True executes through /bin/sh, so shell metacharacters in a non-literal command (variable, f-string, or concatenation) are interpreted as shell syntax and injected commands run - e.g. subprocess.run(cmd, shell=True) or Popen(f"ping {host}", shell=True) lets host=''x;id'' run id. notMatch suppresses shell=False (sink already misses it) plus the safe twins where the first positional argument is a pure string literal or a list of only string literals; it still fires on concatenation because a comma (not ''+'') must follow the literal. The kwargs-order case is already safe here: after the first-arg literal and its comma, [^)]* consumes any other keyword arguments before shell=True, so reordering (e.g. shell=True, cwd=root) does not cause a false positive. app.run(debug=True,...) is not matched because the sink requires the token shell= specifically.'
+confidence: high

@@ -1,0 +1,13 @@
+id: wide/ssti-stubble-render
+name: ssti-stubble-render
+category: INJECTION
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*\b_?[Ss]tubble\w*\.Render\s*\(\s*(?:(?:\$@?|@\$)"|@?"[^"]*"\s*\+|[A-Za-z_][\w.]*\s*[\[(+,)])
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Render a fixed literal template and pass user input as the data/view argument only, never as the template string.
+why: Stubble's renderer.Render takes its first argument as the Mustache template string; a user-controlled source lets an attacker inject template logic and read the view model (SSTI).
+confidence: high

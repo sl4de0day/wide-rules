@@ -1,0 +1,25 @@
+id: wide/proto-guard-incomplete
+name: proto-guard-incomplete
+category: PROTOTYPE
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-1321
+pattern: '===?\s*[''"]__proto__[''"]'
+message: This guards only '__proto__', which is an incomplete prototype-pollution check.
+remediation: Reject 'constructor' and 'prototype' as well, or set into a null-prototype object.
+not-match: constructor|prototype
+why: Blocking '__proto__' alone is bypassed by the path ['constructor','prototype', …], which reaches Object.prototype just the same and pollutes every object.
+confidence: high

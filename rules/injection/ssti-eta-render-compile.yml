@@ -1,0 +1,19 @@
+id: wide/ssti-eta-render-compile
+name: ssti-eta-render-compile
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-1336
+pattern: \b[Ee]ta\.(?:render|renderString|compile|compileToString)\s*\(\s*(?:[^\s'"`)]|(?:'[^']*'|"[^"]*"|`[^`]*`)\s*\+|`[^`]*\$\{)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Render from a fixed template file or constant literal and pass user input as the data object; never build the Eta template string from user input.
+why: Eta compiles its string argument into a JavaScript function and its <% %> tags execute JS, so passing a dynamic template source results in server-side code execution.
+confidence: high

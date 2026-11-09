@@ -1,0 +1,19 @@
+id: wide/ssti-lodash-underscore-template
+name: ssti-lodash-underscore-template
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-1336
+pattern: \b(?:_|lodash|underscore)\.template\s*\(\s*(?:[^\s'"`)]|(?:'[^']*'|"[^"]*"|`[^`]*`)\s*\+|`[^`]*\$\{)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Compile only a fixed literal template and feed user input through the data object of the returned function; never build the template string from user input.
+why: _.template compiles its string argument into a JavaScript function, and its <% %> interpolate/evaluate delimiters execute arbitrary JS, so a dynamic template source is direct server-side code injection.
+confidence: high

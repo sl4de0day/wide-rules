@@ -1,0 +1,15 @@
+id: wide/netauthz-forwardable-header-as-auth-py
+name: netauthz-forwardable-header-as-auth-py
+category: NETWORK
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-290
+pattern: request\.headers(?:\.get\(\s*['"]x-(?:forwarded-for|forwarded-host|forwarded-user|real-ip|internal|is-admin|admin|auth-token|auth|api-key|user-id|user-role|user|role|client-id|trusted|backend|gateway)['"]\s*\)|\[['"]x-(?:forwarded-for|forwarded-host|forwarded-user|real-ip|internal|is-admin|admin|auth-token|auth|api-key|user-id|user-role|user|role|client-id|trusted|backend|gateway)['"]\])\s*(?:(?:==|!=)\s*(?:['"][^'"]*['"]|True|False)|\)?\s*:?\s*[^\n]{0,40}?\b(?:grant\w*|allow\w*|authoriz\w*|is_internal|is_admin|isadmin|bypass|skip_auth)\b)
+message: Broken access control — authorization based on network location or a spoofable client header (CWE-346/290).
+remediation: Do not authorize on X-Forwarded-* or custom X-* headers. Use Flask-Login/session or a verified token. If a trusted proxy sets the header, strip it at the edge and verify a proxy-signed value rather than trusting presence/equality.
+not-match: ^\s*#|\b(?:logger|logging|log|print|metric|audit|throttle|whitelist|proxy)\b|rate[_-]?limit|\.split\(|client_ip|remote_addr|jwt|verify_token|login_required|current_user|authenticate|session\[|redirect
+why: Flask request.headers X-Forwarded-For / X-Internal / X-Admin / X-User-Role compared to a value, or present and gating grant/allow/authorize/is_admin, authorizes on a client-settable header. Such headers survive non-stripping proxies, so an attacker forges one for privilege. X-Forwarded-Proto was removed from the list (its != 'https' compare is redirect logic, not auth); notMatch excludes IP-extraction, logging, rate-limit, and redirect uses.
+confidence: high

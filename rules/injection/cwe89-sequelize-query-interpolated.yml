@@ -1,0 +1,19 @@
+id: wide/cwe89-sequelize-query-interpolated
+name: cwe89-sequelize-query-interpolated
+category: INJECTION
+severity: CRITICAL
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-89
+pattern: sequelize\.query\s*\(\s*(?:`[^`]*\$\{|["'][^"']*["']\s*\+)
+message: sequelize.query() is handed a string that was interpolated or concatenated.
+remediation: 'Use replacements or bind: sequelize.query(''... WHERE id = :id'', { replacements: { id } }).'
+why: sequelize.query sends raw SQL. Anything spliced into the string before it gets there is parsed as SQL, so the ORM offers no protection on this path.
+confidence: high

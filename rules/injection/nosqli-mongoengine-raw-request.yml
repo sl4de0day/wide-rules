@@ -1,0 +1,15 @@
+id: wide/nosqli-mongoengine-raw-request
+name: nosqli-mongoengine-raw-request
+category: INJECTION
+severity: CRITICAL
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-943
+pattern: __raw__\s*=\s*(?:\{[^}]*)?(?:request\.get_json\(\)|request\.(?:json|data|args|form|values|POST|GET|query|query_params|params))
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: Do not build __raw__ from request data; validate/coerce fields first, or express the query with typed MongoEngine field lookups instead of __raw__.
+not-match: (?:str|int|float|ObjectId|Number|escape|sanitize)\(\s*request|\.validated_data|schema\.load|bleach|jsonschema|^\s*#
+why: MongoEngine's __raw__ escape hatch passes a request-controlled dict straight to the driver, so injected operators reach the query unchecked — the same operator-injection bypass as raw PyMongo.
+confidence: high

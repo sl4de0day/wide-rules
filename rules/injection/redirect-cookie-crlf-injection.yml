@@ -1,0 +1,31 @@
+id: wide/redirect-cookie-crlf-injection
+name: redirect-cookie-crlf-injection
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - go
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - java
+cwe: CWE-113
+pattern: (?:\b(?:res|resp|response|reply|ctx|context|w|writer)\.(?:redirect|location|cookie|clearCookie|sendRedirect)|\bredirect|HttpResponseRedirect)\s*\(\s*[^)]*?(?:req\.|request\.|\.query\b|\.body\b|\.params\b|\.headers\b|\$_GET|\$_POST|\$_REQUEST|getParameter)
+message: HTTP response splitting / header injection — user input placed into a response header without stripping CRLF (CWE-113).
+remediation: Validate redirect targets against an allowlist of known paths/hosts and strip CR/LF before building Location or Set-Cookie values; for cookies, use a cookie API that encodes values rather than concatenating raw request input.
+not-match: encodeURIComponent|encodeURI\b|\.replace\s*\([^)]*\\[rn]|\bparseInt\b|\bNumber\s*\(|\.includes\s*\(|sanitiz|escapeHeader|stripCRLF|allowlist|^\s*(?:\/\/|\*|\/\*|#)
+why: A redirect or cookie setter (res.redirect/sendRedirect/location, Flask redirect(), Django HttpResponseRedirect, res.cookie/clearCookie) is fed raw request input as the Location or Set-Cookie value. The header is emitted verbatim, so unstripped CR/LF allows response splitting and header injection (CWE-113); the same untrusted value also enables open redirect. The \bredirect( alternative requires '(' immediately after 'redirect' so redirectTo(/redirectMiddleware( do not match, and the input markers avoid client-router redirect(searchParams.get()).
+confidence: high

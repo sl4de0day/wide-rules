@@ -1,0 +1,20 @@
+id: wide/js-html-content-type-send-bare-var
+name: js-html-content-type-send-bare-var
+category: XSS
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-79
+pattern: (?=.*(?:['"`]\s*text\/html|\.type\(\s*['"`]html))(?=.*\.(?:send|end|write)\s*\(\s*[A-Za-z_$][\w.$\[\]]*\s*\)).*\S
+message: Reflected XSS — an unescaped variable is interpolated into an HTML response (CWE-79).
+remediation: Escape or sanitise the variable before sending it as HTML (escapeHtml/he.encode/DOMPurify), send structured data with res.json, or serve static markup with res.sendFile; only label a response text/html when its body is trusted or already encoded.
+not-match: ^\s*(?:\/\/|\*|\/\*)|escapeHtml|htmlEscape|escapeHTML|encodeHTML|\bhe\.(?:encode|escape)|DOMPurify|sanitiz|\bxss\s*\(|encodeURI|\bescape\s*\(|\.replace(?:All)?\(\s*(?:\/\[?|['"`])[<>&]|res\.json|\bsendFile\b|\breadFileSync\b|\breadFile\b|\.(?:send|end|write)\s*\(\s*[\w.]*\b(?:count|length|id|index|total|idx|size|num|offset|limit)\b
+why: 'The response is explicitly declared text/html (a Content-Type header set to a quoted ''text/html'', or res.type(''html'')) and, on the same statement, a bare variable is handed to .send/.end/.write with no HTML-tag literal on the line to key on. Sending an unescaped string variable as text/html is reflected/stored XSS even when the markup is assembled elsewhere. Kept precise: the content-type must be a real quoted ''text/html''/type(''html'') (a quote must sit adjacent to text/html, so a coincidental comment mention like ''returned text/html'' does not match) AND the sent argument must be a single identifier/member/index expression that closes with ) -- not a string literal, not res.json, and not a function call (escapeHtml(x)/he.escape(x)/DOMPurify.sanitize(x)/sendFile(x)/readFileSync(x)/renderString(x)), because an identifier followed by ( never reaches the required ). notMatch additionally drops escaped/sanitised sends, sendFile/readFile(Sync), res.json, obviously-numeric variables, and comments. A lone res.setHeader(''Content-Type'',''text/html'') with no bare-variable send on the line does not match, and a template-literal body (Rule 1''s job) does not match here.'
+confidence: high

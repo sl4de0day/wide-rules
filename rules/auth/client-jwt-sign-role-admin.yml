@@ -1,0 +1,25 @@
+id: wide/client-jwt-sign-role-admin
+name: client-jwt-sign-role-admin
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+  - html
+  - htm
+  - xhtml
+cwe: CWE-602
+pattern: \bjwt\.sign\s*\(\s*\{[^}]*['"]?\brole\b['"]?\s*:\s*['"](admin|superadmin|super_admin|root|owner|superuser)['"]
+message: Client-side token signing or embedded signing key — a secret/decision shipped to the browser is attacker-forgeable.
+remediation: Never call jwt.sign in browser/client code. Issue tokens on the server after authenticating the request, deriving role from the server-side user record — the client should only receive and send an opaque token, never build one.
+not-match: ^\s*(\/\/|\*|\/\*)|\bjwt\.verify\b|server[-\s]side
+why: jwt.sign() runs in the client bundle and mints a token whose payload literally sets role to an elevated value. The signing key must ship with it, so any user can re-sign the same claim with a role of their choosing. Minting an authorization token client-side is client-side enforcement of a server-side security decision.
+confidence: high

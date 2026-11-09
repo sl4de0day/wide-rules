@@ -1,0 +1,34 @@
+id: wide/insecure-url
+name: insecure-url
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - py
+  - pyi
+  - pyw
+  - go
+  - rs
+  - java
+  - html
+  - json
+cwe: CWE-319
+pattern: '["''`]http:\/\/(?!localhost|127\.0\.0\.1|0\.0\.0\.0|\[::1\])'
+message: This address is plain http.
+remediation: Use https:// for anything that leaves the machine (loopback is exempt).
+not-match: w3\.org|xmlns|schemas?\.|purl\.org|\.dtd|namespace|xml\.apache|ns\.adobe|openxmlformats
+why: The request and its answer travel in the clear and can be read or rewritten in transit.
+confidence: high

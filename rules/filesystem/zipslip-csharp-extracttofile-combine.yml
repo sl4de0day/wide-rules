@@ -1,0 +1,14 @@
+id: wide/zipslip-csharp-extracttofile-combine
+name: zipslip-csharp-extracttofile-combine
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-22
+pattern: Path\.Combine\s*\([^)]*\.FullName\b|\.ExtractToFile\s*\(
+message: Zip Slip / insecure archive extraction — an archive entry name escapes the destination, arbitrary file write (CWE-22/59).
+remediation: 'Build the path then verify: var full = Path.GetFullPath(Path.Combine(dest, entry.FullName)); if (!full.StartsWith(Path.GetFullPath(dest) + Path.DirectorySeparatorChar)) throw. Reject ''..''/rooted FullName and skip zero-length symlink-style entries.'
+not-match: ^\s*(\/\/|\/\*|\*)|GetFullPath|\.StartsWith\(|[Ss]aniti|IsInside|GetCanonicalPath|WithinDirectory
+why: Per-entry extraction with entry.ExtractToFile / Path.Combine(dir, entry.FullName) uses the untrusted ZipArchiveEntry.FullName; Path.Combine with a rooted or ../-laden FullName resolves outside the destination, so extraction writes an arbitrary file (unlike ZipFile.ExtractToDirectory which validates).
+confidence: high

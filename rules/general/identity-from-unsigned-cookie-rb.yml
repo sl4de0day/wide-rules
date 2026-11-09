@@ -1,0 +1,13 @@
+id: wide/identity-from-unsigned-cookie-rb
+name: identity-from-unsigned-cookie-rb
+category: GENERAL
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-302
+pattern: \bcookies\s*\[\s*(:\s*|['"])(user(name|_id|_name|_role)?|uid|login|account)\b
+message: Broken session management — identity/role from an unverified client value or a writable store (CWE-807/302).
+remediation: Use cookies.signed[...] / cookies.encrypted[...] or the Rails session (session[:user_id]), which are tamper-protected.
+not-match: \.signed\b|\.encrypted\b|^\s*#
+why: A plain (unsigned) Rails cookie holding a user identifier is used as identity. cookies[:user] is fully client-writable with no integrity checking, so it can be forged to any account. This is authentication by assumed-immutable data (CWE-302). cookies.signed/cookies.encrypted and session[...] are excluded.
+confidence: high

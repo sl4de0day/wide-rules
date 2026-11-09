@@ -1,0 +1,15 @@
+id: wide/ssrf-redirect-follow-tainted-url
+name: ssrf-redirect-follow-tainted-url
+category: NETWORK
+severity: MEDIUM
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-918
+pattern: \b(?:requests|httpx|session|sess|client)\.(?:get|post|put|delete|patch|head|request)\s*\(\s*(?:['"][A-Z]+['"]\s*,\s*)?(?:url\s*=\s*)?request\.(?:args|form|values|json|data|GET|POST|query_params|cookies|headers).*(?:allow|follow)_redirects\s*=\s*True
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Set allow_redirects=False (follow_redirects=False for httpx) and, if redirects are needed, re-run the allowlist/IP checks on every hop's Location before following it.
+not-match: ^\s*#|is_safe_url|allowlist|whitelist|allowed_|ALLOWED|\bvalidate
+why: A user-controlled URL sits in the URL position of an HTTP call that is made with allow_redirects/follow_redirects=True, so even an allowlisted origin can 30x-redirect the client into internal services; the redirect target is never re-validated (CWE-918). Anchoring request.* to the URL slot of a concrete requests/httpx/session call (rather than 'request.* appears anywhere on a line with redirects=True') removes the false hit where request.* is only a header/param and the URL is a constant.
+confidence: high

@@ -1,0 +1,19 @@
+id: wide/cwe916-pbkdf2-iterations-low
+name: cwe916-pbkdf2-iterations-low
+category: CRYPTO
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-916
+pattern: pbkdf2(?:Sync)?\s*\(\s*[^,]+,\s*[^,]+,\s*\d{1,4}\b
+message: PBKDF2 is used with an iteration count below 10000.
+remediation: Use a high iteration count (600000+ for PBKDF2-HMAC-SHA256) or switch to bcrypt/argon2/scrypt.
+why: Too few iterations make each password guess cheap, so an attacker with the hashes can brute-force weak passwords rapidly.
+confidence: high

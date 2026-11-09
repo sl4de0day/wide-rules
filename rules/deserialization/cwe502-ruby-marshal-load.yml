@@ -1,0 +1,12 @@
+id: wide/cwe502-ruby-marshal-load
+name: cwe502-ruby-marshal-load
+category: DESERIALIZATION
+severity: CRITICAL
+languages:
+  - rb
+cwe: CWE-502
+pattern: Marshal\s*\.\s*load\s*\(
+message: Marshal.load reconstructs arbitrary Ruby objects from serialized bytes.
+remediation: Never Marshal.load untrusted data; use a data-only format such as JSON for external input.
+why: Marshal has no type restrictions, so untrusted input can drive object instantiation into gadget chains that lead to remote code execution.
+confidence: high

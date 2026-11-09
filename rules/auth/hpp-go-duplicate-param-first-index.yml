@@ -1,0 +1,12 @@
+id: wide/hpp-go-duplicate-param-first-index
+name: hpp-go-duplicate-param-first-index
+category: AUTH
+severity: MEDIUM
+languages:
+  - go
+cwe: CWE-235
+pattern: \b(?:r|req|request)\.(?:Form|PostForm|URL\.Query\(\))\s*\[\s*["'`][^"'`]+["'`]\s*\]\s*\[\s*(?:0|len\()
+message: HTTP parameter pollution — raw/duplicated request parameters forwarded so layers disagree (CWE-235).
+remediation: Use r.FormValue / q.Get for a single canonical value, or explicitly reject requests that supply the parameter more than once.
+why: Indexing the raw multi-value slice (r.Form["x"][0] or [len-1]) manually picks first-vs-last for a duplicated parameter; if a downstream component picks the opposite occurrence, the two views of the same request disagree (HTTP parameter pollution). The map-index-then-slice-index shape distinguishes it from r.FormValue("x")[0] (a string byte index) and r.URL.Query().Get("x")[0].
+confidence: high

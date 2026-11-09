@@ -1,0 +1,14 @@
+id: wide/ssti-jinja2-django-from-string
+name: ssti-jinja2-django-from-string
+category: INJECTION
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-1336
+pattern: \bfrom_string\s*\(\s*(?:(?!(?:filename|file|uri|lookup|name|encoding)\s*=)[A-Za-z_]\w*\s*=\s*)?(?:[rbuRBU]{0,2}f['"]|['"][^'"\n]*['"]\s*(?:\+|%|\.\s*format)|(?![rbufRBUF]{0,2}['"])[A-Za-z_][\w.]*(?![\w.])(?!\s*=[^=]))
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Load a predefined template with get_template()/from_string on a constant, and supply user input only through the render context, not the template string itself.
+why: Environment.from_string (Jinja2) and Engine.from_string (Django) compile their string argument into a template, so a dynamic source string turns attacker-controlled text into executable template code.
+confidence: high

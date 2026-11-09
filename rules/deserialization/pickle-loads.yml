@@ -1,0 +1,14 @@
+id: wide/pickle-loads
+name: pickle-loads
+category: DESERIALIZATION
+severity: CRITICAL
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-502
+pattern: ^loads?$
+message: pickle can execute code while it deserialises.
+remediation: Use JSON for anything that crosses a trust boundary.
+why: 'Unpickling is not parsing: a crafted payload runs arbitrary code as it is read.'
+confidence: high

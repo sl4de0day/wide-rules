@@ -1,0 +1,15 @@
+id: wide/nosqli-mongo-filter-request-map
+name: nosqli-mongo-filter-request-map
+category: INJECTION
+severity: CRITICAL
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-943
+pattern: \.(find|findOne|findOneAndUpdate|findOneAndDelete|findOneAndReplace|replaceOne|count|countDocuments|remove|deleteOne|deleteMany|updateOne|updateMany)\s*\(\s*(?:(?:new\s+)?(?:Document|BasicDBObject)\s*\(\s*)?(body|payload|requestBody|reqBody|request\.getParameterMap|params)\b
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: Never use the raw request map as a filter. Construct the Document field-by-field with typed keys and coerced scalar values (new Document("user", String.valueOf(body.get("user")))) or validate against a schema first.
+not-match: String\.valueOf|parseInt|parseLong|Integer\.|Long\.|\bvalidate\b|[Ss]anitiz|Filters\.|\bschema\b|new\s+ObjectId|^\s*(?:\/\/|\/\*|\*)
+why: Passing a deserialized request map (a @RequestBody Map / params map, optionally wrapped in a Document/BasicDBObject) straight into a Mongo query lets the client supply operator keys ($ne, $gt, $regex, $where) inside field values, bypassing intended equality filters. The 'new' keyword is optional so Kotlin's Document(body) is caught; a Document built field-by-field with a literal key ('username', ...) is excluded because the raw map name never sits right after the paren.
+confidence: high

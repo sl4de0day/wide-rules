@@ -1,0 +1,25 @@
+id: wide/cwe1321-set-prototype-of
+name: cwe1321-set-prototype-of
+category: PROTOTYPE
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-1321
+pattern: Object\.setPrototypeOf\s*\(
+message: Object.setPrototypeOf is called with a non-null prototype argument.
+remediation: Avoid changing prototypes at runtime; to strip a prototype use Object.setPrototypeOf(o, null) or Object.create(null).
+not-match: ',\s*null\s*\)'
+why: If the prototype argument is attacker-influenced it rewrites the object's prototype chain (prototype pollution); runtime prototype changes are also a smell.
+confidence: high

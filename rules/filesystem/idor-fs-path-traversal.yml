@@ -1,0 +1,20 @@
+id: wide/idor-fs-path-traversal
+name: idor-fs-path-traversal
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-639
+pattern: (fs\.(readFile|readFileSync|createReadStream|createWriteStream|unlink|unlinkSync|writeFile|writeFileSync|readdir|readdirSync|appendFile)|res\.(sendFile|download)|path\.(join|resolve))\s*\([^;)]*req\.(params|query|body)
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: Reduce the input to a bare name with path.basename, resolve against a fixed base dir, and verify the resolved path still startsWith that base (or map the input through an allowlist) before touching the filesystem; for res.sendFile pass a fixed { root }.
+not-match: path\.basename|basename\s*\(|sanitiz|allow[Ll]ist|white[Ll]ist|startsWith|req\.user|isOwner|realpath|\broot\s*:|^\s*(?:\/\/|\*|\/\*)
+why: A filesystem path or download target is built from a client-supplied filename with no containment check, so ../ sequences or absolute paths let the caller read or write files outside the intended directory (path-traversal IDOR over files).
+confidence: high

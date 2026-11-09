@@ -1,0 +1,15 @@
+id: wide/server-presence-only-auth-header-python
+name: server-presence-only-auth-header-python
+category: AUTH
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-287
+pattern: '\bif\s+(?:request|req|self\.request)\.(?:headers|META|COOKIES|GET)\.get\(\s*[''"](?:Authorization|HTTP_AUTHORIZATION|X-Api-Key|X-Auth-Token|session|sessionid|token|api_?key)[''"]\s*\)\s*:'
+message: Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.
+remediation: 'Compare or verify the credential: decode-and-verify the JWT (with verify_signature True), validate the API key against a store, or use the framework''s authentication class. Branch on the verified outcome, not on presence.'
+not-match: (?:\.verify\(|verify_jwt|validate_token|verify_token|jwt\.decode\([^)]*verify\s*=\s*True|introspect|^\s*#)
+why: The view grants access on the truthiness of a header/cookie lookup (request.headers.get('Authorization') as a bare if-condition). Any non-empty value passes; the token/API key is never validated against a signature or store.
+confidence: high

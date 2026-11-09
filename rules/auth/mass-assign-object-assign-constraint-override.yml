@@ -1,0 +1,20 @@
+id: wide/mass-assign-object-assign-constraint-override
+name: mass-assign-object-assign-constraint-override
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-639
+pattern: (?:Object\.assign|(?:_|lodash)\.(?:assign|assignIn|extend|merge|mergeWith)|(?:\$|jQuery)\.extend|angular\.(?:extend|merge))\s*\([^)]*\{[^}]*\b(?:tenantId|tenant_id|userId|user_id|ownerId|owner_id|orgId|accountId|role|isAdmin|isClassified)\b[^}]*\}\s*,
+message: Mass-assignment override (BOLA) — a user object merged after a security constraint can override it (CWE-639).
+remediation: 'Apply the ownership/tenant constraint LAST so it always wins: Object.assign({}, req.body, { tenantId }). Better, never merge raw request input into a query or record - derive tenantId/userId from the authenticated session and allow-list the client fields with pick/omit or a schema (zod/joi/yup) so ownership keys can never be supplied by the client.'
+not-match: (?:^\s*(?:\/\/|\/\*|\*)|\b(?:pick|omit)\s*\(|\.(?:pick|omit|parse|safeParse|validate|validateSync)\s*\(|\b(?:allowlist|whitelist)\b|\b(?:zod|joi|yup)\b)
+why: 'Object.assign and the lodash assign/assignIn/extend/merge/mergeWith family, jQuery/$.extend, and angular.extend copy properties left-to-right so the RIGHTMOST source wins. The rule fires only when a fixed ownership/tenant constraint object literal ({ tenantId }, { userId }, { orgId }, { isAdmin: false }, ...) is NOT the last argument, enforced by the trailing \}\s*, (a comma must follow the constraint object). A later source is typically user-controlled (req.body/req.query, or a variable holding them such as queryFilter = req.body.filter), so the client can send its own tenantId/userId, override the server-set restriction, and read or mutate another tenant''s/owner''s records - CWE-639 authorization bypass through a user-controlled key, the classic multi-tenant BOLA. The critical sample Object.assign({}, { tenantId }, queryFilter) is caught because { tenantId } is followed by another argument. The safe twin Object.assign({}, req.body, { tenantId }) does NOT fire: the constraint is last, followed by ) not a comma. _.defaults is deliberately excluded from the sink because it fills only undefined keys (leftmost wins, safe).'
+confidence: high

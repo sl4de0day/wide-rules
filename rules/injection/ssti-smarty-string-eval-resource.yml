@@ -1,0 +1,17 @@
+id: wide/ssti-smarty-string-eval-resource
+name: ssti-smarty-string-eval-resource
+category: INJECTION
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/[/*]|#|\*)).*?->(?:fetch|display|createTemplate)\s*\(\s*(?:"(?:string|eval):[^"]*\$\{?[A-Za-z_]|(?:'(?:string|eval):[^']*'|"(?:string|eval):[^"]*")\s*\.\s*[\$A-Za-z_])
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Use the file (default) resource with a fixed template path and pass user input through $smarty->assign(); never concatenate or interpolate request data into a 'string:' or 'eval:' resource.
+why: 'Smarty''s string: and eval: resource prefixes make the remainder of the argument be compiled as Smarty template source, so concatenating or interpolating user input after the prefix yields template injection and PHP execution.'
+confidence: high

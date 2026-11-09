@@ -1,0 +1,24 @@
+id: wide/regex-html-sanitizer
+name: regex-html-sanitizer
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-184
+pattern: \/[^\n]*(?:<script|javascript:)[^\n]*\/[gimsuy]*
+message: HTML is being sanitised with a regular-expression blacklist.
+remediation: Sanitise with a real HTML parser such as DOMPurify, not string replacement.
+why: 'Stripping <script>, on… handlers or javascript: with a regex is bypassable: obfuscated encodings, alternate tags (<svg onload>, <iframe srcdoc>), and payloads that reassemble after one replacement pass all get through, giving a false sense of safety.'
+confidence: high

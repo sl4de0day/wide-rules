@@ -1,0 +1,19 @@
+id: wide/cwe95-vm-eval-equivalent
+name: cwe95-vm-eval-equivalent
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-95
+pattern: (?:vm\.(?:runInThisContext|runInContext|runInNewContext|compileFunction)|execScript)\s*\(|setImmediate\s*\(\s*["'`]
+message: Code is executed from a string via an eval-equivalent sink (vm.runIn*/vm.compileFunction/execScript, or a string passed to setImmediate).
+remediation: Do not execute code built from data; pass a real function to schedulers and keep untrusted strings out of vm.* and execScript.
+why: These sinks compile and run arbitrary code exactly like eval(); if any part derives from input it is remote code execution.
+confidence: high

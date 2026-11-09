@@ -1,0 +1,13 @@
+id: wide/server-presence-only-auth-header-go
+name: server-presence-only-auth-header-go
+category: AUTH
+severity: HIGH
+languages:
+  - go
+cwe: CWE-287
+pattern: \bif\s+(?:r|req|request|c\.Request|ctx)\.Header\.Get\(\s*"(?:Authorization|X-Api-Key|X-Auth-Token)"\s*\)\s*!=\s*""\s*\{
+message: Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.
+remediation: 'Parse and verify inside the guard: jwt.Parse/ParseWithClaims with a key func that checks the signing method and key, then act on token.Valid. A present but invalid/expired token must return 401.'
+not-match: (?:jwt\.Parse|jwt\.Verify|ParseWithClaims|verifyToken|validateToken|VerifyToken|\.Verify\(|ParseSigned|^\s*\/\/|^\s*\/\*|^\s*\*)
+why: The handler/middleware proceeds whenever r.Header.Get("Authorization") != "", i.e. any non-empty header value. The token is never parsed or signature-verified, so an attacker authenticates with an arbitrary string. The sink requires the != "" to be immediately followed by the block brace, so a compound '!= "" && validateToken(...)' does not match, and w.Header() (response writer) is excluded.
+confidence: high

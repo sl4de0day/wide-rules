@@ -1,0 +1,15 @@
+id: wide/weak-otp-python-random
+name: weak-otp-python-random
+category: CRYPTO
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-330
+pattern: \brandom\s*\.\s*(?:randint|randrange)\s*\(\s*\d+\s*,\s*(?:9000|9999|10000|90000|99999|100000|900000|999999|1000000)\b|\brandom\s*\.\s*choice\s*\(\s*["'][0-9]{4,}["']
+message: GraphQL/dev misconfiguration — introspection or a dev endpoint exposed, or a weak/predictable secret (CWE-200/489/307/770/330).
+remediation: Use secrets.randbelow / secrets.choice (or random.SystemRandom) for verification codes and add per-user rate limiting.
+not-match: ^\s*#|secrets\s*\.|SystemRandom|os\s*\.\s*urandom|\bDEBUG\b
+why: An OTP/verification code drawn from the non-crypto random module (randint/randrange over a 4-6 digit range, or choice over a digit string) is predictable and, with a recovered seed, reproducible.
+confidence: high

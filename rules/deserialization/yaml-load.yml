@@ -1,0 +1,14 @@
+id: wide/yaml-load
+name: yaml-load
+category: DESERIALIZATION
+severity: CRITICAL
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-502
+pattern: ^load$
+message: yaml.load() can construct arbitrary Python objects.
+remediation: Use yaml.safe_load(), or pass Loader=SafeLoader.
+why: The default loader instantiates types named in the document, which is remote code execution on untrusted input.
+confidence: high

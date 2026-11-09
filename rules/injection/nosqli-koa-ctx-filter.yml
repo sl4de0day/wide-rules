@@ -1,0 +1,20 @@
+id: wide/nosqli-koa-ctx-filter
+name: nosqli-koa-ctx-filter
+category: INJECTION
+severity: CRITICAL
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-943
+pattern: \.(find|findOne|findOneAndUpdate|findOneAndDelete|updateOne|updateMany|deleteOne|deleteMany|count|countDocuments|aggregate)\s*\(\s*(ctx\.(query|params|request\.body)|\{[^}]*:\s*ctx\.(query|params|request\.body))
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: Coerce ctx values to scalars (String(ctx.request.body.x)) or validate the body with a schema (koa-joi-router / zod) before querying; never hand a raw ctx.query or ctx.request.body to a find/update filter.
+not-match: \.toString\s*\(|String\s*\(|Number\s*\(|parseInt|parseFloat|\.trim\s*\(|ObjectId\s*\(|Joi\.|zod|\.validate\(|sanitiz|^\s*(?:\/\/|\*|\/\*)
+why: 'Koa exposes user input as ctx.query / ctx.params / ctx.request.body; here it flows into a Mongo filter either as the whole object or as an uncoerced field value, allowing operator injection ({ $ne: ... }, { $gt: ... }) exactly as with Express req.*.'
+confidence: high

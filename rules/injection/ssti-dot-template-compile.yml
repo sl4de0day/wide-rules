@@ -1,0 +1,19 @@
+id: wide/ssti-dot-template-compile
+name: ssti-dot-template-compile
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-1336
+pattern: \bdoT\.(?:template|compile)\s*\(\s*(?:[^\s'"`)]|(?:'[^']*'|"[^"]*"|`[^`]*`)\s*\+|`[^`]*\$\{)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Compile only a constant template literal and supply user input through the render function's data argument, never from request input.
+why: doT.template/compile builds a JavaScript function from its string argument and its {{= }} / {{ }} blocks run raw JS, so a dynamic template source lets an attacker execute code on the server.
+confidence: high

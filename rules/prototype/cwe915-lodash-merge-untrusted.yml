@@ -1,0 +1,24 @@
+id: wide/cwe915-lodash-merge-untrusted
+name: cwe915-lodash-merge-untrusted
+category: PROTOTYPE
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-915
+pattern: \b(?:_|lodash)\.(?:merge|mergeWith|defaultsDeep)\s*\([^;\n]*\b(?:req\.body|req\.query|req\.params|request\.body|ctx\.request\.body|JSON\.parse|userInput|payload|req\.headers)\b
+message: A lodash deep-merge (merge/mergeWith/defaultsDeep) is fed request or parsed-user data as a source object.
+remediation: Validate/whitelist keys, merge into a null-prototype target, or use a merge that ignores __proto__ and constructor.
+why: Deep-merging untrusted objects lets __proto__/constructor keys write onto Object.prototype (prototype pollution), corrupting application-wide state.
+confidence: high

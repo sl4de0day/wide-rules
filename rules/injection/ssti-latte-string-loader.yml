@@ -1,0 +1,17 @@
+id: wide/ssti-latte-string-loader
+name: ssti-latte-string-loader
+category: INJECTION
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/[/*]|#|\*)).*?\bStringLoader\s*\(\s*(?:\[|array\s*\()[^\]]*=>\s*(?:\$|(?:'[^']*'|"[^"]*")\s*\.\s*[\$A-Za-z_]|"[^"]*\$\{?[A-Za-z_])
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Populate the StringLoader map only with fixed template strings and pass user data via the render parameters, never as a loader value built from request input.
+why: Latte's StringLoader serves its array values as compilable Latte template source, so a dynamic value registers attacker-controlled Latte code that Latte compiles and runs as PHP.
+confidence: high

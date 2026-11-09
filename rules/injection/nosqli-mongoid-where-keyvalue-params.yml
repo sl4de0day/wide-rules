@@ -1,0 +1,13 @@
+id: wide/nosqli-mongoid-where-keyvalue-params
+name: nosqli-mongoid-where-keyvalue-params
+category: INJECTION
+severity: CRITICAL
+languages:
+  - rb
+cwe: CWE-943
+pattern: \.where\(\s*[a-z_]\w*:\s*params\s*(?:\[|\.fetch|\.dig)
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: 'Force each request value to a scalar before it reaches the selector: Model.where(username: params[:username].to_s, password: hashed(params[:password].to_s)), wrap ids in BSON::ObjectId, or validate through the schema; never compare a raw params value for auth.'
+not-match: \.to_s\b|\.to_i\b|\.to_f\b|String\(|Integer\(|\.to_param|BSON::ObjectId|\.validate|current_user|current_account|session\[|authorize|policy_scope|^\s*#
+why: 'field: params[:field] in a Mongoid selector looks scalar but Rails may deliver params[:field] as a Hash when the client sends field[$ne]= or field[$gt]=, turning the equality into an operator query. The classic case Model.where(username: params[:username], password: params[:password]) becomes an auth bypass (password[$ne]=). Without .to_s/Integer coercion or a BSON::ObjectId cast the value is attacker-typed. Note: this shape is also common and safe under pure ActiveRecord/SQL (values are typed/quoted there), so on an AR-heavy codebase expect benign matches unless coercion is present; the notMatch coercion signals are the intended rescue. Full-line comments and String()/Integer()/BSON casts are suppressed.'
+confidence: high

@@ -1,0 +1,14 @@
+id: wide/cwe617-py-assert-authorization
+name: cwe617-py-assert-authorization
+category: AUTH
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-617
+pattern: ^\s*assert\b[^#]*\b(?:is_admin|is_authenticated|is_staff|is_superuser|has_perm|has_permission|current_user|request\.user|is_authorized|permission|is_owner)\b
+message: An authorization check is enforced with assert, which is stripped when Python runs with -O.
+remediation: Replace the assert with an explicit if-check that raises PermissionError or returns 403.
+why: In optimized/production mode (python -O) assert statements are removed, so the access-control check silently disappears and the action proceeds unchecked.
+confidence: high

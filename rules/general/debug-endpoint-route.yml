@@ -1,0 +1,36 @@
+id: wide/debug-endpoint-route
+name: debug-endpoint-route
+category: GENERAL
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - rb
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - java
+  - kt
+  - kts
+  - go
+  - cs
+  - csx
+cwe: CWE-489
+pattern: \b(?:get|post|put|delete|patch|route|use|all|map|mapget|mappost|mapput|mapdelete|handlefunc|match|any|resource|namespace)\s*(?:\(\s*)?['"\x60]\/(?:[\w.@:-]+\/)*_{0,2}(?:debug|dev|internal|backdoor|test)_{0,2}\b
+message: GraphQL/dev misconfiguration — introspection or a dev endpoint exposed, or a weak/predictable secret (CWE-200/489/307/770/330).
+remediation: Delete the endpoint before release, or gate it behind an explicit production check (NODE_ENV/APP_ENV) plus an admin/authentication guard so it cannot run in prod without authorization.
+not-match: ^\s*(?:\/\/|#|\*|\/\*|<!--|--)|NODE_ENV|APP_ENV|RAILS_ENV|FLASK_ENV|GIN_MODE|ASPNETCORE_ENVIRONMENT|isAdmin|is_admin|requireAdmin|require_admin|admin_required|adminOnly|ensureAdmin|hasRole|requireAuth|@admin|isDev|isDevelopment|__DEV__|IsDevelopment|app\.Environment|Rails\.env|env\s*[!=]==?\s*['"\x60](?:dev|development|staging|local|test)|==\s*['"\x60](?:dev|development|staging|local|test)|debug\s*[:=]\s*(?:false|0)
+why: A route whose path segment is debug/dev/internal/backdoor/test registers a backdoor or diagnostic handler that ships to production, exposing internal state, resets, or dumps to anyone who guesses the path. Word boundaries after the keyword keep it from firing on '/devices', '/developer', '/latest', '/testimonials'.
+confidence: high

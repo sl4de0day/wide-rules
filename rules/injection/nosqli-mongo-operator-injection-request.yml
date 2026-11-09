@@ -1,0 +1,15 @@
+id: wide/nosqli-mongo-operator-injection-request
+name: nosqli-mongo-operator-injection-request
+category: INJECTION
+severity: CRITICAL
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-943
+pattern: '[''"]\$(?:where|regex|expr|function|ne|gt|gte|lt|lte|in|nin|or|and|nor)[''"]\s*:\s*[^,}]*request\.(?:json|data|args|form|values|POST|GET|query|query_params|params)\b'
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: 'Coerce the input to the expected scalar (or re.escape a $regex), and avoid $where entirely with user input: {''age'': {''$gt'': int(request.args[''min''])}}.'
+not-match: (?:int|str|float|bool|Number|parseInt|ObjectId|Decimal)\(\s*request|re\.escape\(|escape\(\s*request|\.validated_data|schema\.load|bleach|sanitize|^\s*#
+why: A Mongo query operator ($where/$regex/$ne/$gt/$in/…) is fed a request value directly. $where enables server-side JS injection; $regex enables ReDoS/bypass; comparison operators let an attacker widen the match set.
+confidence: high

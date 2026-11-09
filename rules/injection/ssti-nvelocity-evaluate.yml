@@ -1,0 +1,13 @@
+id: wide/ssti-nvelocity-evaluate
+name: ssti-nvelocity-evaluate
+category: INJECTION
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*\b_?[Vv]elocity\w*\.Evaluate\s*\(\s*[^,]+,\s*[^,]+,\s*[^,]+,\s*(?:(?:\$@?|@\$)"|@?"[^"]*"\s*\+|[A-Za-z_][\w.]*\s*[\[(+,)])
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Evaluate only fixed literal VTL and place user input into the VelocityContext as data, never as the instring template argument.
+why: Velocity.Evaluate(context, writer, tag, instring) merges its fourth argument as a VTL template; a dynamic template string permits method invocation on context objects and can reach RCE (SSTI).
+confidence: high

@@ -1,0 +1,19 @@
+id: wide/cwe915-object-assign-req-body
+name: cwe915-object-assign-req-body
+category: PROTOTYPE
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-915
+pattern: Object\.assign\s*\(\s*(?!\{)[^,)]+,\s*req\.(?:body|query|params)\b
+message: Object.assign copies the whole request object onto an existing model/entity.
+remediation: Assign only whitelisted properties, or merge into a fresh {} with just the fields you validated.
+why: Every attacker-supplied key overwrites the target's properties, so protected fields (role, verified, ownerId) can be set from the request (mass assignment).
+confidence: high

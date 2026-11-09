@@ -1,0 +1,20 @@
+id: wide/xxe-libxmljs-noent-replace-entities
+name: xxe-libxmljs-noent-replace-entities
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-776
+pattern: \b(?:noent|replaceEntities)\s*:\s*true\b
+message: XML entity expansion / XXE — an XML parser resolves entities on untrusted input (CWE-776/611).
+remediation: Parse untrusted XML with the default noent:false (do not substitute entities); avoid dtdload/dtdvalid unless a DTD is required, and verify no <!ENTITY> declarations are present.
+not-match: \b(?:noent|replaceEntities)\s*:\s*false|^\s*(?:\/\/|\/\*|\*)|new RegExp\(|message:\s*['"]|\bsinkRegex\b
+why: 'libxmljs parseXml/parseXmlString with { noent: true } (XML_PARSE_NOENT) or { replaceEntities: true } substitutes entity references while parsing; an untrusted document can then trigger exponential internal-entity expansion (billion laughs) and, with DTD loading, external-entity injection. The colon-keyed sink deliberately matches the option-object form only, so noent:false / replaceEntities:false twins, `= true` assignments to unrelated vars, *Value/*Enabled suffixes, and comment lines are excluded.'
+confidence: high

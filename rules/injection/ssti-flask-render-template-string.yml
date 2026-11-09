@@ -1,0 +1,14 @@
+id: wide/ssti-flask-render-template-string
+name: ssti-flask-render-template-string
+category: INJECTION
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-1336
+pattern: \brender_template_string\s*\(\s*(?:(?!(?:filename|file|uri|lookup|name|encoding)\s*=)[A-Za-z_]\w*\s*=\s*)?(?:[rbuRBU]{0,2}f['"]|['"][^'"\n]*['"]\s*(?:\+|%|\.\s*format)|(?![rbufRBUF]{0,2}['"])[A-Za-z_][\w.]*(?![\w.])(?!\s*=[^=]))
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Render a fixed template file with render_template('page.html', name=value) and pass all user input only as named context data, never as the template source.
+why: Flask's render_template_string compiles its first argument as a Jinja2 template, so a dynamic (variable, concatenated, f-string, %/format) source lets attacker input reach the template compiler and execute.
+confidence: high

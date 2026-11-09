@@ -1,0 +1,12 @@
+id: wide/ssti-go-jet-loadtemplate
+name: ssti-go-jet-loadtemplate
+category: INJECTION
+severity: HIGH
+languages:
+  - go
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*\.LoadTemplate\(\s*[^,)]+,\s*(?:[A-Za-z_]|[\x22\x60][^\x22\x60]*[\x22\x60]\s*\+)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Register templates from a trusted loader with fixed content and pass user input only through the vars/VarMap given to Execute.
+why: jet Set.LoadTemplate(name, content) compiles its second argument as template SOURCE, so passing user input as the content lets an attacker inject Jet actions and reach ranged/exposed data.
+confidence: high

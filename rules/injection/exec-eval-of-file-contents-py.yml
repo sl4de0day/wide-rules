@@ -1,0 +1,15 @@
+id: wide/exec-eval-of-file-contents-py
+name: exec-eval-of-file-contents-py
+category: INJECTION
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-95
+pattern: \b(?:exec|eval)\s*\(\s*(?:compile\s*\(\s*)?open\s*\(
+message: Write-then-execute — code is loaded or run from a user-controlled or writable path (potential RCE, CWE-829/95/98/94).
+remediation: Do not exec/eval file contents. Load data with a safe parser (json/yaml.safe_load), or for genuine plugins use importlib against a fixed, read-only package and a validated name.
+not-match: ^\s*#|open\s*\(\s*['"][^'"]*['"]\s*\)|__file__
+why: exec()/eval() (optionally via compile()) of the bytes returned by open() executes the contents of a file as Python; when that file path is user-controlled or lives in an uploads/tmp directory, writing the file is direct code execution. open() of a plain string literal and open(__file__) are suppressed; execute()/opened.read() do not match the exec/open boundary.
+confidence: high

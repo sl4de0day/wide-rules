@@ -1,0 +1,13 @@
+id: wide/xxe-java-xml-factory-unhardened
+name: xxe-java-xml-factory-unhardened
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - java
+cwe: CWE-611
+pattern: (?:\b(?:DocumentBuilderFactory|SAXParserFactory|XMLInputFactory|TransformerFactory|SchemaFactory)\.newInstance\s*\(\s*\)|\bnew\s+SAXReader\s*\()
+message: XML entity expansion / XXE — an XML parser resolves entities on untrusted input (CWE-776/611).
+remediation: 'Immediately harden the factory: setFeature("http://apache.org/xml/features/disallow-doctype-decl", true) (or FEATURE_SECURE_PROCESSING), set ACCESS_EXTERNAL_DTD/ACCESS_EXTERNAL_STYLESHEET to "", and for StAX set XMLInputFactory.SUPPORT_DTD and IS_SUPPORTING_EXTERNAL_ENTITIES to false.'
+not-match: disallow-doctype-decl|FEATURE_SECURE_PROCESSING|SUPPORT_DTD\s*,\s*false|ACCESS_EXTERNAL_(?:DTD|SCHEMA|STYLESHEET)\s*,\s*(?:""|'')|setExpandEntityReferences\s*\(\s*false|^\s*(?:\/\/|\*|\/\*)
+why: 'A JAXP/dom4j factory (DocumentBuilderFactory, SAXParserFactory, XMLInputFactory, TransformerFactory, dom4j SAXReader) created via the no-arg newInstance()/new SAXReader() processes DOCTYPE declarations and external entities by default; unless hardened it lets untrusted XML perform XXE (local file disclosure, SSRF) and entity-expansion DoS. Instances hardened on the same line (disallow-doctype-decl true, FEATURE_SECURE_PROCESSING, SUPPORT_DTD false, empty ACCESS_EXTERNAL_*, setExpandEntityReferences(false)) and comment lines are suppressed. Note: the empty-parens anchor means SchemaFactory.newInstance(schemaLang) and string literals do not match; multi-line hardening (harden on a following line) is a known limitation of a single-line regex.'
+confidence: high

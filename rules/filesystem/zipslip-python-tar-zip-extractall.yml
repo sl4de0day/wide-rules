@@ -1,0 +1,15 @@
+id: wide/zipslip-python-tar-zip-extractall
+name: zipslip-python-tar-zip-extractall
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-22
+pattern: \.extractall\s*\(
+message: Zip Slip / insecure archive extraction — an archive entry name escapes the destination, arbitrary file write (CWE-22/59).
+remediation: 'On Python 3.12+ pass filter=''data'' (data_filter). Otherwise validate each member: os.path.realpath(os.path.join(dest, name)) must start with os.path.realpath(dest); reject absolute names, ''..'', and link members before extracting.'
+not-match: ^\s*#|filter\s*=|data_filter|is_within_directory|is_safe_path|commonpath|commonprefix|realpath|\.startswith\(|safe_extract|str\.extractall
+why: tarfile/zipfile extractall() writes all members using their in-archive names; a member named ../../etc/passwd (or an absolute path, or a symlink member) is written outside the target directory, a classic arbitrary-write / TarSlip primitive.
+confidence: high

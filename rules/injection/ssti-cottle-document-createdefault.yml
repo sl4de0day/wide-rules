@@ -1,0 +1,13 @@
+id: wide/ssti-cottle-document-createdefault
+name: ssti-cottle-document-createdefault
+category: INJECTION
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*\bDocument\.CreateDefault\s*\(\s*(?:(?:\$@?|@\$)"|@?"[^"]*"\s*\+|[A-Za-z_][\w.]*\s*[\[(+,)])
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Create the document from a fixed literal template and pass user input as values in the runtime store passed to Render, not as the template source.
+why: Cottle's Document.CreateDefault parses its argument as a Cottle template; a user-controlled source lets an attacker evaluate expressions and invoke exposed functions against the value store (SSTI).
+confidence: high

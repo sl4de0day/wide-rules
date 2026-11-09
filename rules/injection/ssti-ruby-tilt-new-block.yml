@@ -1,0 +1,12 @@
+id: wide/ssti-ruby-tilt-new-block
+name: ssti-ruby-tilt-new-block
+category: INJECTION
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-1336
+pattern: ^(?!\s*#).*?\bTilt(?:\[[^\]]*\]|::\w+)?\.new\s*(?:\((?:[^()]|\([^()]*\))*\))?\s*\{\s*(?:[a-z_@][\w.:]*|"[^"]*#\{|(?:"[^"]*"|'[^']*')\s*(?:\+|%|<<)(?!\s*["']))
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Point Tilt at a fixed template file, or return only a constant literal from the block, and pass user data through the render scope/locals rather than the block source.
+why: Tilt['erb'/'slim'/...] .new (and Tilt::*Template.new) compiles the string returned by its block as a template of the chosen engine; a dynamic block value hands attacker-controlled template source (often ERB/Slim/Haml, i.e. RCE) to the compiler.
+confidence: high

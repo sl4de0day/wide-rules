@@ -1,0 +1,15 @@
+id: wide/identity-from-trusted-request-header-java
+name: identity-from-trusted-request-header-java
+category: GENERAL
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-302
+pattern: \.getHeader\s*\(\s*"(X-)?(username|userid|user|uid|login|account|remote-user|auth-user)\b
+message: Broken session management — identity/role from an unverified client value or a writable store (CWE-807/302).
+remediation: Authenticate via the container/framework principal (SecurityContextHolder / getUserPrincipal) or a verified token. If a trusted upstream proxy injects the header, strip/verify it at the edge.
+not-match: '[Uu]ser-?[Aa]gent|^\s*(\/\/|\*|\/\*)'
+why: The acting user identity is read from a request header (X-User, X-Remote-User, ...). Any client can send an arbitrary header, so trusting this assumed-immutable data as authenticated identity is an authentication bypass by header spoofing (CWE-302). User-Agent is explicitly excluded.
+confidence: high

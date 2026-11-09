@@ -1,0 +1,22 @@
+id: wide/debug-enabled
+name: debug-enabled
+category: GENERAL
+severity: LOW
+languages:
+  - py
+  - pyi
+  - pyw
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-489
+pattern: debug\s*=\s*True|app\.run\([^)]*debug\s*=\s*True
+message: Debug mode looks enabled.
+remediation: Drive debug from an environment variable and keep it off in production.
+why: A debug server exposes stack traces and, in Flask, an interactive console that runs code — never for production.
+confidence: high

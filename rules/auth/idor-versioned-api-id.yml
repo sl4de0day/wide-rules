@@ -1,0 +1,20 @@
+id: wide/idor-versioned-api-id
+name: idor-versioned-api-id
+category: AUTH
+severity: LOW
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-639
+pattern: (\.(get|post|put|patch|del|delete)|@(Get|Post|Put|Patch|Delete|All))\s*\(\s*['"`][^'"`]*\/?(api\/)?v\d+\/[^'"`]*:[A-Za-z_]*[iI]d\b
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: Confirm the handler enforces ownership; attach the standard auth/authorization middleware or guard (requireAuth, @UseGuards(OwnerGuard), a policy check) to the versioned route, or retire the deprecated endpoint.
+not-match: requireAuth|ensureAuth|isAuthenticated|authorize|@UseGuards|AuthGuard|passport|requireOwner|checkPermission|checkOwner|req\.user|ensureLogin|verifyToken|\bjwt\b|\brequire[A-Z]|\bensure[A-Z]|\bverify[A-Z]|\bcheck[A-Z]|Guard\b|[Mm]iddleware|authenticat|\bacl\b|\brbac\b|\bpolicy\b|can[A-Z]|^\s*(?:\/\/|\*|\/\*)
+why: 'Aggravator, not a bug by itself: a route under a versioned/legacy path (/v1/, /api/v2/) exposes an :id parameter with no auth middleware or guard named on the same line. Old versioned endpoints are a common place ownership checks were never back-ported, so these are worth an audit.'
+confidence: low

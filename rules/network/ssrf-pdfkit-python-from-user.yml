@@ -1,0 +1,15 @@
+id: wide/ssrf-pdfkit-python-from-user
+name: ssrf-pdfkit-python-from-user
+category: NETWORK
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-918
+pattern: \bpdfkit\.from_(?:string|url|file)\s*\(
+message: Renderer resource embedding — a document/PDF/image converter resolves a user-controlled resource, enabling LFI or SSRF (CWE-918/73/611).
+remediation: 'Set options={''disable-local-file-access'': None} and validate/allowlist any URL; only pass fixed literal sources or content built from trusted templates.'
+not-match: (?:^\s*(?:#|\/\/|\*)|disable-local-file-access|pdfkit\.from_(?:string|url|file)\s*\(\s*['"`][^'"`$]*['"`]\s*[,)])
+why: python pdfkit wraps wkhtmltopdf; from_string/from_url/from_file with user-controlled HTML or URL lets an attacker read local files via file:// or reach internal hosts (SSRF) because local-file access is enabled by default.
+confidence: high

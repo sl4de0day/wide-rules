@@ -1,0 +1,36 @@
+id: wide/service-broker-cache-noauth-uri
+name: service-broker-cache-noauth-uri
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - rb
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - java
+  - kt
+  - kts
+  - go
+  - cs
+  - csx
+cwe: CWE-306
+pattern: (?:amqps?|memcached|memcache):\/\/(?![^\/\s'"@]*@)
+message: Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.
+remediation: 'Create a dedicated broker/cache user with a password (RabbitMQ user, memcached SASL) and connect with credentials from a secret: amqp://<user>:<pass>@host. Treat every internal service as internet-facing.'
+not-match: ^\s*(?:\/\/|\*|#|<!--)|\b(?:test|spec|fixture|mock|dummy|sample|example|e2e)\b|:['"]\s*\+
+why: An amqp(s):// or memcached:// URI with no userinfo reaches the message broker / cache with no authentication, letting any reachable client publish, consume, or read/poison cached data. Memcached and open brokers have no auth by default.
+confidence: high

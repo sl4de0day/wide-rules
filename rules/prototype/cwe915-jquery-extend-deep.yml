@@ -1,0 +1,25 @@
+id: wide/cwe915-jquery-extend-deep
+name: cwe915-jquery-extend-deep
+category: PROTOTYPE
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-915
+pattern: \$(?:\.fn)?\.extend\s*\(\s*true\b
+message: jQuery $.extend is called in deep mode ($.extend(true, target, ...)) onto an existing target object.
+remediation: Deep-extend into a fresh {} target, or sanitize keys (drop __proto__/constructor) before merging.
+not-match: \$(?:\.fn)?\.extend\s*\(\s*true\s*,\s*\{\s*\}
+why: Deep-extending an existing object with untrusted source data can set __proto__ properties and pollute Object.prototype across the app.
+confidence: high

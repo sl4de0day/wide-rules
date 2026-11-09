@@ -1,0 +1,13 @@
+id: wide/pathwrite-java-fileoutputstream-reqparam
+name: pathwrite-java-fileoutputstream-reqparam
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - java
+cwe: CWE-22
+pattern: new\s+(FileOutputStream|FileWriter|PrintWriter|BufferedWriter)\s*\([^;]*\b(request\.getParameter|getSubmittedFileName|getOriginalFilename)\s*\(
+message: Path traversal on write — a file is written to a user-controlled path without a containment check (CWE-22).
+remediation: Reduce the name with FilenameUtils.getName()/an allowlist, then verify file.getCanonicalPath().startsWith(baseDir.getCanonicalPath()+File.separator) before opening the stream.
+not-match: getCanonicalPath|getCanonicalFile|FilenameUtils\.getName|toRealPath|startsWith|sanitiz|basename|whitelist|allowlist|^\s*(\/\/|\*|\/\*)
+why: A FileOutputStream/FileWriter/PrintWriter is opened over new File(dir, request.getParameter(...)) or the multipart getSubmittedFileName()/Spring getOriginalFilename(); the File(dir, child) constructor does not block '../', so request input controls the write location.
+confidence: high

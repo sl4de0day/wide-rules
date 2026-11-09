@@ -1,0 +1,18 @@
+id: wide/netauthz-origin-referer-as-auth-php
+name: netauthz-origin-referer-as-auth-php
+category: AUTH
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-346
+pattern: (?:\$_SERVER\s*\[\s*['"]HTTP_(?:ORIGIN|REFERER)['"]\s*\]\s*(?:===?|!==?)\s*['"][^'"]+['"]|strpos\(\s*\$_SERVER\s*\[\s*['"]HTTP_(?:ORIGIN|REFERER)['"]\s*\]\s*,\s*['"][^'"]+['"]\s*\)\s*===?\s*0)
+message: Broken access control — authorization based on network location or a spoofable client header (CWE-346/290).
+remediation: Authorize on a session ($_SESSION with a real login) or verified token, not HTTP_ORIGIN/HTTP_REFERER. Use Origin only for CORS headers and add proper CSRF tokens.
+not-match: ^\s*(?:\/\/|#|\*)|Access-Control|Allow-Origin|\bcors\b|allowed_origins|whitelist|\b(?:log|logger|error_log|syslog|metric|audit)\b|password_verify|jwt|verifyToken|authenticate|csrf|\$_SESSION
+why: $_SERVER['HTTP_ORIGIN']/HTTP_REFERER compared to (or strpos-prefixed against) a trusted value to decide access treats a client-controlled header as identity. Both are forgeable outside a browser, so the check is bypassable. CORS/logging lines are excluded by notMatch.
+confidence: high

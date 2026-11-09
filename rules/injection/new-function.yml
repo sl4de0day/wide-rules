@@ -1,0 +1,24 @@
+id: wide/new-function
+name: new-function
+category: INJECTION
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-95
+pattern: ^Function$
+message: new Function() compiles a string into code.
+remediation: Use a real function, a lookup table, or JSON.parse for data.
+why: 'It is eval() by another name: the body is executed with the caller''s authority.'
+confidence: high

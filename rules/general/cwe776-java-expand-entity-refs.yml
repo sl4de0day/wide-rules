@@ -1,0 +1,12 @@
+id: wide/cwe776-java-expand-entity-refs
+name: cwe776-java-expand-entity-refs
+category: GENERAL
+severity: HIGH
+languages:
+  - java
+cwe: CWE-776
+pattern: setExpandEntityReferences\s*\(\s*true\s*\)
+message: DocumentBuilderFactory is set to expand entity references.
+remediation: Call setExpandEntityReferences(false) and disallow DOCTYPE declarations entirely.
+why: Expanding entity references lets recursively nested entities blow up (billion laughs / quadratic blowup), exhausting CPU and memory to deny service.
+confidence: high

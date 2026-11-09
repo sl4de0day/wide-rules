@@ -1,0 +1,14 @@
+id: wide/ssrf-follow-redirects-enabled
+name: ssrf-follow-redirects-enabled
+category: NETWORK
+severity: MEDIUM
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-918
+pattern: (?:setInstanceFollowRedirects|setFollowRedirects|followRedirects|followSslRedirects)\s*\(\s*(?:true|(?:HttpClient\.)?Redirect\.(?:ALWAYS|NORMAL))\s*\)
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Disable automatic redirect following (setInstanceFollowRedirects(false) / Redirect.NEVER) and manually validate the host of every redirect Location before following it.
+why: Following redirects without re-validating each hop lets an allowlisted URL 302-redirect to an internal target, defeating the front-door SSRF check.
+confidence: high

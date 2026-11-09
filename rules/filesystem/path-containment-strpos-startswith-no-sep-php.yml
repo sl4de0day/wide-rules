@@ -1,0 +1,18 @@
+id: wide/path-containment-strpos-startswith-no-sep-php
+name: path-containment-strpos-startswith-no-sep-php
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-22
+pattern: (?:\bstrpos\s*\(\s*\$[A-Za-z_]\w*\s*,\s*(?:\$[A-Za-z_]\w*(?:Dir|Root|Base|_dir|_root|_base)\b|\$(?:base|root)\b)\s*\)\s*(?:!==?|===?)\s*0|\bstrpos\s*\(\s*\$(?:resolved|realpath|realPath|absPath|absolute|fullPath|filePath|normalized|canonicalPath|canonical|targetPath|safePath|finalPath)\w*\s*,[^)]*\)\s*(?:!==?|===?)\s*0|\bstr_starts_with\s*\(\s*\$[A-Za-z_]\w*\s*,\s*(?:\$[A-Za-z_]\w*(?:Dir|Root|Base|_dir|_root|_base)\b|\$(?:base|root)\b)\s*\)|\bstr_starts_with\s*\(\s*\$(?:resolved|realpath|realPath|absPath|absolute|fullPath|filePath|normalized|canonicalPath|canonical|targetPath|safePath|finalPath)\w*\s*,[^)]*\))
+message: Path-containment bypass — a startsWith/indexOf prefix check with no trailing separator lets a sibling directory escape (CWE-22).
+remediation: 'Append the separator: strpos($resolved, $base . DIRECTORY_SEPARATOR) === 0 (or str_starts_with with the separator) and confirm realpath($resolved) !== false; ideally validate against an allowlist of canonical base paths.'
+not-match: ^\s*(?:\/\/|#|\*)|\.\s*(?:DIRECTORY_SEPARATOR|['"][\/\\]['"])|[\/\\]['"]\s*\)|WithSep
+why: 'strpos($resolved, $base) === 0 / str_starts_with($resolved, $base) confines a realpath to a base with no trailing DIRECTORY_SEPARATOR, so /var/www/uploads_backup passes a check for /var/www/uploads (CWE-22). Tightened: the generic-haystack branches dropped their bare string-literal needle — they fired on `strpos($uri, ''/api'') === 0` / `str_starts_with($route, ''/admin'')` router code; base literals stay caught via the resolved-path-haystack branches ($resolved/$normalized/$canonical, first arg). Needle bare-var restricted to $base/$root and *Dir/*Root/*Base/_dir/_root/_base so `$baseUrl` no longer matches. notMatch clears the . DIRECTORY_SEPARATOR / . ''/'' twin, a trailing-slash literal, and comments.'
+confidence: high

@@ -1,0 +1,13 @@
+id: wide/arginj-ruby-concat-arg-array
+name: arginj-ruby-concat-arg-array
+category: INJECTION
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-88
+pattern: ^(?=.*\b(?:system|exec|spawn|IO\.popen|Open3\.(?:capture2e?|capture3|popen3|popen2)|Process\.spawn)\s*\()(?=.*(?:['"][^'"]*['"]\s*\+\s*[A-Za-z_@]|[A-Za-z_@][\w.\[\]]*\s*\+\s*['"]|"[^"]*#\{)).*
+message: Argument injection — a user value reaches a CLI argument that could be interpreted as an option/flag (CWE-88).
+remediation: Validate on the same line with an anchored =~ /.../ or String#match?, coerce numerics with Integer()/to_i, or place a literal '--' end-of-options element before any user value in the argument list.
+not-match: (?:=~\s*\/|\.match\?\s*\(|\.match\s*\(|\bInteger\s*\(|\.to_i\b|['"]--['"]|^\s*#)
+why: 'A system/exec/spawn/IO.popen/Open3.* multi-argument call element is built by concatenation or #{} interpolation of a variable. The multi-arg (array) form bypasses the shell but not flag parsing: a value that starts with ''-'' becomes a CLI option to the target program (argument/flag injection).'
+confidence: high

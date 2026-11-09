@@ -1,0 +1,19 @@
+id: wide/ssti-jade-compile-render
+name: ssti-jade-compile-render
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-1336
+pattern: \b[Jj]ade\.(?:compile|render|compileClient)\s*\(\s*(?:[^\s'"`)]|(?:'[^']*'|"[^"]*"|`[^`]*`)\s*\+|`[^`]*\$\{)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Render from a fixed .jade file with jade.renderFile and pass user input as locals; never build the compiled string from request data.
+why: Jade (the predecessor of Pug) compiles its string argument into an executable render function, so a dynamic template source allows arbitrary JavaScript execution on the server.
+confidence: high

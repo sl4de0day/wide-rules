@@ -1,0 +1,20 @@
+id: wide/cwe22-express-sendfile-req-path
+name: cwe22-express-sendfile-req-path
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-22
+pattern: \bres\.(sendFile|download)\s*\([^)]*\breq\.(params|query|body|headers|cookies)\b
+message: res.sendFile/res.download serves a path taken from request data.
+remediation: Pass a validated basename and set the { root } option so Express confines the path, or map the input through an allowlist.
+not-match: 'path\.basename|root\s*:'
+why: A user-controlled relative path with ../ lets an attacker download arbitrary files outside the intended web root.
+confidence: high

@@ -1,0 +1,12 @@
+id: wide/ssti-go-liquid-parse-render-string
+name: ssti-go-liquid-parse-render-string
+category: INJECTION
+severity: HIGH
+languages:
+  - go
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*\.(?:ParseAndRenderString|ParseTemplateAndCache|ParseTemplate|ParseString)\(\s*(?:\[\]byte\(\s*|\[\]rune\(\s*)?(?:[A-Za-z_]|[\x22\x60][^\x22\x60]*[\x22\x60]\s*\+)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Parse a fixed literal (or a file from a trusted path via ParseTemplateFile) and pass user input only through the bindings map handed to Render/ParseAndRenderString.
+why: liquid Engine.ParseString/ParseTemplate/ParseAndRenderString/ParseTemplateAndCache compile their first argument as Liquid template SOURCE, so a dynamic value (including a []byte(...) of request input) lets an attacker inject tags/filters and reach the bindings.
+confidence: high

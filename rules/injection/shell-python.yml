@@ -1,0 +1,14 @@
+id: wide/shell-python
+name: shell-python
+category: INJECTION
+severity: CRITICAL
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-78
+pattern: subprocess\.\w+\([^)]*shell\s*=\s*True|\bos\.system\s*\(
+message: This runs a shell command.
+remediation: Pass an argument list and leave shell=False (the default).
+why: shell=True (and os.system) send the string through /bin/sh, so interpolated input can inject commands.
+confidence: high

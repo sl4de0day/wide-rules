@@ -1,0 +1,16 @@
+id: wide/cwe611-php-enable-entity-loader
+name: cwe611-php-enable-entity-loader
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+cwe: CWE-611
+pattern: libxml_disable_entity_loader\s*\(\s*false\s*\)
+message: libxml_disable_entity_loader(false) re-enables loading of external XML entities.
+remediation: Call libxml_disable_entity_loader(true) before parsing, or on PHP 8+ never enable LIBXML_NOENT.
+why: Turning the entity loader back on lets a DOCTYPE reference local files or internal URLs, producing classic XXE data exfiltration and SSRF.
+confidence: high

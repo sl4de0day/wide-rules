@@ -1,0 +1,15 @@
+id: wide/py-re-sub-user-replacement-backref
+name: py-re-sub-user-replacement-backref
+category: GENERAL
+severity: LOW
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-116
+pattern: (?<![\w.])re\.subn?\s*\(\s*(?:[rbuRBU]{0,2}(?:"(?:\\.|[^"\\])*"|'(?:\\.|[^'\\])*')|[A-Za-z_][\w.]*(?:\[[^\]]*\])?)\s*,\s*request\.(?:args|form|values|cookies|headers|GET|POST|data)(?:\.[\w]+|\[[^\]]*\]|\.get\s*\([^)]*\))*\s*,
+message: Replacement-token injection — user input used as a replace() replacement or preg_replace /e is interpreted, not literal (CWE-116/94).
+remediation: 'Escape backslashes in the untrusted replacement before use, or pass a function replacement -- re.sub(pattern, lambda m: user_value, string) -- so no backreference expansion happens on the user data. Do not bind raw user input as the replacement argument.'
+not-match: ^\s*#|,\s*lambda\b
+why: 'In re.sub(pattern, repl, string) / re.subn the replacement is not literal text: numbered and named backref tokens expand to captured groups and \g<0> to the whole match, so a user-controlled replacement can splice matched/adjacent content into the output (or raise ''invalid group reference''). The sink fires only when arg2 is a bare identifier/member (optionally subscripted) immediately followed by the comma that begins the required 3rd (string) argument -- so inline lambda replacements (an identifier is not followed by a comma; belt-and-suspenders in notMatch), literal-string replacements, and sanitizer/escaping CALL replacements such as str(x) / repl.upper() (a ( follows the callee, not a comma) are excluded. Two precision/recall fixes over the original: (1) the leading (?<![\w.]) lookbehind replaces \b so it excludes not only foo_re.sub / pre.sub / feature.sub (already handled by \b) but also a leading-dot member like obj.re.sub, which is an unrelated .re attribute and was a false positive; (2) arg1 now accepts raw/bytes/unicode string prefixes ([rbuRBU]{0,2}, e.g. rb''\d+'') and an optional subscript (patterns[0]), closing two recall gaps. The engine supports backreferences (see the PHP rule), so this lookbehind is safe for it.'
+confidence: high

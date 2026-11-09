@@ -1,0 +1,24 @@
+id: wide/contextual-fragment
+name: contextual-fragment
+category: XSS
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-79
+pattern: createContextualFragment\s*\(\s*[A-Za-z_$`]
+message: createContextualFragment parses its argument as HTML.
+remediation: Build nodes with the DOM API, or sanitise the markup (DOMPurify) before creating the fragment.
+why: Range.createContextualFragment turns a string into live nodes with their scripts and event attributes intact — a variable passed here is a DOM-XSS sink, including across a Shadow DOM boundary.
+confidence: high

@@ -1,0 +1,20 @@
+id: wide/cwe352-express-state-change-route
+name: cwe352-express-state-change-route
+category: NETWORK
+severity: LOW
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-352
+pattern: \b(?:app|router)\s*\.\s*(?:post|put|patch|delete)\s*\(
+message: Defines a state-changing Express route (post/put/patch/delete) with no visible CSRF protection on the line.
+remediation: Add CSRF middleware or enforce SameSite cookies plus an anti-CSRF token / required custom header on every mutating route.
+not-match: csrf|csurf|xsrf
+why: State-changing endpoints without an anti-CSRF token or equivalent can be triggered cross-site from a victim's authenticated browser, forging privileged actions.
+confidence: high

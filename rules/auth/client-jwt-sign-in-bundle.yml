@@ -1,0 +1,25 @@
+id: wide/client-jwt-sign-in-bundle
+name: client-jwt-sign-in-bundle
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+  - html
+  - htm
+  - xhtml
+cwe: CWE-602
+pattern: \b(?:jwt|jsonwebtoken)\.sign\s*\(
+message: Client-side token signing or embedded signing key — a secret/decision shipped to the browser is attacker-forgeable.
+remediation: Move jwt.sign() to a server route; have the client call that endpoint and receive the token over the network. Never bundle the signing secret into client code. On the client, only decode (jwt-decode) or send tokens, never sign them.
+not-match: ^\s*(?:\/\/|\*|\/\*|<!--)
+why: jsonwebtoken's jwt.sign() mints a signed token, which requires the signing secret/private key in scope. In a browser bundle the key is fully readable and the mint step is client-controlled, so any attacker can forge tokens (e.g. mint {role:'admin'}). Token issuance must happen on the server behind an authenticated endpoint.
+confidence: high

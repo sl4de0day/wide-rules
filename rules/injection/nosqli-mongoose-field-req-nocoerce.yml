@@ -1,0 +1,20 @@
+id: wide/nosqli-mongoose-field-req-nocoerce
+name: nosqli-mongoose-field-req-nocoerce
+category: INJECTION
+severity: CRITICAL
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-943
+pattern: \.(find|findOne|findOneAndUpdate|findOneAndDelete|updateOne|updateMany|deleteOne|deleteMany|count|countDocuments)\s*\(\s*\{[^}]*:\s*req\.(body|query|params)\.
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: Coerce each user-supplied field to the expected primitive (String(req.body.username), Number(...), or new ObjectId(...)), or validate the body with a schema so object/operator payloads are rejected before they reach the query.
+not-match: \.toString\s*\(|String\s*\(|Number\s*\(|parseInt|parseFloat|\.trim\s*\(|ObjectId\s*\(|mongoose\.Types|Joi\.|zod|\.validate\(|matchedData|sanitiz|^\s*(?:\/\/|\*|\/\*)
+why: 'A filter field is set to a request value (e.g. { username: req.body.username }) without coercing it to a scalar, so a JSON body like { "username": { "$ne": null } } turns the field comparison into an operator query — the canonical login-bypass NoSQL injection.'
+confidence: high

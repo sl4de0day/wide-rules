@@ -1,0 +1,15 @@
+id: wide/netauthz-origin-referer-as-auth-java-kt
+name: netauthz-origin-referer-as-auth-java-kt
+category: AUTH
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-346
+pattern: getHeader\(\s*"(?:Origin|Referer)"\s*\)\s*(?:\.equals\(\s*"[^"]+"|\.startsWith\(\s*"[^"]+"|==\s*"[^"]+")
+message: Broken access control — authorization based on network location or a spoofable client header (CWE-346/290).
+remediation: Authorize with Spring Security / a verified token, not the Origin/Referer header. Use Origin only when building CORS responses; defend CSRF with tokens and SameSite cookies.
+not-match: ^\s*(?:\/\/|\*|\/\*)|access-control|allow-origin|setheader|addheader|\bcors\b|allowedorigins|whitelist|\b(?:log|logger|slf4j|metric|audit)\b|jwt|verifytoken|authenticate|getsession|isauthenticated|securitycontext|hasrole|csrf
+why: request.getHeader("Origin"|"Referer") equals/startsWith a trusted string and that grants access. These headers are client-controlled and forgeable off-browser, so an attacker supplies the expected value to bypass the gate. CORS setHeader/addHeader and logging are excluded by notMatch.
+confidence: high

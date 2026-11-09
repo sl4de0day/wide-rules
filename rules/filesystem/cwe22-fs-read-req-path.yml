@@ -1,0 +1,20 @@
+id: wide/cwe22-fs-read-req-path
+name: cwe22-fs-read-req-path
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-22
+pattern: \bfs\.(readFile|readFileSync|createReadStream|writeFile|writeFileSync|createWriteStream|unlink|unlinkSync|open|openSync|readdir|readdirSync)\s*\([^)]*\breq\.(params|query|body|headers|cookies)\b
+message: A filesystem call is given a path built directly from request data.
+remediation: Resolve the path against a fixed base and reject anything that escapes it, or reduce the input to path.basename() before use.
+not-match: path\.basename
+why: An attacker can inject ../ sequences to read, write, or delete files anywhere on the server, escaping the intended directory.
+confidence: high

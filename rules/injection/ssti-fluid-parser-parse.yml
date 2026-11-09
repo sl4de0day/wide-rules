@@ -1,0 +1,13 @@
+id: wide/ssti-fluid-parser-parse
+name: ssti-fluid-parser-parse
+category: INJECTION
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*(?:new\s+FluidParser\s*\(\s*\)|\b_?[Ff]luid[Pp]arser|\b_?[Pp]arser)\s*\.\s*(?:Try)?Parse\s*\(\s*(?:(?:\$@?|@\$)"|@?"[^"]*"\s*\+|[A-Za-z_][\w.]*\s*[\[(+,)])
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Parse fixed literal templates and register user input as model values in the TemplateContext, never build the parsed source from request data.
+why: Fluid's FluidParser.Parse/TryParse compiles its first argument as a Liquid template; a dynamic source string lets an attacker read exposed model members and inject template logic (SSTI).
+confidence: high

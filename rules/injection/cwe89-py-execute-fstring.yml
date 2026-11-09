@@ -1,0 +1,14 @@
+id: wide/cwe89-py-execute-fstring
+name: cwe89-py-execute-fstring
+category: INJECTION
+severity: CRITICAL
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-89
+pattern: \.execute(?:many)?\s*\(\s*f["']
+message: A cursor executes an f-string.
+remediation: 'Leave the placeholder in the SQL and pass the values: cursor.execute(''SELECT * FROM t WHERE id = %s'', (id,)).'
+why: The f-string is fully expanded before execute() ever sees it, so the value is part of the SQL text and the driver has nothing left to parameterise.
+confidence: high

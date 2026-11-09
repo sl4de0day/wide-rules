@@ -1,0 +1,19 @@
+id: wide/cwe943-mongo-regex-user-input
+name: cwe943-mongo-regex-user-input
+category: INJECTION
+severity: CRITICAL
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-943
+pattern: \$regex["']?\s*:\s*[^,}\n]*req\.(body|query|params)
+message: A MongoDB $regex value is taken directly from request input.
+remediation: Escape regex metacharacters and anchor the value, or match with $eq on the exact field instead of $regex.
+why: Unescaped user input as a $regex lets an attacker craft anchors/wildcards to match unintended records or supply a catastrophic-backtracking pattern that stalls the database (ReDoS).
+confidence: high

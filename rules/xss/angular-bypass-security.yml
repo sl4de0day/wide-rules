@@ -1,0 +1,19 @@
+id: wide/angular-bypass-security
+name: angular-bypass-security
+category: XSS
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-79
+pattern: bypassSecurityTrust(Html|Script|Style|Url|ResourceUrl)\s*\(
+message: This disables Angular's sanitiser.
+remediation: Let Angular sanitise it, or clean the value yourself before trusting it.
+why: bypassSecurityTrust* marks a value as safe without checking it, re-opening the XSS Angular normally prevents.
+confidence: high

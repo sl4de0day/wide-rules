@@ -1,0 +1,12 @@
+id: wide/fmtstring-go-fmt-fprintf-var-format
+name: fmtstring-go-fmt-fprintf-var-format
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - go
+cwe: CWE-134
+pattern: \bfmt\.Fprintf\s*\(\s*[^,()"'`\n]+,\s*(?!["'`])[A-Za-z_][A-Za-z0-9_.]*\s*[,)]
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Use a constant format: fmt.Fprintf(w, "%s", user) rather than fmt.Fprintf(w, user).'
+why: In fmt.Fprintf the format string is the second argument (after the io.Writer); here it is a non-literal identifier, so user-controlled format verbs drive formatting written to the response/stream. A literal format ("%s") is excluded by the negative lookahead, a computed format (fmt.Sprintf(cfg), getFmt()) is excluded because it is followed by '(' not a terminator, and Fprintln is excluded because it is not Fprintf.
+confidence: high

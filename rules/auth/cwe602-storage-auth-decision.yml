@@ -1,0 +1,24 @@
+id: wide/cwe602-storage-auth-decision
+name: cwe602-storage-auth-decision
+category: AUTH
+severity: LOW
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-602
+pattern: \b(?:localStorage|sessionStorage)\s*(?:\.\s*getItem\s*\(\s*|\.\s*|\[\s*)['"`]?(?:role|roles|isAdmin|admin|permission|permissions|privilege|accessLevel|isAuthenticated|userRole|scope)\b
+message: Reads an authorization value (role/isAdmin/permissions) from localStorage/sessionStorage to drive an access decision.
+remediation: Treat storage as untrusted; enforce authorization on the server for every privileged action and derive UI state from a verified session.
+why: Web Storage is fully attacker-controllable in the browser, so gating admin UI or logic on it is trivially bypassed and proves nothing about real privilege.
+confidence: high

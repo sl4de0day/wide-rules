@@ -1,0 +1,19 @@
+id: wide/ssti-pug-compile-render
+name: ssti-pug-compile-render
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-1336
+pattern: \b[Pp]ug\.(?:compile|render|compileClient)\s*\(\s*(?:[^\s'"`)]|(?:'[^']*'|"[^"]*"|`[^`]*`)\s*\+|`[^`]*\$\{)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Render from a fixed .pug file via pug.renderFile/compileFile and pass user input as locals, never assemble the template source from user input.
+why: pug.render/compile/compileClient compile their string argument into a JavaScript render function that executes inline Pug/JS expressions, so a dynamic template source yields server-side code execution.
+confidence: high

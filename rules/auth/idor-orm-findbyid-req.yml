@@ -1,0 +1,20 @@
+id: wide/idor-orm-findbyid-req
+name: idor-orm-findbyid-req
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-639
+pattern: \.(findById|findByPk|findByIdAndUpdate|findByIdAndDelete|findByIdAndRemove|findOneById)\s*\(\s*req\.(params|query|body)
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: 'Scope the lookup to the requester: findOne({ _id: req.params.id, userId: req.user.id }) or add an explicit ownership/authorization check after the fetch (compare doc.owner to the session user, or gate the route with a policy/guard).'
+not-match: req\.(user|session|auth)|current[_-]?[Uu]ser|\b(ownerId|owner_id|userId|user_id|tenantId|tenant_id|accountId|account_id|organizationId|organization_id|orgId|org_id|companyId|company_id|teamId|team_id|workspaceId|workspace_id|createdBy|created_by|authorId|author_id|memberId|member_id)\s*:|isOwner|checkOwner|verifyOwner|assertOwner|ensureOwner|@UseGuards|authorize|Pundit|\bcan\(|\.where\s*\([^)]*(user|owner|tenant|account)|^\s*(?:\/\/|\*|\/\*)
+why: A record is loaded/mutated by primary key taken straight from the client (req.params/query/body) as the direct first argument, with no co-located ownership or session predicate, so any authenticated user can substitute another user's id and read or modify that record.
+confidence: high

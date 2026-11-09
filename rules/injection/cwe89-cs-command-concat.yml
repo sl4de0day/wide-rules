@@ -1,0 +1,13 @@
+id: wide/cwe89-cs-command-concat
+name: cwe89-cs-command-concat
+category: INJECTION
+severity: CRITICAL
+languages:
+  - cs
+  - csx
+cwe: CWE-89
+pattern: new\s+Sql(?:Command|DataAdapter)\s*\(\s*(?:\$"|"[^"]*"\s*\+)
+message: A SqlCommand is built from an interpolated or concatenated string.
+remediation: 'Use parameters: cmd.Parameters.AddWithValue("@id", id) with @id left in the SQL text.'
+why: Both forms produce the finished SQL before ADO.NET sees it, so the value is parsed as part of the statement.
+confidence: high

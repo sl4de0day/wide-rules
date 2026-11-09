@@ -1,0 +1,18 @@
+id: wide/nosqli-mongo-filter-raw-value
+name: nosqli-mongo-filter-raw-value
+category: INJECTION
+severity: CRITICAL
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-943
+pattern: '->(findOne|find|countDocuments|deleteOne|deleteMany|updateOne|updateMany)\s*\(\s*\[[^\]]*=>\s*(\$request\s*->\s*\w+|\$_(GET|POST|REQUEST|COOKIE)\s*\[[^\]]*\])'
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: Cast every user value to the expected scalar type inside the filter — (string) $request->username, (int) $_GET['id'], $request->string('name') — or validate against a schema before querying.
+not-match: \(string\)|\(int\)|\(bool\)|\(float\)|String\s*\(|intval|strval|floatval|boolval|filter_var|->validated|->validate\s*\(|is_string|is_scalar|settype|->string\s*\(|->integer\s*\(|->boolean\s*\(|->float\s*\(|->date\s*\(|->enum\s*\(|^\s*(\/\/|#(?!\[)|\*)
+why: 'A filter field is set to a raw request value (''username'' => $request->username, ''name'' => $_POST[''name'']) with no scalar coercion. Because PHP query strings can carry nested arrays, the value may arrive as {"$ne": null} or {"$regex": ".*"}, injecting operators into the field predicate (e.g. login bypass on password). notMatch adds Laravel typed accessors (->string()/->integer()/->boolean()/->float()) which return coerced values; note a coercer anywhere on the line suppresses the whole line (accepted recall trade-off for precision). Any cast placed before the value also breaks the sink itself, since the token right after => is then ''('' rather than ''$''.'
+confidence: high

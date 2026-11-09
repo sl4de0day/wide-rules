@@ -1,0 +1,19 @@
+id: wide/ssti-liquidjs-parseandrender
+name: ssti-liquidjs-parseandrender
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-1336
+pattern: \b[A-Za-z_$][\w$]*\.(?:parseAndRender|parseAndRenderSync)\s*\(\s*(?:[^\s'"`)]|(?:'[^']*'|"[^"]*"|`[^`]*`)\s*\+|`[^`]*\$\{)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Render fixed templates via engine.renderFile with a constant path and pass user input as the scope object; never pass a user-controlled string to parseAndRender.
+why: LiquidJS parseAndRender/parseAndRenderSync compile their first argument as a Liquid template, so a user-controlled source lets an attacker inject tags and filters that leak context data and can invoke registered filter code.
+confidence: high

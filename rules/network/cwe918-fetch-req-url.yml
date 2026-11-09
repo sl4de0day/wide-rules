@@ -1,0 +1,19 @@
+id: wide/cwe918-fetch-req-url
+name: cwe918-fetch-req-url
+category: NETWORK
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-918
+pattern: \b(fetch|axios|got|ky|needle|superagent|http\.get|https\.get|http\.request|https\.request)\b(\.(get|post|put|delete|patch|head|request))?\s*\(\s*req\.(query|params|body|headers|cookies)\b
+message: An outbound HTTP request uses a URL taken entirely from request data.
+remediation: Validate the URL against an allowlist of hosts/schemes and block private and link-local addresses before requesting it.
+why: A fully user-controlled URL lets an attacker reach internal services, cloud metadata (169.254.169.254), or localhost, i.e. server-side request forgery.
+confidence: high

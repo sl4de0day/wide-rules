@@ -1,0 +1,13 @@
+id: wide/idor-gorm-where-id-req
+name: idor-gorm-where-id-req
+category: AUTH
+severity: HIGH
+languages:
+  - go
+cwe: CWE-639
+pattern: \.Where\(\s*["\x60][^"\x60]*(?:\b[A-Za-z]*_id|\bid|\b[A-Za-z]*Id)\b\s*=\s*\?[^"\x60]*["\x60]\s*,\s*[^;]*(?:\.(?:Param|Params|Query|QueryParam|PostFormValue|PostForm|FormValue|DefaultQuery)\(|Vars\(\w+\)\[|URLParam\(|Params\.ByName\()
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: 'Add an ownership term to the same query: .Where("id = ? AND user_id = ?", id, currentUser.ID), or apply a gorm Scope that always injects the tenant/owner filter.'
+not-match: ^\s*\/\/|^\s*\*\s|[Uu]ser_?[Ii][Dd]|[Oo]wner|[Aa]ccount_?[Ii][Dd]|[Tt]enant|[Oo]rg_?[Ii][Dd]|[Oo]rganization|[Cc]ompany_?[Ii][Dd]|[Tt]eam_?[Ii][Dd]|[Ww]orkspace_?[Ii][Dd]|[Gg]roup_?[Ii][Dd]|[Cc]ustomer_?[Ii][Dd]|[Cc]urrent_?[Uu]ser|[Ss]ession|[Aa]uthoriz|[Ee]nforce|Pundit|CanCan|\.Can\(|[Pp]olic|[Cc]laims|\.Scopes\(|[Oo]wned_?[Bb]y|[Cc]reated_?[Bb]y|[Bb]elongs_?[Tt]o
+why: 'A parameterized gorm .Where() (double-quote or backtick condition) keyed only on an id/_id/xxxId column with a client-supplied value filters by the object reference alone. The placeholder stops SQL injection but not IDOR: with no ownership column (user_id/owner_id/org_id/...) in the predicate or a gorm Scope, the requester can address any record.'
+confidence: high

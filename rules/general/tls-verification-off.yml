@@ -1,0 +1,26 @@
+id: wide/tls-verification-off
+name: tls-verification-off
+category: GENERAL
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - go
+  - java
+  - cs
+  - rb
+cwe: CWE-295
+pattern: rejectUnauthorized\s*:\s*false|NODE_TLS_REJECT_UNAUTHORIZED\s*=\s*['"]?0|verify\s*=\s*False|InsecureSkipVerify\s*:\s*true|CURLOPT_SSL_VERIFYPEER\s*(=>|,)\s*(false|0)|_create_unverified_context
+message: Certificate verification is turned off.
+remediation: Leave verification on; if a self-signed cert is needed, add that specific CA instead of disabling checks.
+why: With verification disabled, any machine on the path can present its own certificate and read or alter the traffic — TLS gives no protection.
+confidence: high

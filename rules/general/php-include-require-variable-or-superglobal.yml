@@ -1,0 +1,18 @@
+id: wide/php-include-require-variable-or-superglobal
+name: php-include-require-variable-or-superglobal
+category: GENERAL
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-98
+pattern: (?:^|;|\{|\})\s*(?:include|require)(?:_once)?\b\s*\(?\s*(?:\$|['"][^'"]*['"]\s*\.\s*\$|[A-Z_][A-Z0-9_]*\s*\.\s*\$)
+message: Write-then-execute — code is loaded or run from a user-controlled or writable path (potential RCE, CWE-829/95/98/94).
+remediation: Never include a path derived from input. Use a fixed switch/allow-list map from a validated key to a hardcoded file, keep templates under a read-only path, and basename()+realpath()-contain any dynamic segment.
+not-match: ^\s*(?:\/\/|#|\*|\/\*)|[Ww]hitelist|allowed|ALLOWED
+why: 'include/require with a variable, a superglobal, or a directory-constant concatenated with a variable pulls in and executes PHP from a runtime path; an attacker who controls the value or writes into the included/uploaded directory achieves RCE (classic LFI-to-RCE). Anchoring the keyword to a statement position (line start, '';'', ''{'', ''}'') prevents it firing on the word ''include'' inside a string such as echo "include $file"; the constant.literal form (__DIR__ . ''/lib.php'') stays inert because it lacks a trailing $. Trade-off: the uncommon assignment form $x = include $y; is not matched.'
+confidence: high

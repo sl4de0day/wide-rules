@@ -1,0 +1,20 @@
+id: wide/identity-var-assigned-from-raw-client-value-js
+name: identity-var-assigned-from-raw-client-value-js
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-807
+pattern: \b(var|let|const)?\s*(req\.)?(loggedInUser|currentUser|current_user|authUser|userName|username|userId|user_id|userRole|isAdmin|is_admin|principal|account|session|users|user|roles|role|uid)\s*=\s*req\.(cookies|headers|query|params|body)\s*(\.\s*|\[\s*['"])
+message: Broken session management — identity/role from an unverified client value or a writable store (CWE-807/302).
+remediation: 'Populate identity/role from trusted state only: a verified JWT claim, req.signedCookies, or the authenticated server-side session (req.session).'
+not-match: signedCookies|jwt\.verify|req\.session\.|^\s*(\/\/|\*|\/\*)
+why: An identity or authorization variable (currentUser, userId, role, isAdmin, req.user, ...) is assigned directly from a raw client value (req.cookies/headers/query/body). The client fully controls its own identity and privilege state. RHS must be a raw req.<source> read, so req.session/req.signedCookies/req.user and getRole(jwt.verify(...)) are excluded.
+confidence: high

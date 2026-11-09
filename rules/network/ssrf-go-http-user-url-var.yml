@@ -1,0 +1,13 @@
+id: wide/ssrf-go-http-user-url-var
+name: ssrf-go-http-user-url-var
+category: NETWORK
+severity: MEDIUM
+languages:
+  - go
+cwe: CWE-918
+pattern: \b(?:http|client)\.(?:Get|Post|Head|PostForm)\s*\(\s*(?:userURL|userUrl|targetURL|targetUrl|inputURL|inputUrl|remoteURL|remoteUrl|userInput|reqURL|externalURL|fetchURL|proxyURL|forwardURL|redirectURL)\b
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Validate the URL host against an allowlist before the call; do not fetch arbitrary user-provided URLs.
+not-match: allowlist|allowList|whitelist|isAllowed|isValidHost|validateURL|sanitiz
+why: An outbound request is made to a variable whose name denotes a user-supplied URL (userURL, targetURL, proxyURL, forwardURL, ...) with no allowlist check on the line, a common SSRF shape the multi-line taint engine may miss on a direct sink. The trailing \b keeps derived names like userURLValidated from matching.
+confidence: high

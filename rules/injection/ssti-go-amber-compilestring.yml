@@ -1,0 +1,12 @@
+id: wide/ssti-go-amber-compilestring
+name: ssti-go-amber-compilestring
+category: INJECTION
+severity: HIGH
+languages:
+  - go
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/\/|\/\*|\*)).*\bamber\.CompileString\(\s*(?:[A-Za-z_]|[\x22\x60][^\x22\x60]*[\x22\x60]\s*\+)
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Compile a fixed literal (or use amber.Compile on a trusted file) and pass user input only via the data given to the compiled template's Execute.
+why: amber.CompileString compiles its first argument as Amber template SOURCE (which lowers to Go html/template with embedded expressions), so a dynamic value is server-side template injection.
+confidence: high

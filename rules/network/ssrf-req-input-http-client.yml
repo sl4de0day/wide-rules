@@ -1,0 +1,20 @@
+id: wide/ssrf-req-input-http-client
+name: ssrf-req-input-http-client
+category: NETWORK
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-918
+pattern: \b(?:fetch|axios|got|needle|superagent|request|https?\.(?:get|request))\b(?:\s*\.\s*(?:get|post|put|patch|delete|del|head|request))?\s*\(\s*[^,)]*\b(?:req|request|ctx|context)\s*\.\s*(?:query|params|body|headers|cookies|url|originalUrl|hostname)\b
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Never build the request target from raw user input. Resolve the requested resource through a fixed server-side allowlist of scheme+host (exact match after parsing with `new URL()`), reject non-http(s) schemes, resolve DNS and re-check the resolved IP against private/link-local ranges, and pin the base URL as a constant to which only a validated path/id is appended.
+not-match: \(\s*["'`]https?:\/\/[\w.-]+|allow[_]?[Ll]ist|white[_]?[Ll]ist|allowedHost|permittedHost|isAllowed|validateHost|ALLOWED_HOSTS
+why: 'A request-input value (req.query/params/body/headers/cookies/url/originalUrl/hostname) sits in the FIRST (URL) argument of an outbound HTTP client call (fetch/axios/got/needle/superagent/request/http(s).get|request), so the attacker controls the destination host and can coerce the server into hitting cloud-metadata (169.254.169.254), localhost admin ports, or intranet hosts. The `[^,)]*` guard keeps the user token inside arg one, so an options object like `{headers: req.headers}` after a comma is not flagged. notMatch suppresses a hardcoded literal-URL first arg (single/double/backtick quoted) and common allowlist markers; note it still fires on `fetch("https://" + req.query.host)` because only the scheme is literal (no `[\w.-]` host after `https://`).'
+confidence: high

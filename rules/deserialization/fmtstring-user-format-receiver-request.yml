@@ -1,0 +1,15 @@
+id: wide/fmtstring-user-format-receiver-request
+name: fmtstring-user-format-receiver-request
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-134
+pattern: \brequest\.(?:args|form|values|json|GET|POST|query_params|data|headers|cookies)(?:\[[^\]]*\]|\.get\([^)]*\))?\s*\.format(?:_map)?\s*\(
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: Never call .format() on user-controlled strings. Use a fixed template with the user data as an argument ("...{}".format(user_value)), or string.Template with safe_substitute, or an explicit mapping you control.
+not-match: ^\s*#
+why: A request attribute is the RECEIVER of str.format()/format_map() - the user controls the format template. Via {0.__class__...} / {config[SECRET]} field access this leaks attributes and globals and can disclose secrets (CWE-134). The discriminator is that request.* is immediately followed by .format( (it is the template), not sitting inside the parentheses as an argument to a literal template, so "...{}".format(request.args[...]) and dict-lookup templates[request.args[k]].format(x) do not fire.
+confidence: high

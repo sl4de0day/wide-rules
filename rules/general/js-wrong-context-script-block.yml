@@ -1,0 +1,20 @@
+id: wide/js-wrong-context-script-block
+name: js-wrong-context-script-block
+category: GENERAL
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-116
+pattern: <script\b[^<>]*>(?=[^<]*\breq\.(?:query|body|params|cookies|headers))
+message: Reflected / context-mismatched XSS — user input reaches HTML or JS output without proper contextual encoding (CWE-79/116).
+remediation: Serialize the value with JSON.stringify() (and additionally escape < as < to defeat </script>), or emit it as a data-* attribute and read it via JS; never rely on HTML escaping inside <script>.
+not-match: (?:^\s*(?:\/\/|\*)|JSON\.stringify|json_encode|\.textContent|serialize-javascript|sanitize|DOMPurify)
+why: User data is spliced into the body of a server-built <script> block (the req must appear after the opening tag's >, so <script src/data-* attribute lines are excluded). HTML-entity escaping is the wrong context here and cannot neutralize a JS string breakout or a literal </script> sequence, so the value executes -> context-mismatched-encoding XSS. Note htmlEscape() inside a script tag is still vulnerable.
+confidence: high

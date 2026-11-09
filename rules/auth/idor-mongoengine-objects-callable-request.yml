@@ -1,0 +1,15 @@
+id: wide/idor-mongoengine-objects-callable-request
+name: idor-mongoengine-objects-callable-request
+category: AUTH
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-639
+pattern: \.objects\(\s*(?:pk|id|_id|uuid|slug)\s*=\s*(?:ObjectId\(|int\(|str\()?\s*request\.(?:GET|POST|args|form|values|data|json|query|query_params)\b
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: 'Filter by owner too: Document.objects(id=request.args[''id''], owner=current_user).first(), returning 404 on empty.'
+not-match: request\.user|current_user|g\.user|session\[|\buser_id\s*=|\buser\s*=|\bowner(?:_id)?\s*=|\baccount(?:_id)?\s*=|\bcreated_by\s*=|\btenant(?:_id)?\s*=|\bcompany(?:_id)?\s*=|\borg(?:anization)?(?:_id)?\s*=|\bteam(?:_id)?\s*=|\bgroup(?:_id)?\s*=|\bworkspace(?:_id)?\s*=|\bmember(?:_id)?\s*=|\bauthor(?:_id)?\s*=|\bprofile\s*=|^\s*#
+why: MongoEngine's callable manager Model.objects(id=...) is queried with a request-supplied id and no ownership filter, exposing any document by id.
+confidence: high

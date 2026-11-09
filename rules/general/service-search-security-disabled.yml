@@ -1,0 +1,36 @@
+id: wide/service-search-security-disabled
+name: service-search-security-disabled
+category: GENERAL
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - rb
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - java
+  - kt
+  - kts
+  - go
+  - cs
+  - csx
+cwe: CWE-1188
+pattern: (?:xpack\.)?security\.enabled['"]?\s*[:=]\s*['"]?false|plugins\.security\.disabled['"]?\s*[:=]\s*['"]?true|DISABLE_SECURITY_PLUGIN['"]?\s*[:=]\s*['"]?true
+message: Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.
+remediation: 'Enable the security plugin (xpack.security.enabled: true / keep the OpenSearch security plugin) and configure users, roles, and TLS. Do not disable cluster security even on internal networks.'
+not-match: ^\s*(?:#|\/\/|\*|<!--|;)|\bexample\b
+why: Elasticsearch/OpenSearch security is turned off (xpack.security.enabled=false, plugins.security.disabled=true, DISABLE_SECURITY_PLUGIN=true), so the cluster accepts unauthenticated read/write on every index. This is an insecure-by-design default that exposes all indexed data. The pattern requires the literal security.enabled key with the false value directly after the separator, so ssl/transport/audit/enrollment sub-keys and true values are not matched.
+confidence: high

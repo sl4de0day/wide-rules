@@ -1,0 +1,12 @@
+id: wide/cwe89-go-sprintf-query
+name: cwe89-go-sprintf-query
+category: INJECTION
+severity: CRITICAL
+languages:
+  - go
+cwe: CWE-89
+pattern: (?:db|tx|conn)\.(?:Query|QueryRow|Exec)(?:Context)?\s*\(\s*(?:ctx\s*,\s*)?fmt\.Sprintf\s*\(
+message: A query is built with fmt.Sprintf before it is run.
+remediation: 'Keep the placeholders in the query and pass the values as arguments: db.Query(`SELECT ... WHERE id = $1`, id).'
+why: Sprintf returns a finished string, so the substituted value becomes part of the statement and database/sql has no placeholder left to fill.
+confidence: high

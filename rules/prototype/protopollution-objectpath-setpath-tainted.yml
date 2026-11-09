@@ -1,0 +1,22 @@
+id: wide/protopollution-objectpath-setpath-tainted
+name: protopollution-objectpath-setpath-tainted
+category: PROTOTYPE
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-1321
+pattern: \bobjectPath\([^)]*\)\.(?:set|push|insert|ensureExists|del)\s*\(\s*(?:req|request|body|params|query|payload|input|ctx|args|argv|headers|cookies|userInput|userData|userKey|userPath|clientData|untrusted|tainted|external|dynamicKey|dynamicPath)\b|\bobjectPath\.(?:set|push|insert|ensureExists|del)\s*\(\s*[^,]+,\s*(?:req|request|body|params|query|payload|input|ctx|args|argv|headers|cookies|userInput|userData|userKey|userPath|clientData|untrusted|tainted|external|dynamicKey|dynamicPath)\b
+message: Prototype pollution — attacker-controlled keys can reach Object.prototype via a recursive merge/set (CWE-1321).
+remediation: Upgrade to an object-path version that blocks __proto__/constructor/prototype (or enable its withInheritedProps=false behaviour), reject those segments yourself before calling, or restrict writes to an allowlist of known keys / a null-prototype object.
+not-match: hasOwnProperty|Object\.create\(\s*null\s*\)|['"]__proto__['"]|['"]constructor['"]|['"]prototype['"]|isSafeKey|sanitizeKey|sanitizePath|validateKey|isValidKey|allowedKeys|allowlist|whitelist|denylist|blacklist|forbiddenKeys|dangerousKeys
+why: 'object-path''s set/push/insert/ensureExists/del write to a deep path built from a caller string, and older versions had no __proto__ guard. Both call shapes are covered: objectPath.set(obj, path, val) (path is the 2nd argument) and objectPath(obj).set(path, val) (path is the 1st). AUDIT CHANGE: the path argument''s taint keyword is now anchored at the ROOT of the expression in both alternatives, so leaf-keyword writes like objectPath.set(obj, meta.query, value) no longer fire, while req.body.path / ctx.request.body.path still do. Quoted-literal and array-literal paths don''t match; the .get read and a non-library myObjectPathHelper.set stay out; the guard notMatch suppresses magic-key / hasOwnProperty / allowlist checks and Object.create(null) targets.'
+confidence: high

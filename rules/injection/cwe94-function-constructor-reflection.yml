@@ -1,0 +1,24 @@
+id: wide/cwe94-function-constructor-reflection
+name: cwe94-function-constructor-reflection
+category: INJECTION
+severity: CRITICAL
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-94
+pattern: \.constructor\s*\.\s*constructor
+message: Reflective access to .constructor.constructor reaches the Function constructor to execute arbitrary code.
+remediation: Remove the constructor.constructor reflection and invoke the intended function or value directly.
+why: obj.constructor.constructor('...')() is the classic way to obtain Function and run a code string, bypassing eval bans and sandbox restrictions.
+confidence: high

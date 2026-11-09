@@ -1,0 +1,22 @@
+id: wide/protopollution-recursive-merge-assign
+name: protopollution-recursive-merge-assign
+category: PROTOTYPE
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-1321
+pattern: (?:\bfor\s*\(\s*(?:var|let|const\s)?\s*[\w$]+\s+in\s+[^)]+\)\s*\{?\s*[\w$]+\s*\[\s*[\w$]+\s*\]\s*=)|(?:[\w$]+\s*\[\s*[\w$]+\s*\]\s*=\s*(?:[\w$.]*(?:[Mm]erge|[Ee]xtend|deepAssign|deepClone|deepCopy))\s*\()
+message: Prototype pollution — attacker-controlled keys can reach Object.prototype via a recursive merge/set (CWE-1321).
+remediation: In the merge loop skip dangerous keys — if (key === '__proto__' || key === 'constructor' || key === 'prototype') continue; — and only descend on Object.prototype.hasOwnProperty.call(source, key). Prefer a vetted library (lodash.merge is hardened) or structuredClone, and merge into an Object.create(null) accumulator.
+not-match: hasOwnProperty|Object\.create\(\s*null\s*\)|['"]__proto__['"]|['"]constructor['"]|['"]prototype['"]|isSafeKey|sanitizeKey|allowlist|whitelist|allowedKeys|\b_\.merge\b|\blodash\.merge\b
+why: 'The classic hand-rolled deep-merge / clone: a compact single-line for..in whose body immediately does target[key] = ... (the loop key becomes the write key), or an indexed assignment whose RHS is a merge/extend/deepAssign/deepClone/deepCopy call — target[key] = deepMerge(target[key], source[key]). If the source is untrusted and the loop lacks a key guard, a ''__proto__'' key recurses into and writes Object.prototype. The shape stays tight: a bare target[key]=value with no for..in and no merge call (dst[k]=src[k], cache[id]=computeValue(id)) does NOT match; for..of over an allowlist, plain for(;;) array copies, and spread merges ({ ...a, ...b }) are excluded by shape; Object.assign is out of scope (other angle) and doesn''t match the merge-name list. A guarded merge whose body starts with an if(key===''__proto__'')continue; guard breaks the direct for-in→assignment adjacency AND trips the quoted-magic-key notMatch. AUDIT CHANGE: notMatch now also excludes the hardened library merge _.merge/lodash.merge (out of scope for this angle), so out[key] = _.merge(...) no longer fires. notMatch further suppresses lines carrying hasOwnProperty, an allow/whitelist, or an Object.create(null) target.'
+confidence: high

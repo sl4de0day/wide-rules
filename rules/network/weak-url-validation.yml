@@ -1,0 +1,24 @@
+id: wide/weak-url-validation
+name: weak-url-validation
+category: NETWORK
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-601
+pattern: \.(indexOf|includes|startsWith|search)\s*\(\s*['"](?:https?:\/\/|[A-Za-z0-9-]+\.(?:com|net|org|io|dev|app|co|gov|edu))
+message: A URL is validated by substring/prefix instead of being parsed.
+remediation: Parse with new URL() and compare url.hostname/url.protocol against an explicit allowlist.
+why: 'indexOf("example.com") or startsWith("http") is bypassable: https://evil.com/?example.com and https://example.com.evil.com both pass, opening a redirect or letting a hostile origin through.'
+confidence: high

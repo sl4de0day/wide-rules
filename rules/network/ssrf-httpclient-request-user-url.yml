@@ -1,0 +1,14 @@
+id: wide/ssrf-httpclient-request-user-url
+name: ssrf-httpclient-request-user-url
+category: NETWORK
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-918
+pattern: \.(?:GetAsync|GetStringAsync|GetByteArrayAsync|GetStreamAsync|PostAsync|PutAsync|PatchAsync|SendAsync)\s*\(\s*[^;]*\bRequest(?:\.(?:Query|QueryString|Form|Params|Headers|Cookies)|\[)
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Resolve the user value against a fixed allowlist of permitted hosts/base URIs before the call, or fetch from a constant base URL and only let the user pick a path/id. Do not rely on blocklisting localhost/127.0.0.1.
+not-match: ^\s*(?:\/\/|\*)|[Aa]llow[Ll]ist|[Ww]hite[Ll]ist|[Aa]llowed[Hh]ost|[Ii]sAllowed
+why: An HttpClient async method (GetAsync/GetStringAsync/PostAsync/SendAsync, etc.) is invoked with an argument taken directly from ASP.NET request input (Request.Query/QueryString/Form/Params/Headers/Cookies or Request[...]). The outbound host is attacker-controlled, so the fetch can be aimed at internal services or cloud metadata (169.254.169.254). The [^;]* is bounded to the same statement so a fixed-URL call followed by an unrelated Request read on the same line does not match.
+confidence: high

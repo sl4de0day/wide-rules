@@ -1,0 +1,24 @@
+id: wide/cwe1321-proto-write
+name: cwe1321-proto-write
+category: PROTOTYPE
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-1321
+pattern: (?:\.__proto__|\[\s*["']__proto__["']\s*\])\s*=(?!=)
+message: A value is assigned directly to __proto__, mutating an object's prototype.
+remediation: Store data on own keys of a null-prototype object (Object.create(null)); never assign to __proto__ from input.
+why: Writing __proto__ (especially from request data) pollutes the prototype chain, corrupting unrelated objects and enabling gadget-based DoS or RCE.
+confidence: high

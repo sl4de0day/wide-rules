@@ -1,0 +1,15 @@
+id: wide/idor-mongotemplate-criteria-id-no-owner
+name: idor-mongotemplate-criteria-id-no-owner
+category: AUTH
+severity: MEDIUM
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-639
+pattern: \.where\s*\(\s*"_?id"\s*\)
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: Chain an ownership constraint onto the Criteria, e.g. Criteria.where("_id").is(id).and("ownerId").is(principal.getId()), or verify the returned document's owner before use.
+not-match: \.and\s*\(\s*"(owner|user|account|tenant|org|created_?by|createdBy|customer|client|member|acl|group|team)|andOperator[^)]*"(owner|user|account|tenant|org|customer|created)|[Pp]rincipal|[Cc]urrentUser|getUserId|getOwner|SecurityContext|@PreAuthorize|@PostAuthorize|Authentication|^\s*(?:\/\/|\/\*|\*)
+why: 'A MongoTemplate Criteria that matches a document solely by _id (Criteria.where("_id").is(...)) with no chained ownership constraint (.and("ownerId")..., .andOperator(...owner...)) fetches/mutates any document by id regardless of who owns it. This is a per-line heuristic: an ownership .and(...) on a separate line cannot be seen, so it carries a strong notMatch and accepts some false positives.'
+confidence: high

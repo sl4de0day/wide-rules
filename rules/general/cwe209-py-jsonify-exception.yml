@@ -1,0 +1,14 @@
+id: wide/cwe209-py-jsonify-exception
+name: cwe209-py-jsonify-exception
+category: GENERAL
+severity: MEDIUM
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-209
+pattern: (?:jsonify|make_response|return)\b[^#]*\b(?:str|repr)\s*\(\s*(?:e|ex|exc|err|error|exception)\s*\)
+message: A raw exception object is stringified and returned in the HTTP response.
+remediation: Log the exception server-side and return a generic error message with an opaque reference id.
+why: 'Information exposure: exception text leaks stack traces, SQL, file paths, and internals that help an attacker map the system.'
+confidence: high

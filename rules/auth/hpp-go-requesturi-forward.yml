@@ -1,0 +1,13 @@
+id: wide/hpp-go-requesturi-forward
+name: hpp-go-requesturi-forward
+category: AUTH
+severity: HIGH
+languages:
+  - go
+cwe: CWE-235
+pattern: (?:\+\s*(?:r|req|request)\.RequestURI\b|(?:r|req|request)\.RequestURI\b\s*\+|:\/\/[^"'`\n]*%s["'`]\s*,\s*(?:r|req|request)\.RequestURI\b)
+message: HTTP parameter pollution — raw/duplicated request parameters forwarded so layers disagree (CWE-235).
+remediation: Build the downstream URL from validated, canonicalised path and url.Values rather than concatenating the raw RequestURI.
+not-match: path\.Clean|url\.Parse|EscapedPath|Sanitiz
+why: r.RequestURI carries the raw, unparsed path+query exactly as sent; concatenating it into a downstream URL forwards duplicated parameters verbatim so the backend can resolve them differently than the proxy did (HTTP parameter pollution). Matching is restricted to string concatenation and a URL-context sprintf verb, so an http.Get to a fixed backend followed by an unrelated log of r.RequestURI, or any plain log line, no longer matches.
+confidence: high

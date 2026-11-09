@@ -1,0 +1,15 @@
+id: wide/fmtstring-java-printf-var
+name: fmtstring-java-printf-var
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-134
+pattern: \.printf\s*\(\s*(?:(?!["'])(?![Ll]ocale\b)[A-Za-z_$]|[Ll]ocale\b[^,]*,\s*(?!["'])[A-Za-z_$])
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Use a constant literal format string and pass user data as value arguments only: out.printf("%s%n", userValue).'
+not-match: \.printf\s*\(\s*[A-Z][A-Z0-9_]{2,}\s*[,)]
+why: printf/System.out.printf with a variable format string treats user input as the template, allowing format-specifier injection (CWE-134). A Locale-aware branch checks the second argument for the printf(Locale, format, args) overload so printf(Locale.US, "%d", n) is safe while printf(Locale.US, userFmt, x) is caught.
+confidence: high

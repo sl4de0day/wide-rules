@@ -1,0 +1,14 @@
+id: wide/netauthz-remote-ip-as-auth-cs
+name: netauthz-remote-ip-as-auth-cs
+category: NETWORK
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-290
+pattern: (?:RemoteIpAddress(?:\.ToString\(\))?\s*(?:==|!=)\s*"(?:127\.0\.0\.1|::1|localhost)"|RemoteIpAddress\.ToString\(\)\.StartsWith\(\s*"(?:127\.|10\.|192\.168\.|172\.(?:1[6-9]|2\d|3[01])\.)|IPAddress\.IsLoopback\(|\.Equals\(\s*IPAddress\.Loopback\))
+message: Broken access control — authorization based on network location or a spoofable client header (CWE-346/290).
+remediation: Use ASP.NET authentication/authorization ([Authorize], a verified token, or cookie auth). Restrict internal endpoints with Kestrel bind address or network policy, not a RemoteIpAddress comparison.
+not-match: ^\s*(?:\/\/|\*|\/\*)|[Ll]og|ILogger|\b(?:audit|throttle)\b|[Mm]etric|[Rr]ate[Ll]imit|\b(?:jwt|VerifyToken|Authenticate|Session|IsAuthenticated|csrf)\b|User\.Identity|\[Authorize\]|\.Listen\(|UseUrls|\?\s*["0-9]
+why: ASP.NET Connection.RemoteIpAddress compared to a loopback/private literal, prefix-matched, or checked via IPAddress.IsLoopback / Equals(IPAddress.Loopback) authorizes by network location. With ForwardedHeaders middleware the RemoteIpAddress is derived from X-Forwarded-For and is spoofable.
+confidence: high

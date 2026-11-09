@@ -1,0 +1,23 @@
+id: wide/ssrf-puppeteer-playwright-setcontent
+name: ssrf-puppeteer-playwright-setcontent
+category: NETWORK
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+cwe: CWE-918
+pattern: \.(?:setContent|set_content)\s*\(
+message: Renderer resource embedding — a document/PDF/image converter resolves a user-controlled resource, enabling LFI or SSRF (CWE-918/73/611).
+remediation: Render only trusted/templated HTML, run the browser with request interception that blocks internal hosts and file://, and never launch with --allow-file-access-from-files.
+not-match: (?:^\s*(?:\/\/|#|\*)|\.(?:setContent|set_content)\s*\(\s*['"`][^'"`$]*['"`]\s*[,)])
+why: 'Puppeteer/Playwright page.setContent(userHtml) followed by page.pdf()/screenshot() renders attacker markup with full network (and, with file-access flags, local) capability, so <img>/<script>/<iframe> to http://169.254.169.254 or internal services yields SSRF (and file:// LFI when enabled). Note: setContentType/setContentLength/set_content_type are excluded because the sink requires setContent/set_content immediately followed by ''(''; a literal first argument is suppressed. Broadest rule in the set (also matches rich-text editor .setContent(var)); kept because it is a named method and literals/comments are suppressed.'
+confidence: high

@@ -1,0 +1,18 @@
+id: wide/hpp-php-raw-querystring-forward
+name: hpp-php-raw-querystring-forward
+category: AUTH
+severity: MEDIUM
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-235
+pattern: \b(curl_setopt\s*\(\s*\$\w+\s*,\s*CURLOPT_URL|file_get_contents|fopen|get_headers)\s*[(,][^;]*\$_SERVER\s*\[\s*['"]QUERY_STRING['"]
+message: HTTP parameter pollution — raw/duplicated request parameters forwarded so layers disagree (CWE-235).
+remediation: Parse the incoming query with parse_str, keep only validated single canonical values, then rebuild the downstream query string with http_build_query instead of forwarding the raw QUERY_STRING.
+not-match: http_build_query
+why: The raw $_SERVER['QUERY_STRING'] is concatenated verbatim into a downstream request URL passed to a curl/stream sink. Duplicated parameters (?id=1&id=2) are forwarded unparsed and may be resolved differently by the backend than by this app - HTTP Parameter Pollution. This is the precise same-line forwarding shape; the sink function is required, so bare reads/logging of QUERY_STRING do not match. notMatch suppresses validated rebuilds via http_build_query.
+confidence: high

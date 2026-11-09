@@ -1,0 +1,14 @@
+id: wide/ssrf-webrequest-webclient-request-user-url
+name: ssrf-webrequest-webclient-request-user-url
+category: NETWORK
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-918
+pattern: (?:\bWebRequest\.Create|\bHttpWebRequest\.Create|\bFtpWebRequest\.Create|\.(?:DownloadString|DownloadData|DownloadFile|OpenRead|OpenReadAsync|UploadString|UploadData|DownloadStringAsync|DownloadDataAsync))\s*\(\s*[^;]*\bRequest(?:\.(?:Query|QueryString|Form|Params|Headers|Cookies)|\[)
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Validate the parsed Uri host against an allowlist before creating the request, or build the request from a constant base URI and a constrained path. Prefer HttpClient with a handler that disables auto-redirect when the target is user-influenced.
+not-match: ^\s*(?:\/\/|\*)|[Aa]llow[Ll]ist|[Ww]hite[Ll]ist|[Aa]llowed[Hh]ost|[Ii]sAllowed
+why: WebRequest.Create / HttpWebRequest.Create or a legacy WebClient download/upload method (DownloadString/DownloadData/DownloadFile/OpenRead/UploadString, etc.) receives a URL taken straight from request input. The WebRequest/WebClient stack follows redirects and reaches arbitrary internal hosts, so a user-controlled URL is a direct SSRF sink. The [^;]* is statement-bounded to avoid matching an unrelated Request read after a fixed-URL call on the same line.
+confidence: high

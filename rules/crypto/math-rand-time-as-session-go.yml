@@ -1,0 +1,13 @@
+id: wide/math-rand-time-as-session-go
+name: math-rand-time-as-session-go
+category: CRYPTO
+severity: HIGH
+languages:
+  - go
+cwe: CWE-330
+pattern: \b(?:session(?:ID|Id|Token|Key|_?id|_?token|_?key)?|sessionid|sid|authToken|token|reset(?:Token|Key|Code)?|apiKey|api_?key|secret(?:Key)?|nonce|csrf(?:Token)?)\b\s*:?=\s*.{0,60}?(?:rand\.(?:Intn|Int31|Int63|Int31n|Int63n|Uint32|Uint64|Float64|Float32|Perm)\s*\(|time\.Now\s*\(\s*\)\s*\.\s*Unix(?:Nano)?\s*\()
+message: Predictable session/token identifier — a security id from a non-CSPRNG or observable source (CWE-330/340).
+remediation: Use crypto/rand (rand.Read into a byte slice, then hex/base64 encode) or a v4 UUID for session ids and tokens; math/rand and time are unsuitable.
+not-match: ^\s*(?:\/\/)|crypto\/rand|rand\.Reader|rand\.Read\b|uuid\.NewV4
+why: Go's math/rand (rand.Intn, rand.Int63, rand.Uint64, ...) is a deterministic PRNG and time.Now().Unix()/UnixNano() is an observable clock; these functions do not exist on crypto/rand, so matching them signals a predictable session id or token.
+confidence: high

@@ -1,0 +1,15 @@
+id: wide/java-urlclassloader-from-upload-dir
+name: java-urlclassloader-from-upload-dir
+category: NETWORK
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-829
+pattern: new\s+URLClassLoader\s*\(.*(?:upload|Upload|UPLOAD|\/tmp\/|getParameter|writableDir|tmpdir)
+message: Write-then-execute — code is loaded or run from a user-controlled or writable path (potential RCE, CWE-829/95/98/94).
+remediation: Load classes only from fixed, application-controlled, non-writable locations; do not build classloader URLs from request input or an uploads directory, and verify any dynamic URL is contained within a trusted base.
+not-match: ^\s*(?:\/\/|\*|\/\*)
+why: Constructing a URLClassLoader over a URL/File derived from an uploads/tmp/writable directory or a request parameter lets an attacker who can place a JAR/class there have it loaded and executed, turning a file upload into code execution. The keyword set now includes the uppercase UPLOAD form so new File(UPLOAD_DIR, jar) is caught; the sink is anchored to the URLClassLoader constructor so fixed-URL loaders do not match.
+confidence: high

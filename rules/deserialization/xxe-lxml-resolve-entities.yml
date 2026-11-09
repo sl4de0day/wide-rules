@@ -1,0 +1,15 @@
+id: wide/xxe-lxml-resolve-entities
+name: xxe-lxml-resolve-entities
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-776
+pattern: \b(?:resolve_entities\s*=\s*True|no_network\s*=\s*False)\b
+message: XML entity expansion / XXE — an XML parser resolves entities on untrusted input (CWE-776/611).
+remediation: Construct the parser with resolve_entities=False and no_network=True (and load_dtd=False), or use defusedxml.lxml which disables entity resolution and external access by default.
+not-match: ^\s*#|defusedxml
+why: An lxml etree.XMLParser built with resolve_entities=True substitutes entity references (enabling billion-laughs expansion), and no_network=False re-enables network fetches for external entities/DTDs; either makes parsing attacker XML unsafe. The safe twins resolve_entities=False / no_network=True, the *_flag/*_default identifier suffixes, defusedxml.lxml usage, and comment lines are excluded.
+confidence: high

@@ -1,0 +1,18 @@
+id: wide/ssrf-php-fetch-fn-userinput
+name: ssrf-php-fetch-fn-userinput
+category: NETWORK
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-918
+pattern: \b(file_get_contents|fopen|get_headers|readfile)\s*\(\s*[^;]*\$_(GET|POST|REQUEST|COOKIE)\b
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Restrict the argument to an allowlisted set of hosts, or use a dedicated HTTP client with host validation; disable allow_url_fopen for genuine local file reads and canonicalize the path.
+not-match: in_array|allowlist|whitelist|allowed_host|allowedHost|ALLOWED_HOST
+why: A request superglobal flows directly into a URL-capable stream function (file_get_contents/fopen/get_headers/readfile). With allow_url_fopen enabled these fetch arbitrary remote URLs, giving SSRF (and local file disclosure when a path is supplied). The [^;]* guard is same-statement bounded so a superglobal after a ';' on the same physical line is not falsely joined; notMatch suppresses allowlist-gated reads.
+confidence: high

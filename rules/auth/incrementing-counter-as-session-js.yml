@@ -1,0 +1,20 @@
+id: wide/incrementing-counter-as-session-js
+name: incrementing-counter-as-session-js
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-340
+pattern: \b(?:session(?:_?id|_?token|_?key)?|sess(?:_?id)?|sid|auth(?:_?token)?|access(?:_?token)?|token|reset(?:_?token|_?key|_?code|_?hash)?|api_?key|secret(?:_?key)?|nonce|csrf(?:_?token)?)\b\s*[:=]\s*(?:\+\+\s*\w+|\w+\s*\+\+|(?:global|next|last|current|counter|count|seq|sequence|id|idx|index)\w*\s*\+\s*1\b)
+message: Predictable session/token identifier — a security id from a non-CSPRNG or observable source (CWE-330/340).
+remediation: Assign the identifier from a CSPRNG (crypto.randomUUID / crypto.randomBytes); never use a monotonically increasing counter as a session id or token.
+not-match: ^\s*(?:\/\/|\*|\/\*|#)|\brandom|crypto|uuid|Date\.now|getTime
+why: 'A session id or token taken from an incrementing counter (++counter, counter++, lastId + 1) is sequential and trivially predictable: an attacker who holds one valid id can guess every other by adding or subtracting 1.'
+confidence: high

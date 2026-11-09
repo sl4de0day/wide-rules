@@ -1,0 +1,15 @@
+id: wide/ssrf-spring-resttemplate-var-url
+name: ssrf-spring-resttemplate-var-url
+category: NETWORK
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-918
+pattern: \.(?:getForObject|getForEntity|postForObject|postForEntity|patchForObject|headForHeaders|optionsForAllow|exchange)\s*\(\s*(?!["'])(?![A-Z][A-Z0-9_]{2,}\s*[,)])[A-Za-z_$]
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Pass only a constant base URL and append validated path segments, or validate the full URL host against an allowlist before the call.
+not-match: '"https?:\/\/|allow-?list|white-?list|isAllowed|permittedHost|ALLOWED_'
+why: Spring RestTemplate methods take the target URL as their first argument; a non-literal (user-derived) URL there allows SSRF to arbitrary hosts.
+confidence: high

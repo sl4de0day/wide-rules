@@ -1,0 +1,22 @@
+id: wide/client-authz-http-status-as-auth
+name: client-authz-http-status-as-auth
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-287
+pattern: (?:[\w$]+(?:\.[\w$]+)*\.(?:status|statusCode)\s*(?:===?|==|>=|<=|>|<)\s*2\d\d\b|[\w$]+(?:\.[\w$]+)*\.ok\b)[^\n]*?(?:\bisLoggedIn\b|\bisAdmin\b|\bisAuthenticated\b|\bisAuthorized\b|\bauthorized\b|\bgrantAccess\b|\ballowAccess\b|\bsetLoggedIn\b|\bsetAdmin\b|\bshowAdmin(?!Error|Warn|Alert|Toast|Message|Msg|Notice|Denied|Fail|Prompt)\w*|\bloginSuccess\b|\bsetAuthenticated\b|\bsetAuthorized\b|\bsetUserRole\b|\bsetIsAdmin\b|\bsetIsLoggedIn\b|localStorage\.setItem|sessionStorage\.setItem)
+message: Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.
+remediation: Never infer authentication/authorization from a status code. Let the server enforce access and return an explicit, signed, server-verified identity/permission for the specific action; treat 2xx only as 'the call completed' and re-authorize privileged operations server-side.
+not-match: (?:^\s*(?:\/\/|\*|\/\*|<!--|#))|(?:\.spec\.|\.test\.|__tests__|\bexpect\s*\(|toHaveBeenCalled|\bmock\w*|\bdescribe\s*\(|\bit\s*\()|(?:\bawait\s+[\w.$]*(?:verify|validateSession|introspect|checkAuth|getSession|reauth)\w*\s*\()
+why: A bare HTTP 2xx status (or res.ok) is treated as proof the user is authenticated/authorized and is used to set an auth flag or unlock access. A 200 only means the request succeeded (an endpoint may return 200 to anyone, or the response may be forged/replayed); it is not an authorization signal, so the client ends up granting access with no server-verified claim.
+confidence: high

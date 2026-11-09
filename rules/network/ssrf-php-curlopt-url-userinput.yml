@@ -1,0 +1,18 @@
+id: wide/ssrf-php-curlopt-url-userinput
+name: ssrf-php-curlopt-url-userinput
+category: NETWORK
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-918
+pattern: curl_setopt\s*\(\s*\$\w+\s*,\s*CURLOPT_URL\s*,.*(\$_(GET|POST|REQUEST|COOKIE)\b|\$_SERVER\s*\[\s*['"]HTTP_)
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Validate the URL host against an allowlist of permitted hosts before curl_setopt; reject non-http(s) schemes and resolve/deny internal and cloud-metadata IP ranges.
+not-match: in_array|allowlist|whitelist|allowed_host|allowedHost|ALLOWED_HOST
+why: 'A request superglobal is set as CURLOPT_URL on the same line, so the outbound curl target is attacker-controlled with no allowlist - classic SSRF. Tightened from the original: the $_SERVER branch now requires an HTTP_ request-header key (e.g. HTTP_X_FORWARDED_HOST) instead of any $_SERVER key, so server-controlled keys like DOCUMENT_ROOT/SERVER_NAME no longer produce false positives. notMatch suppresses lines that gate the value behind an allowlist/in_array check.'
+confidence: high

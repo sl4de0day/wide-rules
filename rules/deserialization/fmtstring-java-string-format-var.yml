@@ -1,0 +1,15 @@
+id: wide/fmtstring-java-string-format-var
+name: fmtstring-java-string-format-var
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-134
+pattern: \bString\s*\.\s*format\s*\(\s*(?:(?!["'])(?![Ll]ocale\b)[A-Za-z_$]|[Ll]ocale\b[^,]*,\s*(?!["'])[A-Za-z_$])
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Make the format string a constant literal and pass user data only as trailing value arguments: String.format("%s", userValue).'
+not-match: \bString\s*\.\s*format\s*\(\s*[A-Z][A-Z0-9_]{2,}\s*[,)]
+why: String.format with a non-literal first argument uses user-controlled data as the format template; a crafted %n/%<width> can crash the app or leak/overwrite data (CWE-134). A Locale-aware branch inspects the second argument when the first is Locale.X or a lowercase locale var, so String.format(Locale.US, "%d", n) stays safe while String.format(Locale.US, userFmt, n) is caught.
+confidence: high

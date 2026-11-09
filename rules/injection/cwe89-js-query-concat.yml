@@ -1,0 +1,20 @@
+id: wide/cwe89-js-query-concat
+name: cwe89-js-query-concat
+category: INJECTION
+severity: CRITICAL
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-89
+pattern: \.(?:query|execute)\s*\(\s*["'][^"']*["']\s*\+
+message: A query string is concatenated before it is sent.
+remediation: Use placeholders and a values array instead of building the string.
+not-match: \?\s*[,)]|:\w+|\$\d
+why: String addition puts the value inside the statement, so it is parsed as SQL rather than compared as data.
+confidence: high

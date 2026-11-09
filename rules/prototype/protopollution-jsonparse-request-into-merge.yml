@@ -1,0 +1,22 @@
+id: wide/protopollution-jsonparse-request-into-merge
+name: protopollution-jsonparse-request-into-merge
+category: PROTOTYPE
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-1321
+pattern: \b(?:deepMerge|mergeDeep|deepExtend|deepAssign|defaultsDeep|mergeWith|merge|extend)\s*\([^;]*JSON\.parse\s*\(\s*(?:\w+\.)?(?:req|request|rawBody|reqBody|body|payload|input|ctx|event|message|msg)\b
+message: Prototype pollution — attacker-controlled keys can reach Object.prototype via a recursive merge/set (CWE-1321).
+remediation: 'Strip prototype keys before merging: pass a reviver to JSON.parse ((k,v)=>k===''__proto__''?undefined:v), sanitize the parsed object, target Object.create(null), or use a merge that ignores __proto__/constructor/prototype. Validate the body against a schema (allowlist of expected fields) before merging.'
+not-match: __proto__|constructor|prototype|Object\.create\(\s*null\s*\)|sanitiz|isSafeKey|stripProto|removeProto
+why: A raw request body is JSON.parse'd and passed directly into a deep merge/extend. JSON.parse faithfully materializes an own '__proto__' property from attacker JSON ({"__proto__":{"polluted":1}}), and a recursive merge then walks that key onto Object.prototype. This is the classic request->merge pollution bridge. The regex requires a merge-family callee, the literal JSON.parse, AND a request-derived argument (req/body/payload/ctx/msg/...), so parses of files, env, localStorage or Buffer do not fire, and reviver/sanitize/strip wrappers are suppressed.
+confidence: high

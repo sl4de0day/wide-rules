@@ -1,0 +1,14 @@
+id: wide/cwe89-py-execute-format
+name: cwe89-py-execute-format
+category: INJECTION
+severity: CRITICAL
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-89
+pattern: \.execute(?:many)?\s*\(\s*["'][^"']*["']\s*(?:\+|%\s*[\w(]|\.format\s*\()
+message: A query is assembled with +, % or .format() before it is executed.
+remediation: Use the driver's placeholders (%s or ?) and pass a tuple of values as the second argument.
+why: All three build the finished SQL string in Python, so the value is parsed as SQL rather than bound as a parameter.
+confidence: high

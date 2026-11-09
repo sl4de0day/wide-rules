@@ -1,0 +1,14 @@
+id: wide/hpp-forward-raw-body-stream
+name: hpp-forward-raw-body-stream
+category: AUTH
+severity: MEDIUM
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-235
+pattern: (?:postForObject|postForEntity|exchange|RequestBody\s*\.\s*create|new\s+HttpEntity(?:<[^>]*>)?|BodyPublishers\s*\.\s*ofString|\.bodyValue)\s*\([^;]*(?:request|req|httpRequest|servletRequest)\s*\.\s*(?:getInputStream|getReader|getParameterMap|getQueryString)\s*\(
+message: HTTP parameter pollution — raw/duplicated request parameters forwarded so layers disagree (CWE-235).
+remediation: Deserialise and validate the body into a typed object, then re-serialise only the validated fields for the downstream request instead of forwarding the raw stream.
+why: Piping the raw request body/stream/parameter-map straight into a downstream request re-parses duplicated parameters at the backend, enabling HTTP Parameter Pollution and validation bypass. Requires a forwarding sink AND a raw request accessor on the same statement, so getParameter("x") (single value) and plain reads that only store the body do not fire.
+confidence: high

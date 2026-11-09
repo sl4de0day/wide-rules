@@ -1,0 +1,13 @@
+id: wide/dangerously-set-inner-html
+name: dangerously-set-inner-html
+category: XSS
+severity: MEDIUM
+languages:
+  - jsx
+  - tsx
+cwe: CWE-79
+pattern: ^dangerouslySetInnerHTML$
+message: This bypasses React's escaping.
+remediation: Render text as a child, or sanitise the HTML (e.g. DOMPurify) before setting it.
+why: React escapes everything it renders; this is the one door out, so what goes through it has to be sanitised first.
+confidence: high

@@ -1,0 +1,18 @@
+id: wide/ssrf-php-follow-redirects-unvalidated
+name: ssrf-php-follow-redirects-unvalidated
+category: NETWORK
+severity: LOW
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-918
+pattern: curl_setopt\s*\(\s*\$\w+\s*,\s*CURLOPT_FOLLOWLOCATION\s*,\s*(true|1)\b
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Disable redirect following for user-supplied URLs, or cap CURLOPT_MAXREDIRS and re-validate every redirect Location target against the host allowlist before following.
+not-match: (?!)
+why: CURLOPT_FOLLOWLOCATION is enabled (true/1), so curl silently follows 30x redirects. If the initial URL is user-influenced, a redirect can send the request to an internal target the initial validation never inspected - a common SSRF filter bypass. The trailing \b keeps '1' from matching inside '10' and the (true|1) value guard excludes the false/0 disable forms.
+confidence: high

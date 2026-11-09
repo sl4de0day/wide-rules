@@ -1,0 +1,24 @@
+id: wide/ssrf-localhost-only
+name: ssrf-localhost-only
+category: NETWORK
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-918
+pattern: \b(?:host(?:name)?|url|target|ip)\b[^;\n]*(?:===|==|!==|!=|includes|indexOf|startsWith)[^;\n]*['"](?:127\.0\.0\.1|localhost)['"]
+message: An SSRF guard blocks only localhost/127.0.0.1.
+remediation: Resolve the host to an IP and block all private/loopback/link-local ranges, and disable redirect following.
+why: The same address reaches the loopback through ::1, 0.0.0.0, the decimal form 2130706433, DNS rebinding, or a 302 redirect the fetch follows — so a string blocklist is bypassable.
+confidence: high

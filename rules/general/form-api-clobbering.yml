@@ -1,0 +1,24 @@
+id: wide/form-api-clobbering
+name: form-api-clobbering
+category: GENERAL
+severity: LOW
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-471
+pattern: \b\w*[Ff]orm\.(?:submit|elements|action|reset|method|acceptCharset|enctype)\b
+message: A native form property/method is accessed on a form element (DOM-clobbering risk).
+remediation: 'Call the prototype directly: HTMLFormElement.prototype.submit.call(form).'
+why: An injected <input name="submit"> or name="elements" shadows form.submit / form.elements with the element node, so this reference resolves to the input, not the native API — breaking or hijacking submission.
+confidence: high

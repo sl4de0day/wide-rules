@@ -1,0 +1,18 @@
+id: wide/zipslip-php-ziparchive-extractto
+name: zipslip-php-ziparchive-extractto
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-22
+pattern: '->\s*extractTo\s*\('
+message: Zip Slip / insecure archive extraction — an archive entry name escapes the destination, arbitrary file write (CWE-22/59).
+remediation: 'Validate entries before extracting: for each name, realpath(dir . ''/'' . $name) must str_starts_with the realpath of the destination; reject ''..''/absolute names and symlink entries. Prefer per-entry extraction with an explicit containment check over whole-archive extractTo on untrusted input.'
+not-match: ^\s*(\/\/|#|\/\*|\*)|realpath|str_starts_with|strpos\s*\(|validat|sanitiz|is_safe|within
+why: ZipArchive::extractTo() and PharData::extractTo() unpack every entry into the target directory using in-archive names; PharData in particular does not defend against ../ entries, so extracting an untrusted archive can write files outside the destination. Allowing whitespace after -> catches spaced arrows without matching exportTo/extractToArray.
+confidence: high

@@ -1,0 +1,15 @@
+id: wide/nosqli-pymongo-field-value-request
+name: nosqli-pymongo-field-value-request
+category: INJECTION
+severity: CRITICAL
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-943
+pattern: \.(?:find|find_one|find_one_and_update|find_one_and_delete|delete_one|delete_many|update_one|update_many|count_documents)\(\s*\{[^}]*request\.(?:json|data|args|form|values|POST|GET|query|query_params|params)\b
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: 'Coerce each field to the expected scalar type or validate against a schema before querying: db.users.find_one({''username'': str(request.json[''username''])}).'
+not-match: (?:str|String|int|Number|parseInt|float|bool|ObjectId|Decimal|UUID|escape|sanitize|clean)\(\s*request|\.validated_data|schema\.load|\bvalidate\(|pydantic|marshmallow|jsonschema|bleach|^\s*#
+why: 'A filter field is set to a raw request value without coercion, so an attacker can pass {"$ne": null} / {"$gt": ""} instead of a scalar and match unintended documents (e.g. password/auth bypass).'
+confidence: high

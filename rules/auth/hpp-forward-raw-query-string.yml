@@ -1,0 +1,14 @@
+id: wide/hpp-forward-raw-query-string
+name: hpp-forward-raw-query-string
+category: AUTH
+severity: MEDIUM
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-235
+pattern: '["''][^"'']*[?&]\s*["'']\s*\+\s*[^;]*\bgetQueryString\s*\(\s*\)|(?:URI\s*\.\s*create|new\s+URL|new\s+URI|getForObject|getForEntity|postForObject|postForEntity|exchange|\.uri|\.url)\s*[^;]*\bgetQueryString\s*\(\s*\)|\b(?:url|uri|endpoint|target|backend|downstream|forwardUrl|proxyUrl|location)\w*\s*=[^;]*\+[^;]*\bgetQueryString\s*\(\s*\)'
+message: HTTP parameter pollution — raw/duplicated request parameters forwarded so layers disagree (CWE-235).
+remediation: Do not concatenate request.getQueryString() into a downstream URL; re-build the query from individually validated, canonicalised single values.
+why: Forwarding the raw request query string into a downstream URL lets a duplicated parameter (e.g. ?id=1&id=2) be re-parsed differently by the backend than by the front-end, bypassing validation via HTTP Parameter Pollution. The url-var branch now requires string concatenation (+) so that merely storing or validating getQueryString() into a url-named variable does not fire.
+confidence: high

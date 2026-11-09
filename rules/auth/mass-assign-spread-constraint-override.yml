@@ -1,0 +1,20 @@
+id: wide/mass-assign-spread-constraint-override
+name: mass-assign-spread-constraint-override
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-639
+pattern: (?:\.\.\.\s*\{[^}]*\b(?:tenantId|tenant_id|userId|user_id|ownerId|owner_id|orgId|accountId|role|isAdmin|isClassified)\b[^}]*\}\s*,\s*\.\.\.\s*\(?\s*req\.(?:body|query|params)|\b(?:tenantId|tenant_id|userId|user_id|ownerId|owner_id|orgId|accountId|role|isAdmin|isClassified)\b\s*[:,][^}]*?\.\.\.\s*req\.(?:body|query|params)|\.\.\.\s*[\w$]*(?:tenant|Tenant|owner|Owner|org|Org|account|Account|scope|Scope|constraint|Constraint)[\w$]*\s*,\s*\.\.\.\s*req\.(?:body|query|params))
+message: Mass-assignment override (BOLA) — a user object merged after a security constraint can override it (CWE-639).
+remediation: Put the constraint AFTER the user object so it wins - { ...req.body, tenantId } or { ...req.body, ...{ tenantId } } - or set it as the final literal property. Do not spread req.body/req.query over a scoped base object. Prefer building the object from session-derived ownership values plus an allow-list (pick/omit or a zod/joi/yup schema) of the client-writable fields.
+not-match: (?:^\s*(?:\/\/|\/\*|\*)|\b(?:pick|omit)\s*\(|\.(?:pick|omit|parse|safeParse|validate|validateSync)\s*\(|\b(?:allowlist|whitelist)\b|\b(?:zod|joi|yup)\b)
+why: 'Object spread applies properties left-to-right and LATER keys overwrite earlier ones, so a constraint appearing before a user-controlled spread is silently overridden. Three shapes are matched, each now requiring the overriding source to be req.body/query/params for precision: (1) inline constraint-literal spread followed by a user spread - { ...{ tenantId }, ...req.body } (optionally parenthesized/cast, e.g. ...(req.body as object)); (2) a constraint property followed by a user spread - { tenantId, ...req.body }, { userId: session.userId, ...req.body }; and (3) a constraint-scope VARIABLE spread followed by a user spread - { ...tenantScope, ...req.body }, { ...constraint, ...req.query }. Branch (3) was tightened from the original ''...anyVar, ...req.body'' (which fired on the ubiquitous safe pattern { ...defaults, ...req.body }) to require the variable name to carry an ownership token (tenant/owner/org/account/scope/constraint, either case), so defaults/baseSettings/pagination no longer match. In every matched case the client can supply tenantId/userId/ownerId in req.* and break tenant/owner isolation (CWE-639). Safe twins do not fire: { ...req.body, ...{ tenantId } } and { ...req.body, tenantId } (constraint wins, placed last), { ...{ label:''x'' }, ...req.body } (non-constraint literal), and destructuring rest const { tenantId, ...rest } = req.body (spread is ...rest, not ...req).'
+confidence: high

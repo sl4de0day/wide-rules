@@ -1,0 +1,14 @@
+id: wide/nosqli-mongodb-bsondocument-parse-request
+name: nosqli-mongodb-bsondocument-parse-request
+category: INJECTION
+severity: CRITICAL
+languages:
+  - cs
+  - csx
+cwe: CWE-943
+pattern: (BsonDocument\.Parse|BsonSerializer\.Deserialize<\s*(BsonDocument|BsonValue|BsonArray|object|dynamic)\s*>)\s*\([^;]*Request\.(Query|Form|Body|Headers|Cookies|InputStream)
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: Bind the request to a typed DTO and build the filter from scalar fields via Builders<T>.Filter.Eq(x => x.Field, dto.Field). Never parse user-controlled JSON directly into a filter document.
+not-match: Validate\(|Sanitize|Whitelist|allowedKeys|JsonSchema|SchemaValidate|^\s*\/\/
+why: BsonDocument.Parse or BsonSerializer.Deserialize into an untyped BsonDocument/BsonValue/object/dynamic turns a raw user string into an operator-bearing filter document. The attacker supplies {"$where":"..."} or {"pwd":{"$ne":null}} and injects query operators (CWE-943). Deserializing into a typed DTO is excluded. notMatch drops input validated/whitelisted/schema-checked before use, or commented-out calls.
+confidence: high

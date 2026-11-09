@@ -1,0 +1,22 @@
+id: wide/protopollution-forin-recursive-merge
+name: protopollution-forin-recursive-merge
+category: PROTOTYPE
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-1321
+pattern: (?:for\s*\(\s*(?:(?:const|let|var)\s+)?\w+\s+in\s+\w+|Object\.(?:keys|entries)\s*\([^)]*\)\.forEach\s*\().*\w\s*\[\s*\w+\s*\]\s*=\s*(?:\w+\.)?(?:deepMerge|mergeDeep|deepExtend|deepAssign|mergeRecursive|mergeWith|merge|extend)\s*\(
+message: Prototype pollution — attacker-controlled keys can reach Object.prototype via a recursive merge/set (CWE-1321).
+remediation: 'Skip dangerous keys before recursing: if (key === ''__proto__'' || key === ''constructor'' || key === ''prototype'') continue; and/or gate with Object.prototype.hasOwnProperty.call(source, key). Prefer a null-prototype target (Object.create(null)) or a vetted merge library (lodash.mergeWith with a customizer) instead of a hand-rolled recursive copy.'
+not-match: __proto__|constructor|prototype|hasOwnProperty|Object\.create\(\s*null\s*\)|isSafeKey|isValidKey|sanitiz
+why: 'A single-line recursive merge body: a for-in (or Object.keys/entries forEach) over an untrusted source whose iteration variable indexes the target and is passed back into a recursive merge (target[key] = merge(target[key], source[key])). When key is ''__proto__'', target[key] resolves to Object.prototype and the recursion writes onto it. The regex requires BOTH the loop header AND a self-indexing merge-call assignment on the same line, so a bare for-in or a plain index write does not fire; no __proto__/constructor/prototype/hasOwnProperty/guard token is present on the line.'
+confidence: high

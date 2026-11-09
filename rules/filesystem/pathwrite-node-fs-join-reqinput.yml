@@ -1,0 +1,20 @@
+id: wide/pathwrite-node-fs-join-reqinput
+name: pathwrite-node-fs-join-reqinput
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-22
+pattern: \b(fs|fsp|fsPromises)\.(promises\.)?(writeFile|writeFileSync|appendFile|appendFileSync|createWriteStream|mkdir|mkdirSync)\s*\(\s*path\.(join|resolve)\s*\([^;]*\b(req|request)\.(body|params|query|file|files|headers)\b
+message: Path traversal on write — a file is written to a user-controlled path without a containment check (CWE-22).
+remediation: Resolve the final path and verify it stays within the base dir (path.resolve(dir, name).startsWith(path.resolve(dir)+path.sep)), or reduce the user value to path.basename() / a validated allowlist before joining.
+not-match: basename|secure_filename|sanitiz|whitelist|allowlist|\.startsWith\(|path\.relative|realpath|isInside|^\s*(\/\/|\*|\/\*)
+why: A write/create/mkdir target is built with path.join(dir, req.body|params|query...) from request input; because path.join happily traverses embedded '../', an attacker can steer the write outside the intended directory (overwrite config/code -> RCE).
+confidence: high

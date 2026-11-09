@@ -1,0 +1,13 @@
+id: wide/ssrf-ruby-interpolated-host
+name: ssrf-ruby-interpolated-host
+category: NETWORK
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-918
+pattern: (?:\bNet::HTTP\.\w+|\bHTTParty\.\w+|\bRestClient\.\w+|\bFaraday\.\w+|\bURI\.open|(?:^|[^.\w])open)\s*\(\s*["']#\{
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Do not interpolate untrusted data into the host portion; build the URL from a fixed base and an allowlist-validated host.
+not-match: (?:allow_?list|white_?list|allowed_?hosts?|permitted|safe_?hosts?|valid_?hosts?)|^\s*#
+why: The request URL string BEGINS with an interpolation, so the scheme/host itself is attacker-controlled (full SSRF), not just a path under a constant base. Added \b so MyHTTParty and File.open/logger.open do not match.
+confidence: high

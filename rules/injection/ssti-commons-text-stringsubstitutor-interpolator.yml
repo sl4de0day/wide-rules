@@ -1,0 +1,12 @@
+id: wide/ssti-commons-text-stringsubstitutor-interpolator
+name: ssti-commons-text-stringsubstitutor-interpolator
+category: INJECTION
+severity: HIGH
+languages:
+  - java
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/[/*]|\*)).*?StringSubstitutor\s*\.\s*createInterpolator\s*\(\s*\)\s*\.\s*replace\s*\(\s*(?:[A-Za-z_$]|(?:"[^"]*"|'[^']*')\s*(?:\+(?!\s*["'])|\.\s*(?:format|formatted)\s*\())
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Interpolate only trusted templates, or build a StringSubstitutor with a restricted StringLookup that excludes script/url/dns lookups; keep user input as data, not as the interpolated template.
+why: StringSubstitutor.createInterpolator() enables active ${script:...}/${url:...}/${dns:...} lookups, so replacing a dynamic string interpolates attacker-controlled directives (the Text4Shell class of injection).
+confidence: high

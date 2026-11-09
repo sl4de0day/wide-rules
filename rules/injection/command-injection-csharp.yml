@@ -1,0 +1,13 @@
+id: wide/command-injection-csharp
+name: command-injection-csharp
+category: INJECTION
+severity: CRITICAL
+languages:
+  - cs
+  - csx
+cwe: CWE-78
+pattern: Process\.Start\s*\(|new\s+ProcessStartInfo\s*\(
+message: Process.Start runs an operating-system command.
+remediation: Use a fixed program with an argument list, and validate any value that must be passed.
+why: If the file name or arguments carry request input, the request can run commands on the server.
+confidence: high

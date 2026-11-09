@@ -1,0 +1,13 @@
+id: wide/zipslip-ruby-zip-entry-name
+name: zipslip-ruby-zip-entry-name
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-22
+pattern: (File\.join\s*\([^)]*\bentry\.name\b)|(\bentry\.extract\s*\()|(\.extract\s*\(\s*entry\b)
+message: Zip Slip / insecure archive extraction — an archive entry name escapes the destination, arbitrary file write (CWE-22/59).
+remediation: Compute dest_path = File.join(dest, entry.name), canonicalize with File.realpath/File.expand_path, and require it to start_with?(File.expand_path(dest) + File::SEPARATOR) before extracting; reject '..'/absolute names and skip symlink entries.
+not-match: ^\s*#|realpath|expand_path|start_with\?|commonpath|safe_join|sanitiz|within_dir|is_safe
+why: rubyzip entry.extract(dest) and File.join(dest, entry.name) write using the untrusted entry.name; a name containing ../ escapes the destination, so extraction of a malicious zip yields an arbitrary file write. Word boundaries keep entry.extract/entry.name from matching entry_data/entryset.
+confidence: high

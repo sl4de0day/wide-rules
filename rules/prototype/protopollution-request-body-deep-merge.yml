@@ -1,0 +1,22 @@
+id: wide/protopollution-request-body-deep-merge
+name: protopollution-request-body-deep-merge
+category: PROTOTYPE
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-1321
+pattern: \b(?:deepMerge|mergeDeep|deepExtend|deepAssign|defaultsDeep|mergeWith|merge|extend)\s*\([^;]*\b(?:req|request|ctx)\b[^;]*\.(?:body|query|params)\b
+message: Prototype pollution — attacker-controlled keys can reach Object.prototype via a recursive merge/set (CWE-1321).
+remediation: Never deep-merge raw request objects. Validate against a schema and merge only an allowlisted, typed subset (pick/omit the known fields). If a deep merge is required, use one that drops __proto__/constructor/prototype, merge into Object.create(null), or freeze Object.prototype at startup.
+not-match: __proto__|constructor|prototype|Object\.create\(\s*null\s*\)|sanitiz|\bpick\s*\(|\bomit\s*\(|whitelist|allowlist|isSafeKey
+why: An already-parsed request container (req.body / req.query / req.params, or ctx.request.body) is deep-merged/extended into config or defaults. Body parsers preserve '__proto__' / 'constructor' keys, and a recursive deep merge walks them onto Object.prototype. The regex requires a merge-family callee whose argument list contains a req/request/ctx receiver reaching a .body/.query/.params property; the request token must appear AFTER the merge '(', so a request-named receiver calling .merge (requestId.merge(a,b)) does not fire. Object.assign, spreads, pick/omit/allowlist and sanitize wrappers are excluded.
+confidence: high

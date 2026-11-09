@@ -1,0 +1,15 @@
+id: wide/nosqli-basicquery-document-parse-dynamic
+name: nosqli-basicquery-document-parse-dynamic
+category: INJECTION
+severity: CRITICAL
+languages:
+  - java
+  - kt
+  - kts
+cwe: CWE-943
+pattern: \b(BasicQuery|Document\.parse|BasicDBObject\.parse)\s*\(\s*[a-z_$(]
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: Never parse raw request JSON into a query. Build the filter from explicitly typed, coerced fields (Criteria/Filters.eq with String.valueOf/parseInt), or validate the input against a schema/allowlist before use.
+not-match: '[Vv]alidat|[Ss]anitiz|[Ee]scap|writeValueAsString|toJson|allowlist|whitelist|[Ss]chema|coerce|^\s*(?:\/\/|\/\*|\*)'
+why: Building a Mongo query from a dynamic value via new BasicQuery(...) or Document.parse(...) (argument begins with an identifier/expression/cast, not a fixed " string literal and not an UPPER_CASE constant) lets attacker-controlled JSON define query operators ($where, $ne, $gt, $regex), i.e. NoSQL/operator injection. Guard idioms are matched as stems so camelCase wrappers (schemaValidate, sanitizeJson, escapeMongo) suppress.
+confidence: high

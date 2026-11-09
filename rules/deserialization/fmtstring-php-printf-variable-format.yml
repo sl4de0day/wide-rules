@@ -1,0 +1,18 @@
+id: wide/fmtstring-php-printf-variable-format
+name: fmtstring-php-printf-variable-format
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-134
+pattern: \b(printf|sprintf|vprintf|vsprintf)\s*\(\s*\$\w
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Always pass a constant format literal and put user data in the value arguments: printf(''%s'', $userInput) instead of printf($userInput).'
+not-match: (?!)
+why: The first (format) argument to printf/sprintf/vprintf/vsprintf is a variable, not a quoted literal. If it is user-controlled, embedded conversion specifiers are interpreted - causing argument-count crashes, information disclosure, or output corruption. The literal-format safe form printf("%s", $x) starts with a quote and is not matched; gettext wrappers _(...) / __(...) and constant formats (MSG_TEMPLATE) start with _ or a letter and are not matched; fprintf/vfprintf are excluded by the word boundary (covered by the fprintf rule).
+confidence: high

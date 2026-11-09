@@ -1,0 +1,19 @@
+id: wide/cwe916-bcrypt-rounds-low
+name: cwe916-bcrypt-rounds-low
+category: CRYPTO
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-916
+pattern: bcrypt\.(?:genSalt(?:Sync)?\s*\(\s*|hash(?:Sync)?\s*\([^,)]+,\s*)[1-9]\s*[,)]
+message: bcrypt is used with a cost factor below 10 rounds.
+remediation: Use a bcrypt cost of at least 10 (12+ recommended).
+why: A single-digit work factor makes password hashing fast enough for large-scale offline brute-forcing of leaked hashes.
+confidence: high

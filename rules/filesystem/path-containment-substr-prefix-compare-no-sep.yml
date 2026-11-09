@@ -1,0 +1,30 @@
+id: wide/path-containment-substr-prefix-compare-no-sep
+name: path-containment-substr-prefix-compare-no-sep
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+  - java
+cwe: CWE-22
+pattern: (?:\b(?:resolvedPath|resolved|realPath|realpath|absolutePath|absPath|absolute|fullPath|filePath|normalizedPath|normalized|canonicalPath|canonical|targetPath|safePath|finalPath|cleanPath)\.(?:slice|substring|substr)\s*\(\s*0\s*,\s*[\w$.]+\.length(?:\s*\(\s*\))?\s*\)\s*(?:!==?|===?|\.equals\b)|\bsubstr\s*\(\s*\$(?:resolved|realpath|realPath|absPath|absolute|absolutePath|fullPath|filePath|normalized|canonical|canonicalPath|targetPath|safePath)\w*\s*,\s*0\s*,\s*(?:strlen\s*\(\s*\$?[\w]+\s*\)|[\w$-]+)\s*\)\s*(?:!==?|===?)|\b(?:resolved_path|resolved|real_path|realpath|abs_path|abspath|absolute_path|full_path|file_path|normalized|canonical_path|canonical)\w*\s*\[\s*:\s*len\s*\(\s*[\w.]+\s*\)\s*\]\s*(?:!=|==))
+message: Path-containment bypass — a startsWith/indexOf prefix check with no trailing separator lets a sibling directory escape (CWE-22).
+remediation: Do not compare a bare prefix; assert the boundary — resolved === base || resolved.startsWith(base + path.sep) — or use the platform containment helper (path.relative + '..' check, os.path.commonpath, filepath.Rel).
+not-match: ^\s*(?:\/\/|#|\*)|\+\s*(?:path\.sep|os\.sep|File\.separator|separator|['"][\/\\]['"])|\.\s*(?:DIRECTORY_SEPARATOR|['"][\/\\]['"])|path\.relative|os\.path\.relpath|filepath\.Rel|WithSep|WithSlash|with_sep
+why: A leading slice of a resolved path is compared to the base — resolved.slice(0, base.length) === base (JS), substr($resolved, 0, strlen($base)) === $base (PHP), resolved[:len(base)] == base (Python), canonical.substring(0, base.length()).equals(base) (Java) — a prefix-equality check with no separator at the boundary, so /var/www/uploads_backup matches base /var/www/uploads (CWE-22). This rule was already fully receiver/haystack-gated (the first arg must be a resolved-path name and the length must come from a variable via .length/strlen/len), so it never took a bare path literal and does not fire on route/URL prefix code — no structural change was needed, corpora expanded only. notMatch suppresses variants that fold the separator into the compared length/value (base + path.sep, a baseWithSep var), path.relative/relpath/filepath.Rel, and comments.
+confidence: high

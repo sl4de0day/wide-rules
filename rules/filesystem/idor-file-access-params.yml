@@ -1,0 +1,13 @@
+id: wide/idor-file-access-params
+name: idor-file-access-params
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-639
+pattern: (?:send_file|send_data|File\.(?:read(?:lines)?|open|binread|new)|IO\.read)\b[^\n]*params\s*(?:\[|\.fetch|\.dig)
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: Strip the path with File.basename(params[:file]) and confine to a per-user directory (File.join(current_user.folder, File.basename(params[:file]))), map the request to an allow-list of permitted files, or look the file up through an owner-scoped model and authorize it before serving.
+not-match: File\.basename|\bbasename\(|secure_filename|sanitize_filename|allowed_(?:files|paths|names)|whitelist|current_user|current_account|authorize|policy_scope|^\s*#
+why: 'send_file / send_data / File.read(lines) / File.open / File.binread / File.new / IO.read fed a client-controlled path or filename (params[:file], upload_dir + params[:name]) returns an arbitrary file: an attacker substitutes another user''s document id/name, or traverses with ../ to read files outside the intended directory, with no ownership check on which file may be served. File.readlines was added to the sink set (the read\b boundary was excluding it) and a full-line-comment guard added.'
+confidence: high

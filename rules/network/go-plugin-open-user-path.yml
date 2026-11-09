@@ -1,0 +1,13 @@
+id: wide/go-plugin-open-user-path
+name: go-plugin-open-user-path
+category: NETWORK
+severity: HIGH
+languages:
+  - go
+cwe: CWE-829
+pattern: \bplugin\.Open\s*\(
+message: Write-then-execute — code is loaded or run from a user-controlled or writable path (potential RCE, CWE-829/95/98/94).
+remediation: Open only a fixed literal plugin path shipped with the application; if the name is dynamic, validate it against an allow-list and require it under a read-only directory that no request handler can write to.
+not-match: ^\s*(?:\/\/|\*|\/\*)|plugin\.Open\s*\(\s*"[^"]*"\s*\)
+why: plugin.Open() loads a Go shared object and runs its init() functions; a non-literal path lets an attacker point it at an uploaded or writable .so and execute code in-process. A literal path is suppressed, a leading word-boundary stops matching inside otherplugin.Open(...), and pluginManager.Opened(...)/myplugin.OpenConn(...) fail the .Open( boundary.
+confidence: high

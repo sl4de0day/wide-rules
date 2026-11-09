@@ -1,0 +1,22 @@
+id: wide/protopollution-bare-merge-extend-req
+name: protopollution-bare-merge-extend-req
+category: PROTOTYPE
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-1321
+pattern: ^(?=.*(?:[^\w.$]|^)(?:merge|extend|defaultsDeep)\s*\()(?=.*(?:req(?:uest)?\.(?:body|query|params|headers|cookies)|ctx\.(?:request\.body|query|params|body)|JSON\.parse\s*\(|\bpayload\b|\buserInput\b))
+message: Prototype pollution — attacker-controlled keys can reach Object.prototype via a recursive merge/set (CWE-1321).
+remediation: Confirm the imported merge is recursive; if so, merge into an Object.create(null) target, drop __proto__/constructor/prototype keys before merging, or replace the raw merge with a schema-validated field copy so only known keys are written.
+not-match: (?:__proto__|constructor|prototype|Object\.create\s*\(\s*null\s*\)|structuredClone)
+why: 'A bare (non-method) merge(target, src) / extend(target, src) / defaultsDeep(target, src) imported from a merge library, where the source on the same line is client-controlled, is a likely recursive merge of untrusted keys into target and a prototype-pollution sink. The negative-position guard (?:[^\w.$]|^) requires the call to be a bare identifier so method calls (_.merge, obj.extend, Model.merge), deepmerge(...) and other prefixed identifiers (xmerge, emergeCallback) are left to the more specific rules and are not double-flagged. This is a medium-confidence heuristic: it cannot see across the line, so an unrelated merge() plus an unrelated user-input reference on the same physical line can still match.'
+confidence: high

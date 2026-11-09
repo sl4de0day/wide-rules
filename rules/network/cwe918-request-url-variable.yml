@@ -1,0 +1,19 @@
+id: wide/cwe918-request-url-variable
+name: cwe918-request-url-variable
+category: NETWORK
+severity: LOW
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-918
+pattern: \b(fetch|axios|got|ky|needle|superagent)\s*(\.\s*(get|post|put|delete|patch|head|request))?\s*\(\s*(userUrl|targetUrl|remoteUrl|externalUrl|proxyUrl|redirectUrl|webhookUrl|callbackUrl|imageUrl|avatarUrl|userInput|targetURL|userURL|target_url)\b
+message: An outbound HTTP request uses a variable that appears to hold a user-supplied URL.
+remediation: Confirm the URL is trusted and validate its host/scheme against an allowlist, rejecting private and link-local targets.
+why: If the URL originates from user input (webhook, avatar, callback), fetching it enables SSRF against internal hosts and metadata endpoints.
+confidence: high

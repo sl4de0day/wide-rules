@@ -1,0 +1,13 @@
+id: wide/weak-otp-ruby-rand
+name: weak-otp-ruby-rand
+category: CRYPTO
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-330
+pattern: \brand\s*\(\s*(?:\d+\s*\.\.\s*)?(?:9000|9999|10000|90000|99999|100000|900000|999999|1000000)\s*\)
+message: GraphQL/dev misconfiguration — introspection or a dev endpoint exposed, or a weak/predictable secret (CWE-200/489/307/770/330).
+remediation: Use SecureRandom.random_number for verification codes and add attempt lockout.
+not-match: ^\s*#|SecureRandom
+why: An OTP from Kernel#rand / Random#rand over a small numeric range is predictable and not suitable for authentication codes.
+confidence: high

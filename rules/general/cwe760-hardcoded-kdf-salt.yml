@@ -1,0 +1,19 @@
+id: wide/cwe760-hardcoded-kdf-salt
+name: cwe760-hardcoded-kdf-salt
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-760
+pattern: (?:pbkdf2|scrypt)(?:Sync)?\s*\(\s*[^,]+,\s*['"]
+message: A key-derivation function is called with a hardcoded string-literal salt.
+remediation: Generate a unique random salt per credential with crypto.randomBytes() and store it with the hash.
+why: A constant salt lets attackers precompute rainbow tables and share cracking effort across all derived keys/hashes, negating the salt's purpose.
+confidence: high

@@ -1,0 +1,14 @@
+id: wide/nosqli-mongodb-jsonfilterdefinition-request
+name: nosqli-mongodb-jsonfilterdefinition-request
+category: INJECTION
+severity: CRITICAL
+languages:
+  - cs
+  - csx
+cwe: CWE-943
+pattern: new\s+JsonFilterDefinition\s*<[^>]*>\s*\([^;]*Request\.(Query|Form|Body|Headers|Cookies)
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: Construct filters from typed, validated fields via Builders<T>.Filter.Eq(...). Do not feed request strings into JsonFilterDefinition.
+not-match: Validate\(|Sanitize|Whitelist|allowedKeys|JsonSchema|SchemaValidate|^\s*\/\/
+why: 'new JsonFilterDefinition<T>(userInput) wraps a raw user-controlled JSON string as the query filter, allowing operator injection identical to BsonDocument.Parse: the attacker supplies {"$ne":null} or {"$where":"..."} to subvert the query (CWE-943). \s* was added around the generic angle bracket to tolerate spacing. notMatch drops input validated/whitelisted/sanitized before use, or commented-out calls.'
+confidence: high

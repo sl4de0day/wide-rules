@@ -1,0 +1,25 @@
+id: wide/dynamic-global-invoke
+name: dynamic-global-invoke
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-470
+pattern: \b(window|self|globalThis|top|parent)\[[^\]\n]+\]\s*\(
+message: A global function is invoked by a dynamically-resolved name.
+remediation: Map allowed actions to a fixed lookup object of permitted handlers instead of indexing the global scope.
+not-match: \[\s*['"][^'"]*['"]\s*\]
+why: window[name]() lets whatever controls `name` — a URL parameter, a hash — call any global method, which is arbitrary function invocation (unsafe reflection).
+confidence: high

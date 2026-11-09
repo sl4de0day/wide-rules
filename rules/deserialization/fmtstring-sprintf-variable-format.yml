@@ -1,0 +1,19 @@
+id: wide/fmtstring-sprintf-variable-format
+name: fmtstring-sprintf-variable-format
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-134
+pattern: \b(?:printf|sprintf|vsprintf|util\s*\.\s*format)\s*\(\s*(?![\s"'`])[A-Za-z_$][\w.$\[\]]*\s*,
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Make the format string a hardcoded constant literal and bind all dynamic data as value arguments after it: `sprintf(''%s'', userValue)`. If a template must be selected at runtime, pick it from a fixed server-side map of trusted literal templates keyed by an allowlisted identifier — never let its text be user-derived.'
+why: A printf/sprintf/vsprintf/util.format call whose FIRST argument (the format template) is a NON-LITERAL — a variable or member/index expression — followed by additional value arguments. When the template itself is dynamic, attacker-controlled %-directives are interpreted, consuming the following arguments and enabling information disclosure, log injection, or crashes. The leading negative lookahead `(?![\s"'`])` plus an identifier-start requirement structurally rejects a quoted/backtick literal format (`printf("literal %s", x)`, `util.format(`tpl`, y)`) and a numeric first arg (`printf(3, y)`), which are the safe forms; `String.format(...)`/`myFormat(...)` are outside the sink.
+confidence: high

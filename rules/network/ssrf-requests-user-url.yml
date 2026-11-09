@@ -1,0 +1,15 @@
+id: wide/ssrf-requests-user-url
+name: ssrf-requests-user-url
+category: NETWORK
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-918
+pattern: \brequests\.(?:get|post|put|delete|patch|head|options)\s*\(\s*(?:url\s*=\s*)?request\.(?:args|form|values|json|data|cookies|headers|get_json|query_params|GET|POST|body|META)|\brequests\.request\s*\(\s*(?:method\s*=\s*)?['"]?[A-Za-z]+['"]?\s*,\s*(?:url\s*=\s*)?request\.(?:args|form|values|json|data|cookies|headers|get_json|query_params|GET|POST|body|META)
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Resolve the target against a strict allowlist of permitted hosts and schemes before the call; never pass request.args/form/json/GET etc. straight into the URL. Disable redirects and block internal/link-local ranges at DNS-resolution time.
+not-match: ^\s*#|whitelist|allowlist|allowed_|ALLOWED|is_safe_url
+why: requests.<method>() takes a Flask/Django/FastAPI request attribute in the URL position (first positional arg, or url=, or the arg after the method literal for requests.request), so the outbound destination is attacker-controlled with no allowlist (CWE-918). The URL-position anchor is what separates this from the safe case where request.* flows into data=/params=/headers=/cookies=/json= instead of the URL.
+confidence: high

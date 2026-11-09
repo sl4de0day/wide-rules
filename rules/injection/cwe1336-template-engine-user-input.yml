@@ -1,0 +1,19 @@
+id: wide/cwe1336-template-engine-user-input
+name: cwe1336-template-engine-user-input
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-1336
+pattern: (?:nunjucks\.renderString|Handlebars\.compile|handlebars\.compile|ejs\.render|pug\.compile|pug\.render|jade\.compile|dust\.compile|_\.template|art\.compile|liquid\.parseAndRender)\s*\(\s*(?:`[^`)]*\$\{|["'][^)]*\+)
+message: A template engine compiles/renders a template string that is concatenated or interpolated with user input.
+remediation: Keep the template static and pass user values through the engine's data/context argument so they are escaped, never concatenated into the template itself.
+why: 'Mixing data into the template source rather than the data context is server-side template injection: engine syntax in the input is evaluated, often leading to remote code execution.'
+confidence: high

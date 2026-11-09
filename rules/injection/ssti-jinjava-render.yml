@@ -1,0 +1,12 @@
+id: wide/ssti-jinjava-render
+name: ssti-jinjava-render
+category: INJECTION
+severity: HIGH
+languages:
+  - java
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/[/*]|\*)).*?\b[Jj]injava\w*\s*\.\s*render(?:ForResult)?\s*\(\s*(?:[A-Za-z_$]|(?:"[^"]*"|'[^']*')\s*(?:\+(?!\s*["'])|\.\s*(?:format|formatted)\s*\())
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Keep the template string a fixed literal or resource and pass user-controlled values only in the context/bindings map.
+why: Jinjava.render/renderForResult compiles its first argument as a Jinja-style template; a dynamic template string lets an attacker inject expressions/filters that reach RCE.
+confidence: high

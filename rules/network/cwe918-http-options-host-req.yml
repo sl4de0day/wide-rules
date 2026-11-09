@@ -1,0 +1,19 @@
+id: wide/cwe918-http-options-host-req
+name: cwe918-http-options-host-req
+category: NETWORK
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-918
+pattern: \b(http|https)\.(get|request)\s*\(\s*\{[^}]*\b(host|hostname)\s*:\s*req\.(query|params|body|headers|cookies)\b
+message: The host/hostname of an outbound request options object comes from request data.
+remediation: Pin the host to a fixed value or validate it against an allowlist before issuing the request.
+why: A user-controlled destination host lets an attacker redirect the request to internal services or cloud metadata, i.e. server-side request forgery.
+confidence: high

@@ -1,0 +1,19 @@
+id: wide/cwe780-rsa-no-oaep-padding
+name: cwe780-rsa-no-oaep-padding
+category: GENERAL
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-780
+pattern: padding\s*[:=]\s*[\w.]*RSA_PKCS1_PADDING\b
+message: RSA encryption is configured with PKCS#1 v1.5 padding instead of OAEP.
+remediation: Use crypto.constants.RSA_PKCS1_OAEP_PADDING for RSA encryption.
+why: RSA_PKCS1_PADDING is vulnerable to Bleichenbacher-style padding-oracle attacks that can recover plaintext or forge signatures.
+confidence: high

@@ -1,0 +1,13 @@
+id: wide/idor-gorm-first-req-param
+name: idor-gorm-first-req-param
+category: AUTH
+severity: HIGH
+languages:
+  - go
+cwe: CWE-639
+pattern: \.(?:First|Take|Last|Find)\(\s*&\w+\s*,\s*[^;]*(?:\.(?:Param|Params|Query|QueryParam|PostFormValue|PostForm|FormValue|DefaultQuery)\(|Vars\(\w+\)\[|URLParam\(|Params\.ByName\()
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: 'Scope the lookup to the requester: db.Where("owner_id = ?", currentUser.ID).First(&doc, id), or verify ownership after loading before returning the record.'
+not-match: ^\s*\/\/|^\s*\*\s|[Uu]ser_?[Ii][Dd]|[Oo]wner|[Aa]ccount_?[Ii][Dd]|[Tt]enant|[Oo]rg_?[Ii][Dd]|[Oo]rganization|[Cc]ompany_?[Ii][Dd]|[Tt]eam_?[Ii][Dd]|[Ww]orkspace_?[Ii][Dd]|[Gg]roup_?[Ii][Dd]|[Cc]ustomer_?[Ii][Dd]|[Cc]urrent_?[Uu]ser|[Ss]ession|[Aa]uthoriz|[Ee]nforce|Pundit|CanCan|\.Can\(|[Pp]olic|[Cc]laims|\.Scopes\(|[Oo]wned_?[Bb]y|[Cc]reated_?[Bb]y|[Bb]elongs_?[Tt]o
+why: gorm First/Take/Last/Find loads a row by primary key from its second positional argument. When that argument is a client-supplied reference (c.Param/c.Query/mux.Vars/URLParam/FormValue, plus fiber c.Params and echo c.QueryParam) and no co-located ownership predicate is present, any authenticated user can read another user's record by changing the id (classic IDOR).
+confidence: high

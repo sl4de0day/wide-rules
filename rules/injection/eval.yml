@@ -1,0 +1,24 @@
+id: wide/eval
+name: eval
+category: INJECTION
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-95
+pattern: ^eval$
+message: eval() runs whatever string it is given.
+remediation: Parse the data (JSON.parse) or dispatch on known values instead of executing a string.
+why: Anything that reaches this string — a query parameter, a stored value, a postMessage — becomes code running with the page's full authority.
+confidence: high

@@ -1,0 +1,19 @@
+id: wide/ssrf-c-curl-followlocation-enabled
+name: ssrf-c-curl-followlocation-enabled
+category: NETWORK
+severity: LOW
+languages:
+  - c
+  - h
+  - cpp
+  - cc
+  - cxx
+  - hpp
+  - hh
+cwe: CWE-918
+pattern: \bcurl_easy_setopt\s*\(\s*[^,()]+,\s*CURLOPT_FOLLOWLOCATION\s*,\s*\w
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Keep redirects disabled for user-influenced requests, or set CURLOPT_REDIR_PROTOCOLS and re-validate every redirect target host against the allowlist (e.g. via CURLOPT_PREREQFUNCTION / opensocket callback).
+not-match: FOLLOWLOCATION\s*,\s*(?:0L?|false)\b
+why: 'Enabling CURLOPT_FOLLOWLOCATION makes libcurl transparently follow HTTP 3xx redirects; even a validated front-door URL can be redirected to an internal host or cloud metadata endpoint (SSRF-via-redirect). The regex fires when FOLLOWLOCATION is set to any non-empty value and the notMatch guard suppresses the explicit-disable forms 0, 0L, and false. Residual edge: an explicit hex disable (0x0) is not recognised by the guard and would still fire.'
+confidence: high

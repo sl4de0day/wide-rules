@@ -1,0 +1,17 @@
+id: wide/ssti-dwoo-string-template
+name: ssti-dwoo-string-template
+category: INJECTION
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/[/*]|#|\*)).*?new\s+\\?Dwoo[\\_]Template[\\_]Str(?:ing)?\s*\(\s*(?:\$|(?:'[^']*'|"[^"]*")\s*\.\s*[\$A-Za-z_]|"[^"]*\$\{?[A-Za-z_])
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Instantiate the file-based Dwoo template with a fixed path and pass user input through the Dwoo data object, not into a string-template constructor.
+why: Constructing a Dwoo string-template object from a dynamic value compiles that string as a Dwoo template, whose expression/PHP callbacks lead to code execution.
+confidence: high

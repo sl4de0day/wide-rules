@@ -1,0 +1,14 @@
+id: wide/fmtstring-string-format-nonliteral-format
+name: fmtstring-string-format-nonliteral-format
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-134
+pattern: \b[Ss]tring\.Format\s*\(\s*(?!(?:\$@|@\$|\$|@)?["'])[A-Za-z_]
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Make the format string a constant literal and pass user data only as trailing value arguments: String.Format("{0}", userValue). Never pass user input in the format-string position.'
+not-match: ^\s*(?:\/\/|\*)|[Ss]tring\.Format\s*\(\s*(?:CultureInfo|[Cc]ulture[A-Za-z]*|provider|_provider|[Ff]ormatProvider|IFormatProvider|NumberFormatInfo|DateTimeFormatInfo)\b|[Ss]tring\.Format\s*\(\s*[A-Za-z_][\w.]*\s*,\s*(?:\$@|@\$|\$|@)?["']
+why: 'String.Format is called with a non-literal first argument (a variable/expression, not a quoted "...", @"...", or $"..." literal). If the template is user-controlled it becomes a composite-format-string injection: an out-of-range index throws FormatException (DoS) and format/alignment specifiers can be abused. The negative lookahead structurally rejects the safe literal-format call. notMatch excludes the IFormatProvider overload two ways: by named provider types AND, generally, by the shape String.Format(identifier, "literal", ...) - which reliably catches any provider variable (numberFormatInfo, fmtProvider, custom casings) that precedes a literal format, killing the top false-positive class.'
+confidence: high

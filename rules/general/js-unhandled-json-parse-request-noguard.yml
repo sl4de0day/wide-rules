@@ -1,0 +1,20 @@
+id: wide/js-unhandled-json-parse-request-noguard
+name: js-unhandled-json-parse-request-noguard
+category: GENERAL
+severity: LOW
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-248
+pattern: JSON\.parse\s*\(\s*(?:await\s+)?(?:req|request|ctx|event)\.(?:body|query|params|param|headers|header|cookies|rawBody|raw|payload|data|request|files)\b
+message: Unvalidated request input may throw an unhandled exception (robustness / DoS, CWE-20/248).
+remediation: Wrap the parse in try/catch and respond 400 on failure, e.g. `let data; try { data = JSON.parse(req.body); } catch { return res.status(400).end(); }`, or validate with a schema (zod/Joi) first. If a body parser already ran, use req.body directly instead of re-parsing. Note `|| '{}'` / `?? '{}'` is not a fix — it does not catch malformed JSON.
+not-match: \b(?:try|catch)\b|^\s*(?:\/\/|\*|\/\*)|\/\/|\b(?:Joi|zod|yup|schema|validate|validator|safeParse|tryParse|parseSafe)\b
+why: 'JSON.parse called directly on a request-derived value throws an uncaught SyntaxError when the client sends malformed JSON (and `|| ''{}''` / `?? ''{}''` defaults do NOT help, since they only patch null/undefined, not an invalid string). With no try/catch on the line the exception escapes the handler and, absent a global error boundary, 500s or crashes the process. Refinement vs. the original: the sink''s property was narrowed from `(?:req|request|ctx|event)\.<anything>` to an input-bearing property allowlist (body/query/params/headers/cookies/rawBody/payload/data/request/files/...). The original broad form fired on `JSON.parse(req.app.get(''cfg''))` — parsing a server-side config off the Express app handle, not user input — a verified false positive now suppressed by the sink. The try/catch, comment, and schema/validate suppressors keep it off guarded parses; requiring the property-access form (not JSON.parse(localVar)) keeps it off non-request parses.'
+confidence: high

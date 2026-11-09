@@ -1,0 +1,24 @@
+id: wide/cwe601-client-location-from-url-param
+name: cwe601-client-location-from-url-param
+category: NETWORK
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-601
+pattern: \b(location\.href|location\.assign|location\.replace|window\.location|document\.location|top\.location)\b\s*[=(][^;]*(location\.(search|hash)|document\.referrer|document\.URL|URLSearchParams|searchParams\.get|getParameterByName|req\.(query|params|body))
+message: The browser is navigated to a URL read from query/hash/referrer.
+remediation: Allowlist the destination or force a same-origin relative path before assigning to location.
+why: 'Assigning an unvalidated URL parameter to location produces a DOM open redirect, and a javascript: value can run script.'
+confidence: high

@@ -1,0 +1,19 @@
+id: wide/hpp-c-querystring-var-into-url
+name: hpp-c-querystring-var-into-url
+category: AUTH
+severity: MEDIUM
+languages:
+  - c
+  - h
+  - cpp
+  - cc
+  - cxx
+  - hpp
+  - hh
+cwe: CWE-235
+pattern: \b(?:strcat|strncat|strlcat|sprintf|snprintf|asprintf|curl_easy_setopt)\s*\([^;]*(?:https?:\/\/|\?%s|&%s|CURLOPT_URL)[^;]*\b(?:query_string|querystring|raw_query|rawquery|raw_qs|the_query)\b
+message: HTTP parameter pollution — raw/duplicated request parameters forwarded so layers disagree (CWE-235).
+remediation: Do not append the raw query string to a downstream URL. Rebuild the query from validated, canonicalised single values before forwarding.
+not-match: (?:curl_easy_escape|url_encode|urlencode|canonical|sanitiz|escape|validate|http_build_query|reserializ|re_serial)
+why: 'A variable clearly holding the raw query string (query_string/raw_query/raw_qs/...) is concatenated into a downstream URL (scheme, ?%s/&%s trailer, or CURLOPT_URL) without re-serialisation, so a duplicated parameter is re-interpreted downstream — HTTP Parameter Pollution. The regex requires BOTH a URL indicator and a raw-query-named variable on the same statement; the \b anchor prevents sink substring matches; the notMatch guard clears encode/canonicalise/validate/reserialise wrappers, and a cleaned name (escaped_query, canonical_qs, clean_query) is not in the raw-query name set. Residual edge: a ?%s appearing in non-URL prose on the same line alongside a raw-query variable could still fire.'
+confidence: high

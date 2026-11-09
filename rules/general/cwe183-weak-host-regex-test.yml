@@ -1,0 +1,25 @@
+id: wide/cwe183-weak-host-regex-test
+name: cwe183-weak-host-regex-test
+category: GENERAL
+severity: LOW
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-183
+pattern: \/[^/\n]*\\\.[A-Za-z][^/\n]*\/\s*\.(?:test|exec)\s*\(
+message: Tests a host/URL against a regex that has no scheme anchor and allows arbitrary subdomains or prefixes.
+remediation: Anchor the scheme and full host (^https?://...$) or parse with new URL() and compare hostname exactly.
+not-match: \^https?|\^wss?|:\\\/\\\/|:\/\/
+why: An unanchored host pattern like /.*\.example\.com/ also matches evil-example.com or example.com.attacker.net, so origin/host allow-listing is bypassable.
+confidence: high

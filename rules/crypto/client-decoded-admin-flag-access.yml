@@ -1,0 +1,25 @@
+id: wide/client-decoded-admin-flag-access
+name: client-decoded-admin-flag-access
+category: CRYPTO
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+  - html
+  - htm
+  - xhtml
+cwe: CWE-347
+pattern: \b(jwtDecode|jwt_decode|jwt\.decode|decodeJwt|decodeToken|parseJwt|parseToken)\s*\((?:[^()]|\([^()]*\))*\)\s*\??\.(isAdmin|is_admin|isSuperAdmin|isSuperuser|admin)\b
+message: Client-side token signing or embedded signing key — a secret/decision shipped to the browser is attacker-forgeable.
+remediation: Do not read privilege flags from jwt.decode() output for security. Verify the signature (server-side or via jwt.verify/jwtVerify) and enforce admin access on the server per request; use the client value only for non-sensitive display.
+not-match: ^\s*(\/\/|\*|\/\*)|\bjwt\.verify\b|\.verify\s*\(
+why: An admin flag is read directly off an unverified decoded token (decode does not check the signature). Any user can set isAdmin:true in the payload and this access grants it, because nothing verified the token's authenticity — a forgeable-claim privilege escalation.
+confidence: high

@@ -1,0 +1,22 @@
+id: wide/protopollution-hoek-applytodefaults-req
+name: protopollution-hoek-applytodefaults-req
+category: PROTOTYPE
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-1321
+pattern: ^(?=.*(?:\b[Hh]oek\s*\.\s*(?:merge|applyToDefaults)|\bapplyToDefaults)\s*\()(?=.*(?:req(?:uest)?\.(?:body|query|params|headers|cookies)|ctx\.(?:request\.body|query|params|body)|JSON\.parse\s*\(|\bpayload\b|\buserInput\b))
+message: Prototype pollution — attacker-controlled keys can reach Object.prototype via a recursive merge/set (CWE-1321).
+remediation: Upgrade hoek to a patched version (>=4.2.1/5.0.3) that ignores __proto__, merge into an Object.create(null) target, strip __proto__/constructor/prototype keys first, or validate the payload against a joi/schema allow-list before merging.
+not-match: (?:__proto__|constructor|prototype|Object\.create\s*\(\s*null\s*\)|structuredClone)
+why: Hoek.merge / Hoek.applyToDefaults (the hapi utility, also exposed as a bare applyToDefaults) recursively fold a source object into defaults. Passing client input as the source lets a __proto__ key walk into Object.prototype (hoek CVE-2018-3728). Each name requires an immediately-following `(` so Hoek.clone/reach, applyDefaults, and applyToDefaultsSync are not flagged, and the notMatch drops Object.create(null) targets and same-line proto-key filters.
+confidence: high

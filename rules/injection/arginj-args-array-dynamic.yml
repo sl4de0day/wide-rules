@@ -1,0 +1,20 @@
+id: wide/arginj-args-array-dynamic
+name: arginj-args-array-dynamic
+category: INJECTION
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-88
+pattern: \b(?:args|argv|cmdArgs|cliArgs|cmdline|commandArgs|execArgs|spawnArgs|params)\s*=\s*\[[^\]]*(?:\$\{[A-Za-z_$]|['"][^'"]*['"]\s*\+\s*[A-Za-z_$]|[A-Za-z_$][\w$.]*\s*\+\s*['"])
+message: User input in a response header value or a CLI argument array (header injection / argument injection).
+remediation: Validate that user-derived argument values do not start with '-', or place a literal '--' end-of-options separator before them; prefer a fixed argument list and pass user data only as non-option operands.
+not-match: ^\s*(?:\/\/|\*|\/\*)|\bmessage:|\bwhy:|new RegExp\(|\.test\s*\(|shlex|\bNumber\s*\(|--\s*['"`]
+why: A command-argument array (assigned to args/argv/cmdArgs/...) contains a value built by interpolation or concatenation. Passed later to spawn/execFile/exec, a value that starts with '-' becomes an option/flag (argument injection, CWE-88) even without a shell — e.g. ['-i', name, '-o', `output.${format}`] where format is user-controlled. Catches the common case where the array is built on a separate line from the exec call.
+confidence: high

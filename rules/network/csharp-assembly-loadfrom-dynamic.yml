@@ -1,0 +1,14 @@
+id: wide/csharp-assembly-loadfrom-dynamic
+name: csharp-assembly-loadfrom-dynamic
+category: NETWORK
+severity: HIGH
+languages:
+  - cs
+  - csx
+cwe: CWE-829
+pattern: \bAssembly\.(?:LoadFrom|LoadFile|UnsafeLoadFrom|Load)\s*\(
+message: Write-then-execute — code is loaded or run from a user-controlled or writable path (potential RCE, CWE-829/95/98/94).
+remediation: Load only assemblies from fixed, signed, application-controlled locations; verify a strong-name/publisher signature before loading and never load from an uploads directory or a request-supplied path.
+not-match: ^\s*(?:\/\/|\*|\/\*)|Assembly\.(?:LoadFrom|LoadFile|UnsafeLoadFrom|Load)\s*\(\s*@?"[^"]*"\s*\)
+why: Assembly.LoadFrom/LoadFile/Load with a non-literal path or a byte[] read at runtime loads and can execute managed code from that source; an attacker who writes the DLL/bytes into an upload or writable path achieves code execution. A single string/verbatim-string literal argument is suppressed, a leading word-boundary stops MyAssembly.LoadFrom(...), and GetExecutingAssembly()/assemblyBytes.Load(...) do not match.
+confidence: high

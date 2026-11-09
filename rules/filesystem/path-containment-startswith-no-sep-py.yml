@@ -1,0 +1,15 @@
+id: wide/path-containment-startswith-no-sep-py
+name: path-containment-startswith-no-sep-py
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-22
+pattern: (?:\b(?:resolved_path|resolved|real_path|realpath|abs_path|abspath|absolute_path|full_path|file_path|normalized_path|normalized|canonical_path|canonical|target_path|safe_path|final_path)\s*\.startswith\s*\([^)]*\)|\bos\.path\.(?:realpath|abspath)\s*\([^)]*\)\s*\.startswith\s*\([^)]*\)|[A-Za-z_][\w.]*\.startswith\s*\(\s*(?:[A-Za-z_]\w*_(?:dir|root)\b|[A-Za-z_]\w*(?:Dir|Root)\b|(?:base|root|cwd)\b|(?:BASE_DIR|ROOT_DIR|UPLOAD_DIR|PUBLIC_DIR|STATIC_DIR|DATA_DIR)\b)\s*\))
+message: Path-containment bypass — a startsWith/indexOf prefix check with no trailing separator lets a sibling directory escape (CWE-22).
+remediation: Use os.path.commonpath([base, resolved]) == base, or compare with the separator (resolved == base or resolved.startswith(base + os.sep)); never a bare startswith.
+not-match: ^\s*#|\+\s*os\.sep|\+\s*['"][\/\\]['"]|os\.path\.join\s*\([^)]*,\s*['"]{2}\s*\)|os\.path\.commonpath|os\.path\.relpath|[\/\\]['"]\s*\)|with_sep|WithSep
+why: 'A realpath/abspath result is confined with `.startswith(base)` and no trailing os.sep, so /var/www/uploads_backup passes a check for /var/www/uploads (CWE-22). Tightened: the generic-receiver branch dropped its string-literal alternative, so `request.path.startswith(''/api'')` and `p.startswith(''/'')` (absolute/route checks) no longer fire; literals stay caught via the resolved-path-receiver and os.path.realpath()/abspath() branches. notMatch clears base+os.sep, os.path.join(base,''''), commonpath, relpath, a trailing-slash literal, and ''#'' comments.'
+confidence: high

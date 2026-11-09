@@ -1,0 +1,17 @@
+id: wide/cwe079-php-echo-superglobal
+name: cwe079-php-echo-superglobal
+category: XSS
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+cwe: CWE-79
+pattern: \b(?:echo|print)\b[^;]*\$_(?:GET|POST|REQUEST|COOKIE)\b
+message: User input from a PHP request superglobal is echoed to the page without output encoding.
+remediation: Encode with htmlspecialchars($value, ENT_QUOTES, 'UTF-8') before echoing it.
+not-match: htmlspecialchars|htmlentities|strip_tags|urlencode|intval|filter_var|\(int\)
+why: 'Reflected cross-site scripting: the attacker controls the request value and injects script that runs in the victim''s browser session.'
+confidence: high

@@ -1,0 +1,12 @@
+id: wide/cwe827-dotnet-dtdprocessing-parse
+name: cwe827-dotnet-dtdprocessing-parse
+category: GENERAL
+severity: MEDIUM
+languages:
+  - cs
+cwe: CWE-827
+pattern: DtdProcessing\s*\.\s*Parse
+message: XmlReaderSettings enables DTD processing via DtdProcessing.Parse.
+remediation: Set DtdProcessing = DtdProcessing.Prohibit (or Ignore) for untrusted input.
+why: Allowing the reader to parse a DTD gives attacker-controlled documents control over entity definitions, enabling XXE and entity-expansion attacks.
+confidence: high

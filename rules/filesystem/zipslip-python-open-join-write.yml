@@ -1,0 +1,15 @@
+id: wide/zipslip-python-open-join-write
+name: zipslip-python-open-join-write
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-22
+pattern: open\s*\(\s*os\.path\.join\s*\([^)]*\b(name|filename|member|entry|fname|zinfo|zipinfo)\b[^)]*\)\s*,\s*['"][wa]
+message: Zip Slip / insecure archive extraction — an archive entry name escapes the destination, arbitrary file write (CWE-22/59).
+remediation: Compute the joined path, canonicalize with os.path.realpath, and confirm it starts with the realpath of dest before opening for write; reject '..' and absolute entry names.
+not-match: ^\s*#|realpath|\.startswith\(|commonpath|commonprefix|is_within_directory|is_safe_path|safe_extract|sanitiz|safe_join|secure_filename
+why: Manual extraction opens a write-mode file at os.path.join(dest, <entry name>) inside a zip/tar loop; because the entry name is untrusted, a name with ../ or a leading slash makes os.path.join resolve outside dest, writing attacker-controlled bytes to an arbitrary path. Word boundaries keep the name tokens from matching safe identifiers such as dirname/basename/pathname.
+confidence: high

@@ -1,0 +1,13 @@
+id: wide/ssrf-ruby-open-uri
+name: ssrf-ruby-open-uri
+category: NETWORK
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-918
+pattern: (?:\bURI\.open|(?:^|[^.\w])open)\s*\(\s*(?:URI[.(]|params\b|request\.|cookies\b|@?\w*(?:url|uri|host|hostname|link|endpoint|target|addr|address|domain)\w*(?!:))
+message: Server-side request forgery — an outbound request targets a user-controlled address (CWE-918).
+remediation: Never pass user input to open()/URI.open; use an HTTP client with an allowlisted host and disable file/pipe schemes.
+not-match: (?:allow_?list|white_?list|allowed_?hosts?|permitted|safe_?hosts?|valid_?hosts?)|URI(?:\.parse|\.join|\.encode|\.escape)?\s*\(\s*(?:["']https?:|ENV\b)|^\s*#
+why: open-uri Kernel#open / URI.open fetches a user-supplied URL (also local file read and, with a leading pipe, command execution). This rule previously LACKED the URI-literal guard, so open(URI("https://literal")) false-fired; added it (plus ENV).
+confidence: high

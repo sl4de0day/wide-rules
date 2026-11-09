@@ -1,0 +1,20 @@
+id: wide/pathwrite-node-fs-concat-reqinput
+name: pathwrite-node-fs-concat-reqinput
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-22
+pattern: \b(fs|fsp|fsPromises)\.(promises\.)?(writeFile|writeFileSync|appendFile|appendFileSync|createWriteStream|mkdir|mkdirSync)\s*\(\s*[^,]*(\+|\$\{)[^,]*\b(req|request)\.(body|params|query|file|files|headers)\b
+message: Path traversal on write — a file is written to a user-controlled path without a containment check (CWE-22).
+remediation: Never concatenate untrusted names into a path; join, then canonicalize and assert containment (resolved.startsWith(base+sep)), or replace the user segment with path.basename()/an allowlisted id.
+not-match: basename|secure_filename|sanitiz|whitelist|allowlist|\.startsWith\(|path\.relative|realpath|^\s*(\/\/|\*|\/\*)
+why: A write target is assembled by string concatenation (dir + '/' + userName) or a template literal (`${dir}/${req...}`) directly from request input, so '../' in the user value escapes the base directory and enables arbitrary file overwrite.
+confidence: high

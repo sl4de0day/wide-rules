@@ -1,0 +1,14 @@
+id: wide/cwe079-py-mark-safe-variable
+name: cwe079-py-mark-safe-variable
+category: XSS
+severity: MEDIUM
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-79
+pattern: \bmark_safe\s*\(\s*(?:f['"]|[A-Za-z_]\w*)
+message: mark_safe() is applied to a variable or f-string, disabling Django's auto-escaping.
+remediation: Return the plain value and let the template escape it, or use format_html() with escaped arguments.
+why: Marking attacker-influenced content as safe bypasses template escaping and produces stored or reflected cross-site scripting.
+confidence: high

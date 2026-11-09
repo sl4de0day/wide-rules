@@ -1,0 +1,15 @@
+id: wide/identity-from-raw-request-value-py
+name: identity-from-raw-request-value-py
+category: AUTH
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+cwe: CWE-807
+pattern: request\.(cookies|headers|args|form|values|COOKIES|GET|POST|META)\s*(\.\s*get\s*\(\s*|\[\s*)['"](HTTP[_-])?(X[-_])?(user(name)?|uid|user[-_]?id|login|account|current[-_]?user)\b
+message: Broken session management — identity/role from an unverified client value or a writable store (CWE-807/302).
+remediation: Derive identity from Django request.session / Flask server-side session, or from a verified token (jwt.decode with verification, itsdangerous signed cookie).
+not-match: ^\s*#|verify=True|itsdangerous|signer\.unsign|jwt\.decode
+why: A user identifier is read from a raw request cookie/header/query/form (Flask request.cookies/headers/args, Django request.COOKIES/GET/META) and used as identity. These values are attacker-controlled. request.session is excluded (not a raw source), and lines carrying jwt.decode/itsdangerous/signer.unsign/verify=True are suppressed as verified.
+confidence: high

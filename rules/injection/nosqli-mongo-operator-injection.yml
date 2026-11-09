@@ -1,0 +1,20 @@
+id: wide/nosqli-mongo-operator-injection
+name: nosqli-mongo-operator-injection
+category: INJECTION
+severity: CRITICAL
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-943
+pattern: \$(where|regex|ne|gt|gte|lt|lte|in|nin|elemMatch|expr|function|accumulator|options)\s*:\s*[^,}]*req\.(body|query|params)
+message: Possible NoSQL injection — user input flows into a query object/operator without type coercion (CWE-943).
+remediation: Avoid $where/$function on user input entirely. Coerce operands to scalars, and for $regex escape the pattern (escapeStringRegexp) or replace it with an anchored, validated value; prefer exact-match queries over user-controlled operators.
+not-match: String\s*\(|Number\s*\(|parseInt|parseFloat|escapeRegex|escapeStringRegexp|escape\s*\(|sanitiz|Joi\.|zod|\.validate\(|RegExp\.escape|^\s*(?:\/\/|\*|\/\*)
+why: A Mongo query operator ($where, $regex, $ne, $gt, $in, ...) is driven directly by request input. $where and $function evaluate attacker JavaScript (RCE / blind extraction); $regex enables ReDoS and enumeration; comparison operators leak or over-select data.
+confidence: high

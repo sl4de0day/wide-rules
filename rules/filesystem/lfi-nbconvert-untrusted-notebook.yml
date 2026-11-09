@@ -1,0 +1,23 @@
+id: wide/lfi-nbconvert-untrusted-notebook
+name: lfi-nbconvert-untrusted-notebook
+category: FILESYSTEM
+severity: HIGH
+languages:
+  - py
+  - pyi
+  - pyw
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-73
+pattern: (?=.*\bnbconvert\b)(?=.*(?:--to\b|--execute\b|--output\b|--template\b|\.ipynb\b|jupyter))(?=.*(?:\$\{|\+\s*\w|,\s*[A-Za-z_]\w*\s*[,)\]]|\bf["']|[\[(]\s*[A-Za-z_$][\w.$]*\s*[,)\]])).*
+message: Renderer resource embedding — a document/PDF/image converter resolves a user-controlled resource, enabling LFI or SSRF (CWE-918/73/611).
+remediation: Never nbconvert untrusted notebooks with --execute; sanitize/strip attachments and custom templates, run in an isolated sandbox, and validate the notebook path against an allowlist.
+not-match: (?:^\s*(?:\/\/|#|\*)|\bconsole\.|\blog(?:ger)?\.|System\.(?:out|err)|\bprint\s*\(|\becho\s)
+why: jupyter nbconvert on an untrusted .ipynb renders attacker-controlled cell/attachment/template content; templates and outputs can reference local files (LFI), and --execute additionally runs embedded code. Log lines are suppressed to avoid status-logging noise.
+confidence: high

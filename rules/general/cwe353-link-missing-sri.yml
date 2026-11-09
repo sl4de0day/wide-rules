@@ -1,0 +1,19 @@
+id: wide/cwe353-link-missing-sri
+name: cwe353-link-missing-sri
+category: GENERAL
+severity: MEDIUM
+languages:
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+  - jsx
+  - tsx
+cwe: CWE-353
+pattern: <link\b(?=[^>]*\bstylesheet\b)[^>]*\bhref\s*=\s*["'](?:https?:)?\/\/
+message: An external stylesheet <link> loads from a remote origin without an integrity (Subresource Integrity) attribute.
+remediation: Add integrity="sha384-..." and crossorigin to the stylesheet link, or self-host the CSS.
+not-match: \bintegrity\s*=
+why: A tampered remote CSS file can exfiltrate data and deface the page; SRI blocks a modified stylesheet from being applied.
+confidence: high

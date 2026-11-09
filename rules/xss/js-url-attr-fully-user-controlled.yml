@@ -1,0 +1,20 @@
+id: wide/js-url-attr-fully-user-controlled
+name: js-url-attr-fully-user-controlled
+category: XSS
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-79
+pattern: \b(?:href|src)\s*=\s*(?:["']\s*\$\{\s*req\.(?:query|body|params|cookies)|["']["']?\s*\+\s*req\.(?:query|body|params|cookies))
+message: Reflected / context-mismatched XSS — user input reaches HTML or JS output without proper contextual encoding (CWE-79/116).
+remediation: Validate and normalize the URL with new URL()/sanitize-url and enforce a scheme allowlist (http/https/mailto/relative) before emitting it into the attribute.
+not-match: (?:^\s*(?:\/\/|\*)|encodeURIComponent|sanitizeUrl|sanitize-url|isSafeUrl|validateUrl|DOMPurify|new URL\()
+why: 'The entire href/src value begins with user input (${req.*} or ""+req.* right after the attribute quote), so an attacker can supply a javascript: or data: URL that executes -> XSS. A fixed prefix (host/#/path) before the interpolation is not matched, so only fully attacker-controlled URLs fire. HTML-entity escaping does not neutralize a dangerous URL scheme, making this a context-mismatch when only escaped.'
+confidence: high

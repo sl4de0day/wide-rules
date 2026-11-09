@@ -1,0 +1,20 @@
+id: wide/jwt-decode-noverify
+name: jwt-decode-noverify
+category: CRYPTO
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-347
+pattern: jwt\.decode\s*\(
+message: jwt.decode() does not verify the signature.
+remediation: Use jwt.verify() with the key so a forged token is rejected.
+not-match: verify
+why: decode() reads the claims without checking they were signed, so the values cannot be trusted for a security decision.
+confidence: high

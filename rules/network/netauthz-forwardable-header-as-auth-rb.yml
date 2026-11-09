@@ -1,0 +1,13 @@
+id: wide/netauthz-forwardable-header-as-auth-rb
+name: netauthz-forwardable-header-as-auth-rb
+category: NETWORK
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-290
+pattern: request\.(?:headers\[['"](?:x-(?:forwarded-for|forwarded-host|forwarded-user|real-ip|internal|is-admin|admin|auth-token|auth|api-key|user-id|user-role|user|role|trusted|backend|gateway))['"]\]|get_header\(\s*['"]HTTP_X_[A-Z_]+['"]\s*\))\s*(?:==|!=)\s*['"][^'"]*['"]
+message: Broken access control — authorization based on network location or a spoofable client header (CWE-346/290).
+remediation: Do not authorize on X-* request headers. Use Devise/session or a verified token. If a trusted proxy sets the header, strip and re-inject it at the edge and verify a signed proxy value.
+not-match: ^\s*#|\b(?:log|logger|metric|audit|throttle|proxy)\b|rate[_-]?limit|\.split|client_ip|remote_ip|jwt|verify_token|authenticate|current_user|devise|csrf|session\[
+why: Rails request.headers['X-Forwarded-For'|'X-Admin'|'X-Internal'|...] (or get_header('HTTP_X_*')) compared to a value drives an access decision (the grant keyword precedes it in a postfix `if`). These headers are client-settable and survive non-stripping proxies, so an attacker forges one. notMatch excludes logging, IP-extraction, and rate-limit uses.
+confidence: high

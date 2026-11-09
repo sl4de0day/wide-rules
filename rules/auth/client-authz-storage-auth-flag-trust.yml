@@ -1,0 +1,22 @@
+id: wide/client-authz-storage-auth-flag-trust
+name: client-authz-storage-auth-flag-trust
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-602
+pattern: (?:localStorage|sessionStorage|window\.localStorage|window\.sessionStorage|globalThis\.localStorage)\s*(?:\.\s*getItem\s*\(\s*['"](?:isLoggedIn|loggedIn|isLogin|isLogIn|isAuthenticated|isAuthed|isAdmin|admin|role|userRole|user_role|authenticated|auth|isSuperuser|accessLevel|isAuthorized)['"]\s*\)|(?:\.\s*(?:isLoggedIn|isAdmin|isAuthenticated|isAuthed|role|authenticated|isSuperuser|isAuthorized)\b|\[\s*['"](?:isLoggedIn|isAdmin|isAuthenticated|role|authenticated|isSuperuser|isAuthorized)['"]\s*\])(?!\s*=(?!=)))
+message: Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.
+remediation: Never trust an auth flag read from web storage for access control. Verify the session/permission with the server before showing protected views or performing privileged actions; the server response, not client storage, must decide.
+not-match: (?:^\s*(?:\/\/|\*|\/\*|<!--|#))|(?:\.spec\.|\.test\.|__tests__|\bexpect\s*\(|\bmock\w*|toHaveBeenCalled|\bdescribe\s*\(|\bit\s*\()|(?:textContent|innerText|placeholder|<option|aria-|\.value\s*=(?!=))|(?:\bawait\s+[\w.$]*(?:verify|validateSession|introspect|checkAuth|getSession|reauth)\w*\s*\()
+why: An access decision reads an auth flag straight out of localStorage/sessionStorage (getItem('isLoggedIn'), localStorage.isAdmin) and trusts it. Because web storage is attacker-writable on the origin, anyone can set the flag and be treated as logged in or admin — the client is enforcing a security decision on a value it does not control.
+confidence: high

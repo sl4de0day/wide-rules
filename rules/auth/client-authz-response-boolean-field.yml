@@ -1,0 +1,22 @@
+id: wide/client-authz-response-boolean-field
+name: client-authz-response-boolean-field
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - vue
+  - svelte
+cwe: CWE-602
+pattern: (?:(?:\bif\s*\(\s*|\breturn\s+|\bwhile\s*\(\s*)!?\s*[\w$]+(?:\.[\w$]+)*\.(?:(?:isAdmin|isAdministrator|isLoggedIn|isLogIn|isLogin|isAuthenticated|isAuthed|isSuperuser|isSuperUser|isAuth)\b|admin\b(?!\s*\()))|(?:[\w$]+(?:\.[\w$]+)*\.(?:isAdmin|isAdministrator|isLoggedIn|isLogIn|isLogin|isAuthenticated|isAuthed|isSuperuser|isSuperUser|isAuth)\s*(?:\?|&&))
+message: Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.
+remediation: Do not gate access on a client-held boolean. Have the server authorize each protected action/route and return only the data the caller is entitled to; on the client, treat any such flag as a presentation hint and re-fetch/authorize from the server before revealing privileged data or actions.
+not-match: (?:^\s*(?:\/\/|\*|\/\*|<!--|#))|(?:className|classList|\bstyle\b|\.style\b|textContent|innerText|innerHTML\s*=|\.hidden\b|display\s*[:=]|visibility|opacity|aria-|toggleClass|setAttribute|isMenuOpen|isModalOpen|isDrawerOpen|isDropdownOpen|isCollapsed|isExpanded|showTooltip|tooltip|darkMode|\btheme\b)|(?:\bawait\s+[\w.$]*(?:verify|validate|revalidate|authorize|introspect|checkAuth|getSession|fetchUser)\w*\s*\()|(?:mongoose|adminCommand|\bdb\.admin\b)
+why: The browser grants access or renders a protected view by branching on an auth/role boolean it received or holds (res.data.isLogin, response.admin, user.isAdmin). A client can flip that value in devtools or by tampering with the response, so the gate enforces nothing; every real authorization must be re-decided on the server per request.
+confidence: high

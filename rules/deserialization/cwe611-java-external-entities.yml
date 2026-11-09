@@ -1,0 +1,12 @@
+id: wide/cwe611-java-external-entities
+name: cwe611-java-external-entities
+category: DESERIALIZATION
+severity: HIGH
+languages:
+  - java
+cwe: CWE-611
+pattern: setFeature\s*\(\s*["'][^"']*external-(general|parameter)-entities["']\s*,\s*true
+message: The XML parser factory explicitly enables external general/parameter entities.
+remediation: Set these features to false and set disallow-doctype-decl to true, or use a secure XML library.
+why: Setting the external-entities feature to true permits a DOCTYPE to fetch local files or network resources, the root cause of XXE in JAXP parsers.
+confidence: high

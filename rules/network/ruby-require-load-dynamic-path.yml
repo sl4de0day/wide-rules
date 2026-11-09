@@ -1,0 +1,13 @@
+id: wide/ruby-require-load-dynamic-path
+name: ruby-require-load-dynamic-path
+category: NETWORK
+severity: HIGH
+languages:
+  - rb
+cwe: CWE-829
+pattern: \b(?:require|require_relative|load)\b\s*\(?\s*(?:[a-z_@$][\w@$.]*|['"][^'"]*#\{|['"][^'"]*['"]\s*\+)
+message: Write-then-execute — code is loaded or run from a user-controlled or writable path (potential RCE, CWE-829/95/98/94).
+remediation: Load only fixed literal paths of trusted code; if a plugin name is selected at runtime, validate it against an allow-list and resolve it under a read-only directory (reject '..' and absolute paths).
+not-match: ^\s*#
+why: require/require_relative/load with a local/instance variable, a string interpolation (#{...}), or a concatenation loads and executes a Ruby file chosen at runtime; a user-controlled name or a writable/uploaded path becomes code execution. The bareword branch is lowercase-anchored so uppercase constant helpers (File.join(...), ALLOWED[name], File.expand_path(...)) do not match, and word-boundaries keep payload()/download()/autoload from firing.
+confidence: high

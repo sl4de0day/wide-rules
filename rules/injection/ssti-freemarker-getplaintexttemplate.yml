@@ -1,0 +1,12 @@
+id: wide/ssti-freemarker-getplaintexttemplate
+name: ssti-freemarker-getplaintexttemplate
+category: INJECTION
+severity: HIGH
+languages:
+  - java
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/[/*]|\*)).*?\bTemplate\s*\.\s*getPlainTextTemplate\s*\(\s*[^;,()]*,\s*(?:[A-Za-z_$]|(?:"[^"]*"|'[^']*')\s*(?:\+(?!\s*["'])|\.\s*(?:format|formatted)\s*\())
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Do not construct the content argument from request data; use a fixed template resource and supply user input only through the data-model.
+why: Template.getPlainTextTemplate builds a template from its String content argument; a dynamic content String is compiled as template source and enables directive injection reaching RCE.
+confidence: high

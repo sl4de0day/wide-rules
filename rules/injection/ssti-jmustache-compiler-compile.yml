@@ -1,0 +1,12 @@
+id: wide/ssti-jmustache-compiler-compile
+name: ssti-jmustache-compiler-compile
+category: INJECTION
+severity: HIGH
+languages:
+  - java
+cwe: CWE-1336
+pattern: ^(?!\s*(?:\/[/*]|\*)).*?\.\s*compiler\s*\(\s*\)[^;]*\.\s*compile\s*\(\s*(?:[A-Za-z_$]|(?:"[^"]*"|'[^']*')\s*(?:\+(?!\s*["'])|\.\s*(?:format|formatted)\s*\())
+message: Server-side template injection (SSTI) — user input is compiled as a template.
+remediation: Compile a fixed template string/resource and provide user input only through the context object passed to execute().
+why: JMustache's Mustache.compiler().compile(...) parses its argument as a Mustache template; a dynamic argument makes user input the template source, exposing the data model and lambda handling.
+confidence: high

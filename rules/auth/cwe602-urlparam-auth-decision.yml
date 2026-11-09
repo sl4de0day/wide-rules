@@ -1,0 +1,24 @@
+id: wide/cwe602-urlparam-auth-decision
+name: cwe602-urlparam-auth-decision
+category: AUTH
+severity: LOW
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - html
+  - htm
+  - xhtml
+  - vue
+  - svelte
+cwe: CWE-602
+pattern: (?:URLSearchParams[^)]*\)|\bparams|\bsearchParams|\bquery|\burlParams|\bqs)\s*\.\s*get\s*\(\s*['"`](?:role|roles|isAdmin|admin|permission|permissions|privilege|access|accessLevel|isAuthenticated)\b
+message: Reads an authorization value (role/isAdmin/access) from a URL query parameter to make an access decision.
+remediation: Never derive privileges from the URL; authorize on the server using a verified session or signed token.
+why: Query parameters are user-supplied, so using them to grant roles or unlock admin behavior lets anyone escalate by editing the URL.
+confidence: high

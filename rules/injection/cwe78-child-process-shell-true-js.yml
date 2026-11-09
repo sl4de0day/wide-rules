@@ -1,0 +1,20 @@
+id: wide/cwe78-child-process-shell-true-js
+name: cwe78-child-process-shell-true-js
+category: INJECTION
+severity: CRITICAL
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-78
+pattern: \b(?:spawnSync|execFileSync|execFile|spawn|exec|fork)\s*\(.*\bshell\s*:\s*true\b
+message: Command injection via shell:true — child_process/subprocess with the shell option re-parses arguments through the system shell (CWE-78).
+remediation: 'Remove the shell:true option so arguments go straight to execvp without a shell: spawn(''ping'', [''-c'',''1'', host]) with an args array keeps metacharacters inert. If a shell is genuinely required, strictly allowlist/validate the input and never place user-controlled data into a shell-parsed argument.'
+not-match: ^\s*(?:\/\/|\*|\/\*)|\b(?:spawnSync|execFileSync|execFile|spawn|exec|fork)\s*\(\s*(?:'[^']*'|"[^"]*"|`[^`$]*`|\[(?:\s*(?:'[^']*'|"[^"]*"|`[^`$]*`)\s*,?)*\s*\]|,|\s)*\{
+why: 'A child_process spawn/exec/execFile/spawnSync/execFileSync/fork call given the { shell: true } option re-parses its arguments through the system shell, so shell metacharacters (; && | $() backticks) inside a non-literal argument execute as commands even though an args array was used. In spawn(''ping'', [''-c'',''1'', host], { shell:true }) a value host=''example.com;id'' runs id, bypassing any IP-format blacklist. Two refinements over the original: (1) the notMatch''s option-object clause was relaxed from requiring shell to be the FIRST key (\{\s*shell\s*:\s*true) to just reaching the opening brace after all-literal args, so a safe call with reordered options like spawn(''ls'',[''-la''],{ cwd:''/tmp'', shell:true }) no longer false-fires; (2) the backtick template-literal alternatives were tightened from `[^`]*` to `[^`$]*` so an interpolated template literal (`ls ${dir}`) is treated as non-literal and correctly fires, while a plain template literal stays suppressed. notMatch still suppresses shell:false (sink misses it), calls whose args are only string/array literals, and commented lines (// * /*).'
+confidence: high

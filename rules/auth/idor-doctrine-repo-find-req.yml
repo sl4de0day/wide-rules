@@ -1,0 +1,18 @@
+id: wide/idor-doctrine-repo-find-req
+name: idor-doctrine-repo-find-req
+category: AUTH
+severity: HIGH
+languages:
+  - php
+  - phtml
+  - php3
+  - php4
+  - php5
+  - phps
+cwe: CWE-639
+pattern: '->(find|findOrFail)\s*\(\s*(\$request\b|request\s*\(|\$_(GET|POST|REQUEST|COOKIE)\b)'
+message: Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).
+remediation: Use findOneBy(['id' => $request->id, 'owner' => $this->getUser()]) or run a voter/policy check ($this->denyAccessUnlessGranted('view', $entity)) after loading. A scoped fetch through the owner ($this->getUser()->getPosts()->find(...)) is also suppressed.
+not-match: user_?id|owner|auth\s*\(|Auth::|->user\b|->getUser\b|getUser\s*\(|Gate::|authorize|policy|current_?user|abort_unless|abort_if|\bcan\s*\(|->can\b|\bcannot\b|isGranted|denyAccessUnlessGranted|Bouncer::|whereBelongsTo|tenant|team_?id|account_?id|org_?id|organi|company_?id|group_?id|customer_?id|^\s*(\/\/|#(?!\[)|\*)
+why: A repository/entity-manager find() fetches an entity by identifier taken from the request, with no ownership or authorization gate on the statement — the classic broken-object-level-authorization pattern. Critically, Symfony's ownership idioms $this->getUser()/isGranted()/denyAccessUnlessGranted() are NOT matched by the Laravel-style ->user token, so they were added explicitly; this is the top FP source for this broad ->find rule.
+confidence: high

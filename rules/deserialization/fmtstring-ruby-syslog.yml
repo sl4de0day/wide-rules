@@ -1,0 +1,13 @@
+id: wide/fmtstring-ruby-syslog
+name: fmtstring-ruby-syslog
+category: DESERIALIZATION
+severity: MEDIUM
+languages:
+  - rb
+cwe: CWE-134
+pattern: \bSyslog\.log\s*\(\s*[^,]+,\s*(?!["'])[^)\s]
+message: Format string injection — user input used as the format/template string (CWE-134).
+remediation: 'Pass a constant format literal and user data as arguments: Syslog.log(pri, "%s", user).'
+not-match: ^\s*#
+why: 'Syslog.log receives a non-literal format argument after the priority, so user data is interpreted as a C-style format string. Kept as-is: the (?!["'']) lookahead suppresses literal second args, and the leading \b means MySyslog.log does not match.'
+confidence: high
