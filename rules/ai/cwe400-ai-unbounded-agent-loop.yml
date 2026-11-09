@@ -1,0 +1,18 @@
+id: wide/cwe400-ai-unbounded-agent-loop
+name: ai-unbounded-agent-loop
+category: AI_SECURITY
+severity: MEDIUM
+languages:
+  - js
+  - jsx
+  - ts
+  - tsx
+  - py
+  - mjs
+  - cjs
+cwe: CWE-400
+pattern: \bwhile\s*\(\s*(?:true|1)\s*\)\s*\{[^}]*(?:agent|runner|llm)\.(?:step|run|complete|executeTurn)\s*\(
+message: Autonomous agent loop running without maximum iteration bound or dwell commitment check.
+remediation: Enforce a strict maximum turn limit and use CommitmentGate to prevent tool oscillation.
+why: Unbounded agent loops can cause denial of service, resource exhaustion, and infinite tool flapping.
+confidence: medium

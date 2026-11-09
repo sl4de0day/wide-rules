@@ -14,8 +14,8 @@ const bundle = JSON.parse(fs.readFileSync(bundlePath, 'utf8'));
 
 console.log(`Testing bundle version ${bundle.version} with ${bundle.totalRules} rules...`);
 
-assert.equal(bundle.totalRules, 712);
-assert.ok(bundle.rules.length === 712);
+assert.equal(bundle.totalRules, 720);
+assert.ok(bundle.rules.length === 720);
 
 let testedRegexCount = 0;
 for (const rule of bundle.rules) {
@@ -48,4 +48,14 @@ assert.ok(csCommandRule);
 const csCommandRegex = new RegExp(csCommandRule.pattern, 'i');
 assert.ok(csCommandRegex.test('new SqlCommand("SELECT * FROM users WHERE id = " + id)'));
 
-console.log('All rule engine tests passed successfully (716 assertion checks passed).');
+const aiPromptInjRule = bundle.rules.find(r => r.id === 'wide/cwe079-ai-prompt-injection');
+assert.ok(aiPromptInjRule);
+const aiPromptInjRegex = new RegExp(aiPromptInjRule.pattern, 'i');
+assert.ok(aiPromptInjRegex.test('const prompt = `System instructions: ${req.body.input}`;'));
+
+const aiToolExecRule = bundle.rules.find(r => r.id === 'wide/cwe078-ai-unsafe-tool-exec');
+assert.ok(aiToolExecRule);
+const aiToolExecRegex = new RegExp(aiToolExecRule.pattern, 'i');
+assert.ok(aiToolExecRegex.test('exec(toolCall.arguments.command);'));
+
+console.log('All rule engine tests passed successfully (726 assertion checks passed).');

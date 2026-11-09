@@ -1,0 +1,18 @@
+id: wide/cwe306-ai-unauthenticated-mcp-registration
+name: ai-unauthenticated-mcp-registration
+category: AI_SECURITY
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - ts
+  - tsx
+  - py
+  - mjs
+  - cjs
+cwe: CWE-306
+pattern: \b(?:mcp|toolRegistry)\.(?:register|addServer)\s*\(\s*(?:req\.|params\.|untrusted|remoteUrl)
+message: Registration of untrusted or unauthenticated Model Context Protocol (MCP) server.
+remediation: Enforce user confirmation and cryptographic signature verification before trusting MCP servers.
+why: Registering unvetted MCP servers exposes the agent host to rogue tool definitions and untrusted prompt injection.
+confidence: high

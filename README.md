@@ -19,16 +19,18 @@
 
 ---
 
-**Wide Rules is the unified, versioned static application security testing (SAST) rule and AST pattern database for the Wide ecosystem. Housing 700+ security rules covering 90+ CWE categories across JavaScript, TypeScript, Python, Go, PHP, Java, C#, and Ruby, it acts as the central vulnerability intelligence repository for Wide IDE, Wide CLI, Wide Action, and Wide SDK.**
+**Wide Rules is the unified vulnerability database and DecisionCore multi-agent coordination library for the Wide ecosystem. Housing 720 security rules covering 90+ CWE categories and OWASP Top 10 for LLMs alongside DecisionCore algorithmic primitives (`CommitmentGate`, `PluralityConsensus`, `ClaimTable`, `PartitionAssignment`, `WeightedScorer`, `SynchronizationBarrier`), it acts as the central vulnerability and agent intelligence repository for Wide IDE, Wide CLI, Wide App, Wide Action, and Wide SDK.**
 
 Wide Rules separates security definitions from scanner engines:
-- **Centralized Vulnerability Database:** Over 700 curated rules maintained independently of binary release cycles.
+- **Centralized Vulnerability Database:** Over 720 curated rules maintained independently of binary release cycles.
+- **Embedded DecisionCore Primitives:** Native multi-agent consensus, anti-thrashing dwell gates, and collision-free lease tables.
 - **Pre-Compiled Distribution:** Bundled into lightweight `dist/rules.json` and `dist/rules.min.json` artifacts for instant offline and air-gapped scanning.
 - **Ecosystem Consistency:** Powers real-time editor diagnostics in Wide IDE, terminal scans in Wide CLI, CI/CD gates in Wide Action, and programmatic audits in Wide SDK.
 
 ## Features
 
-- **Comprehensive SAST Catalog.** Over 700 curated security rules spanning SQL injection, command execution, path traversal, SSRF, memory safety, and secret detection.
+- **Comprehensive SAST Catalog.** 720 curated security rules spanning SQL injection, command execution, path traversal, SSRF, memory safety, and AI prompt injection.
+- **DecisionCore Multi-Agent Engine.** Out-of-the-box algorithmic coordination primitives for subagent voting, resource claiming, and patch evaluation.
 - **Multi-Language Coverage.** Tailored detection patterns for JavaScript, TypeScript, Python, PHP, Java, Go, C#, Rust, and Ruby.
 - **Schema Validated.** Every rule is verified against an explicit JSON Schema ensuring consistent metadata, CWE mapping, and severity rankings.
 - **Pre-Compiled Distribution.** Automated CI bundling packages the complete rule catalog into standalone `dist/rules.json` and `dist/rules.min.json` for offline and air-gapped security scanning.
@@ -48,6 +50,7 @@ Wide Rules separates security definitions from scanner engines:
 | `xss` | 28 | Cross-site scripting, DOM manipulation, unsafe HTML output |
 | `crypto` | 26 | Deprecated ciphers, collision-prone hashing, weak randomness |
 | `logic` | 2 | Numeric validation flaws, integer boundary overflows |
+| `ai` | 8 | AI agent prompt injection, unsafe tool execution, context overflow, untrusted MCP |
 | `general` | 75 | General application security, memory safety, client-side trust issues |
 
 ## Quick Start

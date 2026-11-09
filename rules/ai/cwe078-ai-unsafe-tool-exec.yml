@@ -1,0 +1,18 @@
+id: wide/cwe078-ai-unsafe-tool-exec
+name: ai-unsafe-tool-exec
+category: AI_SECURITY
+severity: CRITICAL
+languages:
+  - js
+  - jsx
+  - ts
+  - tsx
+  - py
+  - mjs
+  - cjs
+cwe: CWE-78
+pattern: \b(?:exec|execSync|spawn|subprocess\.run|os\.system)\s*\(\s*(?:toolCall|tool_call|args|arguments|response\.command|patch\.command)
+message: Executing raw system command directly from AI tool call response without argument validation.
+remediation: Whitelist allowed commands and run them in an isolated sandbox with fixed arguments.
+why: Autonomous AI tool responses executing directly in the shell can result in arbitrary remote code execution if prompt injection occurs.
+confidence: high

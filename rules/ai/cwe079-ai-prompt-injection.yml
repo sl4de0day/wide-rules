@@ -1,0 +1,18 @@
+id: wide/cwe079-ai-prompt-injection
+name: ai-prompt-injection
+category: AI_SECURITY
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - ts
+  - tsx
+  - py
+  - mjs
+  - cjs
+cwe: CWE-79
+pattern: \b(?:prompt|instruction|query|input)\s*[:=]\s*(?:f?["'].*?\{|`.*?\$\{).*(?:req\.|params\.|body\.|userInput|user_input|request\.)
+message: Untrusted user input concatenated directly into LLM prompt template without sanitization.
+remediation: Use structured multi-turn message roles or sanitize prompt inputs before sending to the model.
+why: Direct concatenation of user-supplied text into system prompts enables indirect prompt injection and instruction override.
+confidence: high

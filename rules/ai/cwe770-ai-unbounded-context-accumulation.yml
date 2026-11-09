@@ -1,0 +1,18 @@
+id: wide/cwe770-ai-unbounded-context-accumulation
+name: ai-unbounded-context-accumulation
+category: AI_SECURITY
+severity: LOW
+languages:
+  - js
+  - jsx
+  - ts
+  - tsx
+  - py
+  - mjs
+  - cjs
+cwe: CWE-770
+pattern: \b(?:messages|history|conversation)\s*\.push\s*\(\s*\{[^}]*content\s*:[^}]*\}\s*\)
+message: Agent message history grows indefinitely without context window compaction or eviction strategy.
+remediation: Use sliding window context compaction or summarize previous conversation turns.
+why: Unbounded context accumulation leads to LLM context overflow errors and memory exhaustion.
+confidence: low

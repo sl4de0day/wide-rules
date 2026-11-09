@@ -1,13 +1,25 @@
 {
   "name": "wide-rules",
-  "version": "0.191126",
-  "description": "Unified Vulnerability and AST Pattern Database for the Wide Ecosystem",
+  "version": "0.2101126",
+  "description": "Unified Vulnerability Database and DecisionCore Multi-Agent Primitives for the Wide Ecosystem",
   "type": "module",
-  "main": "dist/rules.json",
+  "main": "./src/index.js",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    },
+    "./rules": "./dist/rules.json",
+    "./decision": {
+      "types": "./src/decision/index.d.ts",
+      "default": "./src/decision/index.js"
+    }
+  },
   "scripts": {
     "validate": "node scripts/validate.cjs",
-    "test": "node scripts/test-rules.cjs",
-    "bundle": "node scripts/bundle.cjs"
+    "bundle": "node scripts/bundle.cjs",
+    "test": "node scripts/test-decision.cjs && node scripts/test-rules.cjs"
   },
   "repository": {
     "type": "git",
@@ -18,6 +30,8 @@
     "sast",
     "ast-patterns",
     "vulnerability-database",
+    "decisioncore",
+    "multi-agent",
     "appsec",
     "devsecops",
     "wide",
