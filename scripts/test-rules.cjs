@@ -14,8 +14,8 @@ const bundle = JSON.parse(fs.readFileSync(bundlePath, 'utf8'));
 
 console.log(`Testing bundle version ${bundle.version} with ${bundle.totalRules} rules...`);
 
-assert.equal(bundle.totalRules, 720);
-assert.ok(bundle.rules.length === 720);
+assert.equal(bundle.totalRules, 721);
+assert.ok(bundle.rules.length === 721);
 
 let testedRegexCount = 0;
 for (const rule of bundle.rules) {
@@ -58,4 +58,11 @@ assert.ok(aiToolExecRule);
 const aiToolExecRegex = new RegExp(aiToolExecRule.pattern, 'i');
 assert.ok(aiToolExecRegex.test('exec(toolCall.arguments.command);'));
 
-console.log('All rule engine tests passed successfully (726 assertion checks passed).');
+const aiNoEmojisRule = bundle.rules.find(r => r.id === 'wide/ai-no-emojis');
+assert.ok(aiNoEmojisRule);
+assert.ok(aiNoEmojisRule.instruction.includes('Do not use emojis'));
+const aiNoEmojisRegex = new RegExp(aiNoEmojisRule.pattern);
+assert.ok(aiNoEmojisRegex.test('Hello 😀 World'));
+assert.ok(!aiNoEmojisRegex.test('Hello World'));
+
+console.log('All rule engine tests passed successfully.');

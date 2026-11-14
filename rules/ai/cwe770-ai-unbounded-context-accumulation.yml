@@ -15,4 +15,5 @@ pattern: \b(?:messages|history|conversation)\s*\.push\s*\(\s*\{[^}]*content\s*:[
 message: Agent message history grows indefinitely without context window compaction or eviction strategy.
 remediation: Use sliding window context compaction or summarize previous conversation turns.
 why: Unbounded context accumulation leads to LLM context overflow errors and memory exhaustion.
+instruction: Maintain concise conversation context and avoid unbounded accumulation.
 confidence: low

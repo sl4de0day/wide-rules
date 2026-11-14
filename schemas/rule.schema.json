@@ -52,6 +52,9 @@
     },
     "remediation": {
       "type": "string"
+    },
+    "instruction": {
+      "type": "string"
     }
   },
   "additionalProperties": true

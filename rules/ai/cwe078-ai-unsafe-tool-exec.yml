@@ -15,4 +15,5 @@ pattern: \b(?:exec|execSync|spawn|subprocess\.run|os\.system)\s*\(\s*(?:toolCall
 message: Executing raw system command directly from AI tool call response without argument validation.
 remediation: Whitelist allowed commands and run them in an isolated sandbox with fixed arguments.
 why: Autonomous AI tool responses executing directly in the shell can result in arbitrary remote code execution if prompt injection occurs.
+instruction: Never execute raw system commands directly from AI tool call responses without argument validation.
 confidence: high

@@ -1,0 +1,12 @@
+id: wide/ai-no-emojis
+name: ai-no-emojis
+category: AI_SECURITY
+severity: HIGH
+languages:
+  - all
+pattern: (?:[\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27BF])
+message: AI agents must not use emojis or emoticons under any circumstances.
+remediation: Strip all emojis from text and outputs, preserving clean technical prose.
+why: Emojis degrade technical clarity and violate Wide ecosystem professional standards.
+instruction: Do not use emojis anywhere in your responses or generated code. Never output emojis under any circumstances.
+confidence: high

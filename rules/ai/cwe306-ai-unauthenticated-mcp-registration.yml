@@ -15,4 +15,5 @@ pattern: \b(?:mcp|toolRegistry)\.(?:register|addServer)\s*\(\s*(?:req\.|params\.
 message: Registration of untrusted or unauthenticated Model Context Protocol (MCP) server.
 remediation: Enforce user confirmation and cryptographic signature verification before trusting MCP servers.
 why: Registering unvetted MCP servers exposes the agent host to rogue tool definitions and untrusted prompt injection.
+instruction: Never register external toolsets or MCP servers without authentication and user authorization.
 confidence: high

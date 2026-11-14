@@ -15,4 +15,5 @@ pattern: \b(?:prompt|instruction|query|input)\s*[:=]\s*(?:f?["'].*?\{|`.*?\$\{).
 message: Untrusted user input concatenated directly into LLM prompt template without sanitization.
 remediation: Use structured multi-turn message roles or sanitize prompt inputs before sending to the model.
 why: Direct concatenation of user-supplied text into system prompts enables indirect prompt injection and instruction override.
+instruction: Always validate and sanitize untrusted user input before incorporating into prompt templates.
 confidence: high

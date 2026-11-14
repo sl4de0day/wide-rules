@@ -15,4 +15,5 @@ pattern: \b(?:applyPatch|applyDiff|fs\.writeFile|writeFileSync)\s*\(\s*(?:filepa
 message: Direct file write of AI-suggested code diff without validation or syntax check.
 remediation: Score candidate patches using WeightedScorer and validate syntax before committing changes.
 why: Applying unvalidated code patches directly to disk can corrupt project files or introduce syntax errors.
+instruction: Always inspect relevant files before modifying them, validate bounds, and verify patch integrity.
 confidence: medium

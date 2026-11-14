@@ -13,6 +13,7 @@ export interface SecurityRule {
   message: string;
   why?: string;
   remediation?: string;
+  instruction?: string;
 }
 
 export interface RulesBundle {
@@ -26,3 +27,6 @@ export interface RulesBundle {
 
 export function getRulesPath(): string;
 export function loadRules(): RulesBundle;
+export function loadAgentRules(): SecurityRule[];
+export function buildAgentInstructions(rules?: SecurityRule[]): string;
+export function sanitizeAgentOutput(text: string, rules?: SecurityRule[]): string;
