@@ -1,0 +1,49 @@
+name: Dynamic CVE Rule Learning
+
+on:
+  schedule:
+    - cron: "0 3 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  models: read
+
+jobs:
+  learn-rules:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Sync Advisories and Synthesize Verified Candidate Rules
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+        run: |
+          npm run sync:advisories
+          node src/cli.js learn --limit 5
+          npm run validate
+          npm run bundle
+          npm test
+
+      - name: Open Pull Request for Verified Rules
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: "chore(rules): add dynamically learned CVE rules"
+          title: "chore(rules): add verified CVE rules from internet feeds"
+          body: "Automated candidate rules synthesized from verified advisories and validated through schema, ReDoS, fixture, and false-positive checks."
+          branch: chore/learned-rules
+          delete-branch: true

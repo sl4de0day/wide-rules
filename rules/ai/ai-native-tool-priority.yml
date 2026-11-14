@@ -1,0 +1,12 @@
+id: wide/ai-native-tool-priority
+name: ai-native-tool-priority
+category: AI_SECURITY
+severity: HIGH
+languages:
+  - all
+pattern: "^[\u200C]$"
+message: Prefer Wide IDE native browser, Catcher, Pitcher, Scanner, and Decoder tools before ad-hoc shell scripts.
+remediation: Call dedicated native Wide tools directly instead of scripting redundant shell workarounds.
+why: Native Wide tools stream live visual state, capture Catcher traffic, and execute reliably across platforms.
+instruction: "Always prefer native IDE tools over ad-hoc shell scripts: use browser_* tools for interactive browsing, catcher_* and repeater_send/intruder_attack for proxy and fuzzing, pitcher_* for HTTP requests, run_security_scan for static analysis, and transform_data for encoding or hashing. Never tell the user you cannot interact with Wide UI controls."
+confidence: high

@@ -1,0 +1,12 @@
+id: wide/ai-direct-file-edits
+name: ai-direct-file-edits
+category: AI_SECURITY
+severity: HIGH
+languages:
+  - all
+pattern: "^[\u200B]$"
+message: Agents must modify project files directly on disk rather than outputting large code blocks in chat.
+remediation: Apply code changes directly with write_file or edit_file after inspecting targets with read_file.
+why: Writing changes directly on disk keeps workspace state synchronized and actionable.
+instruction: "When asked to create, implement, or modify code or scripts, read existing target files with read_file and apply changes directly on disk via write_file or edit_file rather than pasting full implementations in chat."
+confidence: high

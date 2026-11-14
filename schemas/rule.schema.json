@@ -24,6 +24,12 @@
     "cwe": {
       "type": "string"
     },
+    "cve": {
+      "oneOf": [
+        { "type": "string" },
+        { "type": "array", "items": { "type": "string" } }
+      ]
+    },
     "severity": {
       "type": "string",
       "enum": ["CRITICAL", "HIGH", "MEDIUM", "LOW", "INFO"]
@@ -38,6 +44,9 @@
       "type": "string"
     },
     "not-match": {
+      "type": "string"
+    },
+    "source-pattern": {
       "type": "string"
     },
     "confidence": {
@@ -55,6 +64,37 @@
     },
     "instruction": {
       "type": "string"
+    },
+    "references": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "metadata": {
+      "type": "object",
+      "properties": {
+        "source": { "type": "string" },
+        "kev": { "type": "boolean" },
+        "epss": { "type": "number" },
+        "learnedAt": { "type": "string" },
+        "advisoryUrl": { "type": "string" }
+      },
+      "additionalProperties": true
+    },
+    "tests": {
+      "type": "object",
+      "properties": {
+        "positive": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "negative": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": true

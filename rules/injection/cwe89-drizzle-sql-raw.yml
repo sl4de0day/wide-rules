@@ -1,0 +1,28 @@
+id: wide/cwe89-drizzle-sql-raw
+name: cwe89-drizzle-sql-raw
+category: INJECTION
+severity: CRITICAL
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-89
+pattern: sql\.raw\s*\(\s*(?:`[^`]{0,300}\$\{|["'][^"']{0,300}["']\s*\+|[A-Za-z_$][A-Za-z0-9_$]{0,60}\s*(?:,|\)))
+not-match: ^\s*(?://|/\*|\*)
+confidence: high
+message: Drizzle ORM sql.raw() is called with interpolated or dynamic SQL.
+why: sql.raw() injects raw SQL fragments verbatim without parameter binding; passing user-controlled or interpolated values enables SQL injection.
+remediation: 'Use the tagged-template sql helper (db.execute(sql`SELECT * FROM users WHERE id = ${id}`)) so Drizzle binds every value as a parameter.'
+tests:
+  positive:
+    - "db.execute(sql.raw(`SELECT * FROM users WHERE id = ${req.params.id}`))"
+    - "db.execute(sql.raw('SELECT * FROM users WHERE name = ' + name))"
+    - "db.execute(sql.raw(userQuery))"
+  negative:
+    - "db.execute(sql`SELECT * FROM users WHERE id = ${req.params.id}`)"
+    - "db.execute(sql.raw('SELECT 1'))"

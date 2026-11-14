@@ -1,28 +1,73 @@
 {
-  "version": "0.2101126",
-  "generatedAt": "2026-11-14T09:05:54.144Z",
-  "totalRules": 722,
+  "version": "0.3141126",
+  "generatedAt": "2026-11-14T15:57:36.479Z",
+  "totalRules": 729,
   "categories": {
-    "AI_SECURITY": 10,
+    "AI_SECURITY": 13,
     "AUTH": 106,
     "CRYPTO": 26,
     "DESERIALIZATION": 51,
     "FILESYSTEM": 47,
     "GENERAL": 75,
-    "INJECTION": 179,
+    "INJECTION": 181,
     "LOGIC": 2,
-    "NETWORK": 92,
+    "NETWORK": 93,
     "PROTOTYPE": 31,
-    "SECRETS": 75,
+    "SECRETS": 76,
     "XSS": 28
   },
   "severities": {
-    "HIGH": 453,
-    "CRITICAL": 85,
-    "MEDIUM": 149,
+    "HIGH": 457,
+    "MEDIUM": 150,
+    "CRITICAL": 87,
     "LOW": 35
   },
   "rules": [
+    {
+      "id": "wide/ai-direct-file-edits",
+      "name": "ai-direct-file-edits",
+      "category": "AI_SECURITY",
+      "severity": "HIGH",
+      "languages": [
+        "all"
+      ],
+      "pattern": "^[​]$",
+      "message": "Agents must modify project files directly on disk rather than outputting large code blocks in chat.",
+      "remediation": "Apply code changes directly with write_file or edit_file after inspecting targets with read_file.",
+      "why": "Writing changes directly on disk keeps workspace state synchronized and actionable.",
+      "instruction": "When asked to create, implement, or modify code or scripts, read existing target files with read_file and apply changes directly on disk via write_file or edit_file rather than pasting full implementations in chat.",
+      "confidence": "high"
+    },
+    {
+      "id": "wide/ai-language-matching",
+      "name": "ai-language-matching",
+      "category": "AI_SECURITY",
+      "severity": "MEDIUM",
+      "languages": [
+        "all"
+      ],
+      "pattern": "^[‍]$",
+      "message": "Respond concisely in the user's language, referencing only observed files and verified tool results.",
+      "remediation": "Match the user's language and summarize verified tool outputs concisely.",
+      "why": "Clear, accurate, concise summaries prevent hallucinated claims and improve clarity.",
+      "instruction": "Always respond in the user's language unless instructed otherwise, keeping technical summaries concise and grounded strictly in observed files and tool results.",
+      "confidence": "high"
+    },
+    {
+      "id": "wide/ai-native-tool-priority",
+      "name": "ai-native-tool-priority",
+      "category": "AI_SECURITY",
+      "severity": "HIGH",
+      "languages": [
+        "all"
+      ],
+      "pattern": "^[‌]$",
+      "message": "Prefer Wide IDE native browser, Catcher, Pitcher, Scanner, and Decoder tools before ad-hoc shell scripts.",
+      "remediation": "Call dedicated native Wide tools directly instead of scripting redundant shell workarounds.",
+      "why": "Native Wide tools stream live visual state, capture Catcher traffic, and execute reliably across platforms.",
+      "instruction": "Always prefer native IDE tools over ad-hoc shell scripts: use browser_* tools for interactive browsing, catcher_* and repeater_send/intruder_attack for proxy and fuzzing, pitcher_* for HTTP requests, run_security_scan for static analysis, and transform_data for encoding or hashing. Never tell the user you cannot interact with Wide UI controls.",
+      "confidence": "high"
+    },
     {
       "id": "wide/ai-no-emojis",
       "name": "ai-no-emojis",
@@ -2689,6 +2734,50 @@
       "confidence": "high"
     },
     {
+      "id": "wide/cwe319-postgres-sslmode-disable",
+      "name": "cwe319-postgres-sslmode-disable",
+      "category": "NETWORK",
+      "severity": "HIGH",
+      "languages": [
+        "js",
+        "jsx",
+        "mjs",
+        "cjs",
+        "ts",
+        "tsx",
+        "mts",
+        "cts",
+        "py",
+        "pyi",
+        "pyw",
+        "go",
+        "java",
+        "cs",
+        "rb",
+        "yml",
+        "yaml",
+        "json"
+      ],
+      "cwe": "CWE-319",
+      "pattern": "(?:\\bsslmode\\s*=\\s*(?:disable|allow)\\b|(?:postgres(?:ql)?|mysql2?|rediss?):\\/\\/[^\\s'\"`?]{1,200}\\?(?:[^\\s'\"`&]{1,100}&){0,8}ssl\\s*=\\s*(?:false|0)\\b)",
+      "not-match": "^\\s*(?://|#|/\\*|\\*)",
+      "confidence": "high",
+      "message": "Database connection disables TLS encryption (sslmode=disable / ssl=false).",
+      "why": "Disabling TLS on database connections sends database credentials and query payloads in cleartext across the network, allowing eavesdropping and credential interception.",
+      "remediation": "Configure sslmode=verify-full (PostgreSQL) or require TLS with verified CA certificates (sslmode=VERIFY_IDENTITY / rediss://).",
+      "tests": {
+        "positive": [
+          "const url = \"postgres://app:pass@db.prod.internal:5432/orders?sslmode=disable\";",
+          "const mysqlUrl = \"mysql://app:pass@db.internal:3306/app?charset=utf8&ssl=false\";",
+          "psycopg.connect(\"dbname=app sslmode=allow host=db.internal\")"
+        ],
+        "negative": [
+          "const url = \"postgres://app@db.prod.internal:5432/orders?sslmode=verify-full\";",
+          "const local = \"postgresql://127.0.0.1:5432/dev\";"
+        ]
+      }
+    },
+    {
       "id": "wide/cwe321-hardcoded-crypto-key",
       "name": "cwe321-hardcoded-crypto-key",
       "category": "SECRETS",
@@ -3777,6 +3866,51 @@
       "confidence": "high"
     },
     {
+      "id": "wide/cwe798-hardcoded-db-uri",
+      "name": "cwe798-hardcoded-db-uri",
+      "category": "SECRETS",
+      "severity": "CRITICAL",
+      "languages": [
+        "js",
+        "jsx",
+        "mjs",
+        "cjs",
+        "ts",
+        "tsx",
+        "mts",
+        "cts",
+        "py",
+        "pyi",
+        "pyw",
+        "go",
+        "java",
+        "cs",
+        "rb",
+        "php",
+        "yml",
+        "yaml",
+        "json"
+      ],
+      "cwe": "CWE-798",
+      "pattern": "(?:postgres(?:ql)?|mysql2?|mongodb(?:\\+srv)?|rediss?):\\/\\/[A-Za-z0-9._-]{1,40}:[^\\s'\"`${}<>@]{4,64}@[A-Za-z0-9._-]{2,80}",
+      "not-match": "(?:example|changeme|placeholder|your[_-]?(?:pass|password|secret)|@(?:localhost|127\\.0\\.0\\.1)\\b|\\$\\{|\\{\\{)",
+      "confidence": "high",
+      "message": "Hardcoded database connection URI containing inline credentials detected.",
+      "why": "Embedding database usernames and passwords directly in source code or checked-in configs exposes backend data stores to anyone with repository or artifact access.",
+      "remediation": "Load connection strings from environment variables or an OS/cloud secret manager (e.g., process.env.DATABASE_URL or Keychain/DPAPI vault) instead of hardcoding credentials.",
+      "tests": {
+        "positive": [
+          "const uri = \"postgresql://prod_admin:S3cur3ProdPass99@db.internal.company.com:5432/billing\";",
+          "MONGO_URI = \"mongodb+srv://appuser:k9X_prodToken21@cluster0.mongodb.net/app\""
+        ],
+        "negative": [
+          "const uri = `postgresql://${process.env.DB_USER}:${process.env.DB_PASS}@db.internal:5432/billing`;",
+          "const dev = \"postgres://dev:devpass@localhost:5432/local_db\";",
+          "const doc = \"postgresql://user:changeme@db.example.com:5432/app\";"
+        ]
+      }
+    },
+    {
       "id": "wide/cwe827-dotnet-dtdprocessing-parse",
       "name": "cwe827-dotnet-dtdprocessing-parse",
       "category": "GENERAL",
@@ -3844,6 +3978,40 @@
       "remediation": "Use FromSqlInterpolated / ExecuteSqlInterpolated, which turn each interpolation into a parameter.",
       "why": "The Raw variants take the SQL verbatim. The Interpolated variants are the ones that parameterise; these do not.",
       "confidence": "high"
+    },
+    {
+      "id": "wide/cwe89-drizzle-sql-raw",
+      "name": "cwe89-drizzle-sql-raw",
+      "category": "INJECTION",
+      "severity": "CRITICAL",
+      "languages": [
+        "js",
+        "jsx",
+        "mjs",
+        "cjs",
+        "ts",
+        "tsx",
+        "mts",
+        "cts"
+      ],
+      "cwe": "CWE-89",
+      "pattern": "sql\\.raw\\s*\\(\\s*(?:`[^`]{0,300}\\$\\{|[\"'][^\"']{0,300}[\"']\\s*\\+|[A-Za-z_$][A-Za-z0-9_$]{0,60}\\s*(?:,|\\)))",
+      "not-match": "^\\s*(?://|/\\*|\\*)",
+      "confidence": "high",
+      "message": "Drizzle ORM sql.raw() is called with interpolated or dynamic SQL.",
+      "why": "sql.raw() injects raw SQL fragments verbatim without parameter binding; passing user-controlled or interpolated values enables SQL injection.",
+      "remediation": "Use the tagged-template sql helper (db.execute(sql`SELECT * FROM users WHERE id = ${id}`)) so Drizzle binds every value as a parameter.",
+      "tests": {
+        "positive": [
+          "db.execute(sql.raw(`SELECT * FROM users WHERE id = ${req.params.id}`))",
+          "db.execute(sql.raw('SELECT * FROM users WHERE name = ' + name))",
+          "db.execute(sql.raw(userQuery))"
+        ],
+        "negative": [
+          "db.execute(sql`SELECT * FROM users WHERE id = ${req.params.id}`)",
+          "db.execute(sql.raw('SELECT 1'))"
+        ]
+      }
     },
     {
       "id": "wide/cwe89-go-query-concat",
@@ -4110,6 +4278,40 @@
       "remediation": "Use the array or hash form: where('id = ?', id) or where(id: id).",
       "why": "Interpolation happens before ActiveRecord sees the string, so the value is part of the SQL and the usual escaping never runs.",
       "confidence": "high"
+    },
+    {
+      "id": "wide/cwe89-sequelize-literal",
+      "name": "cwe89-sequelize-literal",
+      "category": "INJECTION",
+      "severity": "HIGH",
+      "languages": [
+        "js",
+        "jsx",
+        "mjs",
+        "cjs",
+        "ts",
+        "tsx",
+        "mts",
+        "cts"
+      ],
+      "cwe": "CWE-89",
+      "pattern": "[Ss]equelize\\.literal\\s*\\(\\s*(?:`[^`]{0,300}\\$\\{|[\"'][^\"']{0,300}[\"']\\s*\\+|[A-Za-z_$][A-Za-z0-9_$]{0,60}\\s*(?:,|\\)))",
+      "not-match": "^\\s*(?://|/\\*|\\*)",
+      "confidence": "high",
+      "message": "Sequelize.literal() receives interpolated, concatenated, or dynamic SQL.",
+      "why": "Sequelize.literal bypasses parameterization and inserts the given string directly into the generated SQL query, exposing the query to SQL injection.",
+      "remediation": "Use parameterized Sequelize query options (where, replacements, bind) instead of Sequelize.literal() for dynamic expressions.",
+      "tests": {
+        "positive": [
+          "User.findAll({ order: Sequelize.literal(`field ${req.query.dir}`) })",
+          "User.findAll({ where: sequelize.literal('age > ' + minAge) })",
+          "User.findAll({ where: Sequelize.literal(filterExpr) })"
+        ],
+        "negative": [
+          "User.findAll({ attributes: [[Sequelize.fn('COUNT', Sequelize.col('id')), 'cnt']] })",
+          "User.create({ updatedAt: Sequelize.literal('CURRENT_TIMESTAMP') })"
+        ]
+      }
     },
     {
       "id": "wide/cwe89-sequelize-query-interpolated",

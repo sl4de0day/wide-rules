@@ -1,16 +1,20 @@
 {
   "name": "wide-rules",
-  "version": "0.2101126",
+  "version": "0.3141126",
   "description": "Unified Vulnerability Database and DecisionCore Multi-Agent Primitives for the Wide Ecosystem",
   "type": "module",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
+  "bin": {
+    "wide-rules": "./src/cli.js"
+  },
   "exports": {
     ".": {
       "types": "./src/index.d.ts",
       "default": "./src/index.js"
     },
     "./rules": "./dist/rules.json",
+    "./advisories": "./dist/osv-bundle.json",
     "./decision": {
       "types": "./src/decision/index.d.ts",
       "default": "./src/decision/index.js"
@@ -19,6 +23,9 @@
   "scripts": {
     "validate": "node scripts/validate.cjs",
     "bundle": "node scripts/bundle.cjs",
+    "sync:advisories": "node src/cli.js sync --feeds",
+    "sync:remote": "node src/cli.js sync --remote",
+    "learn:rules": "node src/cli.js learn",
     "test": "node scripts/test-decision.cjs && node scripts/test-rules.cjs"
   },
   "repository": {

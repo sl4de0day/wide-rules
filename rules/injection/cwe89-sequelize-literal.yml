@@ -1,0 +1,28 @@
+id: wide/cwe89-sequelize-literal
+name: cwe89-sequelize-literal
+category: INJECTION
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+cwe: CWE-89
+pattern: '[Ss]equelize\.literal\s*\(\s*(?:`[^`]{0,300}\$\{|["''][^"'']{0,300}["'']\s*\+|[A-Za-z_$][A-Za-z0-9_$]{0,60}\s*(?:,|\)))'
+not-match: ^\s*(?://|/\*|\*)
+confidence: high
+message: Sequelize.literal() receives interpolated, concatenated, or dynamic SQL.
+why: Sequelize.literal bypasses parameterization and inserts the given string directly into the generated SQL query, exposing the query to SQL injection.
+remediation: Use parameterized Sequelize query options (where, replacements, bind) instead of Sequelize.literal() for dynamic expressions.
+tests:
+  positive:
+    - "User.findAll({ order: Sequelize.literal(`field ${req.query.dir}`) })"
+    - "User.findAll({ where: sequelize.literal('age > ' + minAge) })"
+    - "User.findAll({ where: Sequelize.literal(filterExpr) })"
+  negative:
+    - "User.findAll({ attributes: [[Sequelize.fn('COUNT', Sequelize.col('id')), 'cnt']] })"
+    - "User.create({ updatedAt: Sequelize.literal('CURRENT_TIMESTAMP') })"

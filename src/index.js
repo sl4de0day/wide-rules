@@ -3,6 +3,11 @@ import * as path from "node:path";
 import { fileURLToPath } from "node:url";
 
 export * from "./decision/index.js";
+export * from "./feeds/sources.js";
+export * from "./updater/sync.js";
+export * from "./learning/redos.js";
+export * from "./learning/verifier.js";
+export * from "./learning/synthesizer.js";
 
 const currentDir = path.dirname(fileURLToPath(import.meta.url));
 const rulesJsonPath = path.resolve(currentDir, "../dist/rules.json");
@@ -16,7 +21,7 @@ export function loadRules() {
     const raw = fs.readFileSync(rulesJsonPath, "utf8");
     return JSON.parse(raw);
   }
-  return { version: "0.2101126", totalRules: 0, rules: [] };
+  return { version: "0.3141126", totalRules: 0, rules: [] };
 }
 
 export function loadAgentRules() {

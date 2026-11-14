@@ -1,0 +1,45 @@
+name: Sync Security Advisories
+
+on:
+  schedule:
+    - cron: "0 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  sync-advisories:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Sync Internet Advisories (GHSA + CISA KEV + FIRST EPSS)
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npm run sync:advisories
+
+      - name: Bundle and Verify Rules + OSV
+        run: |
+          npm run validate
+          npm run bundle
+          npm test
+
+      - name: Commit Updated Advisories
+        run: |
+          git config user.name "wide-rules-bot"
+          git config user.email "wide-rules-bot@users.noreply.github.com"
+          git add data/osv-advisories.json data/raw-advisories.json dist/osv-bundle.json dist/osv-bundle.min.json dist/rules.json dist/rules.min.json dist/SHA256SUMS
+          if ! git diff --cached --quiet; then
+            git commit -m "chore(advisories): sync OSV/GHSA/KEV/EPSS feeds"
+            git push
+          fi

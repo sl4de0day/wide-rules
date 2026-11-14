@@ -1,0 +1,38 @@
+id: wide/cwe319-postgres-sslmode-disable
+name: cwe319-postgres-sslmode-disable
+category: NETWORK
+severity: HIGH
+languages:
+  - js
+  - jsx
+  - mjs
+  - cjs
+  - ts
+  - tsx
+  - mts
+  - cts
+  - py
+  - pyi
+  - pyw
+  - go
+  - java
+  - cs
+  - rb
+  - yml
+  - yaml
+  - json
+cwe: CWE-319
+pattern: (?:\bsslmode\s*=\s*(?:disable|allow)\b|(?:postgres(?:ql)?|mysql2?|rediss?):\/\/[^\s'"`?]{1,200}\?(?:[^\s'"`&]{1,100}&){0,8}ssl\s*=\s*(?:false|0)\b)
+not-match: ^\s*(?://|#|/\*|\*)
+confidence: high
+message: Database connection disables TLS encryption (sslmode=disable / ssl=false).
+why: Disabling TLS on database connections sends database credentials and query payloads in cleartext across the network, allowing eavesdropping and credential interception.
+remediation: Configure sslmode=verify-full (PostgreSQL) or require TLS with verified CA certificates (sslmode=VERIFY_IDENTITY / rediss://).
+tests:
+  positive:
+    - 'const url = "postgres://app:pass@db.prod.internal:5432/orders?sslmode=disable";'
+    - 'const mysqlUrl = "mysql://app:pass@db.internal:3306/app?charset=utf8&ssl=false";'
+    - 'psycopg.connect("dbname=app sslmode=allow host=db.internal")'
+  negative:
+    - 'const url = "postgres://app@db.prod.internal:5432/orders?sslmode=verify-full";'
+    - 'const local = "postgresql://127.0.0.1:5432/dev";'

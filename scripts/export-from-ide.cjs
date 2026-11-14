@@ -2,7 +2,7 @@ const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
 
-const ideRulesPath = 'C:/Users/yusuf/Downloads/wide/wide/apps/renderer/src/editor/features/inspect/rules.ts';
+const ideRulesPath = 'C:/Users/yusuf/Downloads/wide/wide-ide/apps/renderer/src/editor/features/inspect/rules.ts';
 const rulesRepoRoot = path.resolve(__dirname, '..');
 
 let code = fs.readFileSync(ideRulesPath, 'utf8');
