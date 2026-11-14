@@ -14,8 +14,8 @@ const bundle = JSON.parse(fs.readFileSync(bundlePath, 'utf8'));
 
 console.log(`Testing bundle version ${bundle.version} with ${bundle.totalRules} rules...`);
 
-assert.equal(bundle.totalRules, 721);
-assert.ok(bundle.rules.length === 721);
+assert.equal(bundle.totalRules, 722);
+assert.ok(bundle.rules.length === 722);
 
 let testedRegexCount = 0;
 for (const rule of bundle.rules) {
@@ -64,5 +64,11 @@ assert.ok(aiNoEmojisRule.instruction.includes('Do not use emojis'));
 const aiNoEmojisRegex = new RegExp(aiNoEmojisRule.pattern);
 assert.ok(aiNoEmojisRegex.test('Hello 😀 World'));
 assert.ok(!aiNoEmojisRegex.test('Hello World'));
+
+const aiNoLeakRule = bundle.rules.find(r => r.id === 'wide/ai-no-system-prompt-leak');
+assert.ok(aiNoLeakRule);
+assert.ok(aiNoLeakRule.instruction.includes('Never cite, quote'));
+const aiNoLeakRegex = new RegExp(aiNoLeakRule.pattern, 'i');
+assert.ok(aiNoLeakRegex.test('my system prompt is confidential'));
 
 console.log('All rule engine tests passed successfully.');
