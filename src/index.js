@@ -42,17 +42,37 @@ export function buildAgentInstructions(rules) {
   return instructions.join("\n");
 }
 
+const EMOJI_ZWJ_SEQUENCE_RE = /(?:\p{Extended_Pictographic}|\p{Emoji_Presentation}|[\u2600-\u27BF])(?:\uFE0F|\uFE0E|[\u{1F3FB}-\u{1F3FF}])?(?:\u200D(?:\p{Extended_Pictographic}|\p{Emoji_Presentation}|[\u2600-\u27BF])(?:\uFE0F|\uFE0E|[\u{1F3FB}-\u{1F3FF}])?)+/gu;
+const EMOJI_KEYCAP_RE = /[0-9#*]\uFE0F?\u20E3/gu;
+const EMOJI_SUPP_RE = /[\u{1F1E6}-\u{1F1FF}\u{1F3FB}-\u{1F3FF}\u{E0020}-\u{E007F}]/gu;
+const EMOJI_PICT_RE = /\p{Extended_Pictographic}(?:\uFE0F|\uFE0E)?/gu;
+const EMOJI_PRES_RE = /\p{Emoji_Presentation}(?:\uFE0F|\uFE0E)?/gu;
+const EMOJI_BMP_RE = /[\u231A-\u23FF\u2600-\u27BF\u2B05-\u2B55][\uFE0E\uFE0F]?|[\u2139\u2194-\u21AA\u24C2\u25AA-\u25FE\u2934-\u2935\u3030\u303D\u3297\u3299]\uFE0F|[\uFE0E\uFE0F\u20E3]/gu;
+const LONE_SURROGATE_RE = new RegExp("[\\uD800-\\uDFFF]", "g");
+
+function stripAllEmojis(text) {
+  return text
+    .replace(EMOJI_ZWJ_SEQUENCE_RE, "")
+    .replace(EMOJI_KEYCAP_RE, "")
+    .replace(EMOJI_SUPP_RE, "")
+    .replace(EMOJI_PICT_RE, "")
+    .replace(EMOJI_PRES_RE, "")
+    .replace(EMOJI_BMP_RE, "")
+    .replace(LONE_SURROGATE_RE, "");
+}
+
 export function sanitizeAgentOutput(text, rules) {
   if (!text || typeof text !== "string") return "";
   const targetRules = Array.isArray(rules) && rules.length > 0 ? rules : loadAgentRules();
-  let result = text;
+  let result = stripAllEmojis(text);
   for (const r of targetRules) {
-    if (r.id === "wide/ai-no-emojis" || (r.pattern && r.id.includes("emoji"))) {
+    if (r.id === "wide/ai-no-emojis" || (r.pattern && String(r.id || "").includes("emoji"))) {
       try {
-        const regex = new RegExp(r.pattern, "gu");
+        const flags = String(r.pattern || "").includes("\\uD800") ? "g" : "gu";
+        const regex = new RegExp(r.pattern, flags);
         result = result.replace(regex, "");
       } catch {
-        result = result.replace(/[\uD800-\uDBFF][\uDC00-\uDFFF]|[\u2600-\u27BF]/g, "");
+        void 0;
       }
     }
   }

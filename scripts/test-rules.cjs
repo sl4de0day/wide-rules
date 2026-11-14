@@ -113,8 +113,14 @@ async function main() {
   assert.ok(aiNoEmojisRule);
   assert.ok(aiNoEmojisRule.instruction.includes('Do not use emojis'));
   const aiNoEmojisRegex = new RegExp(aiNoEmojisRule.pattern);
-  assert.ok(aiNoEmojisRegex.test('Hello 😀 World'));
-  assert.ok(!aiNoEmojisRegex.test('Hello World'));
+  for (const sample of ['Hello 😀 World', 'Star ⭐', 'Info ℹ️', 'Keycap 1️⃣', 'Alarm ⏰']) {
+    assert.ok(aiNoEmojisRegex.test(sample), `Regex missed emoji sample: ${sample}`);
+  }
+  assert.ok(!aiNoEmojisRegex.test('Hello World 1 + 2 -> 3'));
+
+  const mod = await import(pathToFileURL(path.join(rootDir, 'src', 'index.js')).href);
+  assert.equal(mod.sanitizeAgentOutput('Hello 😀⭐ℹ️1️⃣👨‍💻🇷🇺 World'), 'Hello  World');
+  assert.equal(mod.sanitizeAgentOutput('Clean prose 1 + 2 -> 3'), 'Clean prose 1 + 2 -> 3');
 
   const aiNoLeakRule = bundle.rules.find(r => r.id === 'wide/ai-no-system-prompt-leak');
   assert.ok(aiNoLeakRule);
@@ -126,8 +132,6 @@ async function main() {
     assert.ok(r, `Missing expected AI rule ${reqId}`);
     assert.ok(r.instruction && r.instruction.length > 20, `Missing instruction on ${reqId}`);
   }
-
-  const mod = await import(pathToFileURL(path.join(rootDir, 'src', 'index.js')).href);
 
   const unsafeRes = mod.checkRegexSafety('^([a-z]+)+$', { strictStatic: true, maxProbeMs: 15 });
   assert.equal(unsafeRes.safe, false, 'ReDoS pattern should be rejected');
