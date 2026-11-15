@@ -19,17 +19,19 @@
 
 ---
 
-**Wide Rules is the unified vulnerability database and DecisionCore multi-agent coordination library for the Wide ecosystem. Housing 720 security rules covering 90+ CWE categories and OWASP Top 10 for LLMs alongside DecisionCore algorithmic primitives (`CommitmentGate`, `PluralityConsensus`, `ClaimTable`, `PartitionAssignment`, `WeightedScorer`, `SynchronizationBarrier`), it acts as the central vulnerability and agent intelligence repository for Wide IDE, Wide CLI, Wide App, Wide Action, and Wide SDK.**
+**Wide Rules is the unified vulnerability database and DecisionCore multi-agent coordination library for the Wide ecosystem. Housing 729 security rules covering 90+ CWE categories and OWASP Top 10 for LLMs alongside DecisionCore algorithmic primitives (`CommitmentGate`, `PluralityConsensus`, `ClaimTable`, `PartitionAssignment`, `WeightedScorer`, `SynchronizationBarrier`), it acts as the central vulnerability and agent intelligence repository for Wide IDE, Wide CLI, Wide App, Wide Action, and Wide SDK.**
 
 Wide Rules separates security definitions from scanner engines:
-- **Centralized Vulnerability Database:** Over 720 curated rules maintained independently of binary release cycles.
+- **Centralized Vulnerability Database:** Over 729 curated rules maintained independently of binary release cycles.
 - **Embedded DecisionCore Primitives:** Native multi-agent consensus, anti-thrashing dwell gates, and collision-free lease tables.
-- **Pre-Compiled Distribution:** Bundled into lightweight `dist/rules.json` and `dist/rules.min.json` artifacts for instant offline and air-gapped scanning.
+- **Threat Intelligence Feeds:** Integrated OSV advisory bundle with 118 advisories, EPSS scoring, and SHA-256 integrity verification.
+- **ReDoS Hardened & Linear Execution:** All rule patterns and regular expressions verified against ReDoS backtracking with dedicated benchmark validation.
+- **Pre-Compiled Distribution:** Bundled into lightweight `dist/rules.json`, `dist/rules.min.json`, and `dist/osv-bundle.json` artifacts for instant offline and air-gapped scanning.
 - **Ecosystem Consistency:** Powers real-time editor diagnostics in Wide IDE, terminal scans in Wide CLI, CI/CD gates in Wide Action, and programmatic audits in Wide SDK.
 
 ## Features
 
-- **Comprehensive SAST Catalog.** 720 curated security rules spanning SQL injection, command execution, path traversal, SSRF, memory safety, and AI prompt injection.
+- **Comprehensive SAST Catalog.** 729 curated security rules spanning SQL injection, command execution, path traversal, SSRF, memory safety, and AI prompt injection.
 - **DecisionCore Multi-Agent Engine.** Out-of-the-box algorithmic coordination primitives for subagent voting, resource claiming, and patch evaluation.
 - **Multi-Language Coverage.** Tailored detection patterns for JavaScript, TypeScript, Python, PHP, Java, Go, C#, Rust, and Ruby.
 - **Schema Validated.** Every rule is verified against an explicit JSON Schema ensuring consistent metadata, CWE mapping, and severity rankings.
@@ -40,17 +42,17 @@ Wide Rules separates security definitions from scanner engines:
 
 | Category | Rules | Description |
 | :--- | :--- | :--- |
-| `injection` | 179 | SQL injection, command injection, eval, template injection, NoSQLi, argument injection |
+| `injection` | 181 | SQL injection, command injection, eval, template injection, NoSQLi, argument injection |
 | `auth` | 106 | Insecure direct object references (IDOR), session fixation, authorization bypass |
-| `network` | 92 | Server-side request forgery (SSRF), open redirect, CORS misconfiguration, CSRF |
-| `secrets` | 75 | Hardcoded API keys, private keys, access tokens, cloud credentials |
+| `network` | 93 | Server-side request forgery (SSRF), open redirect, CORS misconfiguration, CSRF |
+| `secrets` | 76 | Hardcoded API keys, private keys, access tokens, cloud credentials |
 | `deserialization` | 51 | Unsafe deserialization, XML external entity (XXE), format string vulnerabilities |
 | `filesystem` | 47 | Path traversal, directory traversal, unrestricted file upload |
 | `prototype` | 31 | Prototype pollution, unsafe recursive object merging |
 | `xss` | 28 | Cross-site scripting, DOM manipulation, unsafe HTML output |
 | `crypto` | 26 | Deprecated ciphers, collision-prone hashing, weak randomness |
 | `logic` | 2 | Numeric validation flaws, integer boundary overflows |
-| `ai` | 8 | AI agent prompt injection, unsafe tool execution, context overflow, untrusted MCP |
+| `ai` | 13 | AI agent prompt injection, unsafe tool execution, context overflow, untrusted MCP |
 | `general` | 75 | General application security, memory safety, client-side trust issues |
 
 ## Quick Start
