@@ -2,8 +2,11 @@ const fs = require('fs');
 const path = require('path');
 const yaml = require('js-yaml');
 
-const ideRulesPath = 'C:/Users/yusuf/Downloads/wide/wide-ide/apps/renderer/src/editor/features/inspect/rules.ts';
 const rulesRepoRoot = path.resolve(__dirname, '..');
+const ideRulesPath =
+  process.argv[2] ||
+  process.env.WIDE_IDE_RULES_PATH ||
+  path.resolve(rulesRepoRoot, '..', 'wide-ide', 'apps', 'renderer', 'src', 'editor', 'features', 'inspect', 'rules.ts');
 
 let code = fs.readFileSync(ideRulesPath, 'utf8');
 code = code.replace(/export type Severity = [^;]+;/g, '');

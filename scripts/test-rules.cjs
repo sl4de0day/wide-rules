@@ -256,7 +256,7 @@ async function main() {
     assert.ok(fs.existsSync(learnRes.learned[0].filePath));
 
     const cacheDir = path.join(tmpDir, 'cache');
-    const mockRulesBody = JSON.stringify({ version: '0.3141126', rules: [goodCandidate] });
+    const mockRulesBody = JSON.stringify({ version: '0.4151126', rules: [goodCandidate] });
     const mockOsvBody = JSON.stringify(syncRes.db);
     const rulesSha = crypto.createHash('sha256').update(mockRulesBody).digest('hex');
     const osvSha = crypto.createHash('sha256').update(mockOsvBody).digest('hex');
@@ -287,6 +287,16 @@ async function main() {
         throw new Error(`Unexpected remote URL: ${s}`);
       }
     }), /SHA-256 mismatch/);
+
+    await assert.rejects(() => mod.syncFromRemote({
+      cacheDir,
+      verifySha256: true,
+      fetchImpl: async (url) => {
+        const s = String(url);
+        if (s.endsWith('SHA256SUMS')) return { ok: false, status: 404, text: async () => '' };
+        throw new Error(`Unexpected remote URL: ${s}`);
+      }
+    }), /SHA256SUMS/);
   } finally {
     fs.rmSync(tmpDir, { recursive: true, force: true });
   }

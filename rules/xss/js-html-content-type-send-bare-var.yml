@@ -12,7 +12,7 @@ languages:
   - mts
   - cts
 cwe: CWE-79
-pattern: (?=.*(?:['"`]\s*text\/html|\.type\(\s*['"`]html))(?=.*\.(?:send|end|write)\s*\(\s*[A-Za-z_$][\w.$\[\]]*\s*\)).*\S
+pattern: (?:^|\n)(?=[^\n]*(?:['"`]\s*text\/html|\.type\(\s*['"`]html))(?=[^\n]*\.(?:send|end|write)\s*\(\s*[A-Za-z_$][\w.$\[\]]*\s*\))[^\n]*\S
 message: Reflected XSS — an unescaped variable is interpolated into an HTML response (CWE-79).
 remediation: Escape or sanitise the variable before sending it as HTML (escapeHtml/he.encode/DOMPurify), send structured data with res.json, or serve static markup with res.sendFile; only label a response text/html when its body is trusted or already encoded.
 not-match: ^\s*(?:\/\/|\*|\/\*)|escapeHtml|htmlEscape|escapeHTML|encodeHTML|\bhe\.(?:encode|escape)|DOMPurify|sanitiz|\bxss\s*\(|encodeURI|\bescape\s*\(|\.replace(?:All)?\(\s*(?:\/\[?|['"`])[<>&]|res\.json|\bsendFile\b|\breadFileSync\b|\breadFile\b|\.(?:send|end|write)\s*\(\s*[\w.]*\b(?:count|length|id|index|total|idx|size|num|offset|limit)\b

@@ -14,7 +14,7 @@ languages:
   - vue
   - svelte
 cwe: CWE-1321
-pattern: \w+\s*\[\s*\w+\s*\]\s*=\s*(?:\w+\.)?(?:deepMerge|mergeDeep|deepExtend|deepAssign|mergeRecursive|mergeWith|merge|extend)\s*\(\s*\w+\s*\[\s*\w+\s*\]
+pattern: \b\w+\s*\[\s*\w+\s*\]\s*=\s*(?:\w+\.)?(?:deepMerge|mergeDeep|deepExtend|deepAssign|mergeRecursive|mergeWith|merge|extend)\s*\(\s*\w+\s*\[\s*\w+\s*\]
 message: Prototype pollution — attacker-controlled keys can reach Object.prototype via a recursive merge/set (CWE-1321).
 remediation: Guard the key before the recursive call (skip __proto__/constructor/prototype), gate with hasOwnProperty, or descend into a null-prototype accumulator. Where feasible replace the hand-rolled recursion with a vetted, pollution-safe merge utility.
 not-match: __proto__|constructor|prototype|hasOwnProperty|Object\.create\(\s*null\s*\)|isSafeKey|isValidKey|sanitiz

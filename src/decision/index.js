@@ -345,7 +345,9 @@ export class WeightedScorer {
     let m = 0.0;
     for (const c of this.criteria) {
       if (!c || typeof c.term !== "function") throw new TypeError("criterion or term cannot be null");
-      m += Number(c.weight || 0);
+      const w = Number(c.weight ?? 0);
+      if (!Number.isFinite(w) || w < 0.0) throw new RangeError("criterion weight must be finite and non-negative");
+      m += w;
     }
     if (m <= 0.0) throw new RangeError("total weight must be positive");
     this.totalWeight = m;
@@ -354,10 +356,10 @@ export class WeightedScorer {
   score(candidate) {
     let s = 0.0;
     for (const c of this.criteria) {
-      let f = c.term(candidate);
-      if (f < 0.0) f = 0.0;
+      let f = Number(c.term(candidate));
+      if (!Number.isFinite(f) || f < 0.0) f = 0.0;
       else if (f > 1.0) f = 1.0;
-      s += c.weight * f;
+      s += Number(c.weight ?? 0) * f;
     }
     return s / this.totalWeight;
   }
@@ -393,7 +395,7 @@ export class SynchronizationBarrier {
     this.readyStates = new Uint8Array(capacity);
     this.reportTimes = new Float64Array(capacity);
     this.quorumReached = false;
-    this.stageStartTime = 0.0;
+    this.stageStartTime = null;
   }
 
   get reachedQuorum() {
@@ -423,7 +425,7 @@ export class SynchronizationBarrier {
       }
     }
 
-    if (this.stageStartTime === 0.0) this.stageStartTime = now;
+    if (this.stageStartTime === null) this.stageStartTime = now;
 
     if (readyCount >= required) {
       this.quorumReached = true;
@@ -443,6 +445,6 @@ export class SynchronizationBarrier {
     this.readyStates.fill(0);
     this.reportTimes.fill(0.0);
     this.quorumReached = false;
-    this.stageStartTime = 0.0;
+    this.stageStartTime = null;
   }
 }

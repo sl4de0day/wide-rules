@@ -29,62 +29,75 @@ export function normalizeEcosystem(raw) {
   return ECO_MAP[raw.trim().toLowerCase()] || null;
 }
 
-export async function fetchJson(url, options = {}) {
+const RETRYABLE_STATUS = new Set([429, 502, 503, 504]);
+
+function isRetryableError(err) {
+  if (!err) return false;
+  if (err.name === "AbortError" || err.name === "TypeError") return true;
+  const status = Number(err.status || 0);
+  return RETRYABLE_STATUS.has(status);
+}
+
+async function fetchWithTimeout(url, options = {}) {
   const fetchImpl = options.fetchImpl || globalThis.fetch;
   if (typeof fetchImpl !== "function") {
     throw new Error("Global fetch is not available in this Node.js runtime.");
   }
   const timeoutMs = typeof options.timeoutMs === "number" ? options.timeoutMs : 20000;
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
+  const maxRetries = typeof options.retries === "number" ? Math.max(0, options.retries) : 2;
+  const retryDelayMs = typeof options.retryDelayMs === "number" ? options.retryDelayMs : 400;
 
-  try {
-    const res = await fetchImpl(url, {
-      method: options.method || "GET",
-      headers: {
+  let lastError;
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), timeoutMs);
+    try {
+      const headers = {
         "User-Agent": "Wide-Rules-Sync/1.0",
-        Accept: "application/json",
+        ...(options.defaultHeaders || {}),
         ...(options.headers || {})
-      },
-      body: options.body ? (typeof options.body === "string" ? options.body : JSON.stringify(options.body)) : undefined,
-      signal: controller.signal
-    });
-
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status} from ${url}`);
+      };
+      const res = await fetchImpl(url, {
+        method: options.method || "GET",
+        headers,
+        body: options.body !== undefined
+          ? (typeof options.body === "string" ? options.body : JSON.stringify(options.body))
+          : undefined,
+        signal: controller.signal
+      });
+      if (!res.ok) {
+        const httpErr = new Error(`HTTP ${res.status} from ${url}`);
+        httpErr.status = res.status;
+        throw httpErr;
+      }
+      return options.asText ? await res.text() : await res.json();
+    } catch (err) {
+      lastError = err;
+      if (attempt >= maxRetries || !isRetryableError(err)) {
+        throw err;
+      }
+      const backoff = retryDelayMs * Math.pow(2, attempt);
+      await new Promise((resolve) => setTimeout(resolve, backoff));
+    } finally {
+      clearTimeout(timer);
     }
-    return await res.json();
-  } finally {
-    clearTimeout(timer);
   }
+  throw lastError;
+}
+
+export async function fetchJson(url, options = {}) {
+  return fetchWithTimeout(url, {
+    ...options,
+    defaultHeaders: { Accept: "application/json" },
+    asText: false
+  });
 }
 
 export async function fetchText(url, options = {}) {
-  const fetchImpl = options.fetchImpl || globalThis.fetch;
-  if (typeof fetchImpl !== "function") {
-    throw new Error("Global fetch is not available in this Node.js runtime.");
-  }
-  const timeoutMs = typeof options.timeoutMs === "number" ? options.timeoutMs : 20000;
-  const controller = new AbortController();
-  const timer = setTimeout(() => controller.abort(), timeoutMs);
-
-  try {
-    const res = await fetchImpl(url, {
-      method: options.method || "GET",
-      headers: {
-        "User-Agent": "Wide-Rules-Sync/1.0",
-        ...(options.headers || {})
-      },
-      signal: controller.signal
-    });
-
-    if (!res.ok) {
-      throw new Error(`HTTP ${res.status} from ${url}`);
-    }
-    return await res.text();
-  } finally {
-    clearTimeout(timer);
-  }
+  return fetchWithTimeout(url, {
+    ...options,
+    asText: true
+  });
 }
 
 function parseVersionRangeBounds(rawRange) {

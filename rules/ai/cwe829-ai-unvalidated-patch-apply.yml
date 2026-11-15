@@ -11,9 +11,15 @@ languages:
   - mjs
   - cjs
 cwe: CWE-829
-pattern: \b(?:applyPatch|applyDiff|fs\.writeFile|writeFileSync)\s*\(\s*(?:filepath|path|file)\s*,\s*(?:patch|suggestion|aiOutput|response\.content)\s*\)
-message: Direct file write of AI-suggested code diff without validation or syntax check.
-remediation: Score candidate patches using WeightedScorer and validate syntax before committing changes.
+pattern: \b(?:applyPatch|gitApply|applyDiff|writePatch|fs\.writeFile|writeFileSync)\s*\(\s*(?:filepath|path|file)\s*,\s*(?:patch|suggestion|aiOutput|aiPatch|llmResponse|response\.content|output\.patch|modelDiff)\s*\)|\b(?:applyPatch|gitApply|applyDiff|writePatch)\s*\(\s*(?:aiPatch|llmResponse|output\.patch|modelDiff)
+message: Applying LLM-generated patch directly to codebase without path traversal or integrity checks.
+remediation: Validate destination file paths are strictly within workspace bounds and run static scans before applying patches.
 why: Applying unvalidated code patches directly to disk can corrupt project files or introduce syntax errors.
 instruction: Always inspect relevant files before modifying them, validate bounds, and verify patch integrity.
 confidence: medium
+tests:
+  positive:
+    - "fs.writeFileSync(filepath, response.content)"
+    - "applyPatch(aiPatch);"
+  negative:
+    - "validateInsideWorkspace(filepath); applyVerifiedPatch(filepath, checkedDiff);"

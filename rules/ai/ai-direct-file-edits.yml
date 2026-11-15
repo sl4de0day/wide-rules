@@ -4,7 +4,7 @@ category: AI_SECURITY
 severity: HIGH
 languages:
   - all
-pattern: "^[\u200B]$"
+pattern: '^[\u200B]$'
 message: Agents must modify project files directly on disk rather than outputting large code blocks in chat.
 remediation: Apply code changes directly with write_file or edit_file after inspecting targets with read_file.
 why: Writing changes directly on disk keeps workspace state synchronized and actionable.

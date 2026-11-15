@@ -12,7 +12,7 @@ languages:
   - mts
   - cts
 cwe: CWE-22
-pattern: (?:\b(?:resolvedPath|resolved|realPath|realpath|real|absolutePath|absPath|absolute|abs|fullPath|filePath|filepath|normalizedPath|normalized|canonicalPath|canonical|targetPath|safePath|finalPath|requestedPath|joinedPath)\.indexOf\s*\([^)]*\)\s*(?:!==?|===?)\s*0|[A-Za-z_$][\w$.]*\.indexOf\s*\(\s*(?:[A-Za-z_$]\w*(?:Dir|Root)\b|(?:base|root|cwd)\b|(?:BASE_DIR|ROOT_DIR|UPLOAD_DIR|PUBLIC_DIR|STATIC_DIR|DATA_DIR)\b)[^)]*\)\s*(?:!==?|===?)\s*0)
+pattern: (?:\b(?:resolvedPath|resolved|realPath|realpath|real|absolutePath|absPath|absolute|abs|fullPath|filePath|filepath|normalizedPath|normalized|canonicalPath|canonical|targetPath|safePath|finalPath|requestedPath|joinedPath)\.indexOf\s*\([^)]*\)\s*(?:!==?|===?)\s*0|(?<![\w$])[A-Za-z_$][\w$.]*\.indexOf\s*\(\s*(?:[A-Za-z_$]\w*(?:Dir|Root)\b|(?:base|root|cwd)\b|(?:BASE_DIR|ROOT_DIR|UPLOAD_DIR|PUBLIC_DIR|STATIC_DIR|DATA_DIR)\b)[^)]*\)\s*(?:!==?|===?)\s*0)
 message: Path-containment bypass — a startsWith/indexOf prefix check with no trailing separator lets a sibling directory escape (CWE-22).
 remediation: 'Append the separator and accept exact equality: `p === base || p.indexOf(base + path.sep) === 0`; better, after path.resolve test `!path.relative(base, p).startsWith(''..'')` and reject otherwise.'
 not-match: ^\s*(?:\/\/|\*|\/\*|#)|\+\s*(?:path\.sep|os\.sep|['"][\/\\]['"]|\bsep\b|DIRECTORY_SEPARATOR|File\.separator)|path\.relative|[\/\\]['"]\s*\)|WithSep|WithSlash

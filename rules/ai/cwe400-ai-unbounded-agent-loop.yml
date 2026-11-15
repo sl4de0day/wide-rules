@@ -11,9 +11,15 @@ languages:
   - mjs
   - cjs
 cwe: CWE-400
-pattern: \bwhile\s*\(\s*(?:true|1)\s*\)\s*\{[^}]*(?:agent|runner|llm)\.(?:step|run|complete|executeTurn)\s*\(
-message: Autonomous agent loop running without maximum iteration bound or dwell commitment check.
-remediation: Enforce a strict maximum turn limit and use CommitmentGate to prevent tool oscillation.
+pattern: \bwhile\s*\(\s*(?:true|1|!done|!finished|!settled)\s*\)\s*\{(?![^}]*\b(?:maxRounds|maxSteps|maxIterations|round\s*>=|step\s*>=)\b)[^}]*(?:agent|runner|llm)\.(?:step|run|complete|executeTurn)\s*\(
+message: Autonomous agent execution loop lacks explicit termination boundary or maximum step limit.
+remediation: Enforce a strict step threshold and use CommitmentGate to prevent runaway agent execution loops.
 why: Unbounded agent loops can cause denial of service, resource exhaustion, and infinite tool flapping.
 instruction: Always respect maximum step thresholds and loop termination boundaries.
 confidence: medium
+tests:
+  positive:
+    - "while (true) { agent.step(); }"
+    - "while (!done) { runner.executeTurn(); }"
+  negative:
+    - "while (!done) { if (step >= maxSteps) break; agent.step(); }"

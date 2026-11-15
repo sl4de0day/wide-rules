@@ -16,12 +16,37 @@ export function getRulesPath() {
   return rulesJsonPath;
 }
 
+let cachedRulesState = { mtimeMs: -1, size: -1, data: null };
+const agentEmojiRegexCache = new Map();
+
+function getCachedAgentEmojiRegex(pattern, flags) {
+  const key = `${pattern}\0${flags}`;
+  let compiled = agentEmojiRegexCache.get(key);
+  if (!compiled) {
+    if (agentEmojiRegexCache.size >= 256) agentEmojiRegexCache.clear();
+    compiled = new RegExp(pattern, flags);
+    agentEmojiRegexCache.set(key, compiled);
+  }
+  compiled.lastIndex = 0;
+  return compiled;
+}
+
 export function loadRules() {
   if (fs.existsSync(rulesJsonPath)) {
+    const stat = fs.statSync(rulesJsonPath);
+    if (
+      cachedRulesState.data &&
+      cachedRulesState.mtimeMs === stat.mtimeMs &&
+      cachedRulesState.size === stat.size
+    ) {
+      return cachedRulesState.data;
+    }
     const raw = fs.readFileSync(rulesJsonPath, "utf8");
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    cachedRulesState = { mtimeMs: stat.mtimeMs, size: stat.size, data: parsed };
+    return parsed;
   }
-  return { version: "0.3141126", totalRules: 0, rules: [] };
+  return { version: "0.4151126", totalRules: 0, rules: [] };
 }
 
 export function loadAgentRules() {
@@ -69,7 +94,7 @@ export function sanitizeAgentOutput(text, rules) {
     if (r.id === "wide/ai-no-emojis" || (r.pattern && String(r.id || "").includes("emoji"))) {
       try {
         const flags = String(r.pattern || "").includes("\\uD800") ? "g" : "gu";
-        const regex = new RegExp(r.pattern, flags);
+        const regex = getCachedAgentEmojiRegex(r.pattern, flags);
         result = result.replace(regex, "");
       } catch {
         void 0;

@@ -17,3 +17,9 @@ remediation: Use structured multi-turn message roles or sanitize prompt inputs b
 why: Direct concatenation of user-supplied text into system prompts enables indirect prompt injection and instruction override.
 instruction: Always validate and sanitize untrusted user input before incorporating into prompt templates.
 confidence: high
+tests:
+  positive:
+    - "const prompt = `System: ${req.body.input}`;"
+    - "prompt = f'Hello {user_input}'"
+  negative:
+    - "const prompt = sanitizePrompt(staticTemplate);"

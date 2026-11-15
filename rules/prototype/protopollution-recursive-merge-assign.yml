@@ -14,7 +14,7 @@ languages:
   - vue
   - svelte
 cwe: CWE-1321
-pattern: (?:\bfor\s*\(\s*(?:var|let|const\s)?\s*[\w$]+\s+in\s+[^)]+\)\s*\{?\s*[\w$]+\s*\[\s*[\w$]+\s*\]\s*=)|(?:[\w$]+\s*\[\s*[\w$]+\s*\]\s*=\s*(?:[\w$.]*(?:[Mm]erge|[Ee]xtend|deepAssign|deepClone|deepCopy))\s*\()
+pattern: (?:\bfor\s*\(\s*(?:var|let|const\s)?\s*[\w$]+\s+in\s+[^)]+\)\s*\{?\s*[\w$]+\s*\[\s*[\w$]+\s*\]\s*=)|(?:(?<![\w$])[\w$]+\s*\[\s*[\w$]+\s*\]\s*=\s*(?:[\w$.]*(?:[Mm]erge|[Ee]xtend|deepAssign|deepClone|deepCopy))\s*\()
 message: Prototype pollution — attacker-controlled keys can reach Object.prototype via a recursive merge/set (CWE-1321).
 remediation: In the merge loop skip dangerous keys — if (key === '__proto__' || key === 'constructor' || key === 'prototype') continue; — and only descend on Object.prototype.hasOwnProperty.call(source, key). Prefer a vetted library (lodash.merge is hardened) or structuredClone, and merge into an Object.create(null) accumulator.
 not-match: hasOwnProperty|Object\.create\(\s*null\s*\)|['"]__proto__['"]|['"]constructor['"]|['"]prototype['"]|isSafeKey|sanitizeKey|allowlist|whitelist|allowedKeys|\b_\.merge\b|\blodash\.merge\b

@@ -4,7 +4,7 @@ category: AI_SECURITY
 severity: MEDIUM
 languages:
   - all
-pattern: "^[\u200D]$"
+pattern: '^[\u200D]$'
 message: Respond concisely in the user's language, referencing only observed files and verified tool results.
 remediation: Match the user's language and summarize verified tool outputs concisely.
 why: Clear, accurate, concise summaries prevent hallucinated claims and improve clarity.

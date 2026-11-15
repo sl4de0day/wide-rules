@@ -1,6 +1,6 @@
 {
-  "version": "0.3141126",
-  "generatedAt": "2026-11-15T04:42:16.058Z",
+  "version": "0.4151126",
+  "generatedAt": "2026-11-15T11:21:38.775Z",
   "totalRules": 729,
   "categories": {
     "AI_SECURITY": 13,
@@ -31,7 +31,7 @@
       "languages": [
         "all"
       ],
-      "pattern": "^[​]$",
+      "pattern": "^[\\u200B]$",
       "message": "Agents must modify project files directly on disk rather than outputting large code blocks in chat.",
       "remediation": "Apply code changes directly with write_file or edit_file after inspecting targets with read_file.",
       "why": "Writing changes directly on disk keeps workspace state synchronized and actionable.",
@@ -46,7 +46,7 @@
       "languages": [
         "all"
       ],
-      "pattern": "^[‍]$",
+      "pattern": "^[\\u200D]$",
       "message": "Respond concisely in the user's language, referencing only observed files and verified tool results.",
       "remediation": "Match the user's language and summarize verified tool outputs concisely.",
       "why": "Clear, accurate, concise summaries prevent hallucinated claims and improve clarity.",
@@ -61,7 +61,7 @@
       "languages": [
         "all"
       ],
-      "pattern": "^[‌]$",
+      "pattern": "^[\\u200C]$",
       "message": "Prefer Wide IDE native browser, Catcher, Pitcher, Scanner, and Decoder tools before ad-hoc shell scripts.",
       "remediation": "Call dedicated native Wide tools directly instead of scripting redundant shell workarounds.",
       "why": "Native Wide tools stream live visual state, capture Catcher traffic, and execute reliably across platforms.",
@@ -467,7 +467,7 @@
         "svelte"
       ],
       "cwe": "CWE-287",
-      "pattern": "(?:[\\w$]+(?:\\.[\\w$]+)*\\.(?:status|statusCode)\\s*(?:===?|==|>=|<=|>|<)\\s*2\\d\\d\\b|[\\w$]+(?:\\.[\\w$]+)*\\.ok\\b)[^\\n]*?(?:\\bisLoggedIn\\b|\\bisAdmin\\b|\\bisAuthenticated\\b|\\bisAuthorized\\b|\\bauthorized\\b|\\bgrantAccess\\b|\\ballowAccess\\b|\\bsetLoggedIn\\b|\\bsetAdmin\\b|\\bshowAdmin(?!Error|Warn|Alert|Toast|Message|Msg|Notice|Denied|Fail|Prompt)\\w*|\\bloginSuccess\\b|\\bsetAuthenticated\\b|\\bsetAuthorized\\b|\\bsetUserRole\\b|\\bsetIsAdmin\\b|\\bsetIsLoggedIn\\b|localStorage\\.setItem|sessionStorage\\.setItem)",
+      "pattern": "(?<![\\w$])(?:[\\w$]+(?:\\.[\\w$]+)*\\.(?:status|statusCode)\\s*(?:===?|==|>=|<=|>|<)\\s*2\\d\\d\\b|[\\w$]+(?:\\.[\\w$]+)*\\.ok\\b)[^\\n]*?(?:\\bisLoggedIn\\b|\\bisAdmin\\b|\\bisAuthenticated\\b|\\bisAuthorized\\b|\\bauthorized\\b|\\bgrantAccess\\b|\\ballowAccess\\b|\\bsetLoggedIn\\b|\\bsetAdmin\\b|\\bshowAdmin(?!Error|Warn|Alert|Toast|Message|Msg|Notice|Denied|Fail|Prompt)\\w*|\\bloginSuccess\\b|\\bsetAuthenticated\\b|\\bsetAuthorized\\b|\\bsetUserRole\\b|\\bsetIsAdmin\\b|\\bsetIsLoggedIn\\b|localStorage\\.setItem|sessionStorage\\.setItem)",
       "message": "Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.",
       "remediation": "Never infer authentication/authorization from a status code. Let the server enforce access and return an explicit, signed, server-verified identity/permission for the specific action; treat 2xx only as 'the call completed' and re-authorize privileged operations server-side.",
       "not-match": "(?:^\\s*(?:\\/\\/|\\*|\\/\\*|<!--|#))|(?:\\.spec\\.|\\.test\\.|__tests__|\\bexpect\\s*\\(|toHaveBeenCalled|\\bmock\\w*|\\bdescribe\\s*\\(|\\bit\\s*\\()|(?:\\bawait\\s+[\\w.$]*(?:verify|validateSession|introspect|checkAuth|getSession|reauth)\\w*\\s*\\()",
@@ -492,7 +492,7 @@
         "svelte"
       ],
       "cwe": "CWE-602",
-      "pattern": "(?:(?:\\bif\\s*\\(\\s*|\\breturn\\s+|\\bwhile\\s*\\(\\s*)!?\\s*[\\w$]+(?:\\.[\\w$]+)*\\.(?:(?:isAdmin|isAdministrator|isLoggedIn|isLogIn|isLogin|isAuthenticated|isAuthed|isSuperuser|isSuperUser|isAuth)\\b|admin\\b(?!\\s*\\()))|(?:[\\w$]+(?:\\.[\\w$]+)*\\.(?:isAdmin|isAdministrator|isLoggedIn|isLogIn|isLogin|isAuthenticated|isAuthed|isSuperuser|isSuperUser|isAuth)\\s*(?:\\?|&&))",
+      "pattern": "(?:(?:\\bif\\s*\\(\\s*|\\breturn\\s+|\\bwhile\\s*\\(\\s*)!?\\s*[\\w$]+(?:\\.[\\w$]+)*\\.(?:(?:isAdmin|isAdministrator|isLoggedIn|isLogIn|isLogin|isAuthenticated|isAuthed|isSuperuser|isSuperUser|isAuth)\\b|admin\\b(?!\\s*\\()))|(?:(?<![\\w$])[\\w$]+(?:\\.[\\w$]+)*\\.(?:isAdmin|isAdministrator|isLoggedIn|isLogIn|isLogin|isAuthenticated|isAuthed|isSuperuser|isSuperUser|isAuth)\\s*(?:\\?|&&))",
       "message": "Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.",
       "remediation": "Do not gate access on a client-held boolean. Have the server authorize each protected action/route and return only the data the caller is entitled to; on the client, treat any such flag as a presentation hint and re-fetch/authorize from the server before revealing privileged data or actions.",
       "not-match": "(?:^\\s*(?:\\/\\/|\\*|\\/\\*|<!--|#))|(?:className|classList|\\bstyle\\b|\\.style\\b|textContent|innerText|innerHTML\\s*=|\\.hidden\\b|display\\s*[:=]|visibility|opacity|aria-|toggleClass|setAttribute|isMenuOpen|isModalOpen|isDrawerOpen|isDropdownOpen|isCollapsed|isExpanded|showTooltip|tooltip|darkMode|\\btheme\\b)|(?:\\bawait\\s+[\\w.$]*(?:verify|validate|revalidate|authorize|introspect|checkAuth|getSession|fetchUser)\\w*\\s*\\()|(?:mongoose|adminCommand|\\bdb\\.admin\\b)",
@@ -517,7 +517,7 @@
         "svelte"
       ],
       "cwe": "CWE-602",
-      "pattern": "(?:[\\w$]+(?:\\.[\\w$]+)*\\.(?:role|roles|userRole|user_role|accountType|accessLevel|permission|permissions|privilege|privileges|userType|authority|authorities|memberType|accountLevel|group|groups)\\s*(?:===?|!==?)\\s*['\"](?:admin|administrator|superuser|superadmin|super_admin|super-admin|sysadmin|root|owner|manager|moderator|staff|elevated)['\"])|(?:[\\w$]+(?:\\.[\\w$]+)*\\.(?:roles|permissions|privileges|scopes|groups|authorities|grants)\\s*\\.\\s*(?:includes|indexOf|contains|has)\\s*\\(\\s*['\"](?:admin|administrator|superuser|superadmin|root|owner)['\"])",
+      "pattern": "(?<![\\w$])(?:[\\w$]+(?:\\.[\\w$]+)*\\.(?:role|roles|userRole|user_role|accountType|accessLevel|permission|permissions|privilege|privileges|userType|authority|authorities|memberType|accountLevel|group|groups)\\s*(?:===?|!==?)\\s*['\"](?:admin|administrator|superuser|superadmin|super_admin|super-admin|sysadmin|root|owner|manager|moderator|staff|elevated)['\"]|[\\w$]+(?:\\.[\\w$]+)*\\.(?:roles|permissions|privileges|scopes|groups|authorities|grants)\\s*\\.\\s*(?:includes|indexOf|contains|has)\\s*\\(\\s*['\"](?:admin|administrator|superuser|superadmin|root|owner)['\"])",
       "message": "Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.",
       "remediation": "Remove role comparisons from client access decisions. Enforce role/permission on the server for each request and return 403 when unauthorized; use any client-side role only to adjust presentation, never to unlock privileged data or operations.",
       "not-match": "(?:^\\s*(?:\\/\\/|\\*|\\/\\*|<!--|#))|(?:\\bexpect\\s*\\(|\\btoBe\\b|\\btoEqual\\b|\\btoContain\\b|\\bassert\\w*\\s*\\(|\\bdescribe\\s*\\(|\\bit\\s*\\(|\\.spec\\.|\\.test\\.|__tests__|\\bmock\\w*)|(?:\\.(?:filter|map|forEach|reduce|sort|findIndex|find)\\s*\\()|(?:className|classList|\\bstyle\\b|textContent|innerText|placeholder|<option|aria-|\\blabel\\s*[:=])",
@@ -2063,7 +2063,16 @@
       "remediation": "Use structured multi-turn message roles or sanitize prompt inputs before sending to the model.",
       "why": "Direct concatenation of user-supplied text into system prompts enables indirect prompt injection and instruction override.",
       "instruction": "Always validate and sanitize untrusted user input before incorporating into prompt templates.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "const prompt = `System: ${req.body.input}`;",
+          "prompt = f'Hello {user_input}'"
+        ],
+        "negative": [
+          "const prompt = sanitizePrompt(staticTemplate);"
+        ]
+      }
     },
     {
       "id": "wide/cwe079-go-text-template-html",
@@ -2132,12 +2141,21 @@
         "cjs"
       ],
       "cwe": "CWE-95",
-      "pattern": "\\b(?:eval|Function)\\s*\\(\\s*(?:(?:model|ai|agent|llm)Response|suggestedCode|candidatePatch|toolArgs)",
-      "message": "Direct evaluation of AI-generated code via eval or Function constructor.",
-      "remediation": "Execute generated code in a sandboxed process or parse into an AST for safety analysis before execution.",
+      "pattern": "\\b(?:eval|Function|vm\\.runInContext|compile)\\s*\\(\\s*(?:(?:model|ai|agent|llm)Response|suggestedCode|candidatePatch|toolArgs|toolOutput|tool_output|response\\.text|aiResult|ai_output|completion)\\b",
+      "message": "Evaluating raw executable code returned by LLM without sandboxing or static verification.",
+      "remediation": "Parse responses into structured abstract syntax trees or validate against a strict AST schema before execution.",
       "why": "Evaluating unconstrained code generated by an LLM allows untrusted arbitrary code execution within the host runtime.",
       "instruction": "Never evaluate raw executable code dynamically without AST schema validation or sandboxing.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "eval(modelResponse);",
+          "vm.runInContext(toolOutput, ctx);"
+        ],
+        "negative": [
+          "JSON.parse(modelResponse);"
+        ]
+      }
     },
     {
       "id": "wide/cwe098-php-include-superglobal",
@@ -2672,12 +2690,21 @@
         "cjs"
       ],
       "cwe": "CWE-306",
-      "pattern": "\\b(?:mcp|toolRegistry)\\.(?:register|addServer)\\s*\\(\\s*(?:req\\.|params\\.|untrusted|remoteUrl)",
-      "message": "Registration of untrusted or unauthenticated Model Context Protocol (MCP) server.",
-      "remediation": "Enforce user confirmation and cryptographic signature verification before trusting MCP servers.",
+      "pattern": "\\b(?:(?:mcp|toolRegistry)\\.(?:register|addServer|connect)\\s*\\(\\s*(?:req\\.|params\\.|untrusted|remoteUrl|url|endpoint|serverConfig)|(?:registerMcpServer|addMcpServer|mcpClient\\.connect)\\s*\\(\\s*(?:url|endpoint|serverConfig|req\\.|params\\.|untrusted|remoteUrl))",
+      "message": "Model Context Protocol server registered without identity verification or authorization signature.",
+      "remediation": "Verify server host authorization and enforce cryptographic signature checks prior to registering external toolsets.",
       "why": "Registering unvetted MCP servers exposes the agent host to rogue tool definitions and untrusted prompt injection.",
       "instruction": "Never register external toolsets or MCP servers without authentication and user authorization.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "mcp.register(req.body.url);",
+          "registerMcpServer(serverConfig);"
+        ],
+        "negative": [
+          "verifySignatureAndRegisterMcp(trustedConfig);"
+        ]
+      }
     },
     {
       "id": "wide/cwe312-localstorage-sensitive-key",
@@ -3128,12 +3155,21 @@
         "cjs"
       ],
       "cwe": "CWE-400",
-      "pattern": "\\bwhile\\s*\\(\\s*(?:true|1)\\s*\\)\\s*\\{[^}]*(?:agent|runner|llm)\\.(?:step|run|complete|executeTurn)\\s*\\(",
-      "message": "Autonomous agent loop running without maximum iteration bound or dwell commitment check.",
-      "remediation": "Enforce a strict maximum turn limit and use CommitmentGate to prevent tool oscillation.",
+      "pattern": "\\bwhile\\s*\\(\\s*(?:true|1|!done|!finished|!settled)\\s*\\)\\s*\\{(?![^}]*\\b(?:maxRounds|maxSteps|maxIterations|round\\s*>=|step\\s*>=)\\b)[^}]*(?:agent|runner|llm)\\.(?:step|run|complete|executeTurn)\\s*\\(",
+      "message": "Autonomous agent execution loop lacks explicit termination boundary or maximum step limit.",
+      "remediation": "Enforce a strict step threshold and use CommitmentGate to prevent runaway agent execution loops.",
       "why": "Unbounded agent loops can cause denial of service, resource exhaustion, and infinite tool flapping.",
       "instruction": "Always respect maximum step thresholds and loop termination boundaries.",
-      "confidence": "medium"
+      "confidence": "medium",
+      "tests": {
+        "positive": [
+          "while (true) { agent.step(); }",
+          "while (!done) { runner.executeTurn(); }"
+        ],
+        "negative": [
+          "while (!done) { if (step >= maxSteps) break; agent.step(); }"
+        ]
+      }
     },
     {
       "id": "wide/cwe470-dynamic-global-method-invocation",
@@ -3704,12 +3740,21 @@
         "cjs"
       ],
       "cwe": "CWE-770",
-      "pattern": "\\b(?:messages|history|conversation)\\s*\\.push\\s*\\(\\s*\\{[^}]*content\\s*:[^}]*\\}\\s*\\)",
-      "message": "Agent message history grows indefinitely without context window compaction or eviction strategy.",
-      "remediation": "Use sliding window context compaction or summarize previous conversation turns.",
+      "pattern": "\\b(?:messages|history|conversation|chatContext)\\s*\\.push\\s*\\([^)]*\\)(?![^\\n]*(?:slice|shift|trim|truncate|maxTokens|maxHistory))",
+      "message": "LLM conversation context accumulates without token limits or sliding window truncation.",
+      "remediation": "Prune chat context using sliding window truncation or token counting before appending turns.",
       "why": "Unbounded context accumulation leads to LLM context overflow errors and memory exhaustion.",
       "instruction": "Maintain concise conversation context and avoid unbounded accumulation.",
-      "confidence": "low"
+      "confidence": "low",
+      "tests": {
+        "positive": [
+          "messages.push({ role: 'user', content: msg });",
+          "chatContext.push(turn);"
+        ],
+        "negative": [
+          "messages.push({ role: 'user', content: msg }); if (messages.length > maxHistory) messages.shift();"
+        ]
+      }
     },
     {
       "id": "wide/cwe776-java-expand-entity-refs",
@@ -3747,7 +3792,16 @@
       "remediation": "Remove the shell:true option so arguments go straight to execvp without a shell: spawn('ping', ['-c','1', host]) with an args array keeps metacharacters inert. If a shell is genuinely required, strictly allowlist/validate the input and never place user-controlled data into a shell-parsed argument.",
       "not-match": "^\\s*(?:\\/\\/|\\*|\\/\\*)|\\b(?:spawnSync|execFileSync|execFile|spawn|exec|fork)\\s*\\(\\s*(?:'[^']*'|\"[^\"]*\"|`[^`$]*`|\\[(?:\\s*(?:'[^']*'|\"[^\"]*\"|`[^`$]*`)\\s*,?)*\\s*\\]|,|\\s)*\\{",
       "why": "A child_process spawn/exec/execFile/spawnSync/execFileSync/fork call given the { shell: true } option re-parses its arguments through the system shell, so shell metacharacters (; && | $() backticks) inside a non-literal argument execute as commands even though an args array was used. In spawn('ping', ['-c','1', host], { shell:true }) a value host='example.com;id' runs id, bypassing any IP-format blacklist. Two refinements over the original: (1) the notMatch's option-object clause was relaxed from requiring shell to be the FIRST key (\\{\\s*shell\\s*:\\s*true) to just reaching the opening brace after all-literal args, so a safe call with reordered options like spawn('ls',['-la'],{ cwd:'/tmp', shell:true }) no longer false-fires; (2) the backtick template-literal alternatives were tightened from `[^`]*` to `[^`$]*` so an interpolated template literal (`ls ${dir}`) is treated as non-literal and correctly fires, while a plain template literal stays suppressed. notMatch still suppresses shell:false (sink misses it), calls whose args are only string/array literals, and commented lines (// * /*).",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "spawn('ping', ['-c', '1', host], { shell: true });"
+        ],
+        "negative": [
+          "spawn('ping', ['-c', '1', host]);",
+          "spawn('ls', ['-la'], { cwd: '/tmp', shell: true });"
+        ]
+      }
     },
     {
       "id": "wide/cwe78-subprocess-shell-true-py",
@@ -3765,7 +3819,16 @@
       "remediation": "Pass an argument list and drop shell=True: subprocess.run(['ping','-c','1', host]) invokes no shell so metacharacters are inert. If shell=True is unavoidable, wrap every interpolated value in shlex.quote() and strictly validate the input.",
       "not-match": "^\\s*#|\\b(?:subprocess\\s*\\.\\s*)?(?:Popen|run|call|check_call|check_output)\\s*\\(\\s*(?:'[^']*'|\"[^\"]*\"|\\[(?:\\s*(?:'[^']*'|\"[^\"]*\")\\s*,?)*\\s*\\])\\s*,[^)]*\\bshell\\s*=\\s*True",
       "why": "subprocess run/Popen/call/check_call/check_output with shell=True executes through /bin/sh, so shell metacharacters in a non-literal command (variable, f-string, or concatenation) are interpreted as shell syntax and injected commands run - e.g. subprocess.run(cmd, shell=True) or Popen(f\"ping {host}\", shell=True) lets host='x;id' run id. notMatch suppresses shell=False (sink already misses it) plus the safe twins where the first positional argument is a pure string literal or a list of only string literals; it still fires on concatenation because a comma (not '+') must follow the literal. The kwargs-order case is already safe here: after the first-arg literal and its comma, [^)]* consumes any other keyword arguments before shell=True, so reordering (e.g. shell=True, cwd=root) does not cause a false positive. app.run(debug=True,...) is not matched because the sink requires the token shell= specifically.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "subprocess.run(cmd, shell=True)"
+        ],
+        "negative": [
+          "subprocess.run(['ping', '-c', '1', host])",
+          "subprocess.run(['ls', '-la'], cwd=root, shell=True)"
+        ]
+      }
     },
     {
       "id": "wide/cwe780-rsa-no-oaep-padding",
@@ -3858,12 +3921,21 @@
         "cjs"
       ],
       "cwe": "CWE-798",
-      "pattern": "\\b(?:systemPrompt|system_prompt|instructions)\\s*[:=].*(?:apiKey|api_key|password|secret|auth_token|token)\\b",
-      "message": "Hardcoded API key or secret embedded in AI agent system prompt.",
-      "remediation": "Keep secrets outside LLM context and use server-side authenticated tools instead.",
+      "pattern": "\\b(?:systemPrompt|systemMessage|system_prompt|instructions)\\s*[:=].*?(?:process\\.env\\.(?:[A-Z_]*(?:KEY|SECRET|TOKEN|PASSWORD|PASS|AUTH))|apiKey|api_key|password|secret|auth_token|token)\\b",
+      "message": "Sensitive secrets or private API credentials embedded in prompt context.",
+      "remediation": "Keep secrets outside LLM context and provide secrets through isolated backend proxy channels.",
       "why": "System instructions can be leaked to end users via prompt extraction or adversarial jailbreak prompts.",
       "instruction": "Never include secrets, API keys, private tokens, or credentials in prompt context or output.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "const systemPrompt = `You act using key ${process.env.OPENAI_API_KEY}`;",
+          "system_prompt = f'token={auth_token}'"
+        ],
+        "negative": [
+          "const systemPrompt = 'Analyze the code safely without exposing credentials.';"
+        ]
+      }
     },
     {
       "id": "wide/cwe798-hardcoded-db-uri",
@@ -3940,12 +4012,21 @@
         "cjs"
       ],
       "cwe": "CWE-829",
-      "pattern": "\\b(?:applyPatch|applyDiff|fs\\.writeFile|writeFileSync)\\s*\\(\\s*(?:filepath|path|file)\\s*,\\s*(?:patch|suggestion|aiOutput|response\\.content)\\s*\\)",
-      "message": "Direct file write of AI-suggested code diff without validation or syntax check.",
-      "remediation": "Score candidate patches using WeightedScorer and validate syntax before committing changes.",
+      "pattern": "\\b(?:applyPatch|gitApply|applyDiff|writePatch|fs\\.writeFile|writeFileSync)\\s*\\(\\s*(?:filepath|path|file)\\s*,\\s*(?:patch|suggestion|aiOutput|aiPatch|llmResponse|response\\.content|output\\.patch|modelDiff)\\s*\\)|\\b(?:applyPatch|gitApply|applyDiff|writePatch)\\s*\\(\\s*(?:aiPatch|llmResponse|output\\.patch|modelDiff)",
+      "message": "Applying LLM-generated patch directly to codebase without path traversal or integrity checks.",
+      "remediation": "Validate destination file paths are strictly within workspace bounds and run static scans before applying patches.",
       "why": "Applying unvalidated code patches directly to disk can corrupt project files or introduce syntax errors.",
       "instruction": "Always inspect relevant files before modifying them, validate bounds, and verify patch integrity.",
-      "confidence": "medium"
+      "confidence": "medium",
+      "tests": {
+        "positive": [
+          "fs.writeFileSync(filepath, response.content)",
+          "applyPatch(aiPatch);"
+        ],
+        "negative": [
+          "validateInsideWorkspace(filepath); applyVerifiedPatch(filepath, checkedDiff);"
+        ]
+      }
     },
     {
       "id": "wide/cwe89-cs-command-concat",
@@ -4379,7 +4460,7 @@
         "svelte"
       ],
       "cwe": "CWE-915",
-      "pattern": "[A-Za-z_$][\\w$]*\\s*\\[\\s*[A-Za-z_$][\\w$]*\\s*\\]\\s*=(?!=)",
+      "pattern": "(?<![\\w$])[A-Za-z_$][\\w$]*\\s*\\[\\s*[A-Za-z_$][\\w$]*\\s*\\]\\s*=(?!=)",
       "message": "Assigns to a property using a dynamic identifier key (obj[key] = ...), so a caller-controlled key can write arbitrary or prototype properties.",
       "remediation": "Validate key against an allow-list or use a Map/Object.create(null), and reject __proto__/constructor/prototype before writing.",
       "not-match": "\\[\\s*(?:i|j|k|n|idx)\\s*\\]",
@@ -5900,7 +5981,7 @@
         "rb"
       ],
       "cwe": "CWE-134",
-      "pattern": "(?:params\\[[^\\]]*\\]|cookies\\[[^\\]]*\\]|@?(?:[A-Za-z_]\\w*)?(?:fmt|format|template|tmpl|pattern)\\w*)\\s*%\\s*[\\[\\(]",
+      "pattern": "(?<![\\w@])(?:params\\[[^\\]]*\\]|cookies\\[[^\\]]*\\]|@?(?:[A-Za-z_]\\w*)?(?:fmt|format|template|tmpl|pattern)\\w*)\\s*%\\s*[\\[\\(]",
       "message": "Format string injection — user input used as the format/template string (CWE-134).",
       "remediation": "Make the template a constant literal (\"%s\" % user) or sanitise/whitelist the template; never let user input be the left operand of %.",
       "not-match": "^\\s*#",
@@ -7422,12 +7503,20 @@
         "go"
       ],
       "cwe": "CWE-639",
-      "pattern": "\\.(?:QueryRowContext|QueryContext|QueryRow|Query|SelectContext|GetContext|Select|Get)\\(\\s*(?:[^,\"\\x60]*,\\s*)*[\"\\x60]\\s*SELECT\\b[^\"\\x60]*WHERE\\b[^\"\\x60]*\\bid\\s*=\\s*(?:\\?|\\$\\d+)[^\"\\x60]*[\"\\x60]\\s*,\\s*[^;]*(?:\\.(?:Param|Params|Query|QueryParam|PostFormValue|PostForm|FormValue|DefaultQuery)\\(|Vars\\(\\w+\\)\\[|URLParam\\(|Params\\.ByName\\()",
+      "pattern": "\\.(?:QueryRowContext|QueryContext|QueryRow|Query|SelectContext|GetContext|Select|Get)\\(\\s*(?:[^\"\\x60;]+,\\s*)?[\"\\x60]\\s*SELECT\\b[^\"\\x60]*WHERE\\b[^\"\\x60]*\\bid\\s*=\\s*(?:\\?|\\$\\d+)[^\"\\x60]*[\"\\x60]\\s*,\\s*[^;]*(?:\\.(?:Param|Params|Query|QueryParam|PostFormValue|PostForm|FormValue|DefaultQuery)\\(|Vars\\(\\w+\\)\\[|URLParam\\(|Params\\.ByName\\()",
       "message": "Possible IDOR — a resource is accessed by a client-supplied id with no ownership check (CWE-639).",
       "remediation": "Add an ownership predicate bound to the session user: WHERE id = $1 AND owner_id = $2, passing the authenticated user id as the second parameter; treat an empty result as not-authorized.",
       "not-match": "^\\s*\\/\\/|^\\s*\\*\\s|[Uu]ser_?[Ii][Dd]|[Oo]wner|[Aa]ccount_?[Ii][Dd]|[Tt]enant|[Oo]rg_?[Ii][Dd]|[Oo]rganization|[Cc]ompany_?[Ii][Dd]|[Tt]eam_?[Ii][Dd]|[Ww]orkspace_?[Ii][Dd]|[Gg]roup_?[Ii][Dd]|[Cc]ustomer_?[Ii][Dd]|[Cc]urrent_?[Uu]ser|[Ss]ession|[Aa]uthoriz|[Ee]nforce|Pundit|CanCan|\\.Can\\(|[Pp]olic|[Cc]laims|\\.Scopes\\(|[Oo]wned_?[Bb]y|[Cc]reated_?[Bb]y|[Bb]elongs_?[Tt]o",
       "why": "A database/sql, pgx or sqlx Query/QueryRow/Get/Select whose SELECT ... WHERE id = ?/$1 is parameterized with a client-supplied value (double-quote or backtick SQL). The placeholder blocks SQL injection but the row is still addressed by object id alone, with no owner_id/user_id term in the WHERE clause, so it is an IDOR.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "row := db.QueryRow(\"SELECT * FROM orders WHERE id = $1\", c.Param(\"id\"))"
+        ],
+        "negative": [
+          "row := db.QueryRow(\"SELECT * FROM orders WHERE id = $1 AND user_id = $2\", c.Param(\"id\"), userId)"
+        ]
+      }
     },
     {
       "id": "wide/idor-sql-where-id-req",
@@ -7925,7 +8014,7 @@
         "cts"
       ],
       "cwe": "CWE-79",
-      "pattern": "(?=.*(?:['\"`]\\s*text\\/html|\\.type\\(\\s*['\"`]html))(?=.*\\.(?:send|end|write)\\s*\\(\\s*[A-Za-z_$][\\w.$\\[\\]]*\\s*\\)).*\\S",
+      "pattern": "(?:^|\\n)(?=[^\\n]*(?:['\"`]\\s*text\\/html|\\.type\\(\\s*['\"`]html))(?=[^\\n]*\\.(?:send|end|write)\\s*\\(\\s*[A-Za-z_$][\\w.$\\[\\]]*\\s*\\))[^\\n]*\\S",
       "message": "Reflected XSS — an unescaped variable is interpolated into an HTML response (CWE-79).",
       "remediation": "Escape or sanitise the variable before sending it as HTML (escapeHtml/he.encode/DOMPurify), send structured data with res.json, or serve static markup with res.sendFile; only label a response text/html when its body is trusted or already encoded.",
       "not-match": "^\\s*(?:\\/\\/|\\*|\\/\\*)|escapeHtml|htmlEscape|escapeHTML|encodeHTML|\\bhe\\.(?:encode|escape)|DOMPurify|sanitiz|\\bxss\\s*\\(|encodeURI|\\bescape\\s*\\(|\\.replace(?:All)?\\(\\s*(?:\\/\\[?|['\"`])[<>&]|res\\.json|\\bsendFile\\b|\\breadFileSync\\b|\\breadFile\\b|\\.(?:send|end|write)\\s*\\(\\s*[\\w.]*\\b(?:count|length|id|index|total|idx|size|num|offset|limit)\\b",
@@ -8398,7 +8487,7 @@
         "cts"
       ],
       "cwe": "CWE-73",
-      "pattern": "(?=.*\\bnbconvert\\b)(?=.*(?:--to\\b|--execute\\b|--output\\b|--template\\b|\\.ipynb\\b|jupyter))(?=.*(?:\\$\\{|\\+\\s*\\w|,\\s*[A-Za-z_]\\w*\\s*[,)\\]]|\\bf[\"']|[\\[(]\\s*[A-Za-z_$][\\w.$]*\\s*[,)\\]])).*",
+      "pattern": "(?:^|\\n)(?=[^\\n]*\\bnbconvert\\b)(?=[^\\n]*(?:--to\\b|--execute\\b|--output\\b|--template\\b|\\.ipynb\\b|jupyter))(?=[^\\n]*(?:\\$\\{|\\+\\s*\\w|,\\s*[A-Za-z_]\\w*\\s*[,)\\]]|\\bf[\"']|[\\[(]\\s*[A-Za-z_$][\\w.$]*\\s*[,)\\]]))[^\\n]*",
       "message": "Renderer resource embedding — a document/PDF/image converter resolves a user-controlled resource, enabling LFI or SSRF (CWE-918/73/611).",
       "remediation": "Never nbconvert untrusted notebooks with --execute; sanitize/strip attachments and custom templates, run in an isolated sandbox, and validate the notebook path against an allowlist.",
       "not-match": "(?:^\\s*(?:\\/\\/|#|\\*)|\\bconsole\\.|\\blog(?:ger)?\\.|System\\.(?:out|err)|\\bprint\\s*\\(|\\becho\\s)",
@@ -8431,7 +8520,7 @@
         "phps"
       ],
       "cwe": "CWE-73",
-      "pattern": "(?=.*\\bpandoc\\b)(?=.*(?:-o\\b|--output|--to\\b|-t\\b|-f\\b|\\.pdf\\b|\\.docx\\b|\\.md\\b|\\.html?\\b|\\.epub\\b))(?=.*(?:\\$\\{|#\\{|\\+\\s*\\w|\\.\\s*\\$\\w|,\\s*[A-Za-z_]\\w*\\s*[,)\\]]|\\bf[\"']|[\\[(]\\s*[A-Za-z_$][\\w.$]*\\s*[,)\\]])).*",
+      "pattern": "(?:^|\\n)(?=[^\\n]*\\bpandoc\\b)(?=[^\\n]*(?:-o\\b|--output|--to\\b|-t\\b|-f\\b|\\.pdf\\b|\\.docx\\b|\\.md\\b|\\.html?\\b|\\.epub\\b))(?=[^\\n]*(?:\\$\\{|#\\{|\\+\\s*\\w|\\.\\s*\\$\\w|,\\s*[A-Za-z_]\\w*\\s*[,)\\]]|\\bf[\"']|[\\[(]\\s*[A-Za-z_$][\\w.$]*\\s*[,)\\]]))[^\\n]*",
       "message": "Renderer resource embedding — a document/PDF/image converter resolves a user-controlled resource, enabling LFI or SSRF (CWE-918/73/611).",
       "remediation": "Run pandoc with --sandbox on untrusted input, restrict --resource-path to a safe directory, and disable raw HTML/TeX; avoid concatenating request data that selects the input file.",
       "not-match": "(?:^\\s*(?:\\/\\/|#|\\*)|--sandbox|\\bconsole\\.|\\blog(?:ger)?\\.|System\\.(?:out|err)|\\bprintln\\b|\\bprint\\s*\\(|fmt\\.Print|\\becho\\s)",
@@ -9648,7 +9737,7 @@
         "cts"
       ],
       "cwe": "CWE-22",
-      "pattern": "(?:\\b(?:resolvedPath|resolved|realPath|realpath|real|absolutePath|absPath|absolute|abs|fullPath|filePath|filepath|normalizedPath|normalized|canonicalPath|canonical|targetPath|safePath|finalPath|requestedPath|joinedPath)\\.indexOf\\s*\\([^)]*\\)\\s*(?:!==?|===?)\\s*0|[A-Za-z_$][\\w$.]*\\.indexOf\\s*\\(\\s*(?:[A-Za-z_$]\\w*(?:Dir|Root)\\b|(?:base|root|cwd)\\b|(?:BASE_DIR|ROOT_DIR|UPLOAD_DIR|PUBLIC_DIR|STATIC_DIR|DATA_DIR)\\b)[^)]*\\)\\s*(?:!==?|===?)\\s*0)",
+      "pattern": "(?:\\b(?:resolvedPath|resolved|realPath|realpath|real|absolutePath|absPath|absolute|abs|fullPath|filePath|filepath|normalizedPath|normalized|canonicalPath|canonical|targetPath|safePath|finalPath|requestedPath|joinedPath)\\.indexOf\\s*\\([^)]*\\)\\s*(?:!==?|===?)\\s*0|(?<![\\w$])[A-Za-z_$][\\w$.]*\\.indexOf\\s*\\(\\s*(?:[A-Za-z_$]\\w*(?:Dir|Root)\\b|(?:base|root|cwd)\\b|(?:BASE_DIR|ROOT_DIR|UPLOAD_DIR|PUBLIC_DIR|STATIC_DIR|DATA_DIR)\\b)[^)]*\\)\\s*(?:!==?|===?)\\s*0)",
       "message": "Path-containment bypass — a startsWith/indexOf prefix check with no trailing separator lets a sibling directory escape (CWE-22).",
       "remediation": "Append the separator and accept exact equality: `p === base || p.indexOf(base + path.sep) === 0`; better, after path.resolve test `!path.relative(base, p).startsWith('..')` and reject otherwise.",
       "not-match": "^\\s*(?:\\/\\/|\\*|\\/\\*|#)|\\+\\s*(?:path\\.sep|os\\.sep|['\"][\\/\\\\]['\"]|\\bsep\\b|DIRECTORY_SEPARATOR|File\\.separator)|path\\.relative|[\\/\\\\]['\"]\\s*\\)|WithSep|WithSlash",
@@ -9672,7 +9761,7 @@
         "java"
       ],
       "cwe": "CWE-22",
-      "pattern": "(?:\\b(?:resolvedPath|resolved|realPath|realpath|absolutePath|absPath|absolute|fullPath|filePath|filepath|normalizedPath|normalized|canonicalPath|canonical|targetPath|safePath|finalPath|requestedPath|joinedPath)\\.startsWith\\s*\\([^)]*\\)|\\.(?:getCanonicalPath|getAbsolutePath)\\s*\\(\\s*\\)\\s*\\.\\s*startsWith\\s*\\([^)]*\\)|[A-Za-z_$][\\w$.]*\\.startsWith\\s*\\(\\s*(?:[A-Za-z_$]\\w*(?:Dir|Root)\\b|(?:base|root|cwd)\\b|(?:BASE_DIR|ROOT_DIR|UPLOAD_DIR|PUBLIC_DIR|STATIC_DIR|DATA_DIR)\\b)\\s*\\))",
+      "pattern": "(?:\\b(?:resolvedPath|resolved|realPath|realpath|absolutePath|absPath|absolute|fullPath|filePath|filepath|normalizedPath|normalized|canonicalPath|canonical|targetPath|safePath|finalPath|requestedPath|joinedPath)\\.startsWith\\s*\\([^)]*\\)|\\.(?:getCanonicalPath|getAbsolutePath)\\s*\\(\\s*\\)\\s*\\.\\s*startsWith\\s*\\([^)]*\\)|(?<![\\w$])[A-Za-z_$][\\w$.]*\\.startsWith\\s*\\(\\s*(?:[A-Za-z_$]\\w*(?:Dir|Root)\\b|(?:base|root|cwd)\\b|(?:BASE_DIR|ROOT_DIR|UPLOAD_DIR|PUBLIC_DIR|STATIC_DIR|DATA_DIR)\\b)\\s*\\))",
       "message": "Path-containment bypass — a startsWith/indexOf prefix check with no trailing separator lets a sibling directory escape (CWE-22).",
       "remediation": "Append the separator and allow equality: `resolved === base || resolved.startsWith(base + path.sep)` (Java: `canonical.equals(base) || canonical.startsWith(base + File.separator)`); or compare Path objects / test path.relative for a leading '..'.",
       "not-match": "^\\s*(?:\\/\\/|\\*|\\/\\*|#)|\\+\\s*(?:path\\.sep|os\\.sep|File\\.separator|separator|['\"][\\/\\\\]['\"])|path\\.relative|[\\/\\\\]['\"]\\s*\\)|WithSep|WithSlash|new RegExp\\(|message:\\s*['\"]|\\bwhy:|\\bfix:|\\bsinkRegex\\b|text:\\s*new",
@@ -9690,7 +9779,7 @@
         "pyw"
       ],
       "cwe": "CWE-22",
-      "pattern": "(?:\\b(?:resolved_path|resolved|real_path|realpath|abs_path|abspath|absolute_path|full_path|file_path|normalized_path|normalized|canonical_path|canonical|target_path|safe_path|final_path)\\s*\\.startswith\\s*\\([^)]*\\)|\\bos\\.path\\.(?:realpath|abspath)\\s*\\([^)]*\\)\\s*\\.startswith\\s*\\([^)]*\\)|[A-Za-z_][\\w.]*\\.startswith\\s*\\(\\s*(?:[A-Za-z_]\\w*_(?:dir|root)\\b|[A-Za-z_]\\w*(?:Dir|Root)\\b|(?:base|root|cwd)\\b|(?:BASE_DIR|ROOT_DIR|UPLOAD_DIR|PUBLIC_DIR|STATIC_DIR|DATA_DIR)\\b)\\s*\\))",
+      "pattern": "(?:\\b(?:resolved_path|resolved|real_path|realpath|abs_path|abspath|absolute_path|full_path|file_path|normalized_path|normalized|canonical_path|canonical|target_path|safe_path|final_path)\\s*\\.startswith\\s*\\([^)]*\\)|\\bos\\.path\\.(?:realpath|abspath)\\s*\\([^)]*\\)\\s*\\.startswith\\s*\\([^)]*\\)|(?<![\\w.])[A-Za-z_][\\w.]*\\.startswith\\s*\\(\\s*(?:[A-Za-z_]\\w*_(?:dir|root)\\b|[A-Za-z_]\\w*(?:Dir|Root)\\b|(?:base|root|cwd)\\b|(?:BASE_DIR|ROOT_DIR|UPLOAD_DIR|PUBLIC_DIR|STATIC_DIR|DATA_DIR)\\b)\\s*\\))",
       "message": "Path-containment bypass — a startsWith/indexOf prefix check with no trailing separator lets a sibling directory escape (CWE-22).",
       "remediation": "Use os.path.commonpath([base, resolved]) == base, or compare with the separator (resolved == base or resolved.startswith(base + os.sep)); never a bare startswith.",
       "not-match": "^\\s*#|\\+\\s*os\\.sep|\\+\\s*['\"][\\/\\\\]['\"]|os\\.path\\.join\\s*\\([^)]*,\\s*['\"]{2}\\s*\\)|os\\.path\\.commonpath|os\\.path\\.relpath|[\\/\\\\]['\"]\\s*\\)|with_sep|WithSep",
@@ -10639,7 +10728,7 @@
         "svelte"
       ],
       "cwe": "CWE-1321",
-      "pattern": "(?:\\bfor\\s*\\(\\s*(?:var|let|const\\s)?\\s*[\\w$]+\\s+in\\s+[^)]+\\)\\s*\\{?\\s*[\\w$]+\\s*\\[\\s*[\\w$]+\\s*\\]\\s*=)|(?:[\\w$]+\\s*\\[\\s*[\\w$]+\\s*\\]\\s*=\\s*(?:[\\w$.]*(?:[Mm]erge|[Ee]xtend|deepAssign|deepClone|deepCopy))\\s*\\()",
+      "pattern": "(?:\\bfor\\s*\\(\\s*(?:var|let|const\\s)?\\s*[\\w$]+\\s+in\\s+[^)]+\\)\\s*\\{?\\s*[\\w$]+\\s*\\[\\s*[\\w$]+\\s*\\]\\s*=)|(?:(?<![\\w$])[\\w$]+\\s*\\[\\s*[\\w$]+\\s*\\]\\s*=\\s*(?:[\\w$.]*(?:[Mm]erge|[Ee]xtend|deepAssign|deepClone|deepCopy))\\s*\\()",
       "message": "Prototype pollution — attacker-controlled keys can reach Object.prototype via a recursive merge/set (CWE-1321).",
       "remediation": "In the merge loop skip dangerous keys — if (key === '__proto__' || key === 'constructor' || key === 'prototype') continue; — and only descend on Object.prototype.hasOwnProperty.call(source, key). Prefer a vetted library (lodash.merge is hardened) or structuredClone, and merge into an Object.create(null) accumulator.",
       "not-match": "hasOwnProperty|Object\\.create\\(\\s*null\\s*\\)|['\"]__proto__['\"]|['\"]constructor['\"]|['\"]prototype['\"]|isSafeKey|sanitizeKey|allowlist|whitelist|allowedKeys|\\b_\\.merge\\b|\\blodash\\.merge\\b",
@@ -10664,7 +10753,7 @@
         "svelte"
       ],
       "cwe": "CWE-1321",
-      "pattern": "\\w+\\s*\\[\\s*\\w+\\s*\\]\\s*=\\s*(?:\\w+\\.)?(?:deepMerge|mergeDeep|deepExtend|deepAssign|mergeRecursive|mergeWith|merge|extend)\\s*\\(\\s*\\w+\\s*\\[\\s*\\w+\\s*\\]",
+      "pattern": "\\b\\w+\\s*\\[\\s*\\w+\\s*\\]\\s*=\\s*(?:\\w+\\.)?(?:deepMerge|mergeDeep|deepExtend|deepAssign|mergeRecursive|mergeWith|merge|extend)\\s*\\(\\s*\\w+\\s*\\[\\s*\\w+\\s*\\]",
       "message": "Prototype pollution — attacker-controlled keys can reach Object.prototype via a recursive merge/set (CWE-1321).",
       "remediation": "Guard the key before the recursive call (skip __proto__/constructor/prototype), gate with hasOwnProperty, or descend into a null-prototype accumulator. Where feasible replace the hand-rolled recursion with a vetted, pollution-safe merge utility.",
       "not-match": "__proto__|constructor|prototype|hasOwnProperty|Object\\.create\\(\\s*null\\s*\\)|isSafeKey|isValidKey|sanitiz",
@@ -10717,12 +10806,20 @@
         "svelte"
       ],
       "cwe": "CWE-1321",
-      "pattern": "(\\w+)\\[\\s*([A-Za-z_$][\\w$]*)\\s*\\]\\s*=\\s*\\w+\\[\\s*\\2\\s*\\]",
+      "pattern": "\\b(\\w+)\\[\\s*([A-Za-z_$][\\w$]*)\\s*\\]\\s*=\\s*\\w+\\[\\s*\\2\\s*\\]",
       "message": "This copies keys into an object without guarding __proto__.",
       "remediation": "Skip the keys __proto__, constructor and prototype, or merge into an Object.create(null) target.",
       "not-match": "\\[\\s*(i|j|k|n|m|idx|index|row|col|x|y)\\s*\\]|__proto__|hasOwnProperty|Object\\.freeze",
       "why": "A recursive merge that assigns target[key] = source[key] will, if the input carries a \"__proto__\" key, write onto Object.prototype — polluting every object in the program.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "target[key] = source[key];"
+        ],
+        "negative": [
+          "if (key !== '__proto__' && hasOwnProperty.call(source, key)) target[key] = source[key];"
+        ]
+      }
     },
     {
       "id": "wide/proxy-raw-body-forward",
@@ -12351,7 +12448,7 @@
         "go"
       ],
       "cwe": "CWE-918",
-      "pattern": "(?=.*(?:\\bwkhtmltopdf\\b|\\bwkhtmltoimage\\b|\\bprince\\b|\\bweasyprint\\b))(?=.*(?:\\.pdf|\\.png|\\.jpe?g|-o\\b|--output|https?:|file:|\\.html?\\b|\\bwkhtmltopdf\\s*\\(|\\bwkhtmltoimage\\s*\\())(?=.*(?:\\$\\{|#\\{|\\+\\s*\\w|\\.\\s*\\$\\w|,\\s*[A-Za-z_]\\w*\\s*[,)\\]]|\\bf[\"']|[\\[(]\\s*[A-Za-z_$][\\w.$]*\\s*[,)\\]])).*",
+      "pattern": "(?:^|\\n)(?=[^\\n]*(?:\\bwkhtmltopdf\\b|\\bwkhtmltoimage\\b|\\bprince\\b|\\bweasyprint\\b))(?=[^\\n]*(?:\\.pdf|\\.png|\\.jpe?g|-o\\b|--output|https?:|file:|\\.html?\\b|\\bwkhtmltopdf\\s*\\(|\\bwkhtmltoimage\\s*\\())(?=[^\\n]*(?:\\$\\{|#\\{|\\+\\s*\\w|\\.\\s*\\$\\w|,\\s*[A-Za-z_]\\w*\\s*[,)\\]]|\\bf[\"']|[\\[(]\\s*[A-Za-z_$][\\w.$]*\\s*[,)\\]]))[^\\n]*",
       "message": "Renderer resource embedding — a document/PDF/image converter resolves a user-controlled resource, enabling LFI or SSRF (CWE-918/73/611).",
       "remediation": "Pass --disable-local-file-access (or enableLocalFileAccess:false in the node binding), render from a fixed template, and put a strict allowlist/network-egress guard in front of any remote fetch; never concatenate raw request input into the command line.",
       "not-match": "(?:^\\s*(?:\\/\\/|#|\\*)|--disable-local-file-access|enableLocalFileAccess\\s*[:=]?\\s*false|\\bconsole\\.|\\blog(?:ger)?\\.|System\\.(?:out|err)|\\bprintln\\b|\\bprint\\s*\\(|fmt\\.Print|\\becho\\s)",
@@ -12510,7 +12607,7 @@
         "java"
       ],
       "cwe": "CWE-918",
-      "pattern": "(?=.*\\b(?:soffice|libreoffice|unoconv)\\b)(?=.*(?:--convert-to|--headless|--outdir|-f\\b|\\.docx\\b|\\.odt\\b|\\.pptx\\b))(?=.*(?:\\$\\{|#\\{|\\+\\s*\\w|\\.\\s*\\$\\w|,\\s*[A-Za-z_]\\w*\\s*[,)\\]]|\\bf[\"']|[\\[(]\\s*[A-Za-z_$][\\w.$]*\\s*[,)\\]])).*",
+      "pattern": "(?:^|\\n)(?=[^\\n]*\\b(?:soffice|libreoffice|unoconv)\\b)(?=[^\\n]*(?:--convert-to|--headless|--outdir|-f\\b|\\.docx\\b|\\.odt\\b|\\.pptx\\b))(?=[^\\n]*(?:\\$\\{|#\\{|\\+\\s*\\w|\\.\\s*\\$\\w|,\\s*[A-Za-z_]\\w*\\s*[,)\\]]|\\bf[\"']|[\\[(]\\s*[A-Za-z_$][\\w.$]*\\s*[,)\\]]))[^\\n]*",
       "message": "Renderer resource embedding — a document/PDF/image converter resolves a user-controlled resource, enabling LFI or SSRF (CWE-918/73/611).",
       "remediation": "Convert in a sandboxed, network-isolated profile, strip/deny external references before conversion, and validate the input path; do not build the command line from raw request data pointing at attacker documents.",
       "not-match": "(?:^\\s*(?:\\/\\/|#|\\*)|\\bconsole\\.|\\blog(?:ger)?\\.|System\\.(?:out|err)|\\bprintln\\b|\\bprint\\s*\\(|fmt\\.Print|\\becho\\s)",
@@ -14470,7 +14567,7 @@
         "java"
       ],
       "cwe": "CWE-1336",
-      "pattern": "^(?!\\s*(?:\\/[/*]|\\*)).*?[A-Za-z_$]*[Tt]emplate[A-Za-z_$]*[Ee]ngine\\s*\\.\\s*process\\s*\\(\\s*(?:[A-Za-z_$]|(?:\"[^\"]*\"|'[^']*')\\s*(?:\\+(?!\\s*[\"'])|\\.\\s*(?:format|formatted)\\s*\\())[^;]*,",
+      "pattern": "^(?!\\s*(?:\\/[/*]|\\*))[^\\n]*?(?<![\\w$])[A-Za-z_$]*[Tt]emplate[A-Za-z_$]*[Ee]ngine\\s*\\.\\s*process\\s*\\(\\s*(?:[A-Za-z_$]|(?:\"[^\"]*\"|'[^']*')\\s*(?:\\+(?!\\s*[\"'])|\\.\\s*(?:format|formatted)\\s*\\())[^;]*,",
       "message": "Server-side template injection (SSTI) — user input is compiled as a template.",
       "remediation": "Pass a fixed template name (resolved from the classpath) as the first argument and supply user input only via the Context variables.",
       "why": "With a StringTemplateResolver, TemplateEngine.process treats its first argument as the template itself, and Thymeleaf's expression preprocessing (__${...}__) over dynamic template text yields SpEL execution and RCE.",
@@ -14562,7 +14659,7 @@
         "java"
       ],
       "cwe": "CWE-1336",
-      "pattern": "^(?!\\s*(?:\\/[/*]|\\*)).*?(?:[A-Za-z_$]*[Rr]untime[A-Za-z_$]*|rsvc)\\s*\\.\\s*parse\\s*\\(\\s*new\\s+StringReader\\s*\\(\\s*(?:[A-Za-z_$]|(?:\"[^\"]*\"|'[^']*')\\s*(?:\\+(?!\\s*[\"'])|\\.\\s*(?:format|formatted)\\s*\\())",
+      "pattern": "^(?!\\s*(?:\\/[/*]|\\*))[^\\n]*?(?<![\\w$])(?:[A-Za-z_$]*[Rr]untime[A-Za-z_$]*|rsvc)\\s*\\.\\s*parse\\s*\\(\\s*new\\s+StringReader\\s*\\(\\s*(?:[A-Za-z_$]|(?:\"[^\"]*\"|'[^']*')\\s*(?:\\+(?!\\s*[\"'])|\\.\\s*(?:format|formatted)\\s*\\())",
       "message": "Server-side template injection (SSTI) — user input is compiled as a template.",
       "remediation": "Do not parse a StringReader built from user input; resolve templates by resource name and bind user data through the context.",
       "why": "Velocity RuntimeServices.parse compiles the Reader it is given into a template AST; wrapping a dynamic string in a StringReader makes that user input executable VTL.",
@@ -14771,7 +14868,7 @@
         "csx"
       ],
       "cwe": "CWE-208",
-      "pattern": "(?:\\bsig\\b|\\bmac\\b|[\\w$]*(?:token|api_?key|secret|passwd|password|hmac|signature|digest|csrf|otp)(?:key|hash|value|bytes|buffer|digest|header|hex|str)?(?![\\w$]))\\s*(?:===?|!==?|\\.equals\\s*\\()|(?:===?|!==?)\\s*(?:\\bsig\\b|\\bmac\\b|[\\w$]*(?:token|api_?key|secret|passwd|password|hmac|signature|digest|csrf|otp)(?:key|hash|value|bytes|buffer|digest|header|hex|str)?(?![\\w$])(?!\\s*\\.\\s*length))",
+      "pattern": "(?:\\bsig\\b|\\bmac\\b|(?<![\\w$])[\\w$]*(?:token|api_?key|secret|passwd|password|hmac|signature|digest|csrf|otp)(?:key|hash|value|bytes|buffer|digest|header|hex|str)?(?![\\w$]))\\s*(?:===?|!==?|\\.equals\\s*\\()|(?:===?|!==?)\\s*(?:\\bsig\\b|\\bmac\\b|(?<![\\w$])[\\w$]*(?:token|api_?key|secret|passwd|password|hmac|signature|digest|csrf|otp)(?:key|hash|value|bytes|buffer|digest|header|hex|str)?(?![\\w$])(?!\\s*\\.\\s*length))",
       "message": "Non-constant-time secret comparison — compare secrets with crypto.timingSafeEqual, not == / === (CWE-208).",
       "remediation": "Compare secrets with a constant-time function: Node crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b)) (guard equal length first), Python hmac.compare_digest(a,b), PHP hash_equals($known,$user), Java MessageDigest.isEqual(a,b), Go subtle.ConstantTimeCompare(a,b)==1, Rails ActiveSupport::SecurityUtils.secure_compare(a,b). Never use ==/===/.equals on secrets.",
       "not-match": "(?:timingsafeequal|compare_digest|hash_equals|isequal|constanttimecompare|constanttimeequals|secure_compare)\\s*\\(|(?:===?|!==?)\\s*(?:(?:null|undefined|true|false|nan|none|nil)\\b|-?\\d+(?:\\.\\d+)?|['\"`])|['\"`]\\s*(?:===?|!==?)|(?:null|undefined|true|false|nan|none|nil)\\b\\s*(?:===?|!==?)|(?:file|method|type|schema|func|function|byte|content|call|api)Signature|new RegExp\\(|message:\\s*['\"]|\\bwhy:|\\bfix:|\\bsinkRegex\\b|text:\\s*new",

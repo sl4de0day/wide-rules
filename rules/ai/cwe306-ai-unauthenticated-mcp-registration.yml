@@ -11,9 +11,15 @@ languages:
   - mjs
   - cjs
 cwe: CWE-306
-pattern: \b(?:mcp|toolRegistry)\.(?:register|addServer)\s*\(\s*(?:req\.|params\.|untrusted|remoteUrl)
-message: Registration of untrusted or unauthenticated Model Context Protocol (MCP) server.
-remediation: Enforce user confirmation and cryptographic signature verification before trusting MCP servers.
+pattern: \b(?:(?:mcp|toolRegistry)\.(?:register|addServer|connect)\s*\(\s*(?:req\.|params\.|untrusted|remoteUrl|url|endpoint|serverConfig)|(?:registerMcpServer|addMcpServer|mcpClient\.connect)\s*\(\s*(?:url|endpoint|serverConfig|req\.|params\.|untrusted|remoteUrl))
+message: Model Context Protocol server registered without identity verification or authorization signature.
+remediation: Verify server host authorization and enforce cryptographic signature checks prior to registering external toolsets.
 why: Registering unvetted MCP servers exposes the agent host to rogue tool definitions and untrusted prompt injection.
 instruction: Never register external toolsets or MCP servers without authentication and user authorization.
 confidence: high
+tests:
+  positive:
+    - "mcp.register(req.body.url);"
+    - "registerMcpServer(serverConfig);"
+  negative:
+    - "verifySignatureAndRegisterMcp(trustedConfig);"

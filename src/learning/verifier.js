@@ -70,13 +70,15 @@ export function verifyRuleCandidate(doc, options = {}) {
     errors.push(`Invalid confidence '${doc.confidence}'`);
   }
 
-  const patternSafety = checkRegexSafety(doc.pattern, { strictStatic: true, maxProbeMs: 15 });
+  const strictStatic = options.strictStatic !== false;
+  const maxProbeMs = typeof options.maxProbeMs === "number" ? options.maxProbeMs : 15;
+  const patternSafety = checkRegexSafety(doc.pattern, { strictStatic, maxProbeMs });
   if (!patternSafety.safe) {
     errors.push(`Unsafe pattern: ${patternSafety.reason}`);
   }
 
   if (doc["not-match"]) {
-    const nmSafety = checkRegexSafety(doc["not-match"], { strictStatic: true, maxProbeMs: 15 });
+    const nmSafety = checkRegexSafety(doc["not-match"], { strictStatic, maxProbeMs });
     if (!nmSafety.safe) {
       errors.push(`Unsafe not-match: ${nmSafety.reason}`);
     }
@@ -86,8 +88,8 @@ export function verifyRuleCandidate(doc, options = {}) {
     return { ok: false, errors, warnings };
   }
 
-  const patternRe = new RegExp(doc.pattern);
-  const notMatchRe = doc["not-match"] ? new RegExp(doc["not-match"]) : null;
+  const patternRe = new RegExp(doc.pattern, doc.flags || "");
+  const notMatchRe = doc["not-match"] ? new RegExp(doc["not-match"], doc.flags || "") : null;
   const matchesRule = (line) => patternRe.test(line) && !(notMatchRe && notMatchRe.test(line));
 
   const requireTests = options.requireTests !== false;

@@ -5,7 +5,7 @@ severity: HIGH
 languages:
   - rb
 cwe: CWE-134
-pattern: (?:params\[[^\]]*\]|cookies\[[^\]]*\]|@?(?:[A-Za-z_]\w*)?(?:fmt|format|template|tmpl|pattern)\w*)\s*%\s*[\[\(]
+pattern: (?<![\w@])(?:params\[[^\]]*\]|cookies\[[^\]]*\]|@?(?:[A-Za-z_]\w*)?(?:fmt|format|template|tmpl|pattern)\w*)\s*%\s*[\[\(]
 message: Format string injection — user input used as the format/template string (CWE-134).
 remediation: Make the template a constant literal ("%s" % user) or sanitise/whitelist the template; never let user input be the left operand of %.
 not-match: ^\s*#

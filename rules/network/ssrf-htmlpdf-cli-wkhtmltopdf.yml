@@ -24,7 +24,7 @@ languages:
   - java
   - go
 cwe: CWE-918
-pattern: (?=.*(?:\bwkhtmltopdf\b|\bwkhtmltoimage\b|\bprince\b|\bweasyprint\b))(?=.*(?:\.pdf|\.png|\.jpe?g|-o\b|--output|https?:|file:|\.html?\b|\bwkhtmltopdf\s*\(|\bwkhtmltoimage\s*\())(?=.*(?:\$\{|#\{|\+\s*\w|\.\s*\$\w|,\s*[A-Za-z_]\w*\s*[,)\]]|\bf["']|[\[(]\s*[A-Za-z_$][\w.$]*\s*[,)\]])).*
+pattern: (?:^|\n)(?=[^\n]*(?:\bwkhtmltopdf\b|\bwkhtmltoimage\b|\bprince\b|\bweasyprint\b))(?=[^\n]*(?:\.pdf|\.png|\.jpe?g|-o\b|--output|https?:|file:|\.html?\b|\bwkhtmltopdf\s*\(|\bwkhtmltoimage\s*\())(?=[^\n]*(?:\$\{|#\{|\+\s*\w|\.\s*\$\w|,\s*[A-Za-z_]\w*\s*[,)\]]|\bf["']|[\[(]\s*[A-Za-z_$][\w.$]*\s*[,)\]]))[^\n]*
 message: Renderer resource embedding — a document/PDF/image converter resolves a user-controlled resource, enabling LFI or SSRF (CWE-918/73/611).
 remediation: Pass --disable-local-file-access (or enableLocalFileAccess:false in the node binding), render from a fixed template, and put a strict allowlist/network-egress guard in front of any remote fetch; never concatenate raw request input into the command line.
 not-match: (?:^\s*(?:\/\/|#|\*)|--disable-local-file-access|enableLocalFileAccess\s*[:=]?\s*false|\bconsole\.|\blog(?:ger)?\.|System\.(?:out|err)|\bprintln\b|\bprint\s*\(|fmt\.Print|\becho\s)

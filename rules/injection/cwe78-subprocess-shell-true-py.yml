@@ -13,3 +13,9 @@ remediation: 'Pass an argument list and drop shell=True: subprocess.run([''ping'
 not-match: ^\s*#|\b(?:subprocess\s*\.\s*)?(?:Popen|run|call|check_call|check_output)\s*\(\s*(?:'[^']*'|"[^"]*"|\[(?:\s*(?:'[^']*'|"[^"]*")\s*,?)*\s*\])\s*,[^)]*\bshell\s*=\s*True
 why: 'subprocess run/Popen/call/check_call/check_output with shell=True executes through /bin/sh, so shell metacharacters in a non-literal command (variable, f-string, or concatenation) are interpreted as shell syntax and injected commands run - e.g. subprocess.run(cmd, shell=True) or Popen(f"ping {host}", shell=True) lets host=''x;id'' run id. notMatch suppresses shell=False (sink already misses it) plus the safe twins where the first positional argument is a pure string literal or a list of only string literals; it still fires on concatenation because a comma (not ''+'') must follow the literal. The kwargs-order case is already safe here: after the first-arg literal and its comma, [^)]* consumes any other keyword arguments before shell=True, so reordering (e.g. shell=True, cwd=root) does not cause a false positive. app.run(debug=True,...) is not matched because the sink requires the token shell= specifically.'
 confidence: high
+tests:
+  positive:
+    - "subprocess.run(cmd, shell=True)"
+  negative:
+    - "subprocess.run(['ping', '-c', '1', host])"
+    - "subprocess.run(['ls', '-la'], cwd=root, shell=True)"

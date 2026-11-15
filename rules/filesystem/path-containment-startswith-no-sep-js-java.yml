@@ -13,7 +13,7 @@ languages:
   - cts
   - java
 cwe: CWE-22
-pattern: (?:\b(?:resolvedPath|resolved|realPath|realpath|absolutePath|absPath|absolute|fullPath|filePath|filepath|normalizedPath|normalized|canonicalPath|canonical|targetPath|safePath|finalPath|requestedPath|joinedPath)\.startsWith\s*\([^)]*\)|\.(?:getCanonicalPath|getAbsolutePath)\s*\(\s*\)\s*\.\s*startsWith\s*\([^)]*\)|[A-Za-z_$][\w$.]*\.startsWith\s*\(\s*(?:[A-Za-z_$]\w*(?:Dir|Root)\b|(?:base|root|cwd)\b|(?:BASE_DIR|ROOT_DIR|UPLOAD_DIR|PUBLIC_DIR|STATIC_DIR|DATA_DIR)\b)\s*\))
+pattern: (?:\b(?:resolvedPath|resolved|realPath|realpath|absolutePath|absPath|absolute|fullPath|filePath|filepath|normalizedPath|normalized|canonicalPath|canonical|targetPath|safePath|finalPath|requestedPath|joinedPath)\.startsWith\s*\([^)]*\)|\.(?:getCanonicalPath|getAbsolutePath)\s*\(\s*\)\s*\.\s*startsWith\s*\([^)]*\)|(?<![\w$])[A-Za-z_$][\w$.]*\.startsWith\s*\(\s*(?:[A-Za-z_$]\w*(?:Dir|Root)\b|(?:base|root|cwd)\b|(?:BASE_DIR|ROOT_DIR|UPLOAD_DIR|PUBLIC_DIR|STATIC_DIR|DATA_DIR)\b)\s*\))
 message: Path-containment bypass — a startsWith/indexOf prefix check with no trailing separator lets a sibling directory escape (CWE-22).
 remediation: 'Append the separator and allow equality: `resolved === base || resolved.startsWith(base + path.sep)` (Java: `canonical.equals(base) || canonical.startsWith(base + File.separator)`); or compare Path objects / test path.relative for a leading ''..''.'
 not-match: ^\s*(?:\/\/|\*|\/\*|#)|\+\s*(?:path\.sep|os\.sep|File\.separator|separator|['"][\/\\]['"])|path\.relative|[\/\\]['"]\s*\)|WithSep|WithSlash|new RegExp\(|message:\s*['"]|\bwhy:|\bfix:|\bsinkRegex\b|text:\s*new

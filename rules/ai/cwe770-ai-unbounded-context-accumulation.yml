@@ -11,9 +11,15 @@ languages:
   - mjs
   - cjs
 cwe: CWE-770
-pattern: \b(?:messages|history|conversation)\s*\.push\s*\(\s*\{[^}]*content\s*:[^}]*\}\s*\)
-message: Agent message history grows indefinitely without context window compaction or eviction strategy.
-remediation: Use sliding window context compaction or summarize previous conversation turns.
+pattern: \b(?:messages|history|conversation|chatContext)\s*\.push\s*\([^)]*\)(?![^\n]*(?:slice|shift|trim|truncate|maxTokens|maxHistory))
+message: LLM conversation context accumulates without token limits or sliding window truncation.
+remediation: Prune chat context using sliding window truncation or token counting before appending turns.
 why: Unbounded context accumulation leads to LLM context overflow errors and memory exhaustion.
 instruction: Maintain concise conversation context and avoid unbounded accumulation.
 confidence: low
+tests:
+  positive:
+    - "messages.push({ role: 'user', content: msg });"
+    - "chatContext.push(turn);"
+  negative:
+    - "messages.push({ role: 'user', content: msg }); if (messages.length > maxHistory) messages.shift();"

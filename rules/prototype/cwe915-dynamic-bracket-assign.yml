@@ -17,7 +17,7 @@ languages:
   - vue
   - svelte
 cwe: CWE-915
-pattern: '[A-Za-z_$][\w$]*\s*\[\s*[A-Za-z_$][\w$]*\s*\]\s*=(?!=)'
+pattern: '(?<![\w$])[A-Za-z_$][\w$]*\s*\[\s*[A-Za-z_$][\w$]*\s*\]\s*=(?!=)'
 message: Assigns to a property using a dynamic identifier key (obj[key] = ...), so a caller-controlled key can write arbitrary or prototype properties.
 remediation: Validate key against an allow-list or use a Map/Object.create(null), and reject __proto__/constructor/prototype before writing.
 not-match: \[\s*(?:i|j|k|n|idx)\s*\]

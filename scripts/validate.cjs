@@ -34,6 +34,10 @@ async function main() {
     const rel = path.relative(rootDir, file);
     try {
       const raw = fs.readFileSync(file, 'utf8');
+      if (/[\u200B-\u200D\uFEFF]/.test(raw)) {
+        console.error(`ERROR in ${rel}: Contains literal invisible Unicode character; use escaped \\u200B/\\u200C/\\u200D.`);
+        errorCount++;
+      }
       const doc = yaml.load(raw);
 
       if (!doc || typeof doc !== 'object') {
@@ -71,7 +75,15 @@ async function main() {
         console.error(`ERROR in ${rel}: Missing or invalid 'pattern' field.`);
         errorCount++;
       } else {
-        const res = checkRegexSafety(doc.pattern, { strictStatic: false, maxProbeMs: 25 });
+        if (/[\u200B-\u200D\uFEFF]/.test(doc.pattern)) {
+          console.error(`ERROR in ${rel}: pattern decodes to literal invisible Unicode character; single-quote '\\u200B' escapes.`);
+          errorCount++;
+        }
+        if (/^\(\?=[^)]*\.\*/.test(doc.pattern) || /\|\(\?=[^)]*\.\*/.test(doc.pattern)) {
+          console.error(`ERROR in ${rel}: pattern has unanchored .* lookahead (quadratic ReDoS risk).`);
+          errorCount++;
+        }
+        const res = checkRegexSafety(doc.pattern, { strictStatic: false, maxProbeMs: 8 });
         if (!res.safe) {
           console.error(`ERROR in ${rel}: pattern check failed: ${res.reason}`);
           errorCount++;
@@ -79,7 +91,7 @@ async function main() {
       }
 
       if (doc['not-match']) {
-        const nmRes = checkRegexSafety(doc['not-match'], { strictStatic: false, maxProbeMs: 25 });
+        const nmRes = checkRegexSafety(doc['not-match'], { strictStatic: false, maxProbeMs: 8 });
         if (!nmRes.safe) {
           console.error(`ERROR in ${rel}: not-match check failed: ${nmRes.reason}`);
           errorCount++;
@@ -87,7 +99,7 @@ async function main() {
       }
 
       if (doc.tests && typeof doc.tests === 'object') {
-        const check = verifyRuleCandidate(doc, { requireTests: false, maxFalsePositives: 999 });
+        const check = verifyRuleCandidate(doc, { strictStatic: false, maxProbeMs: 8, requireTests: false, maxFalsePositives: 999 });
         if (!check.ok) {
           for (const msg of check.errors) {
             console.error(`ERROR in ${rel}: ${msg}`);

@@ -225,15 +225,24 @@ export async function syncFromRemote(options = {}) {
 
   let checksums = new Map();
   if (verify) {
+    let sumsText;
     try {
-      const sumsText = await fetchText(checksumsUrl, { fetchImpl: options.fetchImpl, timeoutMs: options.timeoutMs });
-      checksums = parseSha256Sums(sumsText);
-    } catch {}
+      sumsText = await fetchText(checksumsUrl, { fetchImpl: options.fetchImpl, timeoutMs: options.timeoutMs });
+    } catch (err) {
+      throw new Error(`Failed to fetch SHA256SUMS (${checksumsUrl}): ${String(err?.message || err)}`);
+    }
+    checksums = parseSha256Sums(sumsText);
+    if (checksums.size === 0) {
+      throw new Error(`SHA256SUMS from ${checksumsUrl} contains no valid checksums`);
+    }
   }
 
   const rulesRaw = await fetchText(rulesUrl, { fetchImpl: options.fetchImpl, timeoutMs: options.timeoutMs });
   const expectedRulesHash = checksums.get("rules.json");
-  if (verify && expectedRulesHash) {
+  if (verify) {
+    if (!expectedRulesHash) {
+      throw new Error("SHA256SUMS is missing required checksum entry for rules.json");
+    }
     const actual = computeSha256(rulesRaw);
     if (actual !== expectedRulesHash) {
       throw new Error(`SHA-256 mismatch for rules.json (expected ${expectedRulesHash}, got ${actual})`);
@@ -245,14 +254,16 @@ export async function syncFromRemote(options = {}) {
   let osvCount = 0;
   let osvSynced = false;
   let osvSha256 = null;
+  const expectedOsvHash = checksums.get("osv-bundle.json");
   try {
     const osvRaw = await fetchText(osvUrl, { fetchImpl: options.fetchImpl, timeoutMs: options.timeoutMs });
-    const expectedOsvHash = checksums.get("osv-bundle.json");
     if (verify && expectedOsvHash) {
       const actualOsv = computeSha256(osvRaw);
       if (actualOsv !== expectedOsvHash) {
         throw new Error(`SHA-256 mismatch for osv-bundle.json (expected ${expectedOsvHash}, got ${actualOsv})`);
       }
+    } else if (verify && !expectedOsvHash) {
+      throw new Error("SHA256SUMS is missing checksum entry for osv-bundle.json");
     }
     const osvParsed = JSON.parse(osvRaw);
     osvCount = typeof osvParsed?.stats?.total === "number"
@@ -262,7 +273,10 @@ export async function syncFromRemote(options = {}) {
     osvSha256 = computeSha256(osvRaw);
     osvSynced = true;
   } catch (err) {
-    if (String(err?.message || "").includes("SHA-256 mismatch")) throw err;
+    const msg = String(err?.message || "");
+    if (msg.includes("SHA-256 mismatch") || msg.includes("SHA256SUMS") || (verify && expectedOsvHash)) {
+      throw err;
+    }
   }
 
   const rulesPath = path.join(cacheDir, "rules.json");
