@@ -1,18 +1,18 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-16T10:39:39.340Z",
+  "generatedAt": "2026-11-16T14:43:59.469Z",
   "sources": [
     "github-advisories",
     "cisa-kev",
     "first-epss"
   ],
   "stats": {
-    "total": 669,
+    "total": 672,
     "kevCount": 154,
     "highEpssCount": 96,
     "byEcosystem": {
       "npm": 251,
-      "pip": 54,
+      "pip": 57,
       "maven": 179,
       "go": 56,
       "cargo": 38,
@@ -3019,6 +3019,17 @@
   ],
   "pip": [
     {
+      "name": "ajenti.plugin.core",
+      "lt": "0.112",
+      "id": "CVE-2026-40177",
+      "ghsaId": "GHSA-3mcx-6wxm-qr8v",
+      "cve": "CVE-2026-40177",
+      "cwe": "CWE-287",
+      "sev": "critical",
+      "note": "ajenti.plugin.core has password bypass when 2FA is activated",
+      "epss": 0.0034
+    },
+    {
       "name": "brotli",
       "ge": "1.0.3",
       "lt": "1.2.1",
@@ -3046,6 +3057,7 @@
     },
     {
       "name": "compose-lint",
+      "ge": "0.31.0",
       "lt": "0.32.0",
       "id": "CVE-2026-125123",
       "ghsaId": "GHSA-8v59-qmwv-4p6q",
@@ -3053,8 +3065,7 @@
       "cwe": "CWE-117",
       "sev": "low",
       "note": "compose-lint: File paths embedded in pull requests can inject CI workflow commands through command-line error messages",
-      "epss": 0.004,
-      "ge": "0.31.0"
+      "epss": 0.004
     },
     {
       "name": "dcap-qvl",
@@ -3184,6 +3195,17 @@
       "note": "Langflow Unauth RCE",
       "kev": true,
       "epss": 0.9999
+    },
+    {
+      "name": "lightning",
+      "lt": "2.3.3",
+      "id": "CVE-2024-5980",
+      "ghsaId": "GHSA-mr7h-w2qc-ffc2",
+      "cve": "CVE-2024-5980",
+      "cwe": "CWE-22",
+      "sev": "critical",
+      "note": "pytorch-lightning vulnerable to Arbitrary File Write via /v1/runs API endpoint",
+      "epss": 0.0132
     },
     {
       "name": "litellm",
@@ -3499,6 +3521,17 @@
       "sev": "high",
       "note": "Pillow: Heap buffer overflow saving TIFF with libtiff when tags override image size",
       "epss": 0.0045
+    },
+    {
+      "name": "pytorch-lightning",
+      "lt": "2.3.3",
+      "id": "CVE-2024-5980",
+      "ghsaId": "GHSA-mr7h-w2qc-ffc2",
+      "cve": "CVE-2024-5980",
+      "cwe": "CWE-22",
+      "sev": "critical",
+      "note": "pytorch-lightning vulnerable to Arbitrary File Write via /v1/runs API endpoint",
+      "epss": 0.0132
     },
     {
       "name": "ray",
@@ -3905,6 +3938,7 @@
     },
     {
       "name": "org.apache.activemq:activemq-all",
+      "ge": "5.19.7",
       "lt": "5.19.8",
       "id": "CVE-2026-50750",
       "ghsaId": "GHSA-9qj4-v6r6-3wmx",
@@ -3912,11 +3946,11 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "Apache ActiveMQ Broker, Apache ActiveMQ, Apache ActiveMQ All have a Denial of Service via Out of Memory vulnerability",
-      "epss": 0.0069,
-      "ge": "5.19.7"
+      "epss": 0.0069
     },
     {
       "name": "org.apache.activemq:activemq-all",
+      "ge": "6.2.6",
       "lt": "6.2.7",
       "id": "CVE-2026-50750",
       "ghsaId": "GHSA-9qj4-v6r6-3wmx",
@@ -3924,8 +3958,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "Apache ActiveMQ Broker, Apache ActiveMQ, Apache ActiveMQ All have a Denial of Service via Out of Memory vulnerability",
-      "epss": 0.0069,
-      "ge": "6.2.6"
+      "epss": 0.0069
     },
     {
       "name": "org.apache.activemq:activemq-all",
@@ -4000,6 +4033,7 @@
     },
     {
       "name": "org.apache.activemq:activemq-broker",
+      "ge": "5.19.7",
       "lt": "5.19.8",
       "id": "CVE-2026-50750",
       "ghsaId": "GHSA-9qj4-v6r6-3wmx",
@@ -4007,11 +4041,11 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "Apache ActiveMQ Broker, Apache ActiveMQ, Apache ActiveMQ All have a Denial of Service via Out of Memory vulnerability",
-      "epss": 0.0069,
-      "ge": "5.19.7"
+      "epss": 0.0069
     },
     {
       "name": "org.apache.activemq:activemq-broker",
+      "ge": "6.2.6",
       "lt": "6.2.7",
       "id": "CVE-2026-50750",
       "ghsaId": "GHSA-9qj4-v6r6-3wmx",
@@ -4019,8 +4053,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "Apache ActiveMQ Broker, Apache ActiveMQ, Apache ActiveMQ All have a Denial of Service via Out of Memory vulnerability",
-      "epss": 0.0069,
-      "ge": "6.2.6"
+      "epss": 0.0069
     },
     {
       "name": "org.apache.activemq:activemq-broker",
@@ -4208,6 +4241,7 @@
     },
     {
       "name": "org.apache.activemq:apache-activemq",
+      "ge": "5.19.7",
       "lt": "5.19.8",
       "id": "CVE-2026-50750",
       "ghsaId": "GHSA-9qj4-v6r6-3wmx",
@@ -4215,11 +4249,11 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "Apache ActiveMQ Broker, Apache ActiveMQ, Apache ActiveMQ All have a Denial of Service via Out of Memory vulnerability",
-      "epss": 0.0069,
-      "ge": "5.19.7"
+      "epss": 0.0069
     },
     {
       "name": "org.apache.activemq:apache-activemq",
+      "ge": "6.2.6",
       "lt": "6.2.7",
       "id": "CVE-2026-50750",
       "ghsaId": "GHSA-9qj4-v6r6-3wmx",
@@ -4227,8 +4261,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "Apache ActiveMQ Broker, Apache ActiveMQ, Apache ActiveMQ All have a Denial of Service via Out of Memory vulnerability",
-      "epss": 0.0069,
-      "ge": "6.2.6"
+      "epss": 0.0069
     },
     {
       "name": "org.apache.activemq:apache-activemq",
@@ -6524,6 +6557,7 @@
     },
     {
       "name": "russh",
+      "ge": "0.65.0",
       "lt": "0.65.1",
       "id": "CVE-2026-128088",
       "ghsaId": "GHSA-736f-c93q-9fwx",
@@ -6531,8 +6565,7 @@
       "cwe": "CWE-367",
       "sev": "low",
       "note": "russh try_sign: asynchronous confirmation can sign after agent lock",
-      "epss": 0.0011,
-      "ge": "0.65.0"
+      "epss": 0.0011
     },
     {
       "name": "russh",
@@ -7823,6 +7856,7 @@
     },
     {
       "name": "loofah",
+      "ge": "2.25.2",
       "lt": "2.25.3",
       "id": "CVE-2026-126206",
       "ghsaId": "GHSA-jcff-cj73-4w4f",
@@ -7830,8 +7864,7 @@
       "cwe": "CWE-79",
       "sev": "medium",
       "note": "Loofah allowed_uri? treats data:text&sol;html as safe text/plain",
-      "epss": 0.0042,
-      "ge": "2.25.2"
+      "epss": 0.0042
     },
     {
       "name": "loofah",

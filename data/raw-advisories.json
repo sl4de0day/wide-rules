@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-16T10:39:39.340Z",
-  "count": 292,
+  "generatedAt": "2026-11-16T14:43:59.469Z",
+  "count": 294,
   "advisories": [
     {
       "id": "CVE-2025-3248",
@@ -4172,6 +4172,59 @@
       ],
       "kev": false,
       "epss": 0.0167
+    },
+    {
+      "id": "CVE-2024-5980",
+      "ghsaId": "GHSA-mr7h-w2qc-ffc2",
+      "cve": "CVE-2024-5980",
+      "cwe": "CWE-22",
+      "sev": "critical",
+      "summary": "pytorch-lightning vulnerable to Arbitrary File Write via /v1/runs API endpoint",
+      "description": "A vulnerability in the /v1/runs API endpoint of lightning-ai/pytorch-lightning v2.2.4 allows attackers to exploit path traversal when extracting tar.gz files. When the LightningApp is running with the plugin_server, attackers can deploy malicious tar.gz plugins that embed arbitrary files with path traversal vulnerabilities. This can result in arbitrary files being written to any directory in the victim's local file system, potentially leading to remote code execution.",
+      "publishedAt": "2024-06-27T21:32:08Z",
+      "updatedAt": "2026-11-16T14:43:15Z",
+      "url": "https://github.com/advisories/GHSA-mr7h-w2qc-ffc2",
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-5980",
+        "https://huntr.com/bounties/55a6ac6f-89c7-42ea-86f3-c6e93a2679f3",
+        "https://github.com/Lightning-AI/pytorch-lightning/pull/20039",
+        "https://github.com/Lightning-AI/pytorch-lightning/releases/tag/2.3.3",
+        "https://github.com/lightning-ai/pytorch-lightning/commit/330af381de88cff17515418a341cbc1f9f127f9a",
+        "https://github.com/pypa/advisory-database/tree/main/vulns/lightning/PYSEC-2026-386.yaml",
+        "https://github.com/pypa/advisory-database/tree/main/vulns/pytorch-lightning/PYSEC-2026-3975.yaml",
+        "https://pypi.org/project/lightning",
+        "https://github.com/advisories/GHSA-mr7h-w2qc-ffc2"
+      ],
+      "patchUrls": [
+        "https://github.com/Lightning-AI/pytorch-lightning/pull/20039",
+        "https://github.com/lightning-ai/pytorch-lightning/commit/330af381de88cff17515418a341cbc1f9f127f9a"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "lightning",
+          "lt": "2.3.3",
+          "id": "CVE-2024-5980",
+          "ghsaId": "GHSA-mr7h-w2qc-ffc2",
+          "cve": "CVE-2024-5980",
+          "cwe": "CWE-22",
+          "sev": "critical",
+          "note": "pytorch-lightning vulnerable to Arbitrary File Write via /v1/runs API endpoint"
+        },
+        {
+          "ecosystem": "pip",
+          "name": "pytorch-lightning",
+          "lt": "2.3.3",
+          "id": "CVE-2024-5980",
+          "ghsaId": "GHSA-mr7h-w2qc-ffc2",
+          "cve": "CVE-2024-5980",
+          "cwe": "CWE-22",
+          "sev": "critical",
+          "note": "pytorch-lightning vulnerable to Arbitrary File Write via /v1/runs API endpoint"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0132
     },
     {
       "id": "CVE-2026-24781",
@@ -15264,6 +15317,41 @@
       ],
       "kev": false,
       "epss": 0.0035
+    },
+    {
+      "id": "CVE-2026-40177",
+      "ghsaId": "GHSA-3mcx-6wxm-qr8v",
+      "cve": "CVE-2026-40177",
+      "cwe": "CWE-287",
+      "sev": "critical",
+      "summary": "ajenti.plugin.core has password bypass when 2FA is activated",
+      "description": "### Impact\n\nIf the 2FA was activated, it was possible to bypass the password authentication\n\n### Patches\n\nThis is fixed in the version 0.112. Users should upgrade to this version as soon as possible.",
+      "publishedAt": "2026-04-10T19:47:31Z",
+      "updatedAt": "2026-11-16T14:41:48Z",
+      "url": "https://github.com/advisories/GHSA-3mcx-6wxm-qr8v",
+      "references": [
+        "https://github.com/ajenti/ajenti/security/advisories/GHSA-3mcx-6wxm-qr8v",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-40177",
+        "https://github.com/pypa/advisory-database/tree/main/vulns/ajenti-plugin-core/PYSEC-2026-266.yaml",
+        "https://pypi.org/project/ajenti-plugin-core",
+        "https://github.com/advisories/GHSA-3mcx-6wxm-qr8v"
+      ],
+      "patchUrls": [],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "ajenti.plugin.core",
+          "lt": "0.112",
+          "id": "CVE-2026-40177",
+          "ghsaId": "GHSA-3mcx-6wxm-qr8v",
+          "cve": "CVE-2026-40177",
+          "cwe": "CWE-287",
+          "sev": "critical",
+          "note": "ajenti.plugin.core has password bypass when 2FA is activated"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0034
     },
     {
       "id": "CVE-2026-35442",
