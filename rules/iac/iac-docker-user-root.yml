@@ -1,0 +1,18 @@
+id: wide/iac-docker-user-root
+name: iac-docker-user-root
+category: AUTH
+severity: MEDIUM
+languages:
+  - yaml
+  - yml
+cwe: CWE-250
+pattern: '^\s*USER\s+(?:root|0)\s*$'
+message: Container configuration explicitly sets the runtime user to root.
+remediation: Drop privileges before container startup using a non-root USER (for example USER 10001:10001).
+confidence: high
+tests:
+  positive:
+    - "USER root"
+    - "USER 0"
+  negative:
+    - "USER 10001"

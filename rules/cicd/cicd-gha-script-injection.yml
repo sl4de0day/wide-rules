@@ -1,0 +1,19 @@
+id: wide/cicd-gha-script-injection
+name: cicd-gha-script-injection
+category: INJECTION
+severity: HIGH
+languages:
+  - yaml
+  - yml
+cwe: CWE-94
+pattern: '\$\{\{\s*github\.event\.(?:issue|pull_request|comment|review|discussion)\.(?:title|body)|github\.head_ref\s*\}\}'
+not-match: 'env:\s*$'
+message: Untrusted GitHub event expression interpolated directly into workflow shell execution.
+remediation: Bind untrusted github.event fields to intermediate env variables and quote "$VAR" inside run scripts instead of inline ${{ ... }} interpolation.
+confidence: high
+tests:
+  positive:
+    - "run: echo \"Title: ${{ github.event.issue.title }}\""
+    - "run: git checkout ${{ github.head_ref }}"
+  negative:
+    - "run: echo \"SHA: ${{ github.sha }}\""

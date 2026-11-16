@@ -1,0 +1,20 @@
+id: wide/logic-race-non-atomic-balance
+name: logic-race-non-atomic-balance
+category: LOGIC
+severity: HIGH
+languages:
+  - js
+  - ts
+  - py
+cwe: CWE-362
+pattern: '\b(?:account|user|wallet|inventory)\.(?:balance|credits|stock)\s*[-+]?=\s*(?:req\.body|amount|qty)\b'
+not-match: 'transaction|mutex|lock|atomic|FOR\s+UPDATE'
+message: Non-atomic read-modify-write update on balance, credits, or inventory risks race-condition double spending.
+remediation: Perform balance or inventory deductions inside a database transaction with conditional atomic updates (UPDATE ... SET balance = balance - $1 WHERE id = $2 AND balance >= $1).
+confidence: high
+tests:
+  positive:
+    - "wallet.balance -= req.body.amount;"
+    - "account.credits -= amount"
+  negative:
+    - "db.transaction(() => walletRepo.atomicDebit(userId, amount));"

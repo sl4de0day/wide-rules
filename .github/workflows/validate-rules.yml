@@ -29,3 +29,8 @@ jobs:
 
       - name: Run Test Suite
         run: npm test
+
+      - name: Run ReDoS and Accuracy Benchmarks
+        run: |
+          npm run bench
+          npm run bench:accuracy

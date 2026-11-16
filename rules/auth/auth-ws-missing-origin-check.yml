@@ -1,0 +1,20 @@
+id: wide/auth-ws-missing-origin-check
+name: auth-ws-missing-origin-check
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - ts
+  - go
+cwe: CWE-1385
+pattern: '(?:CheckOrigin\s*:\s*func\s*\([^)\r\n]{0,60}\)\s*(?:bool\s*)?\{\s*return\s+true|verifyClient\s*:\s*\(\s*[^)\r\n]{0,40}\)\s*=>\s*true)'
+not-match: 'allowedOrigin|expectedOrigin'
+message: WebSocket upgrade handler unconditionally accepts every Origin header, enabling Cross-Site WebSocket Hijacking (CSWSH).
+remediation: Validate the WebSocket handshake Origin header against an explicit allowlist of trusted application origins.
+confidence: high
+tests:
+  positive:
+    - "var upgrader = websocket.Upgrader{ CheckOrigin: func(r *http.Request) bool { return true } }"
+    - "new WebSocketServer({ verifyClient: () => true })"
+  negative:
+    - "var upgrader = websocket.Upgrader{ CheckOrigin: func(r *http.Request) bool { return r.Header.Get('Origin') == allowedOrigin } }"

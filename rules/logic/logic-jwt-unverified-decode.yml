@@ -1,0 +1,23 @@
+id: wide/logic-jwt-unverified-decode
+name: logic-jwt-unverified-decode
+category: AUTH
+severity: CRITICAL
+languages:
+  - js
+  - ts
+  - py
+  - go
+  - java
+  - php
+cwe: CWE-347
+pattern: '(?:\bjwt\.decode\s*\(|["'']?verify_signature["'']?\s*[:=]\s*False\b|\balgorithms\s*[:=]\s*\[[^\]\r\n]{0,40}["'']none["''])'
+not-match: 'jwt\.verify\(|verify_signature["'']?\s*[:=]\s*True'
+message: JWT decoded or configured without cryptographic signature verification (alg=none or unverified decode).
+remediation: Always use jwt.verify / verify_signature=True with an explicit asymmetric or HMAC algorithm allowlist excluding 'none'.
+confidence: high
+tests:
+  positive:
+    - "const claims = jwt.decode(token);"
+    - "jwt.decode(tok, options={'verify_signature': False})"
+  negative:
+    - "const claims = jwt.verify(token, secret, { algorithms: ['HS256'] });"

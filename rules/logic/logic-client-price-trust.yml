@@ -1,0 +1,21 @@
+id: wide/logic-client-price-trust
+name: logic-client-price-trust
+category: LOGIC
+severity: CRITICAL
+languages:
+  - js
+  - ts
+  - py
+  - php
+cwe: CWE-840
+pattern: '\b(?:price|total|amount|discount|unitPrice|role|isAdmin|permissions)\s*:\s*req\.body\.(?:price|total|amount|discount|unitPrice|role|isAdmin|permissions)\b'
+not-match: '^\s*(?://|#|\*)'
+message: Client-controlled price, discount, total, or privilege field is trusted directly from request payload.
+remediation: Recompute pricing and discounts server-side from authoritative catalog records and never accept client-supplied roles or privilege flags.
+confidence: high
+tests:
+  positive:
+    - "await orders.create({ itemId: req.body.itemId, price: req.body.price });"
+    - "const payload = { role: req.body.role };"
+  negative:
+    - "await orders.create({ itemId: item.id, price: catalogItem.price });"

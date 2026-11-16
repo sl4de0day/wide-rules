@@ -1,0 +1,19 @@
+id: wide/iac-k8s-privileged-container
+name: iac-k8s-privileged-container
+category: AUTH
+severity: CRITICAL
+languages:
+  - yaml
+  - yml
+cwe: CWE-250
+pattern: '\b(?:privileged|allowPrivilegeEscalation|hostNetwork|hostPID|hostIPC):\s*true\b'
+not-match: '^\s*#'
+message: Container or Kubernetes pod enables privileged execution or host namespace sharing.
+remediation: "Set privileged: false, allowPrivilegeEscalation: false, and avoid hostNetwork/hostPID/hostIPC sharing."
+confidence: high
+tests:
+  positive:
+    - "privileged: true"
+    - "allowPrivilegeEscalation: true"
+  negative:
+    - "allowPrivilegeEscalation: false"

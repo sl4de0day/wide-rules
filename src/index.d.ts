@@ -115,3 +115,36 @@ export function learnRulesFromAdvisories(options?: Record<string, unknown>): Pro
   learned: Array<{ id: string; ruleId: string; filePath: string }>;
   rejected: Array<{ id: string; reason: string }>;
 }>;
+export function buildLogicalSpans(lines: string[], maxSpanLines?: number): Array<{ startLine: number; endLine: number; text: string }>;
+export function analyzeFileTaint(content: string, lang: string, filePath?: string, options?: { seedTainted?: string[] }): Array<{
+  id: string;
+  ruleId: string;
+  cwe: string;
+  category: string;
+  severity: string;
+  file: string;
+  line: number;
+  endLine: number;
+  snippet: string;
+  message: string;
+  remediation: string;
+  source: string;
+  crossFile?: boolean;
+}>;
+export function analyzeProjectFlows(files: Array<{ file: string; lang: string; content: string }>): Array<{
+  id: string;
+  ruleId: string;
+  cwe: string;
+  category: string;
+  severity: string;
+  file: string;
+  line: number;
+  endLine: number;
+  snippet: string;
+  message: string;
+  remediation: string;
+  source: string;
+  crossFile?: boolean;
+}>;
+export function shannonEntropy(value: string): number;
+export function isLikelyRealSecret(lineText: string, filePath?: string): boolean;

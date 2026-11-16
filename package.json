@@ -18,6 +18,10 @@
     "./decision": {
       "types": "./src/decision/index.d.ts",
       "default": "./src/decision/index.js"
+    },
+    "./analysis": {
+      "types": "./src/index.d.ts",
+      "default": "./src/analysis/taint.js"
     }
   },
   "scripts": {
@@ -28,7 +32,8 @@
     "sync:remote": "node src/cli.js sync --remote",
     "learn:rules": "node src/cli.js learn",
     "test": "node scripts/test-decision.cjs && node scripts/test-rules.cjs",
-    "bench": "node scripts/bench.cjs"
+    "bench": "node scripts/bench.cjs",
+    "bench:accuracy": "node scripts/bench-accuracy.cjs"
   },
   "repository": {
     "type": "git",

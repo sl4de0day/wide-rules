@@ -31,7 +31,9 @@ export function collectCleanCorpus(dirs = []) {
     ".java": "java",
     ".php": "php",
     ".yml": "yaml",
-    ".yaml": "yaml"
+    ".yaml": "yaml",
+    ".tf": "tf",
+    ".tfvars": "tf"
   };
 
   for (const dir of dirs) {

@@ -12,7 +12,12 @@ export function copyPlainFields(target, payload) {
   for (const key of Object.keys(payload || {})) {
     if (key === '__proto__' || key === 'constructor' || key === 'prototype') continue;
     if (Object.hasOwn(payload, key)) {
-      safeTarget[key] = payload[key];
+      Object.defineProperty(safeTarget, key, {
+        value: payload[key],
+        enumerable: true,
+        writable: true,
+        configurable: true
+      });
     }
   }
   return Object.assign(target, safeTarget);

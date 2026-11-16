@@ -528,6 +528,33 @@ async function main() {
   });
   assert.equal(skippedJsonSynth.skipped, true);
 
+  const multilineVuln = [
+    'const userId = req.query.id;',
+    'const safeId = parseInt(req.query.page, 10);',
+    'pool.query(',
+    '  "SELECT * FROM orders WHERE user = " +',
+    '  userId',
+    ');',
+    'pool.query("SELECT * FROM orders WHERE page = $1", [safeId]);'
+  ].join('\n');
+  const taintHits = mod.analyzeFileTaint(multilineVuln, 'js', 'orders.js');
+  assert.equal(taintHits.length, 1);
+  assert.equal(taintHits[0].cwe, 'CWE-89');
+  assert.equal(taintHits[0].line, 3);
+
+  const crossFlows = mod.analyzeProjectFlows([
+    { file: 'sink.js', lang: 'js', content: 'export function runCmd(arg) { return exec("cat " + arg); }' },
+    { file: 'routes.js', lang: 'js', content: 'const target = req.body.target;\nrunCmd(String(target));' }
+  ]);
+  const crossHit = crossFlows.find((f) => f.crossFile === true);
+  assert.ok(crossHit, 'Cross-file taint flow must detect source passing into helper sink');
+  assert.equal(crossHit.cwe, 'CWE-78');
+  assert.equal(crossHit.file, 'routes.js');
+
+  assert.equal(mod.isLikelyRealSecret('const apiKey = "EXAMPLE_YOUR_API_KEY_HERE";', 'app.js'), false);
+  assert.equal(mod.isLikelyRealSecret('const apiKey = "aaaaaaaaaaaaaaaaaaaa";', 'app.js'), false);
+  assert.equal(mod.isLikelyRealSecret('const gh = "ghp_9xK2mP7qR4tV8wZ1aB3cD5eF6gH8jL0nM2q";', 'app.js'), true);
+
   console.log('All rule engine and dynamic learning tests passed successfully.');
 }
 

@@ -1,0 +1,18 @@
+id: wide/cicd-gha-pull-request-target-checkout
+name: cicd-gha-pull-request-target-checkout
+category: INJECTION
+severity: CRITICAL
+languages:
+  - yaml
+  - yml
+cwe: CWE-94
+pattern: 'ref:\s*\$\{\{\s*github\.event\.pull_request\.head\.(?:sha|ref)'
+message: Checking out untrusted pull request head code inside a workflow can grant write-token RCE.
+remediation: Do not checkout github.event.pull_request.head in pull_request_target workflows; use pull_request with read-only permissions or fetch only immutable artifacts.
+confidence: high
+tests:
+  positive:
+    - "ref: ${{ github.event.pull_request.head.sha }}"
+    - "ref: ${{ github.event.pull_request.head.ref }}"
+  negative:
+    - "ref: ${{ github.event.pull_request.base.sha }}"

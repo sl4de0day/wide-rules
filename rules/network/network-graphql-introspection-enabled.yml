@@ -1,0 +1,19 @@
+id: wide/network-graphql-introspection-enabled
+name: network-graphql-introspection-enabled
+category: NETWORK
+severity: MEDIUM
+languages:
+  - js
+  - ts
+  - py
+cwe: CWE-200
+pattern: '\bintrospection\s*:\s*true\b'
+not-match: 'NODE_ENV|development|isDev|test'
+message: GraphQL schema introspection is unconditionally enabled, exposing all queries, mutations, and internal types.
+remediation: "Disable GraphQL introspection in production (introspection: process.env.NODE_ENV !== 'production') and enforce query depth/complexity limits."
+confidence: high
+tests:
+  positive:
+    - "const server = new ApolloServer({ typeDefs, resolvers, introspection: true });"
+  negative:
+    - "const server = new ApolloServer({ typeDefs, resolvers, introspection: process.env.NODE_ENV === 'development' });"

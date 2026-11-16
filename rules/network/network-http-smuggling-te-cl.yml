@@ -1,0 +1,22 @@
+id: wide/network-http-smuggling-te-cl
+name: network-http-smuggling-te-cl
+category: NETWORK
+severity: HIGH
+languages:
+  - js
+  - ts
+  - py
+  - go
+  - java
+cwe: CWE-444
+pattern: '(?:insecureHTTPParser\s*:\s*true|["'']Transfer-Encoding["''][^\r\n]{0,80}["'']Content-Length["''])'
+not-match: '^\s*(?://|#)'
+message: Lenient HTTP parser or conflicting Transfer-Encoding and Content-Length headers risk HTTP request smuggling.
+remediation: Reject requests containing both Transfer-Encoding and Content-Length and disable insecureHTTPParser in Node.js HTTP servers/clients.
+confidence: high
+tests:
+  positive:
+    - "http.createServer({ insecureHTTPParser: true }, handler);"
+    - 'const hdr = { "Transfer-Encoding": "chunked", "Content-Length": "42" };'
+  negative:
+    - "http.createServer({ insecureHTTPParser: false }, handler);"

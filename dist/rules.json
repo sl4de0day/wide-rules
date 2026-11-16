@@ -1,25 +1,25 @@
 {
   "version": "0.4151126",
-  "generatedAt": "2026-11-16T10:00:59.987Z",
-  "totalRules": 729,
+  "generatedAt": "2026-11-16T10:59:57.071Z",
+  "totalRules": 747,
   "categories": {
     "AI_SECURITY": 13,
-    "AUTH": 106,
+    "AUTH": 114,
+    "INJECTION": 183,
+    "GENERAL": 77,
     "CRYPTO": 26,
     "DESERIALIZATION": 51,
     "FILESYSTEM": 47,
-    "GENERAL": 75,
-    "INJECTION": 181,
-    "LOGIC": 2,
-    "NETWORK": 93,
+    "NETWORK": 96,
+    "LOGIC": 5,
     "PROTOTYPE": 31,
     "SECRETS": 76,
     "XSS": 28
   },
   "severities": {
-    "HIGH": 457,
-    "MEDIUM": 150,
-    "CRITICAL": 87,
+    "HIGH": 467,
+    "MEDIUM": 154,
+    "CRITICAL": 91,
     "LOW": 35
   },
   "rules": [
@@ -396,6 +396,81 @@
       "confidence": "medium"
     },
     {
+      "id": "wide/auth-express-admin-no-middleware",
+      "name": "auth-express-admin-no-middleware",
+      "category": "AUTH",
+      "severity": "HIGH",
+      "languages": [
+        "js",
+        "ts"
+      ],
+      "cwe": "CWE-862",
+      "pattern": "\\b(?:app|router)\\.(?:post|put|patch|delete)\\s*\\(\\s*[\"'][^\"'\\r\\n]{0,60}(?:admin|internal|roles)[^\"'\\r\\n]{0,40}[\"']\\s*,\\s*(?:async\\s*)?\\(\\s*req\\b",
+      "not-match": "requireAuth|requireAdmin|authenticate|authorize|isAdmin|passport\\.",
+      "message": "Administrative or internal Express mutation route declared without preceding authorization middleware.",
+      "remediation": "Enforce authentication and role-based authorization middleware before attaching sensitive route handlers.",
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "app.delete('/api/admin/users/:id', async (req, res) => removeUser(req.params.id));",
+          "router.post('/internal/roles', (req, res) => assignRole(req));"
+        ],
+        "negative": [
+          "app.delete('/api/admin/users/:id', requireAdmin, async (req, res) => removeUser(req.params.id));"
+        ]
+      }
+    },
+    {
+      "id": "wide/auth-fastapi-admin-no-depends",
+      "name": "auth-fastapi-admin-no-depends",
+      "category": "AUTH",
+      "severity": "HIGH",
+      "languages": [
+        "py"
+      ],
+      "cwe": "CWE-862",
+      "pattern": "@(?:app|router)\\.(?:post|put|patch|delete)\\(\\s*[\"'][^\"'\\r\\n]{0,60}(?:admin|internal|roles)[^\"'\\r\\n]{0,40}[\"']\\s*\\)",
+      "not-match": "dependencies=",
+      "message": "FastAPI administrative route decorator declares no dependencies=[Depends(...)] authorization guard.",
+      "remediation": "Attach dependencies=[Depends(require_admin)] on the decorator or inject an authenticated admin dependency inside the endpoint signature.",
+      "confidence": "medium",
+      "tests": {
+        "positive": [
+          "@router.delete(\"/admin/users\")",
+          "@app.post(\"/internal/promote\")"
+        ],
+        "negative": [
+          "@router.delete(\"/admin/users\", dependencies=[Depends(require_admin)])"
+        ]
+      }
+    },
+    {
+      "id": "wide/auth-ws-missing-origin-check",
+      "name": "auth-ws-missing-origin-check",
+      "category": "AUTH",
+      "severity": "HIGH",
+      "languages": [
+        "js",
+        "ts",
+        "go"
+      ],
+      "cwe": "CWE-1385",
+      "pattern": "(?:CheckOrigin\\s*:\\s*func\\s*\\([^)\\r\\n]{0,60}\\)\\s*(?:bool\\s*)?\\{\\s*return\\s+true|verifyClient\\s*:\\s*\\(\\s*[^)\\r\\n]{0,40}\\)\\s*=>\\s*true)",
+      "not-match": "allowedOrigin|expectedOrigin",
+      "message": "WebSocket upgrade handler unconditionally accepts every Origin header, enabling Cross-Site WebSocket Hijacking (CSWSH).",
+      "remediation": "Validate the WebSocket handshake Origin header against an explicit allowlist of trusted application origins.",
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "var upgrader = websocket.Upgrader{ CheckOrigin: func(r *http.Request) bool { return true } }",
+          "new WebSocketServer({ verifyClient: () => true })"
+        ],
+        "negative": [
+          "var upgrader = websocket.Upgrader{ CheckOrigin: func(r *http.Request) bool { return r.Header.Get('Origin') == allowedOrigin } }"
+        ]
+      }
+    },
+    {
       "id": "wide/blob-worker-code",
       "name": "blob-worker-code",
       "category": "INJECTION",
@@ -448,6 +523,104 @@
       "remediation": "Do not send secrets over a BroadcastChannel; use a targeted postMessage with an explicit origin.",
       "why": "Any tab, iframe, or extension on the origin can listen on the same channel name, so tokens or session data broadcast over it are exposed to all of them.",
       "confidence": "high"
+    },
+    {
+      "id": "wide/cicd-gha-pull-request-target-checkout",
+      "name": "cicd-gha-pull-request-target-checkout",
+      "category": "INJECTION",
+      "severity": "CRITICAL",
+      "languages": [
+        "yaml",
+        "yml"
+      ],
+      "cwe": "CWE-94",
+      "pattern": "ref:\\s*\\$\\{\\{\\s*github\\.event\\.pull_request\\.head\\.(?:sha|ref)",
+      "message": "Checking out untrusted pull request head code inside a workflow can grant write-token RCE.",
+      "remediation": "Do not checkout github.event.pull_request.head in pull_request_target workflows; use pull_request with read-only permissions or fetch only immutable artifacts.",
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "ref: ${{ github.event.pull_request.head.sha }}",
+          "ref: ${{ github.event.pull_request.head.ref }}"
+        ],
+        "negative": [
+          "ref: ${{ github.event.pull_request.base.sha }}"
+        ]
+      }
+    },
+    {
+      "id": "wide/cicd-gha-script-injection",
+      "name": "cicd-gha-script-injection",
+      "category": "INJECTION",
+      "severity": "HIGH",
+      "languages": [
+        "yaml",
+        "yml"
+      ],
+      "cwe": "CWE-94",
+      "pattern": "\\$\\{\\{\\s*github\\.event\\.(?:issue|pull_request|comment|review|discussion)\\.(?:title|body)|github\\.head_ref\\s*\\}\\}",
+      "not-match": "env:\\s*$",
+      "message": "Untrusted GitHub event expression interpolated directly into workflow shell execution.",
+      "remediation": "Bind untrusted github.event fields to intermediate env variables and quote \"$VAR\" inside run scripts instead of inline ${{ ... }} interpolation.",
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "run: echo \"Title: ${{ github.event.issue.title }}\"",
+          "run: git checkout ${{ github.head_ref }}"
+        ],
+        "negative": [
+          "run: echo \"SHA: ${{ github.sha }}\""
+        ]
+      }
+    },
+    {
+      "id": "wide/cicd-gha-unpinned-action",
+      "name": "cicd-gha-unpinned-action",
+      "category": "GENERAL",
+      "severity": "MEDIUM",
+      "languages": [
+        "yaml",
+        "yml"
+      ],
+      "cwe": "CWE-829",
+      "pattern": "uses:\\s+(?!actions/|github/|\\./|docker://)[a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+@(?:main|master|v\\d+)",
+      "not-match": "@[0-9a-f]{40}",
+      "message": "Third-party GitHub Action is referenced by mutable tag or branch instead of a full commit SHA.",
+      "remediation": "Pin third-party actions to a full 40-character immutable commit SHA (for example uses: owner/action@<40-hex-sha>).",
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "uses: thirdparty/custom-scanner@v2",
+          "uses: example-org/setup-tool@main"
+        ],
+        "negative": [
+          "uses: actions/checkout@v4",
+          "uses: thirdparty/custom-scanner@0123456789abcdef0123456789abcdef01234567"
+        ]
+      }
+    },
+    {
+      "id": "wide/cicd-gha-write-all-permissions",
+      "name": "cicd-gha-write-all-permissions",
+      "category": "AUTH",
+      "severity": "HIGH",
+      "languages": [
+        "yaml",
+        "yml"
+      ],
+      "cwe": "CWE-250",
+      "pattern": "permissions:\\s*write-all\\b",
+      "message": "GitHub Actions workflow grants unrestricted write-all token permissions.",
+      "remediation": "Apply least privilege by declaring explicit read-only permissions (permissions: contents: read) and scoping write permissions per job.",
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "permissions: write-all"
+        ],
+        "negative": [
+          "permissions: read-all"
+        ]
+      }
     },
     {
       "id": "wide/client-authz-http-status-as-auth",
@@ -656,7 +829,7 @@
       "pattern": "\\bcrypto\\.createHmac\\s*\\(",
       "message": "Client-side token signing or embedded signing key — a secret/decision shipped to the browser is attacker-forgeable.",
       "remediation": "Compute HMAC signatures on the server and return the result, or verify inbound HMACs server-side. Keep the HMAC key in server-only environment config. If the client needs an unkeyed digest, use crypto.createHash (no secret) instead.",
-      "not-match": "^\\s*(?:\\/\\/|\\*|\\/\\*|<!--)",
+      "not-match": "^\\s*(?:\\/\\/|\\*|\\/\\*|<!--)|timingSafeEqual|verifyWebhook|node:crypto",
       "why": "crypto.createHmac(alg, secret) keys an HMAC with a shared secret to build a signature/token. In a client-language file that secret is embedded in the bundle, so any attacker can recompute valid HMAC tokens/signatures and forge authenticated requests. Keyed MACs are only meaningful when the key stays server-side.",
       "confidence": "high"
     },
@@ -6896,6 +7069,137 @@
       "confidence": "high"
     },
     {
+      "id": "wide/iac-docker-curl-pipe-shell",
+      "name": "iac-docker-curl-pipe-shell",
+      "category": "GENERAL",
+      "severity": "HIGH",
+      "languages": [
+        "yaml",
+        "yml",
+        "sh"
+      ],
+      "cwe": "CWE-829",
+      "pattern": "\\b(?:curl|wget)\\b[^\\r\\n|]{1,120}\\|\\s*(?:sh|bash)\\b",
+      "not-match": "--check|sha256sum",
+      "message": "Remote script piped directly into a shell interpreter without checksum verification.",
+      "remediation": "Download the artifact, verify its SHA-256 digest against a pinned checksum, and then execute it.",
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "RUN curl -fsSL https://example.com/install.sh | bash",
+          "wget -qO- https://get.example.org/script.sh | sh"
+        ],
+        "negative": [
+          "RUN curl -fsSL https://example.com/tool.tgz -o tool.tgz && sha256sum -c tool.sha256"
+        ]
+      }
+    },
+    {
+      "id": "wide/iac-docker-user-root",
+      "name": "iac-docker-user-root",
+      "category": "AUTH",
+      "severity": "MEDIUM",
+      "languages": [
+        "yaml",
+        "yml"
+      ],
+      "cwe": "CWE-250",
+      "pattern": "^\\s*USER\\s+(?:root|0)\\s*$",
+      "message": "Container configuration explicitly sets the runtime user to root.",
+      "remediation": "Drop privileges before container startup using a non-root USER (for example USER 10001:10001).",
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "USER root",
+          "USER 0"
+        ],
+        "negative": [
+          "USER 10001"
+        ]
+      }
+    },
+    {
+      "id": "wide/iac-iam-wildcard-admin",
+      "name": "iac-iam-wildcard-admin",
+      "category": "AUTH",
+      "severity": "HIGH",
+      "languages": [
+        "tf",
+        "hcl",
+        "json",
+        "yaml",
+        "yml"
+      ],
+      "cwe": "CWE-732",
+      "pattern": "\"(?:Action|actions)\"\\s*[:=]\\s*(?:\"\\*\"|\\[\\s*\"\\*\"\\s*\\])",
+      "not-match": "Condition",
+      "message": "IAM policy grants wildcard Action permissions (*).",
+      "remediation": "Scope IAM policies to the exact least-privilege actions and specific resource ARNs required.",
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "\"Action\": \"*\"",
+          "\"actions\": [\"*\"]"
+        ],
+        "negative": [
+          "\"Action\": [\"s3:GetObject\"]"
+        ]
+      }
+    },
+    {
+      "id": "wide/iac-k8s-privileged-container",
+      "name": "iac-k8s-privileged-container",
+      "category": "AUTH",
+      "severity": "CRITICAL",
+      "languages": [
+        "yaml",
+        "yml"
+      ],
+      "cwe": "CWE-250",
+      "pattern": "\\b(?:privileged|allowPrivilegeEscalation|hostNetwork|hostPID|hostIPC):\\s*true\\b",
+      "not-match": "^\\s*#",
+      "message": "Container or Kubernetes pod enables privileged execution or host namespace sharing.",
+      "remediation": "Set privileged: false, allowPrivilegeEscalation: false, and avoid hostNetwork/hostPID/hostIPC sharing.",
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "privileged: true",
+          "allowPrivilegeEscalation: true"
+        ],
+        "negative": [
+          "allowPrivilegeEscalation: false"
+        ]
+      }
+    },
+    {
+      "id": "wide/iac-terraform-public-ingress",
+      "name": "iac-terraform-public-ingress",
+      "category": "NETWORK",
+      "severity": "HIGH",
+      "languages": [
+        "tf",
+        "hcl",
+        "yaml",
+        "yml"
+      ],
+      "cwe": "CWE-284",
+      "pattern": "(?:cidr_blocks\\s*=\\s*\\[\\s*\"0\\.0\\.0\\.0/0\"\\s*\\]|acl\\s*=\\s*\"public-read(?:-write)?\")",
+      "not-match": "from_port\\s*=\\s*(?:80|443)\\b",
+      "message": "Infrastructure configuration exposes resources or ingress rules to public access (0.0.0.0/0 or public-read ACL).",
+      "remediation": "Restrict security group ingress CIDRs to trusted internal or VPN ranges and keep storage buckets private.",
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "cidr_blocks = [\"0.0.0.0/0\"]",
+          "acl = \"public-read\""
+        ],
+        "negative": [
+          "cidr_blocks = [\"10.0.0.0/8\"]",
+          "acl = \"private\""
+        ]
+      }
+    },
+    {
       "id": "wide/identity-from-raw-request-value-csharp",
       "name": "identity-from-raw-request-value-csharp",
       "category": "AUTH",
@@ -7901,7 +8205,7 @@
       "pattern": "[\"'`]http:\\/\\/(?!localhost|127\\.0\\.0\\.1|0\\.0\\.0\\.0|\\[::1\\])",
       "message": "This address is plain http.",
       "remediation": "Use https:// for anything that leaves the machine (loopback is exempt).",
-      "not-match": "w3\\.org|xmlns|schemas?\\.|purl\\.org|\\.dtd|namespace|xml\\.apache|ns\\.adobe|openxmlformats",
+      "not-match": "w3\\.org|xmlns|schemas?\\.|purl\\.org|\\.dtd|namespace|xml\\.apache|apache\\.org/xml|xml\\.org/sax|ns\\.adobe|openxmlformats",
       "why": "The request and its answer travel in the clear and can be read or rewritten in transit.",
       "confidence": "high"
     },
@@ -8699,6 +9003,113 @@
       "confidence": "low"
     },
     {
+      "id": "wide/logic-client-price-trust",
+      "name": "logic-client-price-trust",
+      "category": "LOGIC",
+      "severity": "CRITICAL",
+      "languages": [
+        "js",
+        "ts",
+        "py",
+        "php"
+      ],
+      "cwe": "CWE-840",
+      "pattern": "\\b(?:price|total|amount|discount|unitPrice|role|isAdmin|permissions)\\s*:\\s*req\\.body\\.(?:price|total|amount|discount|unitPrice|role|isAdmin|permissions)\\b",
+      "not-match": "^\\s*(?://|#|\\*)",
+      "message": "Client-controlled price, discount, total, or privilege field is trusted directly from request payload.",
+      "remediation": "Recompute pricing and discounts server-side from authoritative catalog records and never accept client-supplied roles or privilege flags.",
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "await orders.create({ itemId: req.body.itemId, price: req.body.price });",
+          "const payload = { role: req.body.role };"
+        ],
+        "negative": [
+          "await orders.create({ itemId: item.id, price: catalogItem.price });"
+        ]
+      }
+    },
+    {
+      "id": "wide/logic-jwt-unverified-decode",
+      "name": "logic-jwt-unverified-decode",
+      "category": "AUTH",
+      "severity": "CRITICAL",
+      "languages": [
+        "js",
+        "ts",
+        "py",
+        "go",
+        "java",
+        "php"
+      ],
+      "cwe": "CWE-347",
+      "pattern": "(?:\\bjwt\\.decode\\s*\\(|[\"']?verify_signature[\"']?\\s*[:=]\\s*False\\b|\\balgorithms\\s*[:=]\\s*\\[[^\\]\\r\\n]{0,40}[\"']none[\"'])",
+      "not-match": "jwt\\.verify\\(|verify_signature[\"']?\\s*[:=]\\s*True",
+      "message": "JWT decoded or configured without cryptographic signature verification (alg=none or unverified decode).",
+      "remediation": "Always use jwt.verify / verify_signature=True with an explicit asymmetric or HMAC algorithm allowlist excluding 'none'.",
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "const claims = jwt.decode(token);",
+          "jwt.decode(tok, options={'verify_signature': False})"
+        ],
+        "negative": [
+          "const claims = jwt.verify(token, secret, { algorithms: ['HS256'] });"
+        ]
+      }
+    },
+    {
+      "id": "wide/logic-race-non-atomic-balance",
+      "name": "logic-race-non-atomic-balance",
+      "category": "LOGIC",
+      "severity": "HIGH",
+      "languages": [
+        "js",
+        "ts",
+        "py"
+      ],
+      "cwe": "CWE-362",
+      "pattern": "\\b(?:account|user|wallet|inventory)\\.(?:balance|credits|stock)\\s*[-+]?=\\s*(?:req\\.body|amount|qty)\\b",
+      "not-match": "transaction|mutex|lock|atomic|FOR\\s+UPDATE",
+      "message": "Non-atomic read-modify-write update on balance, credits, or inventory risks race-condition double spending.",
+      "remediation": "Perform balance or inventory deductions inside a database transaction with conditional atomic updates (UPDATE ... SET balance = balance - $1 WHERE id = $2 AND balance >= $1).",
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "wallet.balance -= req.body.amount;",
+          "account.credits -= amount"
+        ],
+        "negative": [
+          "db.transaction(() => walletRepo.atomicDebit(userId, amount));"
+        ]
+      }
+    },
+    {
+      "id": "wide/logic-webhook-missing-timestamp",
+      "name": "logic-webhook-missing-timestamp",
+      "category": "LOGIC",
+      "severity": "MEDIUM",
+      "languages": [
+        "js",
+        "ts",
+        "py"
+      ],
+      "cwe": "CWE-294",
+      "pattern": "req\\.headers\\[['\"]x-(?:stripe|github|webhook)-signature['\"]\\]",
+      "not-match": "timestamp|tolerance|constructEvent|replay|t=",
+      "message": "Webhook signature read without visible timestamp or replay-window validation.",
+      "remediation": "Enforce timestamp tolerance checks alongside HMAC signature verification (or use provider SDK constructEvent helpers) to block webhook replay attacks.",
+      "confidence": "medium",
+      "tests": {
+        "positive": [
+          "const sig = req.headers['x-webhook-signature'];"
+        ],
+        "negative": [
+          "const sig = req.headers['x-webhook-signature']; verifyWithTimestamp(sig, req.headers['x-webhook-timestamp'], tolerance);"
+        ]
+      }
+    },
+    {
       "id": "wide/loose-equality-secret",
       "name": "loose-equality-secret",
       "category": "SECRETS",
@@ -9223,6 +9634,59 @@
       "not-match": "^\\s*#|\\b(?:log|logger|metric|audit|throttle|rack_attack)\\b|rate[_-]?limit|\\b(?:jwt|verify_token|authenticate|current_user|logged_in|devise|csrf)\\b|session\\[|\\?\\s*['\"]",
       "why": "Rails request.remote_ip / request.ip compared to a loopback or private-range literal makes authorization depend on network location. remote_ip is computed from X-Forwarded-For / Client-IP headers, which are client-settable, so an attacker can forge a trusted value and reach the privileged action.",
       "confidence": "high"
+    },
+    {
+      "id": "wide/network-graphql-introspection-enabled",
+      "name": "network-graphql-introspection-enabled",
+      "category": "NETWORK",
+      "severity": "MEDIUM",
+      "languages": [
+        "js",
+        "ts",
+        "py"
+      ],
+      "cwe": "CWE-200",
+      "pattern": "\\bintrospection\\s*:\\s*true\\b",
+      "not-match": "NODE_ENV|development|isDev|test",
+      "message": "GraphQL schema introspection is unconditionally enabled, exposing all queries, mutations, and internal types.",
+      "remediation": "Disable GraphQL introspection in production (introspection: process.env.NODE_ENV !== 'production') and enforce query depth/complexity limits.",
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "const server = new ApolloServer({ typeDefs, resolvers, introspection: true });"
+        ],
+        "negative": [
+          "const server = new ApolloServer({ typeDefs, resolvers, introspection: process.env.NODE_ENV === 'development' });"
+        ]
+      }
+    },
+    {
+      "id": "wide/network-http-smuggling-te-cl",
+      "name": "network-http-smuggling-te-cl",
+      "category": "NETWORK",
+      "severity": "HIGH",
+      "languages": [
+        "js",
+        "ts",
+        "py",
+        "go",
+        "java"
+      ],
+      "cwe": "CWE-444",
+      "pattern": "(?:insecureHTTPParser\\s*:\\s*true|[\"']Transfer-Encoding[\"'][^\\r\\n]{0,80}[\"']Content-Length[\"'])",
+      "not-match": "^\\s*(?://|#)",
+      "message": "Lenient HTTP parser or conflicting Transfer-Encoding and Content-Length headers risk HTTP request smuggling.",
+      "remediation": "Reject requests containing both Transfer-Encoding and Content-Length and disable insecureHTTPParser in Node.js HTTP servers/clients.",
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "http.createServer({ insecureHTTPParser: true }, handler);",
+          "const hdr = { \"Transfer-Encoding\": \"chunked\", \"Content-Length\": \"42\" };"
+        ],
+        "negative": [
+          "http.createServer({ insecureHTTPParser: false }, handler);"
+        ]
+      }
     },
     {
       "id": "wide/new-function",
@@ -9866,7 +10330,7 @@
       "pattern": "(?:\\b(?:resolvedPath|resolved|realPath|realpath|absolutePath|absPath|absolute|fullPath|filePath|filepath|normalizedPath|normalized|canonicalPath|canonical|targetPath|safePath|finalPath|requestedPath|joinedPath)\\.startsWith\\s*\\([^)]*\\)|\\.(?:getCanonicalPath|getAbsolutePath)\\s*\\(\\s*\\)\\s*\\.\\s*startsWith\\s*\\([^)]*\\)|(?<![\\w$.])[A-Za-z_$][\\w$.]*\\.startsWith\\s*\\(\\s*(?:[A-Za-z_$]\\w*(?:Dir|Root)\\b|(?:base|root|cwd)\\b|(?:BASE_DIR|ROOT_DIR|UPLOAD_DIR|PUBLIC_DIR|STATIC_DIR|DATA_DIR)\\b)\\s*\\))",
       "message": "Path-containment bypass — a startsWith/indexOf prefix check with no trailing separator lets a sibling directory escape (CWE-22).",
       "remediation": "Append the separator and allow equality: `resolved === base || resolved.startsWith(base + path.sep)` (Java: `canonical.equals(base) || canonical.startsWith(base + File.separator)`); or compare Path objects / test path.relative for a leading '..'.",
-      "not-match": "^\\s*(?:\\/\\/|\\*|\\/\\*|#)|\\+\\s*(?:path\\.sep|os\\.sep|File\\.separator|separator|['\"][\\/\\\\]['\"])|path\\.relative|[\\/\\\\]['\"]\\s*\\)|WithSep|WithSlash|new RegExp\\(|message:\\s*['\"]|\\bwhy:|\\bfix:|\\bsinkRegex\\b|text:\\s*new",
+      "not-match": "^\\s*(?:\\/\\/|\\*|\\/\\*|#)|\\+\\s*(?:path\\.sep|os\\.sep|File\\.separator|separator|['\"][\\/\\\\]['\"])|path\\.relative|\\.normalize\\s*\\(|[\\/\\\\]['\"]\\s*\\)|WithSep|WithSlash|new RegExp\\(|message:\\s*['\"]|\\bwhy:|\\bfix:|\\bsinkRegex\\b|text:\\s*new",
       "why": "A canonicalized/resolved path is confined with `resolved.startsWith(base)` (or Java `file.getCanonicalPath().startsWith(base)`) without a trailing separator, so /var/www/uploads_backup satisfies a check for /var/www/uploads (CWE-22). Tightened: the third (generic-receiver) branch dropped its string-literal alternative so it no longer matches `req.path.startsWith('/api')` / `resolvedUrl.startsWith('/api')` routing code — literals remain caught via the resolved-path-receiver and getCanonicalPath()/getAbsolutePath() branches. notMatch clears base+path.sep / File.separator / '/', a trailing-slash literal, path.relative, a baseWithSep var, and comments.",
       "confidence": "high",
       "tests": {
@@ -10957,7 +11421,7 @@
       "pattern": "\\b(\\w+)\\[\\s*([A-Za-z_$][\\w$]*)\\s*\\]\\s*=\\s*\\w+\\[\\s*\\2\\s*\\]",
       "message": "This copies keys into an object without guarding __proto__.",
       "remediation": "Skip the keys __proto__, constructor and prototype, or merge into an Object.create(null) target.",
-      "not-match": "\\[\\s*(i|j|k|n|m|idx|index|row|col|x|y)\\s*\\]|__proto__|hasOwnProperty|Object\\.freeze",
+      "not-match": "\\[\\s*(i|j|k|n|m|idx|index|row|col|x|y)\\s*\\]|__proto__|hasOwnProperty|Object\\.hasOwn|Object\\.freeze",
       "why": "A recursive merge that assigns target[key] = source[key] will, if the input carries a \"__proto__\" key, write onto Object.prototype — polluting every object in the program.",
       "confidence": "high",
       "tests": {

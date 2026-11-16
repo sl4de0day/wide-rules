@@ -1,0 +1,19 @@
+id: wide/logic-webhook-missing-timestamp
+name: logic-webhook-missing-timestamp
+category: LOGIC
+severity: MEDIUM
+languages:
+  - js
+  - ts
+  - py
+cwe: CWE-294
+pattern: 'req\.headers\[[''"]x-(?:stripe|github|webhook)-signature[''"]\]'
+not-match: 'timestamp|tolerance|constructEvent|replay|t='
+message: Webhook signature read without visible timestamp or replay-window validation.
+remediation: Enforce timestamp tolerance checks alongside HMAC signature verification (or use provider SDK constructEvent helpers) to block webhook replay attacks.
+confidence: medium
+tests:
+  positive:
+    - "const sig = req.headers['x-webhook-signature'];"
+  negative:
+    - "const sig = req.headers['x-webhook-signature']; verifyWithTimestamp(sig, req.headers['x-webhook-timestamp'], tolerance);"

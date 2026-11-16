@@ -1,0 +1,20 @@
+id: wide/iac-docker-curl-pipe-shell
+name: iac-docker-curl-pipe-shell
+category: GENERAL
+severity: HIGH
+languages:
+  - yaml
+  - yml
+  - sh
+cwe: CWE-829
+pattern: '\b(?:curl|wget)\b[^\r\n|]{1,120}\|\s*(?:sh|bash)\b'
+not-match: '--check|sha256sum'
+message: Remote script piped directly into a shell interpreter without checksum verification.
+remediation: Download the artifact, verify its SHA-256 digest against a pinned checksum, and then execute it.
+confidence: high
+tests:
+  positive:
+    - "RUN curl -fsSL https://example.com/install.sh | bash"
+    - "wget -qO- https://get.example.org/script.sh | sh"
+  negative:
+    - "RUN curl -fsSL https://example.com/tool.tgz -o tool.tgz && sha256sum -c tool.sha256"

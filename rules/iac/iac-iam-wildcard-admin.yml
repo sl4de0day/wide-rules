@@ -1,0 +1,22 @@
+id: wide/iac-iam-wildcard-admin
+name: iac-iam-wildcard-admin
+category: AUTH
+severity: HIGH
+languages:
+  - tf
+  - hcl
+  - json
+  - yaml
+  - yml
+cwe: CWE-732
+pattern: '"(?:Action|actions)"\s*[:=]\s*(?:"\*"|\[\s*"\*"\s*\])'
+not-match: 'Condition'
+message: IAM policy grants wildcard Action permissions (*).
+remediation: Scope IAM policies to the exact least-privilege actions and specific resource ARNs required.
+confidence: high
+tests:
+  positive:
+    - '"Action": "*"'
+    - '"actions": ["*"]'
+  negative:
+    - '"Action": ["s3:GetObject"]'

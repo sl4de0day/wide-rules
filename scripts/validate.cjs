@@ -81,7 +81,8 @@ function validateAgainstSchema(doc, schema) {
 
 async function main() {
   const { checkRegexSafety } = await import(pathToFileURL(path.join(rootDir, 'src', 'learning', 'redos.js')).href);
-  const { verifyRuleCandidate } = await import(pathToFileURL(path.join(rootDir, 'src', 'learning', 'verifier.js')).href);
+  const { collectCleanCorpus, verifyRuleCandidate } = await import(pathToFileURL(path.join(rootDir, 'src', 'learning', 'verifier.js')).href);
+  const cleanCorpus = collectCleanCorpus([path.join(rootDir, 'tests', 'corpus', 'clean')]);
 
   const schema = JSON.parse(fs.readFileSync(schemaPath, 'utf8'));
   const yamlFiles = getAllYamlFiles(rulesDir);
@@ -89,6 +90,7 @@ async function main() {
 
   const ids = new Set();
   let errorCount = 0;
+  let testedRuleCount = 0;
 
   for (const file of yamlFiles) {
     const rel = path.relative(rootDir, file);
@@ -152,7 +154,8 @@ async function main() {
       }
 
       if (doc.tests && typeof doc.tests === 'object') {
-        const check = verifyRuleCandidate(doc, { strictStatic: true, maxProbeMs: 8, requireTests: false, maxFalsePositives: 0 });
+        testedRuleCount++;
+        const check = verifyRuleCandidate(doc, { strictStatic: true, maxProbeMs: 8, requireTests: false, corpus: cleanCorpus, maxFalsePositives: 0 });
         if (!check.ok) {
           for (const msg of check.errors) {
             console.error(`ERROR in ${rel}: ${msg}`);
@@ -170,7 +173,7 @@ async function main() {
     console.error(`Validation failed with ${errorCount} error(s).`);
     process.exit(1);
   } else {
-    console.log(`Validation SUCCESS: ${yamlFiles.length} rules are 100% valid!`);
+    console.log(`Validation SUCCESS: ${yamlFiles.length} rules are 100% valid (${testedRuleCount} with verified inline tests).`);
   }
 }
 

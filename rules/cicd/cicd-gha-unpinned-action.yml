@@ -1,0 +1,20 @@
+id: wide/cicd-gha-unpinned-action
+name: cicd-gha-unpinned-action
+category: GENERAL
+severity: MEDIUM
+languages:
+  - yaml
+  - yml
+cwe: CWE-829
+pattern: 'uses:\s+(?!actions/|github/|\./|docker://)[a-zA-Z0-9_.-]+/[a-zA-Z0-9_.-]+@(?:main|master|v\d+)'
+not-match: '@[0-9a-f]{40}'
+message: Third-party GitHub Action is referenced by mutable tag or branch instead of a full commit SHA.
+remediation: "Pin third-party actions to a full 40-character immutable commit SHA (for example uses: owner/action@<40-hex-sha>)."
+confidence: high
+tests:
+  positive:
+    - "uses: thirdparty/custom-scanner@v2"
+    - "uses: example-org/setup-tool@main"
+  negative:
+    - "uses: actions/checkout@v4"
+    - "uses: thirdparty/custom-scanner@0123456789abcdef0123456789abcdef01234567"

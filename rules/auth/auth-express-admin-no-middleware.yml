@@ -1,0 +1,19 @@
+id: wide/auth-express-admin-no-middleware
+name: auth-express-admin-no-middleware
+category: AUTH
+severity: HIGH
+languages:
+  - js
+  - ts
+cwe: CWE-862
+pattern: '\b(?:app|router)\.(?:post|put|patch|delete)\s*\(\s*["''][^"''\r\n]{0,60}(?:admin|internal|roles)[^"''\r\n]{0,40}["'']\s*,\s*(?:async\s*)?\(\s*req\b'
+not-match: 'requireAuth|requireAdmin|authenticate|authorize|isAdmin|passport\.'
+message: Administrative or internal Express mutation route declared without preceding authorization middleware.
+remediation: Enforce authentication and role-based authorization middleware before attaching sensitive route handlers.
+confidence: high
+tests:
+  positive:
+    - "app.delete('/api/admin/users/:id', async (req, res) => removeUser(req.params.id));"
+    - "router.post('/internal/roles', (req, res) => assignRole(req));"
+  negative:
+    - "app.delete('/api/admin/users/:id', requireAdmin, async (req, res) => removeUser(req.params.id));"

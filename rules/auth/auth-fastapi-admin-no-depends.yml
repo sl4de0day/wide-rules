@@ -1,0 +1,18 @@
+id: wide/auth-fastapi-admin-no-depends
+name: auth-fastapi-admin-no-depends
+category: AUTH
+severity: HIGH
+languages:
+  - py
+cwe: CWE-862
+pattern: '@(?:app|router)\.(?:post|put|patch|delete)\(\s*["''][^"''\r\n]{0,60}(?:admin|internal|roles)[^"''\r\n]{0,40}["'']\s*\)'
+not-match: 'dependencies='
+message: FastAPI administrative route decorator declares no dependencies=[Depends(...)] authorization guard.
+remediation: Attach dependencies=[Depends(require_admin)] on the decorator or inject an authenticated admin dependency inside the endpoint signature.
+confidence: medium
+tests:
+  positive:
+    - '@router.delete("/admin/users")'
+    - '@app.post("/internal/promote")'
+  negative:
+    - '@router.delete("/admin/users", dependencies=[Depends(require_admin)])'

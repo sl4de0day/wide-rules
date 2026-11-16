@@ -1,0 +1,17 @@
+id: wide/cicd-gha-write-all-permissions
+name: cicd-gha-write-all-permissions
+category: AUTH
+severity: HIGH
+languages:
+  - yaml
+  - yml
+cwe: CWE-250
+pattern: 'permissions:\s*write-all\b'
+message: GitHub Actions workflow grants unrestricted write-all token permissions.
+remediation: "Apply least privilege by declaring explicit read-only permissions (permissions: contents: read) and scoping write permissions per job."
+confidence: high
+tests:
+  positive:
+    - "permissions: write-all"
+  negative:
+    - "permissions: read-all"

@@ -1,0 +1,22 @@
+id: wide/iac-terraform-public-ingress
+name: iac-terraform-public-ingress
+category: NETWORK
+severity: HIGH
+languages:
+  - tf
+  - hcl
+  - yaml
+  - yml
+cwe: CWE-284
+pattern: '(?:cidr_blocks\s*=\s*\[\s*"0\.0\.0\.0/0"\s*\]|acl\s*=\s*"public-read(?:-write)?")'
+not-match: 'from_port\s*=\s*(?:80|443)\b'
+message: Infrastructure configuration exposes resources or ingress rules to public access (0.0.0.0/0 or public-read ACL).
+remediation: Restrict security group ingress CIDRs to trusted internal or VPN ranges and keep storage buckets private.
+confidence: high
+tests:
+  positive:
+    - 'cidr_blocks = ["0.0.0.0/0"]'
+    - 'acl = "public-read"'
+  negative:
+    - 'cidr_blocks = ["10.0.0.0/8"]'
+    - 'acl = "private"'

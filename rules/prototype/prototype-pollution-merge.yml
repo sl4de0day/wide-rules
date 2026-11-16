@@ -20,7 +20,7 @@ cwe: CWE-1321
 pattern: \b(\w+)\[\s*([A-Za-z_$][\w$]*)\s*\]\s*=\s*\w+\[\s*\2\s*\]
 message: This copies keys into an object without guarding __proto__.
 remediation: Skip the keys __proto__, constructor and prototype, or merge into an Object.create(null) target.
-not-match: \[\s*(i|j|k|n|m|idx|index|row|col|x|y)\s*\]|__proto__|hasOwnProperty|Object\.freeze
+not-match: \[\s*(i|j|k|n|m|idx|index|row|col|x|y)\s*\]|__proto__|hasOwnProperty|Object\.hasOwn|Object\.freeze
 why: A recursive merge that assigns target[key] = source[key] will, if the input carries a "__proto__" key, write onto Object.prototype — polluting every object in the program.
 confidence: high
 tests:

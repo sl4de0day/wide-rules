@@ -8,6 +8,7 @@ export * from "./updater/sync.js";
 export * from "./learning/redos.js";
 export * from "./learning/verifier.js";
 export * from "./learning/synthesizer.js";
+export * from "./analysis/taint.js";
 
 const currentDir = path.dirname(fileURLToPath(import.meta.url));
 const rulesJsonPath = path.resolve(currentDir, "../dist/rules.json");
