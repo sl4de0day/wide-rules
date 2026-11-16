@@ -42,7 +42,8 @@ export interface RulesBundle {
 export interface AdvisoryEntry {
   name: string;
   ge?: string;
-  lt: string;
+  lt?: string;
+  le?: string;
   id: string;
   ghsaId?: string;
   cve?: string;
@@ -98,6 +99,11 @@ export function syncAdvisoriesFromInternet(options?: Record<string, unknown>): P
   sources: string[];
 }>;
 export function loadAdvisories(options?: Record<string, unknown>): AdvisoriesBundle;
+export function pruneAdvisoryDb(dbInput: AdvisoriesBundle, options?: { maxPerEcosystem?: number; maxTotal?: number }): {
+  db: AdvisoriesBundle;
+  prunedCount: number;
+  archived: Array<AdvisoryEntry & { ecosystem: string }>;
+};
 export function queryOsvBatch(queries: Array<{ package: { ecosystem: string; name: string }; version: string }>, options?: Record<string, unknown>): Promise<Array<{ query: unknown; vulns: Array<{ id: string; modified?: string }> }>>;
 export function checkRegexSafety(patternStr: string, options?: { strictStatic?: boolean; maxProbeMs?: number }): { safe: boolean; reason?: string; elapsedMs?: number };
 export function verifyRuleCandidate(doc: unknown, options?: Record<string, unknown>): { ok: boolean; errors: string[]; warnings: string[]; falsePositives?: number };

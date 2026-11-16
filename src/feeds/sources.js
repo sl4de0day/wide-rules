@@ -121,6 +121,7 @@ function parseVersionRangeBounds(rawRange) {
   const parts = rawRange.split(",").map((s) => s.trim()).filter(Boolean);
   let ge;
   let lt;
+  let le;
 
   for (const part of parts) {
     if (part.startsWith(">=")) {
@@ -128,12 +129,18 @@ function parseVersionRangeBounds(rawRange) {
     } else if (part.startsWith(">")) {
       ge = part.slice(1).trim();
     } else if (part.startsWith("<=")) {
-      lt = part.slice(2).trim();
+      le = part.slice(2).trim();
     } else if (part.startsWith("<")) {
       lt = part.slice(1).trim();
+    } else if (part.startsWith("=")) {
+      const exact = part.slice(1).trim();
+      if (exact) {
+        ge = exact;
+        le = exact;
+      }
     }
   }
-  return { ge, lt };
+  return { ge, lt, le };
 }
 
 export function normalizeGhsaAdvisory(raw) {
@@ -165,13 +172,19 @@ export function normalizeGhsaAdvisory(raw) {
     const name = v?.package?.name;
     if (!eco || !name) continue;
     const range = parseVersionRangeBounds(v.vulnerable_version_range);
-    const fixed = v.first_patched_version || range.lt;
-    if (!fixed) continue;
+    const rawFixed = v.first_patched_version;
+    const fixedFromObj = rawFixed && typeof rawFixed === "object"
+      ? rawFixed.identifier
+      : rawFixed;
+    const fixed = fixedFromObj ? String(fixedFromObj).trim() : (range.lt || undefined);
+    const le = !fixed && range.le ? String(range.le).trim() : undefined;
+    if (!fixed && !le) continue;
     packages.push({
       ecosystem: eco,
       name: String(name),
-      ge: range.ge || undefined,
-      lt: String(fixed),
+      ...(range.ge ? { ge: String(range.ge) } : {}),
+      ...(fixed ? { lt: fixed } : {}),
+      ...(le ? { le } : {}),
       id,
       ghsaId: ghsaId || undefined,
       cve: cveId || undefined,
@@ -344,6 +357,103 @@ export async function fetchOsvVuln(vulnId, options = {}) {
     fetchImpl: options.fetchImpl,
     timeoutMs: options.timeoutMs
   });
+}
+
+export function normalizeOsvAdvisory(raw) {
+  if (!raw || typeof raw !== "object") return null;
+  const aliases = Array.isArray(raw.aliases) ? raw.aliases.map((a) => String(a)) : [];
+  const rawId = typeof raw.id === "string" ? raw.id : null;
+  const cveId = [rawId, ...aliases].find((s) => /^CVE-\d{4}-\d+$/i.test(String(s || "")))?.toUpperCase() || null;
+  const ghsaId = [rawId, ...aliases].find((s) => /^GHSA-[a-z0-9-]+$/i.test(String(s || ""))) || null;
+  const id = cveId || ghsaId || rawId;
+  if (!id) return null;
+
+  const refs = Array.isArray(raw.references)
+    ? raw.references.map((r) => (typeof r === "string" ? r : r?.url)).filter((u) => typeof u === "string")
+    : [];
+  const patchUrls = refs.filter((u) => PATCH_URL_RE.test(u));
+
+  const dbSpec = raw.database_specific && typeof raw.database_specific === "object" ? raw.database_specific : {};
+  const cweIds = Array.isArray(dbSpec.cwe_ids) ? dbSpec.cwe_ids.filter(Boolean) : [];
+  const cwe = cweIds[0] || "CWE-1395";
+  const sevRaw = String(dbSpec.severity || "high").toLowerCase();
+  const sev = ["critical", "high", "medium", "low"].includes(sevRaw) ? sevRaw : "high";
+  const note = String(raw.summary || raw.details || "listed in OSV advisory database")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, 220);
+
+  const packages = [];
+  for (const aff of Array.isArray(raw.affected) ? raw.affected : []) {
+    const eco = normalizeEcosystem(aff?.package?.ecosystem);
+    const name = aff?.package?.name;
+    if (!eco || !name) continue;
+    for (const range of Array.isArray(aff.ranges) ? aff.ranges : []) {
+      let currentGe;
+      for (const ev of Array.isArray(range?.events) ? range.events : []) {
+        if (ev?.introduced) {
+          currentGe = ev.introduced === "0" ? undefined : String(ev.introduced);
+        } else if (ev?.fixed) {
+          packages.push({
+            ecosystem: eco,
+            name: String(name),
+            ...(currentGe ? { ge: currentGe } : {}),
+            lt: String(ev.fixed),
+            id,
+            ...(ghsaId ? { ghsaId } : {}),
+            ...(cveId ? { cve: cveId } : {}),
+            cwe,
+            sev,
+            note
+          });
+          currentGe = undefined;
+        } else if (ev?.last_affected) {
+          packages.push({
+            ecosystem: eco,
+            name: String(name),
+            ...(currentGe ? { ge: currentGe } : {}),
+            le: String(ev.last_affected),
+            id,
+            ...(ghsaId ? { ghsaId } : {}),
+            ...(cveId ? { cve: cveId } : {}),
+            cwe,
+            sev,
+            note
+          });
+          currentGe = undefined;
+        }
+      }
+    }
+  }
+
+  return {
+    id,
+    ghsaId,
+    cve: cveId,
+    cwe,
+    sev,
+    summary: note,
+    description: String(raw.details || "").slice(0, 2500),
+    publishedAt: raw.published || null,
+    updatedAt: raw.modified || null,
+    url: refs[0] || null,
+    references: refs.slice(0, 12),
+    patchUrls: patchUrls.slice(0, 6),
+    packages
+  };
+}
+
+export async function fetchOsvAdvisoryByCve(cveId, options = {}) {
+  const cleanCve = String(cveId || "").trim().toUpperCase();
+  if (!/^CVE-\d{4}-\d+$/.test(cleanCve)) return null;
+  try {
+    const raw = await fetchOsvVuln(cleanCve, options);
+    const norm = normalizeOsvAdvisory(raw);
+    if (!norm || !Array.isArray(norm.packages) || norm.packages.length === 0) return null;
+    return norm;
+  } catch {
+    return null;
+  }
 }
 
 export async function queryOsvBatch(queries, options = {}) {

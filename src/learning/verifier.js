@@ -21,7 +21,18 @@ export const DEFAULT_CLEAN_CORPUS = [
 
 export function collectCleanCorpus(dirs = []) {
   const samples = [...DEFAULT_CLEAN_CORPUS];
-  const extToLang = { ".js": "js", ".mjs": "js", ".cjs": "js", ".ts": "ts", ".py": "py" };
+  const extToLang = {
+    ".js": "js",
+    ".mjs": "js",
+    ".cjs": "js",
+    ".ts": "ts",
+    ".py": "py",
+    ".go": "go",
+    ".java": "java",
+    ".php": "php",
+    ".yml": "yaml",
+    ".yaml": "yaml"
+  };
 
   for (const dir of dirs) {
     if (!dir || !fs.existsSync(dir)) continue;

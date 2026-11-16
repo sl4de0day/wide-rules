@@ -33,6 +33,7 @@ function printHelp() {
     "Commands:",
     "  sync --remote              Download verified rules.json and osv-bundle.json into ~/.wide/rules",
     "  sync --feeds               Fetch latest advisories from GitHub Advisory, CISA KEV, FIRST EPSS",
+    "    [--kev-limit N]          Maximum CISA KEV CVEs to lookup via GHSA/OSV (default 60)",
     "  learn [--limit N]          Synthesize and verify new CVE/GHSA rules into rules/learned/",
     "  query [dir-or-manifest]    Query live OSV API (api.osv.dev) for project dependencies",
     "  stats                      Show currently loaded advisory database counts"
@@ -53,6 +54,7 @@ async function main() {
         pages: Number(flags.pages || 2),
         perPage: Number(flags["per-page"] || 100),
         ecosystem: typeof flags.ecosystem === "string" ? flags.ecosystem : undefined,
+        kevLookupLimit: flags["kev-limit"] !== undefined ? Number(flags["kev-limit"]) : undefined,
         dryRun: Boolean(flags["dry-run"])
       });
       console.log(`Synced advisories: total=${res.total}, added=${res.added}, updated=${res.updated}, kev=${res.kevMatched}, sources=${res.sources.join(",")}`);

@@ -71,6 +71,8 @@ export function selectLearningCandidates(options = {}) {
     const isKev = Boolean(adv.kev);
     const epss = Number(adv.epss || 0);
 
+    const requirePatch = options.requirePatch !== false;
+    if (requirePatch && !patchCount) continue;
     if (!patchCount && !isKev && !isCritical) continue;
 
     let score = 0;
@@ -244,8 +246,9 @@ export async function synthesizeRuleFromAdvisory({ advisory, patchDiff = "", pro
     '  "remediation": "Short actionable fix guidance",',
     '  "tests": { "positive": ["vulnerable line 1", "vulnerable line 2"], "negative": ["safe fixed line 1", "safe fixed line 2"] }',
     "}",
-    "If the vulnerability can only be detected via package version matching in JSON/manifests, target languages: [\"json\"] with an exact package-version pattern.",
-    "If you cannot produce a precise pattern with zero obvious false positives, return { \"skip\": true, \"reason\": \"why\" }."
+    "If the vulnerability is only detectable by package version numbers in manifests (package.json, requirements.txt, pom.xml, go.mod, Cargo.toml) rather than source-code sink/API usage, return { \"skip\": true, \"reason\": \"version-only advisory handled by OSV SCA\" }.",
+    "Never generate generic manifest regex rules targeting \"json\".",
+    "If you cannot produce a precise code-level pattern with zero obvious false positives, return { \"skip\": true, \"reason\": \"why\" }."
   ].join("\n");
 
   const payload = {
@@ -267,6 +270,13 @@ export async function synthesizeRuleFromAdvisory({ advisory, patchDiff = "", pro
 
   if (!rawOut || rawOut.skip) {
     return { skipped: true, reason: rawOut?.reason || "Synthesizer skipped advisory" };
+  }
+
+  const outLangs = Array.isArray(rawOut.languages)
+    ? rawOut.languages.map((l) => String(l).toLowerCase())
+    : [];
+  if (outLangs.length > 0 && outLangs.every((l) => l === "json")) {
+    return { skipped: true, reason: "Version-only manifest json rules are excluded in favor of OSV SCA" };
   }
 
   const slug = toRuleSlug(advisory.id);
@@ -358,24 +368,35 @@ export async function learnRulesFromAdvisories(options = {}) {
     existingRules,
     learnedState,
     limit: options.limit || 5,
-    minEpss: options.minEpss
+    minEpss: options.minEpss,
+    requirePatch: options.requirePatch
   });
 
   const corpus = collectCleanCorpus([
     path.join(REPO_ROOT, "src"),
     path.join(REPO_ROOT, "src", "updater"),
-    path.join(REPO_ROOT, "src", "feeds")
+    path.join(REPO_ROOT, "src", "feeds"),
+    path.join(REPO_ROOT, "tests", "corpus", "clean")
   ]);
 
   const learned = [];
   const rejected = [];
   let stateChanged = false;
+  let consecutiveProviderErrors = 0;
 
   for (const adv of candidates) {
     const patchDiff = await fetchPatchSnippet(adv.patchUrls, {
       token: options.token,
       fetchImpl: options.fetchImpl
     });
+
+    if (!patchDiff && !options.allowEmptyPatch && typeof options.completeFn !== "function") {
+      const reason = "No retrievable GitHub patch diff";
+      learnedState.processed[adv.id] = { status: "skipped", reason, at: new Date().toISOString() };
+      stateChanged = true;
+      rejected.push({ id: adv.id, reason });
+      continue;
+    }
 
     try {
       const synth = await synthesizeRuleFromAdvisory({
@@ -414,10 +435,15 @@ export async function learnRulesFromAdvisories(options = {}) {
         at: new Date().toISOString()
       };
       stateChanged = true;
+      consecutiveProviderErrors = 0;
       learned.push({ id: adv.id, ruleId: synth.rule.id, filePath });
     } catch (err) {
       const reason = String(err?.message || err);
       rejected.push({ id: adv.id, reason });
+      consecutiveProviderErrors++;
+      if (consecutiveProviderErrors >= 2 && typeof options.completeFn !== "function") {
+        break;
+      }
     }
   }
 

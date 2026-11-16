@@ -24,6 +24,7 @@
     "validate": "node scripts/validate.cjs",
     "bundle": "node scripts/bundle.cjs",
     "sync:advisories": "node src/cli.js sync --feeds",
+    "sync:kev": "node src/cli.js sync --feeds --kev-limit 200",
     "sync:remote": "node src/cli.js sync --remote",
     "learn:rules": "node src/cli.js learn",
     "test": "node scripts/test-decision.cjs && node scripts/test-rules.cjs",

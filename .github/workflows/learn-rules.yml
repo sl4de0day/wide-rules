@@ -34,7 +34,11 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           npm run sync:advisories
-          node src/cli.js learn --limit 5 || true
+          if [ -n "$GEMINI_API_KEY" ] || [ -n "$ANTHROPIC_API_KEY" ] || [ -n "$OPENAI_API_KEY" ] || [ -n "$GITHUB_TOKEN" ]; then
+            node src/cli.js learn --limit 5 || true
+          else
+            echo "No LLM provider token available; skipping rule synthesis."
+          fi
           if [ -n "$(git status --porcelain rules/)" ]; then
             echo "has_rules=true" >> "$GITHUB_OUTPUT"
           else
@@ -42,12 +46,13 @@ jobs:
             echo "No new rules learned; skipping bundle and PR creation."
           fi
 
-      - name: Validate and Bundle Learned Rules
+      - name: Validate, Bundle, and Benchmark Learned Rules
         if: steps.learn.outputs.has_rules == 'true'
         run: |
           npm run validate
           npm run bundle
           npm test
+          npm run bench
 
       - name: Open Pull Request for Verified Rules
         if: steps.learn.outputs.has_rules == 'true'

@@ -9,6 +9,7 @@ import {
   fetchGitHubAdvisories,
   fetchGitHubAdvisoryByCve,
   fetchJson,
+  fetchOsvAdvisoryByCve,
   fetchText,
   normalizeEcosystem
 } from "../feeds/sources.js";
@@ -67,7 +68,7 @@ export function mergeAdvisoryRecords(existingDb, advisories, kevMap = new Map(),
   const upsert = (eco, entry, isIncoming) => {
     const normEco = normalizeEcosystem(eco) || eco;
     if (!ECOSYSTEMS.includes(normEco)) return;
-    if (!entry || !entry.name || !entry.lt) return;
+    if (!entry || !entry.name || (!entry.lt && !entry.le)) return;
     const cleanId = String(entry.id || entry.cve || entry.ghsaId || "advisory");
     const cveUpper = typeof entry.cve === "string"
       ? entry.cve.toUpperCase()
@@ -78,11 +79,13 @@ export function mergeAdvisoryRecords(existingDb, advisories, kevMap = new Map(),
     const baseSev = String(entry.sev || "medium").toLowerCase();
     const effectiveSev = kevInfo && SEV_RANK[baseSev] < SEV_RANK.high ? "high" : baseSev;
 
-    const key = `${normEco}:${String(entry.name).toLowerCase()}:${cleanId.toLowerCase()}:${String(entry.lt)}`;
+    const boundKey = entry.lt ? `lt:${String(entry.lt)}` : `le:${String(entry.le)}`;
+    const key = `${normEco}:${String(entry.name).toLowerCase()}:${cleanId.toLowerCase()}:${boundKey}`;
     const normalized = {
       name: String(entry.name),
       ...(entry.ge ? { ge: String(entry.ge) } : {}),
-      lt: String(entry.lt),
+      ...(entry.lt ? { lt: String(entry.lt) } : {}),
+      ...(entry.le ? { le: String(entry.le) } : {}),
       id: cleanId,
       ...(entry.ghsaId ? { ghsaId: String(entry.ghsaId) } : {}),
       ...(cveUpper ? { cve: cveUpper } : {}),
@@ -97,10 +100,19 @@ export function mergeAdvisoryRecords(existingDb, advisories, kevMap = new Map(),
     if (!existing) {
       index.set(key, normalized);
       db[normEco].push(normalized);
-      if (isIncoming) added++;
+      if (isIncoming) {
+        added++;
+      } else {
+        const enrichedKev = Boolean(normalized.kev) && !entry.kev;
+        const enrichedEpss = normalized.epss !== undefined && entry.epss !== normalized.epss;
+        const enrichedSev = normalized.sev !== baseSev;
+        if (enrichedKev || enrichedEpss || enrichedSev) {
+          updated++;
+        }
+      }
     } else if (isIncoming) {
       let changed = false;
-      for (const field of ["ge", "cwe", "sev", "note", "kev", "epss", "ghsaId", "cve"]) {
+      for (const field of ["ge", "lt", "le", "cwe", "sev", "note", "kev", "epss", "ghsaId", "cve"]) {
         if (normalized[field] !== undefined && existing[field] !== normalized[field]) {
           existing[field] = normalized[field];
           changed = true;
@@ -126,7 +138,7 @@ export function mergeAdvisoryRecords(existingDb, advisories, kevMap = new Map(),
   let kevCount = 0;
   let highEpssCount = 0;
   for (const eco of ECOSYSTEMS) {
-    db[eco].sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id) || a.lt.localeCompare(b.lt));
+    db[eco].sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id) || String(a.lt || a.le || "").localeCompare(String(b.lt || b.le || "")));
     db.stats.byEcosystem[eco] = db[eco].length;
     total += db[eco].length;
     for (const item of db[eco]) {
@@ -141,6 +153,145 @@ export function mergeAdvisoryRecords(existingDb, advisories, kevMap = new Map(),
   return { db, added, updated };
 }
 
+function advisoryPriorityScore(item) {
+  const kevScore = item?.kev ? 1000 : 0;
+  const sevScore = (SEV_RANK[String(item?.sev || "medium").toLowerCase()] || 0) * 100;
+  const epssScore = Math.round(Number(item?.epss || 0) * 100);
+  const cveBonus = item?.cve ? 5 : 0;
+  return kevScore + sevScore + epssScore + cveBonus;
+}
+
+export function pruneAdvisoryDb(dbInput, options = {}) {
+  const maxPerEcosystem = typeof options.maxPerEcosystem === "number" ? Math.max(1, options.maxPerEcosystem) : 500;
+  const maxTotal = typeof options.maxTotal === "number" ? Math.max(1, options.maxTotal) : 2000;
+  const base = dbInput && typeof dbInput === "object" ? dbInput : createEmptyAdvisoriesDb();
+
+  let currentTotal = 0;
+  let exceedsEco = false;
+  for (const eco of ECOSYSTEMS) {
+    const len = Array.isArray(base[eco]) ? base[eco].length : 0;
+    currentTotal += len;
+    if (len > maxPerEcosystem) exceedsEco = true;
+  }
+  if (!exceedsEco && currentTotal <= maxTotal) {
+    return { db: base, prunedCount: 0, archived: [] };
+  }
+
+  const db = createEmptyAdvisoriesDb();
+  db.version = base.version || 1;
+  db.generatedAt = base.generatedAt || db.generatedAt;
+  db.sources = Array.isArray(base.sources) ? [...base.sources] : [];
+  const archived = [];
+
+  for (const eco of ECOSYSTEMS) {
+    const list = Array.isArray(base[eco]) ? [...base[eco]] : [];
+    if (list.length > maxPerEcosystem) {
+      list.sort((a, b) => advisoryPriorityScore(b) - advisoryPriorityScore(a) || String(a.name).localeCompare(String(b.name)) || String(a.id).localeCompare(String(b.id)));
+      db[eco] = list.slice(0, maxPerEcosystem);
+      for (const dropped of list.slice(maxPerEcosystem)) {
+        archived.push({ ...dropped, ecosystem: eco });
+      }
+    } else {
+      db[eco] = list;
+    }
+  }
+
+  let runningTotal = ECOSYSTEMS.reduce((acc, eco) => acc + db[eco].length, 0);
+  if (runningTotal > maxTotal) {
+    const ranked = [];
+    for (const eco of ECOSYSTEMS) {
+      for (let idx = 0; idx < db[eco].length; idx++) {
+        ranked.push({ eco, idx, item: db[eco][idx], score: advisoryPriorityScore(db[eco][idx]) });
+      }
+    }
+    ranked.sort((a, b) => a.score - b.score || String(a.item.name).localeCompare(String(b.item.name)) || String(a.item.id).localeCompare(String(b.item.id)));
+    const dropSet = new Map();
+    const toDrop = runningTotal - maxTotal;
+    for (let i = 0; i < toDrop && i < ranked.length; i++) {
+      const entry = ranked[i];
+      if (!dropSet.has(entry.eco)) dropSet.set(entry.eco, new Set());
+      dropSet.get(entry.eco).add(entry.idx);
+      archived.push({ ...entry.item, ecosystem: entry.eco });
+    }
+    for (const eco of ECOSYSTEMS) {
+      const dropIdx = dropSet.get(eco);
+      if (dropIdx && dropIdx.size > 0) {
+        db[eco] = db[eco].filter((_, idx) => !dropIdx.has(idx));
+      }
+    }
+  }
+
+  let total = 0;
+  let kevCount = 0;
+  let highEpssCount = 0;
+  for (const eco of ECOSYSTEMS) {
+    db[eco].sort((a, b) => a.name.localeCompare(b.name) || a.id.localeCompare(b.id) || String(a.lt || a.le || "").localeCompare(String(b.lt || b.le || "")));
+    db.stats.byEcosystem[eco] = db[eco].length;
+    total += db[eco].length;
+    for (const item of db[eco]) {
+      if (item.kev) kevCount++;
+      if (typeof item.epss === "number" && item.epss >= 0.3) highEpssCount++;
+    }
+  }
+  db.stats.total = total;
+  db.stats.kevCount = kevCount;
+  db.stats.highEpssCount = highEpssCount;
+
+  return { db, prunedCount: archived.length, archived };
+}
+
+function mergeRawAdvisories(existingList, incomingList, kevMap = new Map(), epssMap = new Map(), maxEntries = 1000) {
+  const byId = new Map();
+  const upsertRaw = (adv) => {
+    if (!adv || !adv.id) return;
+    const key = String(adv.id).toUpperCase();
+    const prev = byId.get(key);
+    const cveUpper = adv.cve ? String(adv.cve).toUpperCase() : prev?.cve || null;
+    const kevInfo = cveUpper ? kevMap.get(cveUpper) : null;
+    const epssInfo = cveUpper ? epssMap.get(cveUpper) : null;
+    const mergedPatches = [...new Set([
+      ...(Array.isArray(prev?.patchUrls) ? prev.patchUrls : []),
+      ...(Array.isArray(adv.patchUrls) ? adv.patchUrls : [])
+    ])].slice(0, 6);
+    const mergedPackages = Array.isArray(adv.packages) && adv.packages.length > 0
+      ? adv.packages
+      : (Array.isArray(prev?.packages) ? prev.packages : []);
+    const mergedRefs = [...new Set([
+      ...(Array.isArray(prev?.references) ? prev.references : []),
+      ...(Array.isArray(adv.references) ? adv.references : [])
+    ])].slice(0, 12);
+
+    const nextKev = Boolean(kevInfo || adv.kev || prev?.kev);
+    const nextEpss = epssInfo
+      ? Number(epssInfo.epss.toFixed(4))
+      : (typeof adv.epss === "number" && adv.epss > 0 ? adv.epss : (typeof prev?.epss === "number" ? prev.epss : 0));
+
+    byId.set(key, {
+      ...(prev || {}),
+      ...adv,
+      ...(cveUpper ? { cve: cveUpper } : {}),
+      references: mergedRefs,
+      patchUrls: mergedPatches,
+      packages: mergedPackages,
+      kev: nextKev,
+      epss: nextEpss
+    });
+  };
+
+  for (const item of Array.isArray(existingList) ? existingList : []) upsertRaw(item);
+  for (const item of Array.isArray(incomingList) ? incomingList : []) upsertRaw(item);
+
+  return [...byId.values()]
+    .sort((a, b) =>
+      (b.kev ? 1 : 0) - (a.kev ? 1 : 0) ||
+      ((b.patchUrls?.length || 0) > 0 ? 1 : 0) - ((a.patchUrls?.length || 0) > 0 ? 1 : 0) ||
+      Number(b.epss || 0) - Number(a.epss || 0) ||
+      String(b.updatedAt || b.publishedAt || "").localeCompare(String(a.updatedAt || a.publishedAt || "")) ||
+      String(a.id).localeCompare(String(b.id))
+    )
+    .slice(0, maxEntries);
+}
+
 export async function syncAdvisoriesFromInternet(options = {}) {
   const outFile = options.outFile || path.join(REPO_ROOT, "data", "osv-advisories.json");
   const rawOutFile = options.rawOutFile || path.join(REPO_ROOT, "data", "raw-advisories.json");
@@ -151,6 +302,14 @@ export async function syncAdvisoriesFromInternet(options = {}) {
     try {
       existingDb = JSON.parse(fs.readFileSync(outFile, "utf8"));
       hadExistingDb = true;
+    } catch {}
+  }
+
+  let prevRawAdvisories = [];
+  if (fs.existsSync(rawOutFile)) {
+    try {
+      const rawDoc = JSON.parse(fs.readFileSync(rawOutFile, "utf8"));
+      if (Array.isArray(rawDoc?.advisories)) prevRawAdvisories = rawDoc.advisories;
     } catch {}
   }
 
@@ -187,7 +346,7 @@ export async function syncAdvisoriesFromInternet(options = {}) {
   const seenAdvIds = new Set(advisories.map((a) => String(a.id || "").toUpperCase()));
   const kevLimit = typeof options.kevLookupLimit === "number"
     ? options.kevLookupLimit
-    : (options.fetchImpl ? 0 : 12);
+    : (options.fetchImpl ? 0 : 60);
   if (kevLimit > 0 && Array.isArray(kevResult.list) && kevResult.list.length > 0) {
     const existingCves = new Set();
     for (const eco of ECOSYSTEMS) {
@@ -198,31 +357,63 @@ export async function syncAdvisoriesFromInternet(options = {}) {
     const recentKevs = [...kevResult.list]
       .filter((k) => k?.cveID && !seenAdvIds.has(String(k.cveID).toUpperCase()) && !existingCves.has(String(k.cveID).toUpperCase()))
       .sort((a, b) => String(b.dateAdded || "").localeCompare(String(a.dateAdded || "")))
-      .slice(0, kevLimit * 2);
+      .slice(0, kevLimit * 3);
 
+    let cursor = 0;
     let fetchedKevCount = 0;
-    for (const k of recentKevs) {
-      if (fetchedKevCount >= kevLimit) break;
-      try {
-        const adv = await fetchGitHubAdvisoryByCve(k.cveID, {
-          token: options.token,
-          fetchImpl: options.fetchImpl,
-          timeoutMs: options.timeoutMs
-        });
-        if (adv && Array.isArray(adv.packages) && adv.packages.length > 0 && !seenAdvIds.has(String(adv.id).toUpperCase())) {
-          advisories.push(adv);
-          seenAdvIds.add(String(adv.id).toUpperCase());
-          fetchedKevCount++;
-        }
-      } catch {}
-    }
+    let usedOsvFallback = false;
+    const concurrency = Math.min(Math.max(Number(options.kevConcurrency || 6), 1), 10);
+
+    const worker = async () => {
+      while (cursor < recentKevs.length && fetchedKevCount < kevLimit) {
+        const k = recentKevs[cursor++];
+        if (!k?.cveID) continue;
+        try {
+          let adv = await fetchGitHubAdvisoryByCve(k.cveID, {
+            token: options.token,
+            fetchImpl: options.fetchImpl,
+            timeoutMs: options.timeoutMs
+          });
+          if ((!adv || !Array.isArray(adv.packages) || adv.packages.length === 0) && options.osvFallback !== false) {
+            const osvAdv = await fetchOsvAdvisoryByCve(k.cveID, {
+              fetchImpl: options.fetchImpl,
+              timeoutMs: options.timeoutMs
+            });
+            if (osvAdv) {
+              adv = osvAdv;
+              usedOsvFallback = true;
+            }
+          }
+          if (adv && Array.isArray(adv.packages) && adv.packages.length > 0 && fetchedKevCount < kevLimit) {
+            const upperId = String(adv.id).toUpperCase();
+            if (!seenAdvIds.has(upperId)) {
+              advisories.push(adv);
+              seenAdvIds.add(upperId);
+              fetchedKevCount++;
+            }
+          }
+        } catch {}
+      }
+    };
+
+    await Promise.all(Array.from({ length: Math.min(concurrency, recentKevs.length) }, () => worker()));
+    if (usedOsvFallback) sources.push("osv-dev");
   }
 
   let epssMap = new Map();
   if (options.includeEpss !== false) {
     try {
-      const cves = advisories.map((a) => a.cve).filter(Boolean);
-      epssMap = await fetchEpssScores(cves, { fetchImpl: options.fetchImpl, timeoutMs: options.timeoutMs });
+      const cveSet = new Set(advisories.map((a) => a.cve).filter(Boolean).map((c) => String(c).toUpperCase()));
+      if (!options.fetchImpl || options.backfillEpss) {
+        for (const eco of ECOSYSTEMS) {
+          for (const item of Array.isArray(existingDb[eco]) ? existingDb[eco] : []) {
+            if (item?.cve && cveSet.size < 400) {
+              cveSet.add(String(item.cve).toUpperCase());
+            }
+          }
+        }
+      }
+      epssMap = await fetchEpssScores([...cveSet], { fetchImpl: options.fetchImpl, timeoutMs: options.timeoutMs });
       sources.push("first-epss");
     } catch {}
   }
@@ -233,21 +424,42 @@ export async function syncAdvisoriesFromInternet(options = {}) {
     const epssInfo = cveUpper ? epssMap.get(cveUpper) : null;
     return {
       ...adv,
-      kev: Boolean(kevInfo),
-      epss: epssInfo ? epssInfo.epss : 0
+      kev: Boolean(kevInfo || adv.kev),
+      epss: epssInfo ? Number(epssInfo.epss.toFixed(4)) : 0
     };
   });
 
-  const { db, added, updated } = mergeAdvisoryRecords(existingDb, enrichedAdvisories, kevResult.byCve, epssMap);
+  const { db: mergedDb, added, updated } = mergeAdvisoryRecords(existingDb, enrichedAdvisories, kevResult.byCve, epssMap);
+  const pruned = options.prune === false
+    ? { db: mergedDb, prunedCount: 0, archived: [] }
+    : pruneAdvisoryDb(mergedDb, {
+        maxTotal: options.maxAdvisories,
+        maxPerEcosystem: options.maxPerEcosystem
+      });
+  const db = pruned.db;
+
   const prevSources = Array.isArray(existingDb.sources) ? existingDb.sources : [];
   db.sources = [...new Set([...prevSources, ...sources])];
   const sourcesChanged = db.sources.length !== prevSources.length || db.sources.some((s, i) => prevSources[i] !== s);
-  const changed = !hadExistingDb || added > 0 || updated > 0 || sourcesChanged || Boolean(options.force);
+
+  const mergedRaw = mergeRawAdvisories(
+    prevRawAdvisories,
+    enrichedAdvisories,
+    kevResult.byCve,
+    epssMap,
+    options.maxRawAdvisories || 1000
+  );
+  const rawChanged = !fs.existsSync(rawOutFile) || JSON.stringify(prevRawAdvisories) !== JSON.stringify(mergedRaw);
+
+  const changed = !hadExistingDb || added > 0 || updated > 0 || pruned.prunedCount > 0 || sourcesChanged || rawChanged || Boolean(options.force);
   db.generatedAt = changed || !existingDb.generatedAt ? new Date().toISOString() : existingDb.generatedAt;
 
   if (!options.dryRun && changed) {
     writeFileAtomicSync(outFile, JSON.stringify(db, null, 2));
-    writeFileAtomicSync(rawOutFile, JSON.stringify({ generatedAt: db.generatedAt, count: enrichedAdvisories.length, advisories: enrichedAdvisories }, null, 2));
+    writeFileAtomicSync(rawOutFile, JSON.stringify({ generatedAt: db.generatedAt, count: mergedRaw.length, advisories: mergedRaw }, null, 2));
+    if (pruned.prunedCount > 0 && options.archiveOutFile) {
+      writeFileAtomicSync(options.archiveOutFile, JSON.stringify({ generatedAt: db.generatedAt, count: pruned.archived.length, advisories: pruned.archived }, null, 2));
+    }
   }
 
   return {
@@ -255,7 +467,9 @@ export async function syncAdvisoriesFromInternet(options = {}) {
     rawOutFile,
     changed,
     fetchedAdvisories: enrichedAdvisories.length,
-    kevMatched: enrichedAdvisories.filter((a) => a.kev).length,
+    rawCount: mergedRaw.length,
+    prunedCount: pruned.prunedCount,
+    kevMatched: db.stats.kevCount,
     added,
     updated,
     total: db.stats.total,

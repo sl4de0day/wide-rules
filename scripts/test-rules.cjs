@@ -311,9 +311,222 @@ async function main() {
         throw new Error(`Unexpected remote URL: ${s}`);
       }
     }), /SHA256SUMS/);
+
+    const advOut2 = path.join(tmpDir, 'osv-advisories-2.json');
+    const rawOut2 = path.join(tmpDir, 'raw-advisories-2.json');
+    let phase = 1;
+    const lifecycleFetch = async (url) => {
+      const s = String(url);
+      if (s.includes('api.github.com/advisories') && s.includes('cve_id=')) {
+        return { ok: true, status: 200, json: async () => [] };
+      }
+      if (s.includes('api.github.com/advisories')) {
+        if (phase === 1) {
+          return {
+            ok: true,
+            status: 200,
+            json: async () => ([
+              {
+                ghsa_id: 'GHSA-1111-2222-3333',
+                cve_id: 'CVE-2026-11111',
+                severity: 'medium',
+                summary: 'Inclusive bound package issue',
+                references: ['https://github.com/acme/pkg/commit/aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'],
+                cwes: [{ cwe_id: 'CWE-20' }],
+                vulnerabilities: [
+                  {
+                    package: { ecosystem: 'npm', name: 'inc-pkg' },
+                    vulnerable_version_range: '>= 1.0.0, <= 1.2.4'
+                  }
+                ]
+              }
+            ])
+          };
+        }
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ([
+            {
+              ghsa_id: 'GHSA-2222-3333-4444',
+              cve_id: 'CVE-2026-22222',
+              severity: 'high',
+              summary: 'Second sync package issue',
+              references: ['https://github.com/acme/other/commit/bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb'],
+              cwes: [{ cwe_id: 'CWE-79' }],
+              vulnerabilities: [
+                {
+                  package: { ecosystem: 'npm', name: 'other-pkg' },
+                  vulnerable_version_range: '< 2.0.0',
+                  first_patched_version: { identifier: '2.0.0' }
+                }
+              ]
+            }
+          ])
+        };
+      }
+      if (s.includes('known_exploited_vulnerabilities.json')) {
+        if (phase === 1) {
+          return { ok: true, status: 200, json: async () => ({ vulnerabilities: [] }) };
+        }
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({
+            vulnerabilities: [
+              { cveID: 'CVE-2026-11111', dateAdded: '2026-11-14', vulnerabilityName: 'Existing KEV Upgrade' },
+              { cveID: 'CVE-2026-99999', dateAdded: '2026-11-15', vulnerabilityName: 'OSV Fallback KEV' }
+            ]
+          })
+        };
+      }
+      if (s.includes('api.osv.dev/v1/vulns/CVE-2026-99999')) {
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({
+            id: 'GO-2026-9999',
+            aliases: ['CVE-2026-99999'],
+            summary: 'Go OSV fallback vulnerability',
+            database_specific: { severity: 'CRITICAL', cwe_ids: ['CWE-94'] },
+            affected: [
+              {
+                package: { ecosystem: 'Go', name: 'github.com/example/vulnerable' },
+                ranges: [
+                  {
+                    type: 'SEMVER',
+                    events: [{ introduced: '0.1.0' }, { last_affected: '0.2.9' }]
+                  }
+                ]
+              }
+            ]
+          })
+        };
+      }
+      if (s.includes('api.first.org/data/v1/epss')) {
+        if (phase === 1) {
+          return { ok: true, status: 200, json: async () => ({ data: [] }) };
+        }
+        return {
+          ok: true,
+          status: 200,
+          json: async () => ({
+            data: [
+              { cve: 'CVE-2026-11111', epss: '0.9123', percentile: '0.99' },
+              { cve: 'CVE-2026-99999', epss: '0.7500', percentile: '0.95' }
+            ]
+          })
+        };
+      }
+      throw new Error(`Unexpected lifecycle URL: ${s}`);
+    };
+
+    const lc1 = await mod.syncAdvisoriesFromInternet({
+      outFile: advOut2,
+      rawOutFile: rawOut2,
+      kevLookupLimit: 0,
+      fetchImpl: lifecycleFetch
+    });
+    assert.equal(lc1.db.npm.length, 1);
+    assert.equal(lc1.db.npm[0].le, '1.2.4');
+    assert.equal(lc1.db.npm[0].lt, undefined);
+    assert.equal(lc1.db.npm[0].sev, 'medium');
+
+    phase = 2;
+    const lc2 = await mod.syncAdvisoriesFromInternet({
+      outFile: advOut2,
+      rawOutFile: rawOut2,
+      kevLookupLimit: 1,
+      backfillEpss: true,
+      fetchImpl: lifecycleFetch
+    });
+    assert.equal(lc2.changed, true);
+    assert.ok(lc2.updated >= 1, 'Stored advisory must record KEV/EPSS/sev upgrades');
+    const upgradedIncPkg = lc2.db.npm.find((p) => p.name === 'inc-pkg');
+    assert.ok(upgradedIncPkg);
+    assert.equal(upgradedIncPkg.kev, true);
+    assert.equal(upgradedIncPkg.sev, 'high');
+    assert.equal(upgradedIncPkg.epss, 0.9123);
+    const patchedObjPkg = lc2.db.npm.find((p) => p.name === 'other-pkg');
+    assert.equal(patchedObjPkg.lt, '2.0.0');
+    assert.equal(lc2.db.go.length, 1);
+    assert.equal(lc2.db.go[0].name, 'github.com/example/vulnerable');
+    assert.equal(lc2.db.go[0].ge, '0.1.0');
+    assert.equal(lc2.db.go[0].le, '0.2.9');
+    assert.equal(lc2.db.go[0].kev, true);
+    assert.ok(lc2.sources.includes('osv-dev'));
+    const rawDoc2 = JSON.parse(fs.readFileSync(rawOut2, 'utf8'));
+    assert.equal(rawDoc2.count, 3, 'raw-advisories.json must retain cumulative advisories across sync runs');
   } finally {
     fs.rmSync(tmpDir, { recursive: true, force: true });
   }
+
+  const pruneSource = {
+    version: 1,
+    generatedAt: '2026-11-16T00:00:00.000Z',
+    sources: [],
+    stats: { total: 6, kevCount: 1, highEpssCount: 0, byEcosystem: { npm: 6 } },
+    npm: [
+      { name: 'low-1', lt: '1.0.0', id: 'GHSA-1', cwe: 'CWE-20', sev: 'low', note: 'n' },
+      { name: 'low-2', lt: '1.0.0', id: 'GHSA-2', cwe: 'CWE-20', sev: 'low', note: 'n' },
+      { name: 'med-1', lt: '1.0.0', id: 'GHSA-3', cwe: 'CWE-20', sev: 'medium', note: 'n' },
+      { name: 'med-2', lt: '1.0.0', id: 'GHSA-4', cwe: 'CWE-20', sev: 'medium', note: 'n' },
+      { name: 'crit-1', lt: '1.0.0', id: 'GHSA-5', cwe: 'CWE-94', sev: 'critical', note: 'n' },
+      { name: 'kev-1', lt: '1.0.0', id: 'CVE-2026-0001', cve: 'CVE-2026-0001', cwe: 'CWE-287', sev: 'high', kev: true, note: 'n' }
+    ],
+    pip: [],
+    maven: [],
+    go: [],
+    cargo: [],
+    nuget: [],
+    composer: [],
+    rubygems: []
+  };
+  const prunedRes = mod.pruneAdvisoryDb(pruneSource, { maxPerEcosystem: 3, maxTotal: 3 });
+  assert.equal(prunedRes.prunedCount, 3);
+  assert.equal(prunedRes.db.stats.total, 3);
+  assert.ok(prunedRes.db.npm.some((x) => x.kev === true));
+  assert.ok(prunedRes.db.npm.some((x) => x.sev === 'critical'));
+
+  const cleanDir = path.join(rootDir, 'tests', 'corpus', 'clean');
+  const multiLangCorpus = mod.collectCleanCorpus([cleanDir]);
+  for (const lang of ['js', 'ts', 'py', 'go', 'java', 'php', 'yaml']) {
+    assert.ok(multiLangCorpus.some((s) => s.lang === lang), `Expected clean corpus samples for ${lang}`);
+  }
+  const noisyGoCandidate = {
+    id: 'wide/noisy-go-test',
+    name: 'noisy-go-test',
+    category: 'INJECTION',
+    severity: 'HIGH',
+    languages: ['go'],
+    pattern: 'QueryRowContext',
+    message: 'Test noisy Go rule',
+    tests: { positive: ['db.QueryRowContext(ctx, q)'], negative: ['ok()'] }
+  };
+  assert.equal(mod.verifyRuleCandidate(noisyGoCandidate, { corpus: multiLangCorpus, maxFalsePositives: 0 }).ok, false);
+
+  assert.equal(
+    mod.selectLearningCandidates({
+      advisories: [{ id: 'GHSA-no-patch', sev: 'critical', kev: true, patchUrls: [] }]
+    }).length,
+    0,
+    'Advisories without patchUrls must be excluded from rule synthesis'
+  );
+
+  const skippedJsonSynth = await mod.synthesizeRuleFromAdvisory({
+    advisory: { id: 'GHSA-json-only', sev: 'high', summary: 'Version check' },
+    patchDiff: '',
+    provider: 'custom',
+    completeFn: async () => ({
+      category: 'GENERAL',
+      severity: 'HIGH',
+      languages: ['json'],
+      pattern: '"bad-pkg":',
+      message: 'Manifest rule',
+      tests: { positive: ['"bad-pkg": "1.0.0"'], negative: ['"bad-pkg": "2.0.0"'] }
+    })
+  });
+  assert.equal(skippedJsonSynth.skipped, true);
 
   console.log('All rule engine and dynamic learning tests passed successfully.');
 }
