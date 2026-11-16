@@ -74,7 +74,19 @@ async function fetchWithTimeout(url, options = {}) {
         httpErr.status = res.status;
         throw httpErr;
       }
-      return options.asText ? await res.text() : await res.json();
+      if (options.asText) {
+        return typeof res.text === "function" ? await res.text() : JSON.stringify(await res.json());
+      }
+      if (typeof res.text === "function") {
+        const text = await res.text();
+        try {
+          return JSON.parse(text);
+        } catch {
+          const ctype = res.headers?.get?.("content-type") || "unknown";
+          throw new Error(`Invalid JSON response from ${url} (${ctype}): ${text.slice(0, 120).trim()}`);
+        }
+      }
+      return await res.json();
     } catch (err) {
       lastError = err;
       if (attempt >= maxRetries || !isRetryableError(err)) {
