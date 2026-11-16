@@ -137,6 +137,7 @@ function parseJsonFromLlm(rawText) {
 export async function callLlmJson({ provider, model, systemPrompt, userPrompt, fetchImpl }) {
   const chosenModel = model || DEFAULT_MODELS[provider];
   if (!chosenModel) throw new Error(`Unsupported learning provider '${provider}'`);
+  const retryDelayMs = typeof fetchImpl === "function" ? 10 : 4000;
 
   if (provider === "gemini") {
     const key = process.env.GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY;
@@ -154,6 +155,7 @@ export async function callLlmJson({ provider, model, systemPrompt, userPrompt, f
         generationConfig: { temperature: 0.1, responseMimeType: "application/json" }
       },
       timeoutMs: 60000,
+      retryDelayMs,
       fetchImpl
     });
     const text = data?.candidates?.[0]?.content?.parts?.[0]?.text || "";
@@ -178,6 +180,7 @@ export async function callLlmJson({ provider, model, systemPrompt, userPrompt, f
         messages: [{ role: "user", content: userPrompt }]
       },
       timeoutMs: 60000,
+      retryDelayMs,
       fetchImpl
     });
     const text = data?.content?.[0]?.text || "";
@@ -207,6 +210,7 @@ export async function callLlmJson({ provider, model, systemPrompt, userPrompt, f
         ]
       },
       timeoutMs: 60000,
+      retryDelayMs,
       fetchImpl
     });
     const text = data?.choices?.[0]?.message?.content || "";
@@ -228,6 +232,7 @@ export async function callLlmJson({ provider, model, systemPrompt, userPrompt, f
         ]
       },
       timeoutMs: 60000,
+      retryDelayMs,
       fetchImpl
     });
     return parseJsonFromLlm(data?.message?.content || "");
