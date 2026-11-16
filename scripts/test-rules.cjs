@@ -605,6 +605,51 @@ async function main() {
     assert.equal(revOut.learned.length, 0);
     assert.equal(revOut.rejected.length, 1);
     assert.ok(revOut.rejected[0].reason.includes('AI FP review rejected'));
+
+    const badLangCheck = mod.verifyRuleCandidate({
+      id: 'wide/unsupported-lang-test',
+      name: 'unsupported-lang-test',
+      category: 'INJECTION',
+      severity: 'HIGH',
+      languages: ['vtl'],
+      pattern: 'response\\.writer\\.print\\(',
+      message: 'Unsupported lang',
+      tests: { positive: ['response.writer.print(x)'], negative: ['safe(x)'] }
+    });
+    assert.equal(badLangCheck.ok, false);
+    assert.ok(badLangCheck.errors.some((e) => e.includes('Unsupported language')));
+
+    const promoDir = path.join(learnTmp, 'promo');
+    fs.mkdirSync(promoDir, { recursive: true });
+    const yaml = require('js-yaml');
+    fs.writeFileSync(
+      path.join(promoDir, 'exp-rule.yml'),
+      yaml.dump({
+        id: 'wide/exp-rule-test',
+        name: 'exp-rule-test',
+        category: 'INJECTION',
+        severity: 'HIGH',
+        languages: ['js'],
+        pattern: 'dangerousSinkExec\\(\\s*req\\.query',
+        'not-match': 'sanitizeSink',
+        confidence: 'medium',
+        message: 'Experimental rule test',
+        metadata: {
+          source: 'wide-rules-auto-learn',
+          status: 'experimental',
+          quarantineUntil: '2026-01-01T00:00:00.000Z'
+        },
+        tests: {
+          positive: ['dangerousSinkExec(req.query.cmd)'],
+          negative: ['dangerousSinkExec(sanitizeSink(x))']
+        }
+      }),
+      'utf8'
+    );
+    const promotedIds = mod.promoteMaturedRules(promoDir, { corpus: multiLangCorpus });
+    assert.deepEqual(promotedIds, ['wide/exp-rule-test']);
+    const promotedDoc = yaml.load(fs.readFileSync(path.join(promoDir, 'exp-rule.yml'), 'utf8'));
+    assert.equal(promotedDoc.metadata.status, 'verified');
   } finally {
     fs.rmSync(learnTmp, { recursive: true, force: true });
   }

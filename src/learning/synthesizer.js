@@ -4,7 +4,7 @@ import { fileURLToPath } from "node:url";
 import yaml from "js-yaml";
 import { fetchJson, fetchText } from "../feeds/sources.js";
 import { writeFileAtomicSync } from "../updater/sync.js";
-import { collectCleanCorpus, verifyRuleCandidate } from "./verifier.js";
+import { collectCleanCorpus, SUPPORTED_RULE_LANGUAGES, verifyRuleCandidate } from "./verifier.js";
 
 const CURRENT_DIR = path.dirname(fileURLToPath(import.meta.url));
 const REPO_ROOT = path.resolve(CURRENT_DIR, "../..");
@@ -258,7 +258,8 @@ export async function synthesizeRuleFromAdvisory({ advisory, patchDiff = "", pro
     '  "remediation": "Short actionable fix guidance",',
     '  "tests": { "positive": ["vulnerable line 1", "vulnerable line 2"], "negative": ["safe fixed line 1", "safe fixed line 2"] }',
     "}",
-    "Select the exact language code(s) matching the vulnerable source code (including py, php, java, go, rb, rs, cs, c, cpp, tf, yaml, sh, js, ts, etc.); do NOT skip advisories just because they are not JavaScript/TypeScript.",
+    "Select the exact language code(s) matching the vulnerable source code from: js, ts, jsx, tsx, py, go, java, php, rb, rs, cs, c, cpp, kt, scala, sh, sql, yaml, yml, tf, hcl, html, vue, svelte. Never emit unsupported languages such as xml or vtl.",
+    "Focus on generalizable vulnerable API calls, sinks, or insecure framework usage patterns that developers might write in their applications. If the patch only modifies internal vendor private methods that external applications never write or call, return { \"skip\": true, \"reason\": \"internal vendor implementation detail handled by OSV SCA\" }.",
     "If the vulnerability is only detectable by package version numbers in manifests (package.json, requirements.txt, pom.xml, go.mod, Cargo.toml) rather than source-code sink/API usage, return { \"skip\": true, \"reason\": \"version-only advisory handled by OSV SCA\" }.",
     "Never generate generic manifest regex rules targeting \"json\".",
     "If you cannot produce a precise code-level pattern with zero obvious false positives, return { \"skip\": true, \"reason\": \"why\" }."
@@ -286,19 +287,25 @@ export async function synthesizeRuleFromAdvisory({ advisory, patchDiff = "", pro
   }
 
   const outLangs = Array.isArray(rawOut.languages)
-    ? rawOut.languages.map((l) => String(l).toLowerCase())
+    ? rawOut.languages.map((l) => String(l).toLowerCase()).filter((l) => SUPPORTED_RULE_LANGUAGES.has(l))
     : [];
+  if (Array.isArray(rawOut.languages) && rawOut.languages.length > 0 && outLangs.length === 0) {
+    return { skipped: true, reason: `Unsupported target language(s): ${rawOut.languages.join(", ")}` };
+  }
   if (outLangs.length > 0 && outLangs.every((l) => l === "json")) {
     return { skipped: true, reason: "Version-only manifest json rules are excluded in favor of OSV SCA" };
   }
 
+  const nowMs = Date.now();
+  const learnedAtIso = new Date(nowMs).toISOString();
+  const quarantineUntilIso = new Date(nowMs + 7 * 24 * 60 * 60 * 1000).toISOString();
   const slug = toRuleSlug(advisory.id);
   const rule = {
     id: `wide/${slug}`,
     name: slug,
     category: String(rawOut.category || "GENERAL").toUpperCase(),
     severity: String(rawOut.severity || advisory.sev || "HIGH").toUpperCase(),
-    languages: Array.isArray(rawOut.languages) && rawOut.languages.length ? rawOut.languages : ["js", "ts"],
+    languages: outLangs.length ? outLangs : ["js", "ts"],
     cwe: advisory.cwe || "CWE-1395",
     ...(advisory.cve ? { cve: advisory.cve } : {}),
     pattern: String(rawOut.pattern || ""),
@@ -310,9 +317,11 @@ export async function synthesizeRuleFromAdvisory({ advisory, patchDiff = "", pro
     references: Array.isArray(advisory.references) ? advisory.references.slice(0, 6) : [],
     metadata: {
       source: "wide-rules-auto-learn",
+      status: "experimental",
+      quarantineUntil: quarantineUntilIso,
       ...(advisory.kev ? { kev: true } : {}),
       ...(typeof advisory.epss === "number" ? { epss: advisory.epss } : {}),
-      learnedAt: new Date().toISOString(),
+      learnedAt: learnedAtIso,
       ...(advisory.url ? { advisoryUrl: advisory.url } : {})
     },
     tests: {
@@ -381,6 +390,43 @@ function loadExistingRulesDocs(rulesDir) {
   return docs;
 }
 
+export function promoteMaturedRules(learnedDir, options = {}) {
+  const promoted = [];
+  if (!learnedDir || !fs.existsSync(learnedDir)) return promoted;
+  const nowMs = typeof options.nowMs === "number" ? options.nowMs : Date.now();
+  const corpus = Array.isArray(options.corpus)
+    ? options.corpus
+    : collectCleanCorpus([
+        path.join(REPO_ROOT, "src"),
+        path.join(REPO_ROOT, "tests", "corpus", "clean")
+      ]);
+
+  for (const entry of fs.readdirSync(learnedDir, { withFileTypes: true })) {
+    if (!entry.isFile() || (!entry.name.endsWith(".yml") && !entry.name.endsWith(".yaml"))) continue;
+    const full = path.join(learnedDir, entry.name);
+    let doc;
+    try {
+      doc = yaml.load(fs.readFileSync(full, "utf8"));
+    } catch {
+      continue;
+    }
+    if (!doc || typeof doc !== "object" || doc.metadata?.status !== "experimental") continue;
+    const untilMs = doc.metadata?.quarantineUntil ? Date.parse(doc.metadata.quarantineUntil) : 0;
+    if (!untilMs || Number.isNaN(untilMs) || untilMs > nowMs) continue;
+
+    const check = verifyRuleCandidate(doc, { corpus, maxFalsePositives: 0, strictPrecision: true });
+    if (!check.ok) continue;
+
+    doc.metadata.status = "verified";
+    doc.metadata.promotedAt = new Date(nowMs).toISOString();
+    if (!options.dryRun) {
+      writeFileAtomicSync(full, yaml.dump(doc, { lineWidth: -1, noRefs: true }));
+    }
+    promoted.push(doc.id);
+  }
+  return promoted;
+}
+
 export async function learnRulesFromAdvisories(options = {}) {
   const rulesDir = options.rulesDir || path.join(REPO_ROOT, "rules");
   const outDir = options.outDir || path.join(rulesDir, "learned");
@@ -434,8 +480,15 @@ export async function learnRulesFromAdvisories(options = {}) {
   const rejected = [];
   let stateChanged = false;
   let consecutiveProviderErrors = 0;
+  const isLiveLlm = typeof options.completeFn !== "function" && typeof options.fetchImpl !== "function";
+  const pacingDelayMs = typeof options.pacingDelayMs === "number" ? options.pacingDelayMs : (isLiveLlm ? 2500 : 0);
+  const promoted = promoteMaturedRules(outDir, { corpus, dryRun: options.dryRun });
 
-  for (const adv of candidates) {
+  for (let idx = 0; idx < candidates.length; idx++) {
+    const adv = candidates[idx];
+    if (idx > 0 && pacingDelayMs > 0) {
+      await new Promise((r) => setTimeout(r, pacingDelayMs));
+    }
     const patchDiff = await fetchPatchSnippet(adv.patchUrls, {
       token: options.token,
       fetchImpl: options.fetchImpl
@@ -530,6 +583,7 @@ export async function learnRulesFromAdvisories(options = {}) {
     provider,
     candidatesConsidered: candidates.length,
     learned,
+    promoted,
     rejected
   };
 }

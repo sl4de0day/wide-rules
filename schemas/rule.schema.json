@@ -89,6 +89,8 @@
       "type": "object",
       "properties": {
         "source": { "type": "string" },
+        "status": { "type": "string", "enum": ["experimental", "verified", "deprecated"] },
+        "quarantineUntil": { "type": "string" },
         "kev": { "type": "boolean" },
         "epss": { "type": "number" },
         "learnedAt": { "type": "string" },

@@ -78,12 +78,19 @@ async function main() {
   const cleanFlowHits = analysis.analyzeProjectFlows(cleanFiles);
   const vulnRuleHits = scanCorpusWithRules(vulnFiles, rules);
   const vulnFlowHits = analysis.analyzeProjectFlows(vulnFiles);
+  const hitFiles = new Set([
+    ...vulnRuleHits.map((h) => h.file),
+    ...vulnFlowHits.map((h) => h.file)
+  ]);
+  const recallPct = vulnFiles.length > 0 ? Number(((hitFiles.size / vulnFiles.length) * 100).toFixed(1)) : 100;
 
   const report = {
     cleanFiles: cleanFiles.length,
     cleanRuleHits: cleanRuleHits.length,
     cleanFlowHits: cleanFlowHits.length,
     vulnFiles: vulnFiles.length,
+    vulnFilesDetected: hitFiles.size,
+    fileRecallPct: recallPct,
     vulnRuleHits: vulnRuleHits.length,
     vulnFlowHits: vulnFlowHits.length,
     crossFileHits: vulnFlowHits.filter((h) => h.crossFile).length,
@@ -95,8 +102,8 @@ async function main() {
     console.error("Accuracy gate failed: non-zero false positives on clean corpus.");
     process.exit(1);
   }
-  if (report.vulnRuleHits === 0 || report.vulnFlowHits === 0 || report.crossFileHits === 0) {
-    console.error("Accuracy gate failed: expected rule, taint, and cross-file detections on vulnerable corpus.");
+  if (report.vulnRuleHits === 0 || report.vulnFlowHits === 0 || report.crossFileHits === 0 || report.fileRecallPct < 100) {
+    console.error("Accuracy gate failed: expected 100% file recall plus rule, taint, and cross-file detections on vulnerable corpus.");
     process.exit(1);
   }
 }

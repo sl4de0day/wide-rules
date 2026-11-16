@@ -6,6 +6,15 @@ const VALID_SEVERITIES = new Set(["CRITICAL", "HIGH", "MEDIUM", "LOW", "INFO"]);
 const VALID_CONFIDENCE = new Set(["high", "medium", "low"]);
 const ID_RE = /^wide\/[a-z0-9_-]+$/;
 
+export const SUPPORTED_RULE_LANGUAGES = new Set([
+  "all", "c", "cc", "cjs", "cpp", "cs", "csx", "cts", "cxx", "dockerfile",
+  "erl", "ex", "exs", "go", "h", "hcl", "hh", "hpp", "hrl", "htm", "html",
+  "java", "js", "json", "jsx", "kotlin", "kt", "kts", "mjs", "mts",
+  "php", "php3", "php4", "php5", "phps", "phtml", "py", "pyi", "pyw",
+  "rb", "rs", "sc", "scala", "sh", "sql", "svelte", "tf", "ts", "tsx",
+  "vue", "xhtml", "yaml", "yml"
+]);
+
 export const DEFAULT_CLEAN_CORPUS = [
   { lang: "js", code: "const count = Number(req.query.count || 0);" },
   { lang: "js", code: "const rows = await pool.query('SELECT id, name FROM users WHERE id = $1', [userId]);" },
@@ -75,6 +84,13 @@ export function verifyRuleCandidate(doc, options = {}) {
   }
   if (!Array.isArray(doc.languages) || doc.languages.length === 0) {
     errors.push("languages must be a non-empty array");
+  } else {
+    for (const lang of doc.languages) {
+      const normalized = String(lang || "").toLowerCase();
+      if (!SUPPORTED_RULE_LANGUAGES.has(normalized)) {
+        errors.push(`Unsupported language '${lang}'`);
+      }
+    }
   }
   if (!doc.message || typeof doc.message !== "string") {
     errors.push("Missing message");
