@@ -114,7 +114,8 @@ async function main() {
   }
 
   if (command === "stats") {
-    const db = loadAdvisories();
+    const repoPath = path.join(path.dirname(new URL(import.meta.url).pathname.replace(/^\/([A-Za-z]:)/, "$1")), "../data/osv-advisories.json");
+    const db = loadAdvisories({ customPath: flags.cache ? undefined : repoPath });
     console.log(JSON.stringify(db.stats || {}, null, 2));
     return;
   }

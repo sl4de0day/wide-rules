@@ -15,7 +15,7 @@ const DEFAULT_MODELS = {
   gemini: "gemini-2.5-flash",
   claude: "claude-sonnet-4-20250514",
   openai: "gpt-4o-mini",
-  "github-models": "gpt-4o-mini",
+  "github-models": "openai/gpt-4o-mini",
   ollama: "qwen2.5-coder:7b"
 };
 
@@ -182,7 +182,7 @@ export async function callLlmJson({ provider, model, systemPrompt, userPrompt, f
     const key = isGitHub ? process.env.GITHUB_TOKEN : process.env.OPENAI_API_KEY;
     if (!key) throw new Error(`Missing API key for ${provider}`);
     const endpoint = isGitHub
-      ? "https://models.inference.ai.azure.com/chat/completions"
+      ? "https://models.github.ai/inference/chat/completions"
       : "https://api.openai.com/v1/chat/completions";
     const data = await fetchJson(endpoint, {
       method: "POST",
@@ -369,6 +369,7 @@ export async function learnRulesFromAdvisories(options = {}) {
 
   const learned = [];
   const rejected = [];
+  let stateChanged = false;
 
   for (const adv of candidates) {
     const patchDiff = await fetchPatchSnippet(adv.patchUrls, {
@@ -388,6 +389,7 @@ export async function learnRulesFromAdvisories(options = {}) {
 
       if (synth.skipped) {
         learnedState.processed[adv.id] = { status: "skipped", reason: synth.reason, at: new Date().toISOString() };
+        stateChanged = true;
         rejected.push({ id: adv.id, reason: synth.reason });
         continue;
       }
@@ -396,6 +398,7 @@ export async function learnRulesFromAdvisories(options = {}) {
       if (!check.ok) {
         const reason = check.errors.join("; ");
         learnedState.processed[adv.id] = { status: "rejected", reason, at: new Date().toISOString() };
+        stateChanged = true;
         rejected.push({ id: adv.id, reason });
         continue;
       }
@@ -410,16 +413,16 @@ export async function learnRulesFromAdvisories(options = {}) {
         file: path.relative(REPO_ROOT, filePath),
         at: new Date().toISOString()
       };
+      stateChanged = true;
       learned.push({ id: adv.id, ruleId: synth.rule.id, filePath });
     } catch (err) {
       const reason = String(err?.message || err);
-      learnedState.processed[adv.id] = { status: "error", reason, at: new Date().toISOString() };
       rejected.push({ id: adv.id, reason });
     }
   }
 
-  learnedState.updatedAt = new Date().toISOString();
-  if (!options.dryRun) {
+  if (stateChanged && !options.dryRun) {
+    learnedState.updatedAt = new Date().toISOString();
     writeFileAtomicSync(stateFile, JSON.stringify(learnedState, null, 2));
   }
 

@@ -20,3 +20,8 @@ remediation: 'Guard the loop: skip keys that are __proto__/constructor/prototype
 not-match: (?:__proto__|constructor|prototype|Object\.create\s*\(\s*null\s*\)|hasOwn|structuredClone)
 why: 'A hand-rolled deep merge: for..in iterating a client-controlled object and writing target[key] = ... keyed by the same loop variable on the same line. for..in enumerates inherited enumerable keys and an attacker-supplied __proto__ key makes target[key] assign onto the prototype, poisoning Object.prototype. The loop variable is captured and backreferenced (\1) in the write so an unrelated bracket-assignment on the same physical line (config[env]=1) no longer matches; the =(?![=>]) guard excludes ===/==/=> comparisons that previously false-fired (map[k] === val); and notMatch now suppresses hasOwn (covering both hasOwnProperty and Object.hasOwn), same-line __proto__/constructor/prototype skips, and Object.create(null) targets.'
 confidence: high
+tests:
+  positive:
+    - "for (const k in req.body) target[k] = req.body[k];"
+  negative:
+    - "for (const k in req.body) if (Object.hasOwn(req.body, k)) target[k] = req.body[k];"

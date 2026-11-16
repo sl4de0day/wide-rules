@@ -11,9 +11,13 @@ const ECO_MAP = {
   npm: "npm",
   pip: "pip",
   pypi: "pip",
+  py: "pip",
+  python: "pip",
   maven: "maven",
   go: "go",
+  golang: "go",
   cargo: "cargo",
+  rust: "cargo",
   crates: "cargo",
   "crates.io": "cargo",
   nuget: "nuget",
@@ -182,6 +186,30 @@ export function normalizeGhsaAdvisory(raw) {
   };
 }
 
+export async function fetchGitHubAdvisoryByCve(cveId, options = {}) {
+  const cleanCve = String(cveId || "").trim().toUpperCase();
+  if (!/^CVE-\d{4}-\d+$/.test(cleanCve)) return null;
+  const token = options.token || process.env.GITHUB_TOKEN || "";
+  const headers = {
+    Accept: "application/vnd.github+json",
+    "X-GitHub-Api-Version": "2022-11-28"
+  };
+  if (token) headers.Authorization = `Bearer ${token}`;
+
+  const params = new URLSearchParams({
+    type: options.type || "reviewed",
+    cve_id: cleanCve,
+    per_page: "5"
+  });
+  const list = await fetchJson(`${GHSA_API_URL}?${params.toString()}`, {
+    headers,
+    fetchImpl: options.fetchImpl,
+    timeoutMs: options.timeoutMs
+  });
+  if (!Array.isArray(list) || list.length === 0) return null;
+  return normalizeGhsaAdvisory(list[0]);
+}
+
 export async function fetchGitHubAdvisories(options = {}) {
   const perPage = Math.min(Math.max(Number(options.perPage || 100), 1), 100);
   const pages = Math.min(Math.max(Number(options.pages || 2), 1), 10);
@@ -192,16 +220,16 @@ export async function fetchGitHubAdvisories(options = {}) {
   };
   if (token) headers.Authorization = `Bearer ${token}`;
 
-  const advisories = [];
-  for (let page = 1; page <= pages; page++) {
+  const byId = new Map();
+  const collectPage = async (page, ecosystem, limitPerPage) => {
     const params = new URLSearchParams({
       type: options.type || "reviewed",
-      per_page: String(perPage),
+      per_page: String(limitPerPage),
       page: String(page),
       sort: "updated",
       direction: "desc"
     });
-    if (options.ecosystem) params.set("ecosystem", options.ecosystem);
+    if (ecosystem) params.set("ecosystem", ecosystem);
     if (options.severity) params.set("severity", options.severity);
     if (options.updated) params.set("updated", options.updated);
 
@@ -211,15 +239,29 @@ export async function fetchGitHubAdvisories(options = {}) {
       timeoutMs: options.timeoutMs
     });
 
-    if (!Array.isArray(list) || list.length === 0) break;
+    if (!Array.isArray(list) || list.length === 0) return 0;
     for (const raw of list) {
       const normalized = normalizeGhsaAdvisory(raw);
-      if (normalized) advisories.push(normalized);
+      if (normalized && !byId.has(normalized.id)) {
+        byId.set(normalized.id, normalized);
+      }
     }
-    if (list.length < perPage) break;
+    return list.length;
+  };
+
+  for (let page = 1; page <= pages; page++) {
+    const count = await collectPage(page, options.ecosystem, perPage);
+    if (count < perPage) break;
   }
 
-  return advisories;
+  const extraEcosystems = Array.isArray(options.ecosystems) ? options.ecosystems : [];
+  for (const eco of extraEcosystems) {
+    try {
+      await collectPage(1, eco, Math.min(perPage, Number(options.ecosystemPerPage || 30)));
+    } catch {}
+  }
+
+  return [...byId.values()];
 }
 
 export async function fetchCisaKev(options = {}) {

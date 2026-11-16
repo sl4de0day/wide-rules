@@ -42,9 +42,10 @@ rules.sort((a, b) => a.id.localeCompare(b.id));
 
 const pkg = JSON.parse(fs.readFileSync(path.join(rootDir, 'package.json'), 'utf8'));
 
-const bundleData = {
+const force = process.argv.includes('--force');
+
+const rulesPayloadBase = {
   version: pkg.version,
-  generatedAt: new Date().toISOString(),
   totalRules: rules.length,
   categories,
   severities,
@@ -53,9 +54,47 @@ const bundleData = {
 
 const fullJsonPath = path.join(distDir, 'rules.json');
 const minJsonPath = path.join(distDir, 'rules.min.json');
+const shaPath = path.join(distDir, 'SHA256SUMS');
 
-fs.writeFileSync(fullJsonPath, JSON.stringify(bundleData, null, 2), 'utf8');
-fs.writeFileSync(minJsonPath, JSON.stringify(bundleData), 'utf8');
+function stripGeneratedAt(obj) {
+  if (!obj || typeof obj !== 'object') return obj;
+  const copy = { ...obj };
+  delete copy.generatedAt;
+  return copy;
+}
+
+function readJsonSafe(filePath) {
+  try {
+    return JSON.parse(fs.readFileSync(filePath, 'utf8'));
+  } catch {
+    return null;
+  }
+}
+
+let existingRulesTimestamp = null;
+let rulesChanged = force || !fs.existsSync(fullJsonPath) || !fs.existsSync(minJsonPath);
+if (!rulesChanged) {
+  const prev = readJsonSafe(fullJsonPath);
+  if (!prev || JSON.stringify(stripGeneratedAt(prev)) !== JSON.stringify(rulesPayloadBase)) {
+    rulesChanged = true;
+  } else {
+    existingRulesTimestamp = prev.generatedAt || null;
+  }
+}
+
+const bundleData = {
+  version: pkg.version,
+  generatedAt: rulesChanged || !existingRulesTimestamp ? new Date().toISOString() : existingRulesTimestamp,
+  totalRules: rules.length,
+  categories,
+  severities,
+  rules
+};
+
+if (rulesChanged) {
+  fs.writeFileSync(fullJsonPath, JSON.stringify(bundleData, null, 2), 'utf8');
+  fs.writeFileSync(minJsonPath, JSON.stringify(bundleData), 'utf8');
+}
 
 const artifacts = [
   ['rules.json', fullJsonPath],
@@ -63,20 +102,29 @@ const artifacts = [
 ];
 
 let osvCount = 0;
+let osvChanged = false;
 if (fs.existsSync(dataAdvisoriesPath)) {
   const osvDoc = JSON.parse(fs.readFileSync(dataAdvisoriesPath, 'utf8'));
   const osvFullPath = path.join(distDir, 'osv-bundle.json');
   const osvMinPath = path.join(distDir, 'osv-bundle.min.json');
-  fs.writeFileSync(osvFullPath, JSON.stringify(osvDoc, null, 2), 'utf8');
-  fs.writeFileSync(osvMinPath, JSON.stringify(osvDoc), 'utf8');
+  const prevOsv = readJsonSafe(osvFullPath);
+  osvChanged = force || !fs.existsSync(osvFullPath) || !fs.existsSync(osvMinPath) || !prevOsv || JSON.stringify(prevOsv) !== JSON.stringify(osvDoc);
+  if (osvChanged) {
+    fs.writeFileSync(osvFullPath, JSON.stringify(osvDoc, null, 2), 'utf8');
+    fs.writeFileSync(osvMinPath, JSON.stringify(osvDoc), 'utf8');
+  }
   osvCount = Number(osvDoc?.stats?.total || 0);
   artifacts.push(['osv-bundle.json', osvFullPath], ['osv-bundle.min.json', osvMinPath]);
 }
 
-const shaLines = artifacts.map(([name, filePath]) => {
+const nextShaContent = artifacts.map(([name, filePath]) => {
   const hash = crypto.createHash('sha256').update(fs.readFileSync(filePath)).digest('hex');
   return `${hash}  ${name}`;
-});
-fs.writeFileSync(path.join(distDir, 'SHA256SUMS'), `${shaLines.join('\n')}\n`, 'utf8');
+}).join('\n') + '\n';
 
-console.log(`Bundled ${rules.length} rules and ${osvCount} advisories successfully into dist/.`);
+const prevShaContent = fs.existsSync(shaPath) ? fs.readFileSync(shaPath, 'utf8') : '';
+if (rulesChanged || osvChanged || force || prevShaContent !== nextShaContent) {
+  fs.writeFileSync(shaPath, nextShaContent, 'utf8');
+}
+
+console.log(`Bundled ${rules.length} rules and ${osvCount} advisories (${rulesChanged || osvChanged ? 'updated' : 'unchanged'}) into dist/.`);

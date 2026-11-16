@@ -13,3 +13,10 @@ remediation: Use os.path.commonpath([base, resolved]) == base, or compare with t
 not-match: ^\s*#|\+\s*os\.sep|\+\s*['"][\/\\]['"]|os\.path\.join\s*\([^)]*,\s*['"]{2}\s*\)|os\.path\.commonpath|os\.path\.relpath|[\/\\]['"]\s*\)|with_sep|WithSep
 why: 'A realpath/abspath result is confined with `.startswith(base)` and no trailing os.sep, so /var/www/uploads_backup passes a check for /var/www/uploads (CWE-22). Tightened: the generic-receiver branch dropped its string-literal alternative, so `request.path.startswith(''/api'')` and `p.startswith(''/'')` (absolute/route checks) no longer fire; literals stay caught via the resolved-path-receiver and os.path.realpath()/abspath() branches. notMatch clears base+os.sep, os.path.join(base,''''), commonpath, relpath, a trailing-slash literal, and ''#'' comments.'
 confidence: high
+tests:
+  positive:
+    - "if resolved_path.startswith(base_dir): send(resolved_path)"
+    - "if os.path.abspath(p).startswith('/srv/uploads'): open(p)"
+  negative:
+    - "if resolved_path.startswith(base_dir + os.sep): send(resolved_path)"
+    - "if os.path.commonpath([base_dir, resolved_path]) == base_dir: send(resolved_path)"

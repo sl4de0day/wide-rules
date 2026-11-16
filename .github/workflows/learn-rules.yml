@@ -26,6 +26,7 @@ jobs:
         run: npm ci
 
       - name: Sync Advisories and Synthesize Verified Candidate Rules
+        id: learn
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -33,12 +34,23 @@ jobs:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
         run: |
           npm run sync:advisories
-          node src/cli.js learn --limit 5
+          node src/cli.js learn --limit 5 || true
+          if [ -n "$(git status --porcelain rules/)" ]; then
+            echo "has_rules=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_rules=false" >> "$GITHUB_OUTPUT"
+            echo "No new rules learned; skipping bundle and PR creation."
+          fi
+
+      - name: Validate and Bundle Learned Rules
+        if: steps.learn.outputs.has_rules == 'true'
+        run: |
           npm run validate
           npm run bundle
           npm test
 
       - name: Open Pull Request for Verified Rules
+        if: steps.learn.outputs.has_rules == 'true'
         uses: peter-evans/create-pull-request@v7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}

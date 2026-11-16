@@ -135,6 +135,11 @@ async function main() {
 
   const unsafeRes = mod.checkRegexSafety('^([a-z]+)+$', { strictStatic: true, maxProbeMs: 15 });
   assert.equal(unsafeRes.safe, false, 'ReDoS pattern should be rejected');
+  assert.equal(mod.checkRegexSafety('(?:.*foo){2,}', { strictStatic: true }).safe, false);
+  assert.equal(mod.checkRegexSafety('(a+)\\1+', { strictStatic: true }).safe, false);
+  assert.equal(mod.checkRegexSafety('(["\'])\\/{1,2}(?:(?!\\1).)*\\[(?:(?!\\1).)*=(?:(?!\\1).)*\\1', { strictStatic: true }).safe, false);
+  assert.equal(mod.checkRegexSafety('(["\'])[^\'"]{6,}\\1', { strictStatic: true }).safe, true);
+  assert.equal(mod.normalizeEcosystem('rust'), 'cargo');
 
   const safeRes = mod.checkRegexSafety('unsafeCall\\([^)]*req\\.body', { strictStatic: true });
   assert.equal(safeRes.safe, true);
@@ -225,10 +230,19 @@ async function main() {
       fetchImpl: mockFetch
     });
     assert.equal(syncRes.total, 1);
+    assert.equal(syncRes.changed, true);
     assert.equal(syncRes.kevMatched, 1);
     assert.equal(syncRes.db.npm[0].name, 'demo-pkg');
     assert.equal(syncRes.db.npm[0].kev, true);
     assert.equal(syncRes.db.npm[0].epss, 0.8421);
+
+    const repeatSync = await mod.syncAdvisoriesFromInternet({
+      outFile: advisoryOut,
+      rawOutFile: rawOut,
+      fetchImpl: mockFetch
+    });
+    assert.equal(repeatSync.changed, false);
+    assert.equal(repeatSync.db.generatedAt, syncRes.db.generatedAt);
 
     const learnRes = await mod.learnRulesFromAdvisories({
       rawAdvisoriesFile: rawOut,

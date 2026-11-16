@@ -19,7 +19,21 @@
       "type": "string"
     },
     "category": {
-      "type": "string"
+      "type": "string",
+      "enum": [
+        "INJECTION",
+        "AUTH",
+        "NETWORK",
+        "SECRETS",
+        "DESERIALIZATION",
+        "FILESYSTEM",
+        "PROTOTYPE",
+        "XSS",
+        "CRYPTO",
+        "AI_SECURITY",
+        "LOGIC",
+        "GENERAL"
+      ]
     },
     "cwe": {
       "type": "string"

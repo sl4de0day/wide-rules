@@ -22,3 +22,10 @@ remediation: Compare the parsed host exactly (host == base), or check base plus 
 not-match: (?:===)|(?:\.equals\s*\()|(?:['"`]\.['"`]\s*[.+]\s*[$\w])|(?:^\s*(?:#|\/\/|\*|\/\*))
 why: Suffix/contains/prefix host checks in Python (endswith), Go (strings.HasSuffix/Contains/HasPrefix), Java (endsWith/contains), PHP (str_ends_with/strpos), and Ruby (end_with?/include?) are substring tests without a boundary. HasSuffix(host, '.internal') / host.endswith('mycorp.com') / strpos($host,'example.com')!==false also accept an attacker-owned host that merely contains or ends with the string, enabling SSRF. Both alternations now require the second (literal) argument to look like a host (dotted label, IPv4, or scheme://authority), so the extremely common path/scheme/extension checks on a url var across all five languages (strings.HasPrefix(url,'/api/'), url.endswith('.png'), str_contains($url,'?'), strings.Contains(url,'://')) do not fire and get the rule dropped.
 confidence: high
+tests:
+  positive:
+    - "if host.endswith('corp.internal'): requests.get(url)"
+    - "if strings.HasSuffix(host, 'trusted.com') { http.Get(url) }"
+  negative:
+    - "if host == 'corp.internal' or host.endswith('.' + base): fetch(url)"
+    - "if url.endswith('.png'): return None"

@@ -13,3 +13,8 @@ remediation: Resolve the host and validate it against an allowlist of permitted 
 not-match: '"https?:\/\/|allow-?list|white-?list|isAllowed|permittedHost|ALLOWED_'
 why: new URL(userInput).openConnection()/openStream() opens an outbound connection to a host derived from user input, enabling SSRF against internal services and cloud metadata.
 confidence: high
+tests:
+  positive:
+    - "URLConnection conn = new URL(targetUrl).openConnection();"
+  negative:
+    - "URLConnection conn = new URL(ALLOWED_ENDPOINT).openConnection();"

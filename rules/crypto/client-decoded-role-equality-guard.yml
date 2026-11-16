@@ -23,3 +23,8 @@ remediation: Never authorize on jwt.decode() output. Verify the signature server
 not-match: ^\s*(\/\/|\*|\/\*)|\bjwt\.verify\b|\.verify\s*\(
 why: jwt.decode()/jwtDecode() only base64-decodes the payload — it does NOT verify the signature. Comparing that decoded role to 'admin' to gate behavior trusts an unverified, user-editable claim, so a user can flip their role in the token and pass the check (improper signature verification driving an authorization decision).
 confidence: high
+tests:
+  positive:
+    - "if (jwtDecode(token).role === 'admin') unlock();"
+  negative:
+    - "if (jwt.verify(token, pubKey).role === 'admin') unlock();"

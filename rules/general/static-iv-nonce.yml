@@ -22,3 +22,9 @@ message: The IV/nonce is a fixed/zero value rather than fresh random bytes.
 remediation: Generate a fresh random IV per message with crypto.getRandomValues()/randomBytes() and store it alongside the ciphertext.
 why: 'Reusing an IV with the same key in AES-GCM/CTR is catastrophic: it breaks confidentiality (XOR of two ciphertexts leaks plaintext) and, for GCM, lets an attacker forge the authentication tag.'
 confidence: high
+tests:
+  positive:
+    - "const iv = new Uint8Array(12);"
+    - "const nonce = Buffer.alloc(16);"
+  negative:
+    - "const iv = crypto.randomBytes(12);"

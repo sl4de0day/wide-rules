@@ -11,3 +11,9 @@ remediation: Parse and validate the body, then re-serialize a canonical body (e.
 not-match: bytes\.NewReader|bytes\.NewBuffer|strings\.NewReader|json\.Marshal
 why: The raw inbound request body (r.Body) is streamed unmodified into an outbound request; if it carries duplicated form parameters, the downstream service re-parses them with different precedence than the frontend, enabling parameter pollution. The body must appear as a real argument of the outbound call (balanced-paren match), optionally wrapped in one no-op adaptor like io.NopCloser, so an r.Body mentioned in a trailing comment or a separate statement on the same line no longer matches.
 confidence: high
+tests:
+  positive:
+    - "resp, err := client.Post(downstreamURL, \"application/json\", r.Body)"
+    - "reqOut, _ := http.NewRequest(\"POST\", target, io.NopCloser(req.Body))"
+  negative:
+    - "resp, err := client.Post(downstreamURL, \"application/json\", bytes.NewReader(payload))"

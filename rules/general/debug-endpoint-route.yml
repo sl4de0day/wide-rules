@@ -34,3 +34,10 @@ remediation: Delete the endpoint before release, or gate it behind an explicit p
 not-match: ^\s*(?:\/\/|#|\*|\/\*|<!--|--)|NODE_ENV|APP_ENV|RAILS_ENV|FLASK_ENV|GIN_MODE|ASPNETCORE_ENVIRONMENT|isAdmin|is_admin|requireAdmin|require_admin|admin_required|adminOnly|ensureAdmin|hasRole|requireAuth|@admin|isDev|isDevelopment|__DEV__|IsDevelopment|app\.Environment|Rails\.env|env\s*[!=]==?\s*['"\x60](?:dev|development|staging|local|test)|==\s*['"\x60](?:dev|development|staging|local|test)|debug\s*[:=]\s*(?:false|0)
 why: A route whose path segment is debug/dev/internal/backdoor/test registers a backdoor or diagnostic handler that ships to production, exposing internal state, resets, or dumps to anyone who guesses the path. Word boundaries after the keyword keep it from firing on '/devices', '/developer', '/latest', '/testimonials'.
 confidence: high
+tests:
+  positive:
+    - "app.get('/api/internal', (req, res) => res.json(process.env));"
+    - "router.post('/admin/debug', debugHandler);"
+  negative:
+    - "app.get('/api/devices', listDevices);"
+    - "if (process.env.NODE_ENV === 'development') app.get('/api/debug', dumpState);"

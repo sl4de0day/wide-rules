@@ -16,3 +16,9 @@ remediation: The /e modifier was deprecated in PHP 5.5 and removed in 7.0 -- eli
 not-match: ^\s*(?:\/\/|#|\*|\/\*)|preg_replace_callback
 why: 'The PCRE /e (PREG_REPLACE_EVAL) modifier makes preg_replace EXECUTE its replacement argument as PHP code after backreference substitution, so any attacker-influenced group interpolated into that eval''d string yields RCE. The sink matches a literal pattern (opening quote captured as \1, a delimiter captured as \2 from /#~!@%|, a body, the matching close delimiter \2, a trailing modifier run that contains the letter e, and the closing quote \1). Two precision fixes over the original: (1) the body is now (?:(?!\1)[^\\]|\\.)*? so it can never span past the pattern''s own closing quote -- this kills the cross-argument false positive where a plain replacement string that merely looks like /x/e (e.g. preg_replace(''/foo/'',''/replace/e'',$s)) was matched even though arg1 carried no e modifier; the (?!\1) still permits the OTHER quote char inside the pattern, so preg_replace(''/say "hi"/e'',...) stays a true positive. (2) the pipe delimiter was added. Patterns without an e modifier never match (the modifier run requires an e before the closing quote), and preg_replace_callback plus comment lines are suppressed by notMatch (# only anchored at line start, so it never suppresses a real # delimiter mid-line).'
 confidence: high
+tests:
+  positive:
+    - "$out = preg_replace('/([a-z]+)/ei', 'strtoupper(\"$1\")', $input);"
+  negative:
+    - "$out = preg_replace_callback('/([a-z]+)/i', $fn, $input);"
+    - "$out = preg_replace('/foo/', '/replace/e', $input);"

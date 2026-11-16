@@ -1,0 +1,35 @@
+name: Rule False Positive or Bypass Report
+description: Report a false positive or missed vulnerability for an existing Wide rule
+title: "[Rule]: "
+labels: ["rules", "triage"]
+body:
+  - type: input
+    id: rule_id
+    attributes:
+      label: Rule ID
+      placeholder: wide/cwe89-js-query-concat
+    validations:
+      required: true
+  - type: dropdown
+    id: kind
+    attributes:
+      label: Issue Type
+      options:
+        - False Positive
+        - False Negative / Bypass
+        - ReDoS / Performance Issue
+    validations:
+      required: true
+  - type: textarea
+    id: snippet
+    attributes:
+      label: Minimal Code Sample
+      render: text
+    validations:
+      required: true
+  - type: textarea
+    id: notes
+    attributes:
+      label: Expected Behavior
+    validations:
+      required: false

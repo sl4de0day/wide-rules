@@ -1,6 +1,6 @@
 {
   "version": "0.4151126",
-  "generatedAt": "2026-11-16T04:39:35.165Z",
+  "generatedAt": "2026-11-16T10:00:59.987Z",
   "totalRules": 729,
   "categories": {
     "AI_SECURITY": 13,
@@ -467,12 +467,22 @@
         "svelte"
       ],
       "cwe": "CWE-287",
-      "pattern": "(?<![\\w$])(?:[\\w$]+(?:\\.[\\w$]+)*\\.(?:status|statusCode)\\s*(?:===?|==|>=|<=|>|<)\\s*2\\d\\d\\b|[\\w$]+(?:\\.[\\w$]+)*\\.ok\\b)[^\\n]*?(?:\\bisLoggedIn\\b|\\bisAdmin\\b|\\bisAuthenticated\\b|\\bisAuthorized\\b|\\bauthorized\\b|\\bgrantAccess\\b|\\ballowAccess\\b|\\bsetLoggedIn\\b|\\bsetAdmin\\b|\\bshowAdmin(?!Error|Warn|Alert|Toast|Message|Msg|Notice|Denied|Fail|Prompt)\\w*|\\bloginSuccess\\b|\\bsetAuthenticated\\b|\\bsetAuthorized\\b|\\bsetUserRole\\b|\\bsetIsAdmin\\b|\\bsetIsLoggedIn\\b|localStorage\\.setItem|sessionStorage\\.setItem)",
+      "pattern": "(?<![\\w$.])(?:[\\w$]+(?:\\.[\\w$]+)*\\.(?:status|statusCode)\\s*(?:===?|==|>=|<=|>|<)\\s*2\\d\\d\\b|[\\w$]+(?:\\.[\\w$]+)*\\.ok\\b)[^\\n]*?(?:\\bisLoggedIn\\b|\\bisAdmin\\b|\\bisAuthenticated\\b|\\bisAuthorized\\b|\\bauthorized\\b|\\bgrantAccess\\b|\\ballowAccess\\b|\\bsetLoggedIn\\b|\\bsetAdmin\\b|\\bshowAdmin(?!Error|Warn|Alert|Toast|Message|Msg|Notice|Denied|Fail|Prompt)\\w*|\\bloginSuccess\\b|\\bsetAuthenticated\\b|\\bsetAuthorized\\b|\\bsetUserRole\\b|\\bsetIsAdmin\\b|\\bsetIsLoggedIn\\b|localStorage\\.setItem|sessionStorage\\.setItem)",
       "message": "Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.",
       "remediation": "Never infer authentication/authorization from a status code. Let the server enforce access and return an explicit, signed, server-verified identity/permission for the specific action; treat 2xx only as 'the call completed' and re-authorize privileged operations server-side.",
       "not-match": "(?:^\\s*(?:\\/\\/|\\*|\\/\\*|<!--|#))|(?:\\.spec\\.|\\.test\\.|__tests__|\\bexpect\\s*\\(|toHaveBeenCalled|\\bmock\\w*|\\bdescribe\\s*\\(|\\bit\\s*\\()|(?:\\bawait\\s+[\\w.$]*(?:verify|validateSession|introspect|checkAuth|getSession|reauth)\\w*\\s*\\()",
       "why": "A bare HTTP 2xx status (or res.ok) is treated as proof the user is authenticated/authorized and is used to set an auth flag or unlock access. A 200 only means the request succeeded (an endpoint may return 200 to anyone, or the response may be forged/replayed); it is not an authorization signal, so the client ends up granting access with no server-verified claim.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "if (res.status === 200) setIsAdmin(true);",
+          "if (response.ok) localStorage.setItem('auth', '1');"
+        ],
+        "negative": [
+          "if (res.ok) await validateSession();",
+          "if (res.status === 200) showAdminError('Retry later');"
+        ]
+      }
     },
     {
       "id": "wide/client-authz-response-boolean-field",
@@ -492,12 +502,22 @@
         "svelte"
       ],
       "cwe": "CWE-602",
-      "pattern": "(?:(?:\\bif\\s*\\(\\s*|\\breturn\\s+|\\bwhile\\s*\\(\\s*)!?\\s*[\\w$]+(?:\\.[\\w$]+)*\\.(?:(?:isAdmin|isAdministrator|isLoggedIn|isLogIn|isLogin|isAuthenticated|isAuthed|isSuperuser|isSuperUser|isAuth)\\b|admin\\b(?!\\s*\\()))|(?:(?<![\\w$])[\\w$]+(?:\\.[\\w$]+)*\\.(?:isAdmin|isAdministrator|isLoggedIn|isLogIn|isLogin|isAuthenticated|isAuthed|isSuperuser|isSuperUser|isAuth)\\s*(?:\\?|&&))",
+      "pattern": "(?:(?:\\bif\\s*\\(\\s*|\\breturn\\s+|\\bwhile\\s*\\(\\s*)!?\\s*[\\w$]+(?:\\.[\\w$]+)*\\.(?:(?:isAdmin|isAdministrator|isLoggedIn|isLogIn|isLogin|isAuthenticated|isAuthed|isSuperuser|isSuperUser|isAuth)\\b|admin\\b(?!\\s*\\()))|(?:(?<![\\w$.])[\\w$]+(?:\\.[\\w$]+)*\\.(?:isAdmin|isAdministrator|isLoggedIn|isLogIn|isLogin|isAuthenticated|isAuthed|isSuperuser|isSuperUser|isAuth)\\s*(?:\\?|&&))",
       "message": "Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.",
       "remediation": "Do not gate access on a client-held boolean. Have the server authorize each protected action/route and return only the data the caller is entitled to; on the client, treat any such flag as a presentation hint and re-fetch/authorize from the server before revealing privileged data or actions.",
       "not-match": "(?:^\\s*(?:\\/\\/|\\*|\\/\\*|<!--|#))|(?:className|classList|\\bstyle\\b|\\.style\\b|textContent|innerText|innerHTML\\s*=|\\.hidden\\b|display\\s*[:=]|visibility|opacity|aria-|toggleClass|setAttribute|isMenuOpen|isModalOpen|isDrawerOpen|isDropdownOpen|isCollapsed|isExpanded|showTooltip|tooltip|darkMode|\\btheme\\b)|(?:\\bawait\\s+[\\w.$]*(?:verify|validate|revalidate|authorize|introspect|checkAuth|getSession|fetchUser)\\w*\\s*\\()|(?:mongoose|adminCommand|\\bdb\\.admin\\b)",
       "why": "The browser grants access or renders a protected view by branching on an auth/role boolean it received or holds (res.data.isLogin, response.admin, user.isAdmin). A client can flip that value in devtools or by tampering with the response, so the gate enforces nothing; every real authorization must be re-decided on the server per request.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "if (res.data.isAdmin) showVault();",
+          "user.isAuthenticated ? renderPanel() : null;"
+        ],
+        "negative": [
+          "if (await verifyAuth()) return true;",
+          "const cls = user.isMenuOpen ? 'open' : 'closed';"
+        ]
+      }
     },
     {
       "id": "wide/client-authz-role-string-equality",
@@ -517,12 +537,22 @@
         "svelte"
       ],
       "cwe": "CWE-602",
-      "pattern": "(?<![\\w$])(?:[\\w$]+(?:\\.[\\w$]+)*\\.(?:role|roles|userRole|user_role|accountType|accessLevel|permission|permissions|privilege|privileges|userType|authority|authorities|memberType|accountLevel|group|groups)\\s*(?:===?|!==?)\\s*['\"](?:admin|administrator|superuser|superadmin|super_admin|super-admin|sysadmin|root|owner|manager|moderator|staff|elevated)['\"]|[\\w$]+(?:\\.[\\w$]+)*\\.(?:roles|permissions|privileges|scopes|groups|authorities|grants)\\s*\\.\\s*(?:includes|indexOf|contains|has)\\s*\\(\\s*['\"](?:admin|administrator|superuser|superadmin|root|owner)['\"])",
+      "pattern": "(?<![\\w$.])(?:[\\w$]+(?:\\.[\\w$]+)*\\.(?:role|roles|userRole|user_role|accountType|accessLevel|permission|permissions|privilege|privileges|userType|authority|authorities|memberType|accountLevel|group|groups)\\s*(?:===?|!==?)\\s*['\"](?:admin|administrator|superuser|superadmin|super_admin|super-admin|sysadmin|root|owner|manager|moderator|staff|elevated)['\"]|[\\w$]+(?:\\.[\\w$]+)*\\.(?:roles|permissions|privileges|scopes|groups|authorities|grants)\\s*\\.\\s*(?:includes|indexOf|contains|has)\\s*\\(\\s*['\"](?:admin|administrator|superuser|superadmin|root|owner)['\"])",
       "message": "Broken access control — a security decision made from a client value, unverified identifier, or unauthenticated service.",
       "remediation": "Remove role comparisons from client access decisions. Enforce role/permission on the server for each request and return 403 when unauthorized; use any client-side role only to adjust presentation, never to unlock privileged data or operations.",
       "not-match": "(?:^\\s*(?:\\/\\/|\\*|\\/\\*|<!--|#))|(?:\\bexpect\\s*\\(|\\btoBe\\b|\\btoEqual\\b|\\btoContain\\b|\\bassert\\w*\\s*\\(|\\bdescribe\\s*\\(|\\bit\\s*\\(|\\.spec\\.|\\.test\\.|__tests__|\\bmock\\w*)|(?:\\.(?:filter|map|forEach|reduce|sort|findIndex|find)\\s*\\()|(?:className|classList|\\bstyle\\b|textContent|innerText|placeholder|<option|aria-|\\blabel\\s*[:=])",
       "why": "A privileged role is decided in the browser by comparing a client-held role/permission value to a hard-coded privileged string (user.role === 'admin', roles.includes('admin')). The role field is client-controllable, so this comparison is not an authorization boundary; the server must re-check the caller's role for the specific resource.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "if (currentUser.role === 'admin') unlockBilling();",
+          "const allowed = session.user.roles.includes('superadmin');"
+        ],
+        "negative": [
+          "expect(user.role === 'admin').toBe(false);",
+          "const badges = users.filter(u => u.role === 'admin');"
+        ]
+      }
     },
     {
       "id": "wide/client-authz-storage-auth-flag-trust",
@@ -740,7 +770,15 @@
       "remediation": "Never authorize on jwt.decode() output. Verify the signature server-side (or with jwt.verify / jose jwtVerify against a public key) and, for real access control, enforce the role on the server for every protected request. Client checks are UI hints only.",
       "not-match": "^\\s*(\\/\\/|\\*|\\/\\*)|\\bjwt\\.verify\\b|\\.verify\\s*\\(",
       "why": "jwt.decode()/jwtDecode() only base64-decodes the payload — it does NOT verify the signature. Comparing that decoded role to 'admin' to gate behavior trusts an unverified, user-editable claim, so a user can flip their role in the token and pass the check (improper signature verification driving an authorization decision).",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "if (jwtDecode(token).role === 'admin') unlock();"
+        ],
+        "negative": [
+          "if (jwt.verify(token, pubKey).role === 'admin') unlock();"
+        ]
+      }
     },
     {
       "id": "wide/client-decoded-scope-permission-access",
@@ -3669,12 +3707,22 @@
         "cts"
       ],
       "cwe": "CWE-643",
-      "pattern": "([\"'])\\/{1,2}(?:(?!\\1).)*\\[(?:(?!\\1).)*=(?:(?!\\1).)*\\1\\s*\\+",
+      "pattern": "([\"'])\\/{1,2}(?:(?!\\1)[^\\[\\r\\n])*\\[(?:(?!\\1)[^=\\r\\n])*=(?:(?!\\1)[^\\r\\n])*\\1\\s*\\+",
       "message": "An XPath expression with a predicate is built by string concatenation.",
       "remediation": "Use a parameterized/variable-bound XPath (e.g. XPathExpression with a resolver) or escape the value before embedding it.",
       "not-match": "(escapeXPath|xpathEscape|xpath\\.escape|encodeXPath|escapeForXPath)",
       "why": "Injecting quotes or ' or 1=1'-style payloads into an XPath predicate lets an attacker alter the node selection and read data outside the intended scope of the document.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "const q = \"//users[@id=\" + req.query.id + \"]\";",
+          "const q = '//items[@name=\"' + userInput;"
+        ],
+        "negative": [
+          "const q = \"//users[@id=$userId]\";",
+          "const q = escapeXPath(\"//users[@id=\" + req.query.id);"
+        ]
+      }
     },
     {
       "id": "wide/cwe693-csp-unsafe-inline-eval",
@@ -3790,7 +3838,7 @@
       "pattern": "\\b(?:spawnSync|execFileSync|execFile|spawn|exec|fork)\\s*\\(.*\\bshell\\s*:\\s*true\\b",
       "message": "Command injection via shell:true — child_process/subprocess with the shell option re-parses arguments through the system shell (CWE-78).",
       "remediation": "Remove the shell:true option so arguments go straight to execvp without a shell: spawn('ping', ['-c','1', host]) with an args array keeps metacharacters inert. If a shell is genuinely required, strictly allowlist/validate the input and never place user-controlled data into a shell-parsed argument.",
-      "not-match": "^\\s*(?:\\/\\/|\\*|\\/\\*)|\\b(?:spawnSync|execFileSync|execFile|spawn|exec|fork)\\s*\\(\\s*(?:'[^']*'|\"[^\"]*\"|`[^`$]*`|\\[(?:\\s*(?:'[^']*'|\"[^\"]*\"|`[^`$]*`)\\s*,?)*\\s*\\]|,|\\s)*\\{",
+      "not-match": "^\\s*(?:\\/\\/|\\*|\\/\\*)|\\b(?:spawnSync|execFileSync|execFile|spawn|exec|fork)\\s*\\(\\s*(?:(?:'[^']*'|\"[^\"]*\"|`[^`$]*`)|\\[\\s*(?:(?:'[^']*'|\"[^\"]*\"|`[^`$]*`)(?:\\s*,\\s*(?:'[^']*'|\"[^\"]*\"|`[^`$]*`))*)\\s*,?\\s*\\]|\\[\\s*\\])(?:\\s*,\\s*(?:(?:'[^']*'|\"[^\"]*\"|`[^`$]*`)|\\[\\s*(?:(?:'[^']*'|\"[^\"]*\"|`[^`$]*`)(?:\\s*,\\s*(?:'[^']*'|\"[^\"]*\"|`[^`$]*`))*)\\s*,?\\s*\\]|\\[\\s*\\]))?\\s*,\\s*\\{",
       "why": "A child_process spawn/exec/execFile/spawnSync/execFileSync/fork call given the { shell: true } option re-parses its arguments through the system shell, so shell metacharacters (; && | $() backticks) inside a non-literal argument execute as commands even though an args array was used. In spawn('ping', ['-c','1', host], { shell:true }) a value host='example.com;id' runs id, bypassing any IP-format blacklist. Two refinements over the original: (1) the notMatch's option-object clause was relaxed from requiring shell to be the FIRST key (\\{\\s*shell\\s*:\\s*true) to just reaching the opening brace after all-literal args, so a safe call with reordered options like spawn('ls',['-la'],{ cwd:'/tmp', shell:true }) no longer false-fires; (2) the backtick template-literal alternatives were tightened from `[^`]*` to `[^`$]*` so an interpolated template literal (`ls ${dir}`) is treated as non-literal and correctly fires, while a plain template literal stays suppressed. notMatch still suppresses shell:false (sink misses it), calls whose args are only string/array literals, and commented lines (// * /*).",
       "confidence": "high",
       "tests": {
@@ -3817,7 +3865,7 @@
       "pattern": "\\b(?:subprocess\\s*\\.\\s*)?(?:Popen|run|call|check_call|check_output)\\s*\\(.*\\bshell\\s*=\\s*True\\b",
       "message": "Command injection via shell:true — child_process/subprocess with the shell option re-parses arguments through the system shell (CWE-78).",
       "remediation": "Pass an argument list and drop shell=True: subprocess.run(['ping','-c','1', host]) invokes no shell so metacharacters are inert. If shell=True is unavoidable, wrap every interpolated value in shlex.quote() and strictly validate the input.",
-      "not-match": "^\\s*#|\\b(?:subprocess\\s*\\.\\s*)?(?:Popen|run|call|check_call|check_output)\\s*\\(\\s*(?:'[^']*'|\"[^\"]*\"|\\[(?:\\s*(?:'[^']*'|\"[^\"]*\")\\s*,?)*\\s*\\])\\s*,[^)]*\\bshell\\s*=\\s*True",
+      "not-match": "^\\s*#|\\b(?:subprocess\\s*\\.\\s*)?(?:Popen|run|call|check_call|check_output)\\s*\\(\\s*(?:'[^']*'|\"[^\"]*\"|\\[\\s*(?:(?:'[^']*'|\"[^\"]*\")(?:\\s*,\\s*(?:'[^']*'|\"[^\"]*\"))*)?\\s*,?\\s*\\])\\s*,[^)]*\\bshell\\s*=\\s*True",
       "why": "subprocess run/Popen/call/check_call/check_output with shell=True executes through /bin/sh, so shell metacharacters in a non-literal command (variable, f-string, or concatenation) are interpreted as shell syntax and injected commands run - e.g. subprocess.run(cmd, shell=True) or Popen(f\"ping {host}\", shell=True) lets host='x;id' run id. notMatch suppresses shell=False (sink already misses it) plus the safe twins where the first positional argument is a pure string literal or a list of only string literals; it still fires on concatenation because a comma (not '+') must follow the literal. The kwargs-order case is already safe here: after the first-arg literal and its comma, [^)]* consumes any other keyword arguments before shell=True, so reordering (e.g. shell=True, cwd=root) does not cause a false positive. app.run(debug=True,...) is not matched because the sink requires the token shell= specifically.",
       "confidence": "high",
       "tests": {
@@ -5082,7 +5130,17 @@
       "remediation": "Delete the endpoint before release, or gate it behind an explicit production check (NODE_ENV/APP_ENV) plus an admin/authentication guard so it cannot run in prod without authorization.",
       "not-match": "^\\s*(?:\\/\\/|#|\\*|\\/\\*|<!--|--)|NODE_ENV|APP_ENV|RAILS_ENV|FLASK_ENV|GIN_MODE|ASPNETCORE_ENVIRONMENT|isAdmin|is_admin|requireAdmin|require_admin|admin_required|adminOnly|ensureAdmin|hasRole|requireAuth|@admin|isDev|isDevelopment|__DEV__|IsDevelopment|app\\.Environment|Rails\\.env|env\\s*[!=]==?\\s*['\"\\x60](?:dev|development|staging|local|test)|==\\s*['\"\\x60](?:dev|development|staging|local|test)|debug\\s*[:=]\\s*(?:false|0)",
       "why": "A route whose path segment is debug/dev/internal/backdoor/test registers a backdoor or diagnostic handler that ships to production, exposing internal state, resets, or dumps to anyone who guesses the path. Word boundaries after the keyword keep it from firing on '/devices', '/developer', '/latest', '/testimonials'.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "app.get('/api/internal', (req, res) => res.json(process.env));",
+          "router.post('/admin/debug', debugHandler);"
+        ],
+        "negative": [
+          "app.get('/api/devices', listDevices);",
+          "if (process.env.NODE_ENV === 'development') app.get('/api/debug', dumpState);"
+        ]
+      }
     },
     {
       "id": "wide/debug-flag-exposes-data",
@@ -5287,7 +5345,15 @@
       "remediation": "Load the signing secret from server-only configuration (a non-public environment variable or secret manager), never a source literal, and move signing to the server. Rotate any key that has been committed.",
       "not-match": "^\\s*(?:\\/\\/|\\*|\\/\\*|<!--)",
       "why": "The JWT signing key is passed to jwt.sign() as a hardcoded string literal. A hardcoded cryptographic key in source (and especially in a shipped bundle) is recoverable by anyone, so all tokens can be forged and the signature provides no authenticity. The length/position guard targets the actual secret argument, and the trailing [,)] guard prevents matching object string-keys ('key':) so algorithm/option strings like 'HS256' or 'abc123' inside an options object are not flagged.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "const token = jwt.sign({ id: user.id }, 'my-hardcoded-jwt-secret');"
+        ],
+        "negative": [
+          "const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET);"
+        ]
+      }
     },
     {
       "id": "wide/embedded-signing-secret-literal-decl",
@@ -5508,7 +5574,16 @@
       "message": "A missing/falsy value bypasses this security check.",
       "remediation": "Reject when the value is missing (require it), then compare the real value with strict equality.",
       "why": "if (!answer || answer === 'x') lets an absent, null, or empty value make !answer true, so the request passes without the answer/token/code ever being checked.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "if (!otp_code || otp_code === expected_code) allowReset();",
+          "if (!user_token || user_token == stored_token) next();"
+        ],
+        "negative": [
+          "if (otp_code && otp_code === expected_code) allowReset();"
+        ]
+      }
     },
     {
       "id": "wide/flagsan-dash-permissive-sanitizer",
@@ -6604,7 +6679,16 @@
       "remediation": "Parse and validate the body, then re-serialize a canonical body (e.g. bytes.NewReader(json.Marshal(v))) for the downstream request rather than forwarding r.Body verbatim.",
       "not-match": "bytes\\.NewReader|bytes\\.NewBuffer|strings\\.NewReader|json\\.Marshal",
       "why": "The raw inbound request body (r.Body) is streamed unmodified into an outbound request; if it carries duplicated form parameters, the downstream service re-parses them with different precedence than the frontend, enabling parameter pollution. The body must appear as a real argument of the outbound call (balanced-paren match), optionally wrapped in one no-op adaptor like io.NopCloser, so an r.Body mentioned in a trailing comment or a separate statement on the same line no longer matches.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "resp, err := client.Post(downstreamURL, \"application/json\", r.Body)",
+          "reqOut, _ := http.NewRequest(\"POST\", target, io.NopCloser(req.Body))"
+        ],
+        "negative": [
+          "resp, err := client.Post(downstreamURL, \"application/json\", bytes.NewReader(payload))"
+        ]
+      }
     },
     {
       "id": "wide/hpp-go-rawquery-forward",
@@ -8186,7 +8270,15 @@
       "remediation": "Pass a replacer FUNCTION instead of a raw string, e.g. str.replace(pattern, () => userValue), so no token expansion occurs. If a string replacement is required, first escape dollar signs in the user value with a global replace of the dollar sign by a doubled dollar. Never bind untrusted input directly as the replacement argument.",
       "not-match": "^\\s*(?:\\/\\/|\\*|\\/\\*)|\\/\\\\\\$\\/g|\\.replace(?:All)?\\s*\\([^,]*,\\s*(?:function\\b|async\\b|\\()",
       "why": "The second argument of String#replace / #replaceAll is a REPLACEMENT string, not literal text: the dollar tokens expand to the whole match, the pre-match text, the post-match text, a numbered capture group, or a literal dollar. When that argument is a bare user-controlled identifier/member (or a concatenation led by one) rather than a function or a fixed literal, an attacker can embed those tokens to splice adjacent buffer content into the output. The sink fires only when arg1 is a regex/string/identifier pattern and arg2 is an identifier/member (optionally subscripted) closed by ) or +, so string-literal replacements, inline function replacements (function/async/paren-wrapped, and single-param arrows because `id =>` is followed by = not )/+), CALL replacements like escapeHtml(x) / JSON.stringify(x) / schema.parse(x) (a ( follows the callee), and optional-chaining members like req?.query?.name (the ? is outside [\\w$.]) are all excluded by construction; notMatch drops comment lines and lines that globally escape the dollar sign (/\\$/g). Verified precise: no regex change was required and it does not fire on any safe twin tested.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "const out = tpl.replace(/\\{\\{name\\}\\}/g, req.body.name);"
+        ],
+        "negative": [
+          "const out = tpl.replace(/\\{\\{name\\}\\}/g, () => req.body.name);"
+        ]
+      }
     },
     {
       "id": "wide/js-unhandled-json-parse-request-noguard",
@@ -9737,12 +9829,22 @@
         "cts"
       ],
       "cwe": "CWE-22",
-      "pattern": "(?:\\b(?:resolvedPath|resolved|realPath|realpath|real|absolutePath|absPath|absolute|abs|fullPath|filePath|filepath|normalizedPath|normalized|canonicalPath|canonical|targetPath|safePath|finalPath|requestedPath|joinedPath)\\.indexOf\\s*\\([^)]*\\)\\s*(?:!==?|===?)\\s*0|(?<![\\w$])[A-Za-z_$][\\w$.]*\\.indexOf\\s*\\(\\s*(?:[A-Za-z_$]\\w*(?:Dir|Root)\\b|(?:base|root|cwd)\\b|(?:BASE_DIR|ROOT_DIR|UPLOAD_DIR|PUBLIC_DIR|STATIC_DIR|DATA_DIR)\\b)[^)]*\\)\\s*(?:!==?|===?)\\s*0)",
+      "pattern": "(?:\\b(?:resolvedPath|resolved|realPath|realpath|real|absolutePath|absPath|absolute|abs|fullPath|filePath|filepath|normalizedPath|normalized|canonicalPath|canonical|targetPath|safePath|finalPath|requestedPath|joinedPath)\\.indexOf\\s*\\([^)]*\\)\\s*(?:!==?|===?)\\s*0|(?<![\\w$.])[A-Za-z_$][\\w$.]*\\.indexOf\\s*\\(\\s*(?:[A-Za-z_$]\\w*(?:Dir|Root)\\b|(?:base|root|cwd)\\b|(?:BASE_DIR|ROOT_DIR|UPLOAD_DIR|PUBLIC_DIR|STATIC_DIR|DATA_DIR)\\b)[^)]*\\)\\s*(?:!==?|===?)\\s*0)",
       "message": "Path-containment bypass — a startsWith/indexOf prefix check with no trailing separator lets a sibling directory escape (CWE-22).",
       "remediation": "Append the separator and accept exact equality: `p === base || p.indexOf(base + path.sep) === 0`; better, after path.resolve test `!path.relative(base, p).startsWith('..')` and reject otherwise.",
       "not-match": "^\\s*(?:\\/\\/|\\*|\\/\\*|#)|\\+\\s*(?:path\\.sep|os\\.sep|['\"][\\/\\\\]['\"]|\\bsep\\b|DIRECTORY_SEPARATOR|File\\.separator)|path\\.relative|[\\/\\\\]['\"]\\s*\\)|WithSep|WithSlash",
       "why": "A resolved/absolute path is confined to a base with `path.indexOf(base) === 0` / `!== 0` — a prefix test with no trailing separator — so a sibling whose name only starts with the base (/var/www/uploads_backup vs /var/www/uploads) is treated as inside it (CWE-22). Tightened from the original: the generic-receiver branch no longer accepts a bare path string literal (only a dir-VARIABLE/const argument), because an absolute literal like '/api' is indistinguishable from a route-prefix check and made the rule fire on ordinary `reqPath.indexOf('/api')===0` routing code; path literals are still caught when the RECEIVER is a resolved-path name. Bare base/root/cwd are now `\\b`-bounded so `baseUrl`/`baseName` no longer match.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "if (resolvedPath.indexOf(uploadDir) !== 0) throw new Error('blocked');",
+          "if (target.indexOf(BASE_DIR) === 0) serveFile(target);"
+        ],
+        "negative": [
+          "if (resolvedPath.indexOf(uploadDir + path.sep) !== 0) throw new Error('blocked');",
+          "if (!path.relative(BASE_DIR, target).startsWith('..')) serveFile(target);"
+        ]
+      }
     },
     {
       "id": "wide/path-containment-startswith-no-sep-js-java",
@@ -9761,12 +9863,22 @@
         "java"
       ],
       "cwe": "CWE-22",
-      "pattern": "(?:\\b(?:resolvedPath|resolved|realPath|realpath|absolutePath|absPath|absolute|fullPath|filePath|filepath|normalizedPath|normalized|canonicalPath|canonical|targetPath|safePath|finalPath|requestedPath|joinedPath)\\.startsWith\\s*\\([^)]*\\)|\\.(?:getCanonicalPath|getAbsolutePath)\\s*\\(\\s*\\)\\s*\\.\\s*startsWith\\s*\\([^)]*\\)|(?<![\\w$])[A-Za-z_$][\\w$.]*\\.startsWith\\s*\\(\\s*(?:[A-Za-z_$]\\w*(?:Dir|Root)\\b|(?:base|root|cwd)\\b|(?:BASE_DIR|ROOT_DIR|UPLOAD_DIR|PUBLIC_DIR|STATIC_DIR|DATA_DIR)\\b)\\s*\\))",
+      "pattern": "(?:\\b(?:resolvedPath|resolved|realPath|realpath|absolutePath|absPath|absolute|fullPath|filePath|filepath|normalizedPath|normalized|canonicalPath|canonical|targetPath|safePath|finalPath|requestedPath|joinedPath)\\.startsWith\\s*\\([^)]*\\)|\\.(?:getCanonicalPath|getAbsolutePath)\\s*\\(\\s*\\)\\s*\\.\\s*startsWith\\s*\\([^)]*\\)|(?<![\\w$.])[A-Za-z_$][\\w$.]*\\.startsWith\\s*\\(\\s*(?:[A-Za-z_$]\\w*(?:Dir|Root)\\b|(?:base|root|cwd)\\b|(?:BASE_DIR|ROOT_DIR|UPLOAD_DIR|PUBLIC_DIR|STATIC_DIR|DATA_DIR)\\b)\\s*\\))",
       "message": "Path-containment bypass — a startsWith/indexOf prefix check with no trailing separator lets a sibling directory escape (CWE-22).",
       "remediation": "Append the separator and allow equality: `resolved === base || resolved.startsWith(base + path.sep)` (Java: `canonical.equals(base) || canonical.startsWith(base + File.separator)`); or compare Path objects / test path.relative for a leading '..'.",
       "not-match": "^\\s*(?:\\/\\/|\\*|\\/\\*|#)|\\+\\s*(?:path\\.sep|os\\.sep|File\\.separator|separator|['\"][\\/\\\\]['\"])|path\\.relative|[\\/\\\\]['\"]\\s*\\)|WithSep|WithSlash|new RegExp\\(|message:\\s*['\"]|\\bwhy:|\\bfix:|\\bsinkRegex\\b|text:\\s*new",
       "why": "A canonicalized/resolved path is confined with `resolved.startsWith(base)` (or Java `file.getCanonicalPath().startsWith(base)`) without a trailing separator, so /var/www/uploads_backup satisfies a check for /var/www/uploads (CWE-22). Tightened: the third (generic-receiver) branch dropped its string-literal alternative so it no longer matches `req.path.startsWith('/api')` / `resolvedUrl.startsWith('/api')` routing code — literals remain caught via the resolved-path-receiver and getCanonicalPath()/getAbsolutePath() branches. notMatch clears base+path.sep / File.separator / '/', a trailing-slash literal, path.relative, a baseWithSep var, and comments.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "if (!resolvedPath.startsWith(baseDir)) return res.status(403).end();",
+          "if (file.getCanonicalPath().startsWith(UPLOAD_DIR)) allow();"
+        ],
+        "negative": [
+          "if (resolvedPath.startsWith(baseDir + path.sep)) serve();",
+          "if (resolvedPath === base || resolvedPath.startsWith(base + File.separator)) allow();"
+        ]
+      }
     },
     {
       "id": "wide/path-containment-startswith-no-sep-py",
@@ -9784,7 +9896,17 @@
       "remediation": "Use os.path.commonpath([base, resolved]) == base, or compare with the separator (resolved == base or resolved.startswith(base + os.sep)); never a bare startswith.",
       "not-match": "^\\s*#|\\+\\s*os\\.sep|\\+\\s*['\"][\\/\\\\]['\"]|os\\.path\\.join\\s*\\([^)]*,\\s*['\"]{2}\\s*\\)|os\\.path\\.commonpath|os\\.path\\.relpath|[\\/\\\\]['\"]\\s*\\)|with_sep|WithSep",
       "why": "A realpath/abspath result is confined with `.startswith(base)` and no trailing os.sep, so /var/www/uploads_backup passes a check for /var/www/uploads (CWE-22). Tightened: the generic-receiver branch dropped its string-literal alternative, so `request.path.startswith('/api')` and `p.startswith('/')` (absolute/route checks) no longer fire; literals stay caught via the resolved-path-receiver and os.path.realpath()/abspath() branches. notMatch clears base+os.sep, os.path.join(base,''), commonpath, relpath, a trailing-slash literal, and '#' comments.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "if resolved_path.startswith(base_dir): send(resolved_path)",
+          "if os.path.abspath(p).startswith('/srv/uploads'): open(p)"
+        ],
+        "negative": [
+          "if resolved_path.startswith(base_dir + os.sep): send(resolved_path)",
+          "if os.path.commonpath([base_dir, resolved_path]) == base_dir: send(resolved_path)"
+        ]
+      }
     },
     {
       "id": "wide/path-containment-strpos-startswith-no-sep-php",
@@ -10240,7 +10362,16 @@
       "remediation": "The /e modifier was deprecated in PHP 5.5 and removed in 7.0 -- eliminate it. Use preg_replace_callback with the pattern minus the e modifier and a callback that builds the replacement safely from the matches, instead of eval'ing a string. Never let user input reach a pattern string carrying /e.",
       "not-match": "^\\s*(?:\\/\\/|#|\\*|\\/\\*)|preg_replace_callback",
       "why": "The PCRE /e (PREG_REPLACE_EVAL) modifier makes preg_replace EXECUTE its replacement argument as PHP code after backreference substitution, so any attacker-influenced group interpolated into that eval'd string yields RCE. The sink matches a literal pattern (opening quote captured as \\1, a delimiter captured as \\2 from /#~!@%|, a body, the matching close delimiter \\2, a trailing modifier run that contains the letter e, and the closing quote \\1). Two precision fixes over the original: (1) the body is now (?:(?!\\1)[^\\\\]|\\\\.)*? so it can never span past the pattern's own closing quote -- this kills the cross-argument false positive where a plain replacement string that merely looks like /x/e (e.g. preg_replace('/foo/','/replace/e',$s)) was matched even though arg1 carried no e modifier; the (?!\\1) still permits the OTHER quote char inside the pattern, so preg_replace('/say \"hi\"/e',...) stays a true positive. (2) the pipe delimiter was added. Patterns without an e modifier never match (the modifier run requires an e before the closing quote), and preg_replace_callback plus comment lines are suppressed by notMatch (# only anchored at line start, so it never suppresses a real # delimiter mid-line).",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "$out = preg_replace('/([a-z]+)/ei', 'strtoupper(\"$1\")', $input);"
+        ],
+        "negative": [
+          "$out = preg_replace_callback('/([a-z]+)/i', $fn, $input);",
+          "$out = preg_replace('/foo/', '/replace/e', $input);"
+        ]
+      }
     },
     {
       "id": "wide/php-reflected-html-echo-superglobal",
@@ -10383,7 +10514,16 @@
       "remediation": "Never write a property onto __proto__, constructor.prototype, or Object.prototype from runtime data. If you must reassign an object's prototype use Object.setPrototypeOf with a fixed, trusted value; freeze Object.prototype (Object.freeze) at startup to make accidental pollution throw; and gate any dynamic key so it can never equal __proto__/constructor/prototype.",
       "not-match": "===|!==|typeof\\s|instanceof\\b|getPrototypeOf|isPrototypeOf|hasOwnProperty|Object\\.create\\(\\s*null\\s*\\)|=\\s*[A-Za-z_$][\\w$]*\\.prototype\\b",
       "why": "A statement that assigns THROUGH a prototype-chain reference writes shared state: obj['__proto__'].x=, x.__proto__[k]=, foo['constructor']['prototype'].y=, o.constructor.prototype.z=, or Object.prototype.p= all land on Object.prototype, as do Object.defineProperty/defineProperties and Reflect.set/defineProperty targeting Object.prototype. The single-'=' with a (?!=|>) lookahead means only real assignments match, not comparisons (=== '__proto__' / obj.__proto__ === Object.prototype) or arrow bodies, and reads (return o.__proto__) have no trailing '='. Benign NamedClass.prototype.method= augmentation is NOT matched (only Object.prototype / constructor.prototype / __proto__ bases are), a denylist array literal like ['__proto__','constructor','prototype'] and Map.set('__proto__', v) don't match (no bracket-base + '='), and notMatch also drops comparisons, getPrototypeOf/isPrototypeOf, the Object.prototype.hasOwnProperty.call idiom, and legacy inheritance (this.__proto__ = Parent.prototype / x.__proto__ = Object.getPrototypeOf(y)). Verified robust — no change needed to the regex.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "obj['__proto__'].polluted = true;",
+          "Object.prototype.isAdmin = true;"
+        ],
+        "negative": [
+          "if (obj.__proto__ === Object.prototype) return false;"
+        ]
+      }
     },
     {
       "id": "wide/protopollution-dotprop-generic-setpath-tainted",
@@ -10458,7 +10598,15 @@
       "remediation": "Guard the loop: skip keys that are __proto__/constructor/prototype, gate the write behind Object.prototype.hasOwnProperty.call(src, key) or Object.hasOwn(src, key), copy into an Object.create(null) target, or replace the loop with an explicit allow-list of expected fields.",
       "not-match": "(?:__proto__|constructor|prototype|Object\\.create\\s*\\(\\s*null\\s*\\)|hasOwn|structuredClone)",
       "why": "A hand-rolled deep merge: for..in iterating a client-controlled object and writing target[key] = ... keyed by the same loop variable on the same line. for..in enumerates inherited enumerable keys and an attacker-supplied __proto__ key makes target[key] assign onto the prototype, poisoning Object.prototype. The loop variable is captured and backreferenced (\\1) in the write so an unrelated bracket-assignment on the same physical line (config[env]=1) no longer matches; the =(?![=>]) guard excludes ===/==/=> comparisons that previously false-fired (map[k] === val); and notMatch now suppresses hasOwn (covering both hasOwnProperty and Object.hasOwn), same-line __proto__/constructor/prototype skips, and Object.create(null) targets.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "for (const k in req.body) target[k] = req.body[k];"
+        ],
+        "negative": [
+          "for (const k in req.body) if (Object.hasOwn(req.body, k)) target[k] = req.body[k];"
+        ]
+      }
     },
     {
       "id": "wide/protopollution-hoek-applytodefaults-req",
@@ -12391,7 +12539,17 @@
       "remediation": "Parse the URL and compare the host exactly: host === base for a single host, or host === base || host.endsWith('.' + base) for a domain plus its subdomains, or test membership in an allowlist array with ===. For a URL prefix, require the full origin plus separator: url.startsWith(base + '/').",
       "not-match": "(?:===)|(?:\\.startsWith\\s*\\(\\s*['\"`][A-Za-z][A-Za-z0-9+.\\-]*:\\/\\/[^'\"`/]+\\/)|(?:\\.(?:startsWith|endsWith)\\s*\\(\\s*[A-Za-z_$][\\w$.]*\\s*\\+)|(?:\\.endsWith\\s*\\(\\s*['\"`]\\.['\"`]\\s*\\+)|(?:\\.(?:endsWith|startsWith|includes|indexOf)\\s*\\(\\s*['\"`][^'\"`\\n]*\\.(?:js|jsx|ts|tsx|css|scss|less|html?|xml|json|png|jpe?g|gif|svg|webp|ico|woff2?|ttf|eot|map|md|txt|csv|pdf|zip|gz|tar|mp4|mp3)['\"`])|(?:^\\s*(?:\\/\\/|#|\\*|\\/\\*))",
       "why": "endsWith/startsWith/includes/indexOf on a hostname/host/url/origin/referer var is a substring test, not a boundary test. host.endsWith('domain.com') also accepts attacker-owned evildomain.com; url.startsWith('https://api.internal') accepts https://api.internal.evil.com; host.includes('mycorp.com') accepts mycorp.com.attacker.net. Attacker-chosen host reaches an internal target (SSRF). The sink now requires the compared literal to look like a host (a dotted label, an IPv4, or scheme://authority) so ubiquitous path/character/extension checks on a var literally named url (url.startsWith('/'), url.endsWith('.js'), url.includes('?'), host.includes(':')) do not fire and get the whole rule dropped by the harness.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "if (parsed.hostname.endsWith('example.com')) fetch(url);",
+          "if (url.startsWith('https://api.internal')) proxy(url);"
+        ],
+        "negative": [
+          "if (parsed.hostname === 'example.com') fetch(url);",
+          "if (url.startsWith('/api/v1/users')) next();"
+        ]
+      }
     },
     {
       "id": "wide/ssrf-host-suffix-allowlist-multilang",
@@ -12418,7 +12576,17 @@
       "remediation": "Compare the parsed host exactly (host == base), or check base plus a dot-boundary subdomain (host == base or host.endswith('.' + base) / strings.HasSuffix(host, '.'+base) with an equality companion), or test membership in an allowlist. For a prefix, include the authority terminator.",
       "not-match": "(?:===)|(?:\\.equals\\s*\\()|(?:['\"`]\\.['\"`]\\s*[.+]\\s*[$\\w])|(?:^\\s*(?:#|\\/\\/|\\*|\\/\\*))",
       "why": "Suffix/contains/prefix host checks in Python (endswith), Go (strings.HasSuffix/Contains/HasPrefix), Java (endsWith/contains), PHP (str_ends_with/strpos), and Ruby (end_with?/include?) are substring tests without a boundary. HasSuffix(host, '.internal') / host.endswith('mycorp.com') / strpos($host,'example.com')!==false also accept an attacker-owned host that merely contains or ends with the string, enabling SSRF. Both alternations now require the second (literal) argument to look like a host (dotted label, IPv4, or scheme://authority), so the extremely common path/scheme/extension checks on a url var across all five languages (strings.HasPrefix(url,'/api/'), url.endswith('.png'), str_contains($url,'?'), strings.Contains(url,'://')) do not fire and get the rule dropped.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "if host.endswith('corp.internal'): requests.get(url)",
+          "if strings.HasSuffix(host, 'trusted.com') { http.Get(url) }"
+        ],
+        "negative": [
+          "if host == 'corp.internal' or host.endswith('.' + base): fetch(url)",
+          "if url.endswith('.png'): return None"
+        ]
+      }
     },
     {
       "id": "wide/ssrf-htmlpdf-cli-wkhtmltopdf",
@@ -12577,7 +12745,15 @@
       "remediation": "Resolve the host and validate it against an allowlist of permitted destinations before opening the connection; reject internal/link-local ranges.",
       "not-match": "\"https?:\\/\\/|allow-?list|white-?list|isAllowed|permittedHost|ALLOWED_",
       "why": "new URL(userInput).openConnection()/openStream() opens an outbound connection to a host derived from user input, enabling SSRF against internal services and cloud metadata.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "URLConnection conn = new URL(targetUrl).openConnection();"
+        ],
+        "negative": [
+          "URLConnection conn = new URL(ALLOWED_ENDPOINT).openConnection();"
+        ]
+      }
     },
     {
       "id": "wide/ssrf-libreoffice-unoconv-convert",
@@ -13543,11 +13719,21 @@
         "java"
       ],
       "cwe": "CWE-1336",
-      "pattern": "^(?!\\s*(?:\\/[/*]|\\*)).*?new\\s+(?:[A-Za-z_$][\\w$]*\\s*\\.\\s*)*Template\\b\\s*\\(\\s*[^;,()]*,\\s*(?!new\\s+StringReader\\s*\\(\\s*[\"'])(?:[A-Za-z_$]|(?:\"[^\"]*\"|'[^']*')\\s*(?:\\+(?!\\s*[\"'])|\\.\\s*(?:format|formatted)\\s*\\())",
+      "pattern": "^(?!\\s*(?:\\/[/*]|\\*)).*?new\\s+(?:[A-Za-z_$][\\w$]*\\s*\\.\\s*){0,4}Template\\b\\s*\\(\\s*[^;,()]*,\\s*(?!new\\s+StringReader\\s*\\(\\s*[\"'])(?:[A-Za-z_$]|(?:\"[^\"]*\"|'[^']*')\\s*(?:\\+(?!\\s*[\"'])|\\.\\s*(?:format|formatted)\\s*\\())",
       "message": "Server-side template injection (SSTI) — user input is compiled as a template.",
       "remediation": "Load templates by name from a TemplateLoader/Configuration and pass user input only as data in the data-model; never build the Template source String/Reader from user input.",
       "why": "The FreeMarker Template constructor compiles its second argument (a String source or a Reader over one) into an executable template, so a dynamic source lets an attacker inject FreeMarker directives that reach RCE.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "Template t = new Template(\"tpl\", req.getParameter(\"tpl\"), cfg);",
+          "new freemarker.template.Template(\"t\", \"<#assign x=\" + userTpl, cfg);"
+        ],
+        "negative": [
+          "Template t = new Template(\"tpl\", new StringReader(\"Hello\"), cfg);",
+          "// new Template(\"tpl\", userTpl, cfg)"
+        ]
+      }
     },
     {
       "id": "wide/ssti-genshi-markup-template",
@@ -14750,7 +14936,16 @@
       "message": "The IV/nonce is a fixed/zero value rather than fresh random bytes.",
       "remediation": "Generate a fresh random IV per message with crypto.getRandomValues()/randomBytes() and store it alongside the ciphertext.",
       "why": "Reusing an IV with the same key in AES-GCM/CTR is catastrophic: it breaks confidentiality (XOR of two ciphertexts leaks plaintext) and, for GCM, lets an attacker forge the authentication tag.",
-      "confidence": "high"
+      "confidence": "high",
+      "tests": {
+        "positive": [
+          "const iv = new Uint8Array(12);",
+          "const nonce = Buffer.alloc(16);"
+        ],
+        "negative": [
+          "const iv = crypto.randomBytes(12);"
+        ]
+      }
     },
     {
       "id": "wide/subprocess-run-script-from-upload-dir-py",

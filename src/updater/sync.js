@@ -7,6 +7,7 @@ import {
   fetchCisaKev,
   fetchEpssScores,
   fetchGitHubAdvisories,
+  fetchGitHubAdvisoryByCve,
   fetchJson,
   fetchText,
   normalizeEcosystem
@@ -145,17 +146,28 @@ export async function syncAdvisoriesFromInternet(options = {}) {
   const rawOutFile = options.rawOutFile || path.join(REPO_ROOT, "data", "raw-advisories.json");
 
   let existingDb = createEmptyAdvisoriesDb();
+  let hadExistingDb = false;
   if (fs.existsSync(outFile)) {
     try {
       existingDb = JSON.parse(fs.readFileSync(outFile, "utf8"));
+      hadExistingDb = true;
     } catch {}
   }
+
+  const diversify = options.diversify !== false && !options.ecosystem && !options.fetchImpl;
+  const ecosystemsToQuery = Array.isArray(options.ecosystems)
+    ? options.ecosystems
+    : diversify
+      ? ["npm", "pip", "maven", "go", "rust"]
+      : [];
 
   const sources = [];
   const advisories = await fetchGitHubAdvisories({
     perPage: options.perPage || 100,
     pages: options.pages || 2,
     ecosystem: options.ecosystem,
+    ecosystems: ecosystemsToQuery,
+    ecosystemPerPage: options.ecosystemPerPage || 30,
     severity: options.severity,
     updated: options.updated,
     token: options.token,
@@ -164,12 +176,46 @@ export async function syncAdvisoriesFromInternet(options = {}) {
   });
   sources.push("github-advisories");
 
-  let kevResult = { byCve: new Map(), count: 0 };
+  let kevResult = { byCve: new Map(), count: 0, list: [] };
   if (options.includeKev !== false) {
     try {
       kevResult = await fetchCisaKev({ fetchImpl: options.fetchImpl, timeoutMs: options.timeoutMs });
       sources.push("cisa-kev");
     } catch {}
+  }
+
+  const seenAdvIds = new Set(advisories.map((a) => String(a.id || "").toUpperCase()));
+  const kevLimit = typeof options.kevLookupLimit === "number"
+    ? options.kevLookupLimit
+    : (options.fetchImpl ? 0 : 12);
+  if (kevLimit > 0 && Array.isArray(kevResult.list) && kevResult.list.length > 0) {
+    const existingCves = new Set();
+    for (const eco of ECOSYSTEMS) {
+      for (const item of Array.isArray(existingDb[eco]) ? existingDb[eco] : []) {
+        if (item?.cve) existingCves.add(String(item.cve).toUpperCase());
+      }
+    }
+    const recentKevs = [...kevResult.list]
+      .filter((k) => k?.cveID && !seenAdvIds.has(String(k.cveID).toUpperCase()) && !existingCves.has(String(k.cveID).toUpperCase()))
+      .sort((a, b) => String(b.dateAdded || "").localeCompare(String(a.dateAdded || "")))
+      .slice(0, kevLimit * 2);
+
+    let fetchedKevCount = 0;
+    for (const k of recentKevs) {
+      if (fetchedKevCount >= kevLimit) break;
+      try {
+        const adv = await fetchGitHubAdvisoryByCve(k.cveID, {
+          token: options.token,
+          fetchImpl: options.fetchImpl,
+          timeoutMs: options.timeoutMs
+        });
+        if (adv && Array.isArray(adv.packages) && adv.packages.length > 0 && !seenAdvIds.has(String(adv.id).toUpperCase())) {
+          advisories.push(adv);
+          seenAdvIds.add(String(adv.id).toUpperCase());
+          fetchedKevCount++;
+        }
+      } catch {}
+    }
   }
 
   let epssMap = new Map();
@@ -193,10 +239,13 @@ export async function syncAdvisoriesFromInternet(options = {}) {
   });
 
   const { db, added, updated } = mergeAdvisoryRecords(existingDb, enrichedAdvisories, kevResult.byCve, epssMap);
-  db.sources = [...new Set([...(Array.isArray(existingDb.sources) ? existingDb.sources : []), ...sources])];
-  db.generatedAt = new Date().toISOString();
+  const prevSources = Array.isArray(existingDb.sources) ? existingDb.sources : [];
+  db.sources = [...new Set([...prevSources, ...sources])];
+  const sourcesChanged = db.sources.length !== prevSources.length || db.sources.some((s, i) => prevSources[i] !== s);
+  const changed = !hadExistingDb || added > 0 || updated > 0 || sourcesChanged || Boolean(options.force);
+  db.generatedAt = changed || !existingDb.generatedAt ? new Date().toISOString() : existingDb.generatedAt;
 
-  if (!options.dryRun) {
+  if (!options.dryRun && changed) {
     writeFileAtomicSync(outFile, JSON.stringify(db, null, 2));
     writeFileAtomicSync(rawOutFile, JSON.stringify({ generatedAt: db.generatedAt, count: enrichedAdvisories.length, advisories: enrichedAdvisories }, null, 2));
   }
@@ -204,6 +253,7 @@ export async function syncAdvisoriesFromInternet(options = {}) {
   return {
     outFile,
     rawOutFile,
+    changed,
     fetchedAdvisories: enrichedAdvisories.length,
     kevMatched: enrichedAdvisories.filter((a) => a.kev).length,
     added,

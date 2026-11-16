@@ -24,7 +24,7 @@
 Wide Rules separates security definitions from scanner engines:
 - **Centralized Vulnerability Database:** Over 729 curated rules maintained independently of binary release cycles.
 - **Embedded DecisionCore Primitives:** Native multi-agent consensus, anti-thrashing dwell gates, and collision-free lease tables.
-- **Threat Intelligence Feeds:** Integrated OSV advisory bundle with 118 advisories, EPSS scoring, and SHA-256 integrity verification.
+- **Threat Intelligence Feeds:** Integrated OSV advisory bundle enriched with GitHub Advisories across major ecosystems, CISA KEV flags, EPSS scoring, and SHA-256 integrity verification.
 - **ReDoS Hardened & Linear Execution:** All rule patterns and regular expressions verified against ReDoS backtracking with dedicated benchmark validation.
 - **Pre-Compiled Distribution:** Bundled into lightweight `dist/rules.json`, `dist/rules.min.json`, and `dist/osv-bundle.json` artifacts for instant offline and air-gapped scanning.
 - **Ecosystem Consistency:** Powers real-time editor diagnostics in Wide IDE, terminal scans in Wide CLI, CI/CD gates in Wide Action, and programmatic audits in Wide SDK.
@@ -65,7 +65,7 @@ Download or fetch the latest compiled bundle directly:
 curl -sSL https://raw.githubusercontent.com/sl4de0day/wide-rules/main/dist/rules.json -o rules.json
 ```
 
-Or consume minified distribution via curl or npm:
+Or consume the bundle directly from GitHub via curl or as a git dependency (`npm install github:sl4de0day/wide-rules`):
 
 ```bash
 curl -sSL https://raw.githubusercontent.com/sl4de0day/wide-rules/main/dist/rules.min.json -o rules.min.json
