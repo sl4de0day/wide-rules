@@ -1,0 +1,28 @@
+{
+  "updatedAt": "2026-11-16T13:29:07.773Z",
+  "processed": {
+    "CVE-2025-3248": {
+      "status": "learned",
+      "ruleId": "wide/vuln-cve-2025-3248",
+      "file": "rules/learned/vuln-cve-2025-3248.yml",
+      "at": "2026-11-16T13:27:50.922Z"
+    },
+    "CVE-2025-24893": {
+      "status": "learned",
+      "ruleId": "wide/vuln-cve-2025-24893",
+      "file": "rules/learned/vuln-cve-2025-24893.yml",
+      "at": "2026-11-16T13:28:49.602Z"
+    },
+    "CVE-2025-32432": {
+      "status": "learned",
+      "ruleId": "wide/vuln-cve-2025-32432",
+      "file": "rules/learned/vuln-cve-2025-32432.yml",
+      "at": "2026-11-16T13:28:58.829Z"
+    },
+    "CVE-2017-1000353": {
+      "status": "skipped",
+      "reason": "The vulnerability is in the Jenkins core framework's deserialization mechanism, specifically the absence of a blacklist entry for `java.security.SignedObject` when handling CLI input. This is a version-specific vulnerability of the Jenkins application itself, not a general code pattern that application developers would introduce. Detecting the absence of a specific security configuration line in a framework's internal file is not suitable for a precise, general code-level regex pattern without significant false positives.",
+      "at": "2026-11-16T13:29:07.773Z"
+    }
+  }
+}
