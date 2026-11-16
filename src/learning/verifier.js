@@ -83,6 +83,17 @@ export function verifyRuleCandidate(doc, options = {}) {
     errors.push(`Invalid confidence '${doc.confidence}'`);
   }
 
+  const strictPrecision = Boolean(options.strictPrecision);
+  if (strictPrecision) {
+    const rawPattern = String(doc.pattern || "").trim();
+    if (rawPattern.length < 10) {
+      errors.push("Pattern too short/generic for automated acceptance (<10 chars)");
+    }
+    if (/^\.\*|\.\*$/.test(rawPattern) && rawPattern.replace(/\\./g, "").replace(/[.*+?^${}()|[\]\\]/g, "").length < 6) {
+      errors.push("Pattern relies on trivial wildcards without concrete API/sink anchors");
+    }
+  }
+
   const strictStatic = options.strictStatic !== false;
   const maxProbeMs = typeof options.maxProbeMs === "number" ? options.maxProbeMs : 15;
   const patternSafety = checkRegexSafety(doc.pattern, { strictStatic, maxProbeMs });

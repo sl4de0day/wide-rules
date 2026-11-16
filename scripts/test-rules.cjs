@@ -555,6 +555,60 @@ async function main() {
   assert.equal(mod.isLikelyRealSecret('const apiKey = "aaaaaaaaaaaaaaaaaaaa";', 'app.js'), false);
   assert.equal(mod.isLikelyRealSecret('const gh = "ghp_9xK2mP7qR4tV8wZ1aB3cD5eF6gH8jL0nM2q";', 'app.js'), true);
 
+  assert.equal(
+    mod.verifyRuleCandidate(
+      {
+        id: 'wide/too-short-test',
+        name: 'too-short-test',
+        category: 'GENERAL',
+        severity: 'MEDIUM',
+        languages: ['js'],
+        pattern: 'eval\\(',
+        message: 'Short pattern test',
+        tests: { positive: ['eval(x)'], negative: ['safe(x)'] }
+      },
+      { strictPrecision: true, corpus: multiLangCorpus }
+    ).ok,
+    false,
+    'strictPrecision must reject overly short patterns before auto-merge'
+  );
+
+  const learnTmp = fs.mkdtempSync(path.join(os.tmpdir(), 'wide-learn-rev-'));
+  try {
+    const revOut = await mod.learnRulesFromAdvisories({
+      advisories: [
+        {
+          id: 'CVE-2026-88881',
+          cve: 'CVE-2026-88881',
+          cwe: 'CWE-94',
+          sev: 'critical',
+          kev: true,
+          patchUrls: ['https://github.com/org/repo/commit/abcdef1'],
+          summary: 'Mock RCE'
+        }
+      ],
+      existingRules: [],
+      outDir: path.join(learnTmp, 'rules'),
+      stateFile: path.join(learnTmp, 'state.json'),
+      completeFn: async () => ({
+        category: 'INJECTION',
+        severity: 'CRITICAL',
+        languages: ['js'],
+        pattern: 'dangerousExecCall\\(\\s*req\\.body',
+        'not-match': 'sanitizeInput',
+        confidence: 'high',
+        message: 'Unsanitized dangerousExecCall',
+        tests: { positive: ['dangerousExecCall(req.body.cmd)'], negative: ['dangerousExecCall(sanitizeInput(x))'] }
+      }),
+      reviewFn: async () => ({ approved: false, falsePositiveRisk: 'high', reason: 'Overly broad in tests' })
+    });
+    assert.equal(revOut.learned.length, 0);
+    assert.equal(revOut.rejected.length, 1);
+    assert.ok(revOut.rejected[0].reason.includes('AI FP review rejected'));
+  } finally {
+    fs.rmSync(learnTmp, { recursive: true, force: true });
+  }
+
   console.log('All rule engine and dynamic learning tests passed successfully.');
 }
 
