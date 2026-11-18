@@ -1,10 +1,10 @@
 {
   "version": "0.4151126",
-  "generatedAt": "2026-11-16T15:46:03.533Z",
-  "totalRules": 750,
+  "generatedAt": "2026-11-18T11:00:54.225Z",
+  "totalRules": 751,
   "categories": {
     "AI_SECURITY": 13,
-    "AUTH": 114,
+    "AUTH": 115,
     "INJECTION": 186,
     "GENERAL": 77,
     "CRYPTO": 26,
@@ -19,7 +19,7 @@
   "severities": {
     "HIGH": 467,
     "MEDIUM": 154,
-    "CRITICAL": 94,
+    "CRITICAL": 95,
     "LOW": 35
   },
   "rules": [
@@ -15821,6 +15821,48 @@
         "negative": [
           "async def post_validate_code(code: Code, _current_user: CurrentActiveUser) -> CodeValidationResponse:",
           "async def post_validate_code(code: Code, user=Depends(get_current_user)):"
+        ]
+      }
+    },
+    {
+      "id": "wide/vuln-cve-2026-39987",
+      "name": "vuln-cve-2026-39987",
+      "category": "AUTH",
+      "severity": "CRITICAL",
+      "languages": [
+        "py"
+      ],
+      "cwe": "CWE-306",
+      "cve": "CVE-2026-39987",
+      "pattern": "@router\\.websocket\\(\\s*[\"']\\/ws[\"']\\s*\\)\\s*async\\s+def\\s+\\w+\\s*\\(websocket:\\s*WebSocket\\)\\s*(?:\\s*->\\s*None)?:[\\s\\S]*?(?:(?!validate_auth)[\\s\\S])*?\\bwebsocket\\.accept\\(\\)",
+      "not-match": "\\bvalidate_auth\\(websocket\\)",
+      "confidence": "high",
+      "message": "Marimo terminal WebSocket endpoint lacks authentication, allowing pre-auth RCE.",
+      "why": "The `/terminal/ws` WebSocket endpoint in Marimo's `terminal.py` accepts connections and forks a PTY shell without validating user authentication, leading to unauthenticated remote code execution.",
+      "remediation": "Ensure all sensitive WebSocket endpoints, especially those providing shell access, enforce proper authentication using `validate_auth(websocket)` or similar mechanisms before accepting connections or performing privileged operations.",
+      "references": [
+        "https://github.com/marimo-team/marimo/security/advisories/GHSA-2679-6mx9-h9xc",
+        "https://github.com/marimo-team/marimo/pull/9098",
+        "https://github.com/marimo-team/marimo/commit/c24d4806398f30be6b12acd6c60d1d7c68cfd12a",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-39987",
+        "https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2025-39987",
+        "https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2026-39987"
+      ],
+      "metadata": {
+        "source": "wide-rules-auto-learn",
+        "status": "experimental",
+        "quarantineUntil": "2026-11-25T10:59:31.659Z",
+        "kev": true,
+        "epss": 0.9974,
+        "learnedAt": "2026-11-18T10:59:31.659Z",
+        "advisoryUrl": "https://github.com/advisories/GHSA-2679-6mx9-h9xc"
+      },
+      "tests": {
+        "positive": [
+          "@router.websocket(\"/ws\")\nasync def websocket_endpoint(websocket: WebSocket) -> None:\n    app_state = AppState(websocket)\n    if app_state.mode != SessionMode.EDIT:\n        await websocket.close(\n            code=1008, reason=\"Terminal only available in edit mode\"\n        )\n        return\n    if not supports_terminal():\n        await websocket.close(\n            code=1008, reason=\"Terminal not supported on this platform\"\n        )\n        return\n    # No authentication check!\n    await websocket.accept()\n    # ...\n    child_pid, fd = pty.fork()"
+        ],
+        "negative": [
+          "@router.websocket(\"/ws\")\nasync def websocket_endpoint(websocket: WebSocket) -> None:\n    app_state = AppState(websocket)\n\n    if app_state.enable_auth and not validate_auth(websocket):\n        await websocket.close(\n            WebSocketCodes.UNAUTHORIZED, \"MARIMO_UNAUTHORIZED\"\n        )\n        return\n\n    if app_state.mode != SessionMode.EDIT:\n        await websocket.close(\n            code=1008, reason=\"Terminal only available in edit mode\"\n        )\n        return\n    if not supports_terminal():\n        await websocket.close(\n            code=1008, reason=\"Terminal not supported on this platform\"\n        )\n        return\n    await websocket.accept()\n    # ...\n    child_pid, fd = pty.fork()"
         ]
       }
     },

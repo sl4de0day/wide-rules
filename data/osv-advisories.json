@@ -1,27 +1,62 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-16T14:43:59.469Z",
+  "generatedAt": "2026-11-18T10:59:01.982Z",
   "sources": [
     "github-advisories",
     "cisa-kev",
     "first-epss"
   ],
   "stats": {
-    "total": 672,
+    "total": 820,
     "kevCount": 154,
-    "highEpssCount": 96,
+    "highEpssCount": 102,
     "byEcosystem": {
-      "npm": 251,
-      "pip": 57,
-      "maven": 179,
-      "go": 56,
-      "cargo": 38,
+      "npm": 285,
+      "pip": 137,
+      "maven": 180,
+      "go": 60,
+      "cargo": 44,
       "nuget": 17,
-      "composer": 33,
-      "rubygems": 41
+      "composer": 51,
+      "rubygems": 46
     }
   },
   "npm": [
+    {
+      "name": "@angular/common",
+      "le": "19.2.25",
+      "id": "CVE-2026-111753",
+      "ghsaId": "GHSA-jfgx-762w-99vr",
+      "cve": "CVE-2026-111753",
+      "cwe": "CWE-201",
+      "sev": "medium",
+      "note": "@angular/common: XSRF Token Leakage via URL Parsing Discrepancy in Angular HTTP Client (Incomplete fix for CVE-2025-66035)",
+      "epss": 0.0054
+    },
+    {
+      "name": "@angular/common",
+      "ge": "20.0.0",
+      "lt": "20.3.34",
+      "id": "CVE-2026-111753",
+      "ghsaId": "GHSA-jfgx-762w-99vr",
+      "cve": "CVE-2026-111753",
+      "cwe": "CWE-201",
+      "sev": "medium",
+      "note": "@angular/common: XSRF Token Leakage via URL Parsing Discrepancy in Angular HTTP Client (Incomplete fix for CVE-2025-66035)",
+      "epss": 0.0054
+    },
+    {
+      "name": "@angular/common",
+      "ge": "21.0.0",
+      "lt": "21.0.3",
+      "id": "CVE-2026-111753",
+      "ghsaId": "GHSA-jfgx-762w-99vr",
+      "cve": "CVE-2026-111753",
+      "cwe": "CWE-201",
+      "sev": "medium",
+      "note": "@angular/common: XSRF Token Leakage via URL Parsing Discrepancy in Angular HTTP Client (Incomplete fix for CVE-2025-66035)",
+      "epss": 0.0054
+    },
     {
       "name": "@anthropic-ai/claude-code",
       "lt": "2.1.251",
@@ -235,6 +270,26 @@
       "sev": "medium",
       "note": "@hono/node-server: Unhandled `ECONNRESET` on the socket during an asynchronous WebSocket upgrade crashes the process",
       "epss": 0.0045
+    },
+    {
+      "name": "@libp2p/crypto",
+      "lt": "5.1.22",
+      "id": "CVE-2026-110789",
+      "ghsaId": "GHSA-rvfr-cqwq-rc4j",
+      "cve": "CVE-2026-110789",
+      "cwe": "CWE-130",
+      "sev": "high",
+      "note": "libp2p: ASN.1 DER decoder drives an unbounded synchronous loop on attacker-controlled length fields, stalling the Node event loop pre-auth"
+    },
+    {
+      "name": "@libp2p/gossipsub",
+      "lt": "17.0.0",
+      "id": "CVE-2026-119793",
+      "ghsaId": "GHSA-x2vm-cf3p-m2w8",
+      "cve": "CVE-2026-119793",
+      "cwe": "CWE-400",
+      "sev": "high",
+      "note": "libp2p: gossipsub creates a permanent topics-map entry per distinct subscription with no cap in the default config"
     },
     {
       "name": "@logto/tunnel",
@@ -474,6 +529,54 @@
     },
     {
       "name": "@nuxt/nitro-server",
+      "ge": "3.20.0",
+      "lt": "4.0.0",
+      "id": "CVE-2026-128071",
+      "ghsaId": "GHSA-f3x9-2chm-73c8",
+      "cve": "CVE-2026-128071",
+      "cwe": "CWE-436",
+      "sev": "medium",
+      "note": "Nuxt: Incomplete fix for GHSA-6gq8-jgmh-3ffp: an encoded slash (`%2F`) in the request path bypasses route rules on catch-all page routes",
+      "epss": 0.0027
+    },
+    {
+      "name": "@nuxt/nitro-server",
+      "ge": "4.2.0",
+      "lt": "4.6.4",
+      "id": "CVE-2026-128071",
+      "ghsaId": "GHSA-f3x9-2chm-73c8",
+      "cve": "CVE-2026-128071",
+      "cwe": "CWE-436",
+      "sev": "medium",
+      "note": "Nuxt: Incomplete fix for GHSA-6gq8-jgmh-3ffp: an encoded slash (`%2F`) in the request path bypasses route rules on catch-all page routes",
+      "epss": 0.0027
+    },
+    {
+      "name": "@nuxt/nitro-server",
+      "ge": "3.21.6",
+      "lt": "4.0.0",
+      "id": "CVE-2026-128076",
+      "ghsaId": "GHSA-hf59-9xwc-2g4p",
+      "cve": "CVE-2026-128076",
+      "cwe": "CWE-116",
+      "sev": "low",
+      "note": "Nuxt: Colliding island props can share one `/__nuxt_island` path (incomplete fix for CVE-2026-46342)",
+      "epss": 0.0012
+    },
+    {
+      "name": "@nuxt/nitro-server",
+      "ge": "4.4.6",
+      "lt": "4.6.4",
+      "id": "CVE-2026-128076",
+      "ghsaId": "GHSA-hf59-9xwc-2g4p",
+      "cve": "CVE-2026-128076",
+      "cwe": "CWE-116",
+      "sev": "low",
+      "note": "Nuxt: Colliding island props can share one `/__nuxt_island` path (incomplete fix for CVE-2026-46342)",
+      "epss": 0.0012
+    },
+    {
+      "name": "@nuxt/nitro-server",
       "ge": "4.6.0",
       "lt": "4.6.4",
       "id": "CVE-2026-128077",
@@ -483,6 +586,30 @@
       "sev": "medium",
       "note": "Nuxt: Incomplete fix for GHSA-9v7c-q64q-vv33: a leading `//` in the request path bypasses `server/middleware` path checks and server route rules on page routes",
       "epss": 0.0027
+    },
+    {
+      "name": "@nuxt/rspack-builder",
+      "ge": "3.12.2",
+      "lt": "4.0.0",
+      "id": "CVE-2026-128072",
+      "ghsaId": "GHSA-x2wv-5868-p7v2",
+      "cve": "CVE-2026-128072",
+      "cwe": "CWE-346",
+      "sev": "low",
+      "note": "@nuxt/webpack-builder and @nuxt/rspack-builder dev server serves built source to DNS rebinding pages",
+      "epss": 0.0014
+    },
+    {
+      "name": "@nuxt/rspack-builder",
+      "ge": "4.0.0",
+      "lt": "4.6.4",
+      "id": "CVE-2026-128072",
+      "ghsaId": "GHSA-x2wv-5868-p7v2",
+      "cve": "CVE-2026-128072",
+      "cwe": "CWE-346",
+      "sev": "low",
+      "note": "@nuxt/webpack-builder and @nuxt/rspack-builder dev server serves built source to DNS rebinding pages",
+      "epss": 0.0014
     },
     {
       "name": "@nuxt/schema",
@@ -495,6 +622,42 @@
       "sev": "medium",
       "note": "Nuxt dev server serves files from a parent directory with a stray lockfile or workspace file",
       "epss": 0.0042
+    },
+    {
+      "name": "@nuxt/vite-server",
+      "ge": "4.6.0",
+      "lt": "4.6.4",
+      "id": "CVE-2026-128071",
+      "ghsaId": "GHSA-f3x9-2chm-73c8",
+      "cve": "CVE-2026-128071",
+      "cwe": "CWE-436",
+      "sev": "medium",
+      "note": "Nuxt: Incomplete fix for GHSA-6gq8-jgmh-3ffp: an encoded slash (`%2F`) in the request path bypasses route rules on catch-all page routes",
+      "epss": 0.0027
+    },
+    {
+      "name": "@nuxt/webpack-builder",
+      "ge": "3.0.0",
+      "lt": "4.0.0",
+      "id": "CVE-2026-128072",
+      "ghsaId": "GHSA-x2wv-5868-p7v2",
+      "cve": "CVE-2026-128072",
+      "cwe": "CWE-346",
+      "sev": "low",
+      "note": "@nuxt/webpack-builder and @nuxt/rspack-builder dev server serves built source to DNS rebinding pages",
+      "epss": 0.0014
+    },
+    {
+      "name": "@nuxt/webpack-builder",
+      "ge": "4.0.0",
+      "lt": "4.6.4",
+      "id": "CVE-2026-128072",
+      "ghsaId": "GHSA-x2wv-5868-p7v2",
+      "cve": "CVE-2026-128072",
+      "cwe": "CWE-346",
+      "sev": "low",
+      "note": "@nuxt/webpack-builder and @nuxt/rspack-builder dev server serves built source to DNS rebinding pages",
+      "epss": 0.0014
     },
     {
       "name": "@ohif/extension-dicom-pdf",
@@ -847,6 +1010,29 @@
     {
       "name": "@sveltejs/kit",
       "lt": "2.70.4",
+      "id": "CVE-2026-128116",
+      "ghsaId": "GHSA-rqp5-r3wg-vg35",
+      "cve": "CVE-2026-128116",
+      "cwe": "CWE-79",
+      "sev": "medium",
+      "note": "SvelteKit: Protocol-relative module import during server-side route resolution allows cross-origin script execution",
+      "epss": 0.0026
+    },
+    {
+      "name": "@sveltejs/kit",
+      "ge": "3.0.0",
+      "lt": "3.1.1",
+      "id": "CVE-2026-128116",
+      "ghsaId": "GHSA-rqp5-r3wg-vg35",
+      "cve": "CVE-2026-128116",
+      "cwe": "CWE-79",
+      "sev": "medium",
+      "note": "SvelteKit: Protocol-relative module import during server-side route resolution allows cross-origin script execution",
+      "epss": 0.0026
+    },
+    {
+      "name": "@sveltejs/kit",
+      "lt": "2.70.4",
       "id": "CVE-2026-128117",
       "ghsaId": "GHSA-mw6w-2fmv-pvw3",
       "cve": "CVE-2026-128117",
@@ -866,6 +1052,42 @@
       "sev": "medium",
       "note": "SvelteKit: adapter-node crashes with an unhandled URIError when `reroute` rewrites malformed pathnames",
       "epss": 0.0048
+    },
+    {
+      "name": "@sveltejs/kit",
+      "ge": "3.0.0",
+      "lt": "3.1.1",
+      "id": "CVE-2026-128118",
+      "ghsaId": "GHSA-m9j8-jcmv-hp69",
+      "cve": "CVE-2026-128118",
+      "cwe": "CWE-200",
+      "sev": "high",
+      "note": "SvelteKit: Build-time server-only module import guard could fail, resulting in server secrets being statically replaced in client bundle",
+      "epss": 0.0028
+    },
+    {
+      "name": "@sveltejs/kit",
+      "ge": "2.60.1",
+      "lt": "3.1.1",
+      "id": "CVE-2026-128119",
+      "ghsaId": "GHSA-6cf5-gc4q-fm3x",
+      "cve": "CVE-2026-128119",
+      "cwe": "CWE-863",
+      "sev": "medium",
+      "note": "SvelteKit: Private `query.batch` functions could collide, producing unexpected parameter / function combinations",
+      "epss": 0.0029
+    },
+    {
+      "name": "@sveltejs/kit",
+      "ge": "2.42.0",
+      "lt": "3.1.1",
+      "id": "CVE-2026-128120",
+      "ghsaId": "GHSA-3r8g-jcqq-3p5j",
+      "cve": "CVE-2026-128120",
+      "cwe": "CWE-407",
+      "sev": "high",
+      "note": "SvelteKit: DoS while parsing form data from a remote functions `form`",
+      "epss": 0.0035
     },
     {
       "name": "@tanstack/arktype-adapter",
@@ -1609,6 +1831,39 @@
       "epss": 0.0026
     },
     {
+      "name": "code-review-mcp-server",
+      "lt": "1.5.3",
+      "id": "CVE-2026-68934",
+      "ghsaId": "GHSA-jq3q-62jc-fqq9",
+      "cve": "CVE-2026-68934",
+      "cwe": "CWE-78",
+      "sev": "high",
+      "note": "code-review-mcp-server: Command injection via unsanitized folderPath/baseBranch parameters",
+      "epss": 0.0043
+    },
+    {
+      "name": "deepmerge",
+      "ge": "4.2.0",
+      "le": "4.3.1",
+      "id": "CVE-2026-93753",
+      "ghsaId": "GHSA-gcqx-w48m-w2h4",
+      "cve": "CVE-2026-93753",
+      "cwe": "CWE-1321",
+      "sev": "low",
+      "note": "Withdrawn Advisory: deepmerge mergeObject() allows prototype poisoning of returned objects"
+    },
+    {
+      "name": "directus",
+      "lt": "12.3.1",
+      "id": "CVE-2026-129239",
+      "ghsaId": "GHSA-7h45-q5jx-7r87",
+      "cve": "CVE-2026-129239",
+      "cwe": "CWE-269",
+      "sev": "medium",
+      "note": "Directus: Share update allows reassigning user_created and role",
+      "epss": 0.004
+    },
+    {
       "name": "directus",
       "lt": "11.17.0",
       "id": "CVE-2026-35442",
@@ -1693,6 +1948,29 @@
       "sev": "low",
       "note": "fast-xml-parser: Quadratic CPU consumption scanning unterminated stop-node tags",
       "epss": 0.0046
+    },
+    {
+      "name": "fast-xml-parser",
+      "lt": "4.5.7",
+      "id": "CVE-2026-41650",
+      "ghsaId": "GHSA-gh4j-gqv2-49f6",
+      "cve": "CVE-2026-41650",
+      "cwe": "CWE-91",
+      "sev": "medium",
+      "note": "fast-xml-parser XMLBuilder: XML Comment and CDATA Injection via Unescaped Delimiters",
+      "epss": 0.0024
+    },
+    {
+      "name": "fast-xml-parser",
+      "ge": "5.0.0",
+      "lt": "5.7.0",
+      "id": "CVE-2026-41650",
+      "ghsaId": "GHSA-gh4j-gqv2-49f6",
+      "cve": "CVE-2026-41650",
+      "cwe": "CWE-91",
+      "sev": "medium",
+      "note": "fast-xml-parser XMLBuilder: XML Comment and CDATA Injection via Unescaped Delimiters",
+      "epss": 0.0024
     },
     {
       "name": "filecoin-pin",
@@ -2223,6 +2501,30 @@
     },
     {
       "name": "next",
+      "ge": "16.2.0",
+      "lt": "16.4.5",
+      "id": "CVE-2026-119351",
+      "ghsaId": "GHSA-vc7v-qv4w-wrv8",
+      "cve": "CVE-2026-119351",
+      "cwe": "CWE-362",
+      "sev": "medium",
+      "note": "Next.js: Cache leak across root param values in nested 'use cache' functions via delayed inner stream metadata",
+      "epss": 0.0024
+    },
+    {
+      "name": "next",
+      "ge": "16.3.0",
+      "lt": "16.4.5",
+      "id": "CVE-2026-119790",
+      "ghsaId": "GHSA-mfr8-8qww-v76h",
+      "cve": "CVE-2026-119790",
+      "cwe": "CWE-362",
+      "sev": "medium",
+      "note": "Next.js: Information disclosure across root params when a 'use cache' function is called through unstable_cache()",
+      "epss": 0.004
+    },
+    {
+      "name": "next",
       "ge": "15.2.0",
       "lt": "15.5.18",
       "id": "CVE-2026-45109",
@@ -2352,7 +2654,7 @@
       "cwe": "CWE-20",
       "sev": "medium",
       "note": "Forge: TLS client crash on an unsupported ServerHello compression method",
-      "epss": 0.0043
+      "epss": 0.0046
     },
     {
       "name": "node-forge",
@@ -2375,7 +2677,7 @@
       "cwe": "CWE-476",
       "sev": "medium",
       "note": "Forge: TLS client crash on a handshake record received without a session",
-      "epss": 0.0028
+      "epss": 0.003
     },
     {
       "name": "node-forge",
@@ -2386,7 +2688,7 @@
       "cwe": "CWE-347",
       "sev": "low",
       "note": "Forge: Ed25519 signature verification accepts small-order public keys",
-      "epss": 0.002
+      "epss": 0.0021
     },
     {
       "name": "node-opcua",
@@ -2423,6 +2725,90 @@
       "sev": "critical",
       "note": "node-opcua: Namespace-Level RBAC Fail-Open - Anonymous Write/Call Bypass via Unbound `DefaultRolePermissions",
       "epss": 0.006
+    },
+    {
+      "name": "nuxt",
+      "ge": "3.0.0",
+      "lt": "4.0.0",
+      "id": "CVE-2026-128071",
+      "ghsaId": "GHSA-f3x9-2chm-73c8",
+      "cve": "CVE-2026-128071",
+      "cwe": "CWE-436",
+      "sev": "medium",
+      "note": "Nuxt: Incomplete fix for GHSA-6gq8-jgmh-3ffp: an encoded slash (`%2F`) in the request path bypasses route rules on catch-all page routes",
+      "epss": 0.0027
+    },
+    {
+      "name": "nuxt",
+      "ge": "4.0.0",
+      "lt": "4.6.4",
+      "id": "CVE-2026-128071",
+      "ghsaId": "GHSA-f3x9-2chm-73c8",
+      "cve": "CVE-2026-128071",
+      "cwe": "CWE-436",
+      "sev": "medium",
+      "note": "Nuxt: Incomplete fix for GHSA-6gq8-jgmh-3ffp: an encoded slash (`%2F`) in the request path bypasses route rules on catch-all page routes",
+      "epss": 0.0027
+    },
+    {
+      "name": "nuxt",
+      "ge": "4.6.0",
+      "lt": "4.6.4",
+      "id": "CVE-2026-128074",
+      "ghsaId": "GHSA-r9jc-w898-3fv6",
+      "cve": "CVE-2026-128074",
+      "cwe": "CWE-1333",
+      "sev": "medium",
+      "note": "Nuxt payload URL generation has quadratic cost for repeated slashes in the request path",
+      "epss": 0.0029
+    },
+    {
+      "name": "nuxt",
+      "ge": "3.0.0",
+      "lt": "4.0.0",
+      "id": "CVE-2026-128075",
+      "ghsaId": "GHSA-96x6-fvhx-49hg",
+      "cve": "CVE-2026-128075",
+      "cwe": "CWE-209",
+      "sev": "medium",
+      "note": "Nuxt exposes the message and data of unhandled errors thrown during server rendering",
+      "epss": 0.0031
+    },
+    {
+      "name": "nuxt",
+      "ge": "4.0.0",
+      "lt": "4.6.4",
+      "id": "CVE-2026-128075",
+      "ghsaId": "GHSA-96x6-fvhx-49hg",
+      "cve": "CVE-2026-128075",
+      "cwe": "CWE-209",
+      "sev": "medium",
+      "note": "Nuxt exposes the message and data of unhandled errors thrown during server rendering",
+      "epss": 0.0031
+    },
+    {
+      "name": "nuxt",
+      "ge": "3.21.6",
+      "lt": "4.0.0",
+      "id": "CVE-2026-128076",
+      "ghsaId": "GHSA-hf59-9xwc-2g4p",
+      "cve": "CVE-2026-128076",
+      "cwe": "CWE-116",
+      "sev": "low",
+      "note": "Nuxt: Colliding island props can share one `/__nuxt_island` path (incomplete fix for CVE-2026-46342)",
+      "epss": 0.0012
+    },
+    {
+      "name": "nuxt",
+      "ge": "4.4.6",
+      "lt": "4.6.4",
+      "id": "CVE-2026-128076",
+      "ghsaId": "GHSA-hf59-9xwc-2g4p",
+      "cve": "CVE-2026-128076",
+      "cwe": "CWE-116",
+      "sev": "low",
+      "note": "Nuxt: Colliding island props can share one `/__nuxt_island` path (incomplete fix for CVE-2026-46342)",
+      "epss": 0.0012
     },
     {
       "name": "odf-kit",
@@ -2469,6 +2855,17 @@
       "sev": "high",
       "note": "Parse Server crash via deeply nested query condition operators",
       "epss": 0.0055
+    },
+    {
+      "name": "picomatch",
+      "le": "4.0.7",
+      "id": "CVE-2026-112366",
+      "ghsaId": "GHSA-fc5q-39xc-vjpf",
+      "cve": "CVE-2026-112366",
+      "cwe": "CWE-1333",
+      "sev": "high",
+      "note": "picomatch vulnerable to ReDoS through single-branch repeated extglobs",
+      "epss": 0.0034
     },
     {
       "name": "protobufjs",
@@ -3030,6 +3427,18 @@
       "epss": 0.0034
     },
     {
+      "name": "arize-phoenix",
+      "ge": "13.0.0",
+      "lt": "15.7.0",
+      "id": "CVE-2026-53998",
+      "ghsaId": "GHSA-gfv3-m769-5xm3",
+      "cve": "CVE-2026-53998",
+      "cwe": "CWE-134",
+      "sev": "critical",
+      "note": "Phoenix: Format String Injection in applyChatTemplate",
+      "epss": 0.0036
+    },
+    {
       "name": "brotli",
       "ge": "1.0.3",
       "lt": "1.2.1",
@@ -3054,6 +3463,17 @@
       "note": "Brotli: Out-of-bounds write in the Brotli decoder (\"Node2Shell\") also affects the PyPI Brotli package",
       "kev": true,
       "epss": 0.8264
+    },
+    {
+      "name": "chainlit",
+      "lt": "2.9.4",
+      "id": "CVE-2026-22218",
+      "ghsaId": "GHSA-gm79-2pvc-wc75",
+      "cve": "CVE-2026-22218",
+      "cwe": "CWE-22",
+      "sev": "high",
+      "note": "chainlit : Chainlit allows authenticated arbitrary file reads through custom element updates",
+      "epss": 0.0972
     },
     {
       "name": "compose-lint",
@@ -3123,6 +3543,28 @@
       "note": "GPUStack: Authentication bypass via trusted loopback source (reverse-proxy TCP peer or X-GPUStack-Real-IP header) grants unauthenticated admin",
       "kev": true,
       "epss": 0.0052
+    },
+    {
+      "name": "ironic-inspector",
+      "lt": "2.2.2",
+      "id": "CVE-2015-5306",
+      "ghsaId": "GHSA-x64g-wjmw-w328",
+      "cve": "CVE-2015-5306",
+      "cwe": "CWE-1395",
+      "sev": "critical",
+      "note": "Injection vulnerability that affects ironic-discoverd",
+      "epss": 0.016
+    },
+    {
+      "name": "Jinja2",
+      "lt": "3.1.6",
+      "id": "CVE-2025-27516",
+      "ghsaId": "GHSA-cpwx-vrp4-4pq7",
+      "cve": "CVE-2025-27516",
+      "cwe": "CWE-1336",
+      "sev": "medium",
+      "note": "Jinja2 vulnerable to sandbox breakout through attr filter selecting format method",
+      "epss": 0.0051
     },
     {
       "name": "langflow",
@@ -3208,6 +3650,17 @@
       "epss": 0.0132
     },
     {
+      "name": "lightning",
+      "lt": "2.4.0",
+      "id": "CVE-2024-8019",
+      "ghsaId": "GHSA-4cv3-v7pv-rfhf",
+      "cve": "CVE-2024-8019",
+      "cwe": "CWE-434",
+      "sev": "critical",
+      "note": "PyTorch Lightning path traversal vulnerability",
+      "epss": 0.0112
+    },
+    {
       "name": "litellm",
       "ge": "1.81.16",
       "lt": "1.83.7",
@@ -3246,6 +3699,76 @@
       "epss": 0.0084
     },
     {
+      "name": "mail-parser",
+      "ge": "4.2.0",
+      "lt": "4.6.1",
+      "id": "CVE-2026-129295",
+      "ghsaId": "GHSA-r7w7-vpq8-c5vv",
+      "cve": "CVE-2026-129295",
+      "cwe": "CWE-1333",
+      "sev": "high",
+      "note": "mail-parser is vulnerable to polynomial ReDoS in email header parsing",
+      "epss": 0.005
+    },
+    {
+      "name": "mail-parser",
+      "ge": "3.8.0",
+      "lt": "4.6.0",
+      "id": "CVE-2026-129296",
+      "ghsaId": "GHSA-fr3h-cpq2-9496",
+      "cve": "CVE-2026-129296",
+      "cwe": "CWE-22",
+      "sev": "medium",
+      "note": "mail-parser: Path Traversal vulnerability in attachment extraction",
+      "epss": 0.006
+    },
+    {
+      "name": "mail-parser",
+      "lt": "4.6.2",
+      "id": "CVE-2026-129297",
+      "ghsaId": "GHSA-72px-j8gh-p79x",
+      "cve": "CVE-2026-129297",
+      "cwe": "CWE-20",
+      "sev": "high",
+      "note": "mail-parser: Sender IP address spoofing in get_server_ipaddress()",
+      "epss": 0.002
+    },
+    {
+      "name": "mail-parser",
+      "lt": "4.6.2",
+      "id": "CVE-2026-129299",
+      "ghsaId": "GHSA-24mq-4vc6-2prf",
+      "cve": "CVE-2026-129299",
+      "cwe": "CWE-248",
+      "sev": "medium",
+      "note": "mail-parser: Uncaught exceptions and silent header loss in mail-parser on attacker-controlled input",
+      "epss": 0.0036
+    },
+    {
+      "name": "mail-parser",
+      "ge": "3.7.0",
+      "lt": "4.6.3",
+      "id": "CVE-2026-129300",
+      "ghsaId": "GHSA-xhrq-2mqv-q8wx",
+      "cve": "CVE-2026-129300",
+      "cwe": "CWE-248",
+      "sev": "medium",
+      "note": "mail-parser: Uncaught `OverflowError` / `OSError` on an out-of-range `Received` date",
+      "epss": 0.004
+    },
+    {
+      "name": "mail-parser",
+      "ge": "4.6.0",
+      "lt": "4.6.3",
+      "id": "CVE-2026-129301",
+      "ghsaId": "GHSA-8cgq-x343-p74c",
+      "cve": "CVE-2026-129301",
+      "cwe": "CWE-248",
+      "sev": "medium",
+      "note": "mail-parser: One hostile attachment aborts `write_attachments()` and silently drops the rest of the batch",
+      "epss": 0.0034
+    },
+    {
       "name": "marimo",
       "lt": "0.23.0",
       "id": "CVE-2026-39987",
@@ -3269,6 +3792,17 @@
       "note": "MLflow: Unauthenticated full-read SSRF in webhook delivery: _validate_webhook_url bypassed via unvalidated HTTP redirects (and DNS rebinding)",
       "kev": true,
       "epss": 0.1002
+    },
+    {
+      "name": "mobsf",
+      "lt": "4.4.0",
+      "id": "CVE-2025-46730",
+      "ghsaId": "GHSA-c5vg-26p8-q8cr",
+      "cve": "CVE-2025-46730",
+      "cwe": "CWE-409",
+      "sev": "medium",
+      "note": "Mobile Security Framework (MobSF) Allows Web Server Resource Exhaustion via ZIP of Death Attack",
+      "epss": 0.0053
     },
     {
       "name": "nltk",
@@ -3349,6 +3883,17 @@
       "sev": "high",
       "note": "NLTK: Symlink escape in YCOECorpusReader lets a psd/pos directory symlink read files outside the corpus root within the data sandbox",
       "epss": 0.0062
+    },
+    {
+      "name": "nltk",
+      "lt": "3.10.4",
+      "id": "CVE-2026-128134",
+      "ghsaId": "GHSA-7mxv-7h3q-9324",
+      "cve": "CVE-2026-128134",
+      "cwe": "CWE-426",
+      "sev": "high",
+      "note": "NLTK dot2img runs Graphviz 'dot' without the trusted-exec chokepoint, enabling local code execution via a writable PATH element",
+      "epss": 0.0018
     },
     {
       "name": "nltk",
@@ -3490,6 +4035,17 @@
       "epss": 0.0029
     },
     {
+      "name": "openstack-magnum",
+      "lt": "5.0.0",
+      "id": "CVE-2016-7404",
+      "ghsaId": "GHSA-793v-r35j-9rp9",
+      "cve": "CVE-2016-7404",
+      "cwe": "CWE-200",
+      "sev": "critical",
+      "note": "Openstack Magnum Unsafe Credential Handling",
+      "epss": 0.0188
+    },
+    {
       "name": "opentelemetry-api",
       "lt": "1.45.2",
       "id": "CVE-2026-126360",
@@ -3499,6 +4055,83 @@
       "sev": "medium",
       "note": "OpenTelemetry Python API: Denial of service through quadratic-time traceparent parsing",
       "epss": 0.0052
+    },
+    {
+      "name": "paddlepaddle",
+      "lt": "2.4",
+      "id": "CVE-2022-46741",
+      "ghsaId": "GHSA-2hvc-hwg3-hpvw",
+      "cve": "CVE-2022-46741",
+      "cwe": "CWE-125",
+      "sev": "critical",
+      "note": "PaddlePaddle Out-of-bounds Read vulnerability",
+      "epss": 0.0073
+    },
+    {
+      "name": "pandasai",
+      "le": "0.8.1",
+      "id": "CVE-2023-39661",
+      "ghsaId": "GHSA-8fp9-43pw-56vw",
+      "cve": "CVE-2023-39661",
+      "cwe": "CWE-74",
+      "sev": "critical",
+      "note": "PandasAI vulnerable to arbitrary code execution",
+      "epss": 0.0142
+    },
+    {
+      "name": "pgadmin4",
+      "lt": "9.10",
+      "id": "CVE-2025-12762",
+      "ghsaId": "GHSA-w2p4-p4rh-qcm3",
+      "cve": "CVE-2025-12762",
+      "cwe": "CWE-94",
+      "sev": "critical",
+      "note": "pgAdmin4 vulnerable to Remote Code Execution (RCE) when running in server mode",
+      "epss": 0.127
+    },
+    {
+      "name": "pgadmin4",
+      "lt": "9.2",
+      "id": "CVE-2025-2945",
+      "ghsaId": "GHSA-g73c-fw68-pwx3",
+      "cve": "CVE-2025-2945",
+      "cwe": "CWE-94",
+      "sev": "critical",
+      "note": "pgAdmin 4 Vulnerable to Remote Code Execution",
+      "epss": 0.563
+    },
+    {
+      "name": "pgadmin4",
+      "lt": "9.2",
+      "id": "CVE-2025-2946",
+      "ghsaId": "GHSA-2rrx-pphc-qfv9",
+      "cve": "CVE-2025-2946",
+      "cwe": "CWE-79",
+      "sev": "critical",
+      "note": "pgAdmin 4 Vulnerable to Cross-Site Scripting (XSS) via Query Result Rendering",
+      "epss": 0.0033
+    },
+    {
+      "name": "pgadmin4",
+      "lt": "9.15",
+      "id": "CVE-2026-7813",
+      "ghsaId": "GHSA-h2x2-q2mc-24gw",
+      "cve": "CVE-2026-7813",
+      "cwe": "CWE-284",
+      "sev": "critical",
+      "note": "pgAdmin 4 server mode has an authorization vulnerability affecting Server Groups, Servers, Shared Servers, Background Processes, and Debugger modules",
+      "epss": 0.0046
+    },
+    {
+      "name": "Pillow",
+      "lt": "10.2.0",
+      "id": "CVE-2023-50447",
+      "ghsaId": "GHSA-3f63-hfp8-52jq",
+      "cve": "CVE-2023-50447",
+      "cwe": "CWE-94",
+      "sev": "critical",
+      "note": "Arbitrary Code Execution in Pillow",
+      "epss": 0.017
     },
     {
       "name": "Pillow",
@@ -3523,6 +4156,420 @@
       "epss": 0.0045
     },
     {
+      "name": "pipecat-ai",
+      "ge": "0.0.41",
+      "lt": "0.0.94",
+      "id": "CVE-2025-62373",
+      "ghsaId": "GHSA-c2jg-5cp7-6wc7",
+      "cve": "CVE-2025-62373",
+      "cwe": "CWE-502",
+      "sev": "critical",
+      "note": "Pipecat: Remote Code Execution by Pickle Deserialization Through LivekitFrameSerializer",
+      "epss": 0.007
+    },
+    {
+      "name": "Plone",
+      "ge": "4.3",
+      "le": "5.2.1",
+      "id": "CVE-2020-7941",
+      "ghsaId": "GHSA-w6g9-xccc-347h",
+      "cve": "CVE-2020-7941",
+      "cwe": "CWE-269",
+      "sev": "critical",
+      "note": "Plone Unauthenticated Write Vulnerability",
+      "epss": 0.0227
+    },
+    {
+      "name": "plone.app.contenttypes",
+      "lt": "2.1.6",
+      "id": "CVE-2020-7941",
+      "ghsaId": "GHSA-w6g9-xccc-347h",
+      "cve": "CVE-2020-7941",
+      "cwe": "CWE-269",
+      "sev": "critical",
+      "note": "Plone Unauthenticated Write Vulnerability",
+      "epss": 0.0227
+    },
+    {
+      "name": "praisonai",
+      "lt": "4.5.90",
+      "id": "CVE-2026-34934",
+      "ghsaId": "GHSA-9cq8-3v94-434g",
+      "cve": "CVE-2026-34934",
+      "cwe": "CWE-89",
+      "sev": "critical",
+      "note": "PraisonAI Has Second-Order SQL Injection in `get_all_user_threads`",
+      "epss": 0.0054
+    },
+    {
+      "name": "praisonai",
+      "ge": "4.5.15",
+      "lt": "4.5.69",
+      "id": "CVE-2026-34935",
+      "ghsaId": "GHSA-9gm9-c8mq-vq7m",
+      "cve": "CVE-2026-34935",
+      "cwe": "CWE-78",
+      "sev": "critical",
+      "note": "PraisonAI: OS Command Injection in MCPHandler.parse_mcp_command()",
+      "epss": 0.0084
+    },
+    {
+      "name": "praisonai",
+      "lt": "4.5.97",
+      "id": "CVE-2026-34952",
+      "ghsaId": "GHSA-cfh6-vr3j-qc3g",
+      "cve": "CVE-2026-34952",
+      "cwe": "CWE-306",
+      "sev": "critical",
+      "note": "PraisonAI Has Missing Authentication in WebSocket Gateway",
+      "epss": 0.0045
+    },
+    {
+      "name": "praisonai",
+      "lt": "4.5.97",
+      "id": "CVE-2026-34953",
+      "ghsaId": "GHSA-98f9-fqg5-hvq5",
+      "cve": "CVE-2026-34953",
+      "cwe": "CWE-863",
+      "sev": "critical",
+      "note": "PraisonAI Has Authentication Bypass via OAuthManager.validate_token()",
+      "epss": 0.0039
+    },
+    {
+      "name": "praisonai",
+      "lt": "4.5.149",
+      "id": "CVE-2026-41497",
+      "ghsaId": "GHSA-9qhq-v63v-fv3j",
+      "cve": "CVE-2026-41497",
+      "cwe": "CWE-77",
+      "sev": "critical",
+      "note": "PraisonAI has an incomplete fix for CVE-2026-34935 - OS Command Injection",
+      "epss": 0.0054
+    },
+    {
+      "name": "PraisonAI",
+      "lt": "4.5.113",
+      "id": "CVE-2026-39305",
+      "ghsaId": "GHSA-jfxc-v5g9-38xr",
+      "cve": "CVE-2026-39305",
+      "cwe": "CWE-22",
+      "sev": "critical",
+      "note": "PraisonAI Vulnerable to Arbitrary File Write / Path Traversal in Action Orchestrator",
+      "epss": 0.0032
+    },
+    {
+      "name": "PraisonAI",
+      "lt": "4.5.128",
+      "id": "CVE-2026-40154",
+      "ghsaId": "GHSA-pv9q-275h-rh7x",
+      "cve": "CVE-2026-40154",
+      "cwe": "CWE-829",
+      "sev": "critical",
+      "note": "PraisonAI Vulnerable Untrusted Remote Template Code Execution",
+      "epss": 0.0031
+    },
+    {
+      "name": "PraisonAI",
+      "ge": "2.7.2",
+      "lt": "4.5.128",
+      "id": "CVE-2026-40157",
+      "ghsaId": "GHSA-99g3-w8gr-x37c",
+      "cve": "CVE-2026-40157",
+      "cwe": "CWE-22",
+      "sev": "critical",
+      "note": "PraisonAI vulnerable to arbitrary file write via path traversal in `praisonai recipe unpack`",
+      "epss": 0.0039
+    },
+    {
+      "name": "PraisonAI",
+      "lt": "4.5.139",
+      "id": "CVE-2026-40288",
+      "ghsaId": "GHSA-vc46-vw85-3wvm",
+      "cve": "CVE-2026-40288",
+      "cwe": "CWE-78",
+      "sev": "critical",
+      "note": "PraisonAI has critical RCE via `type: job` workflow YAML",
+      "epss": 0.0062
+    },
+    {
+      "name": "PraisonAI",
+      "lt": "4.5.139",
+      "id": "CVE-2026-40289",
+      "ghsaId": "GHSA-8x8f-54wf-vv92",
+      "cve": "CVE-2026-40289",
+      "cwe": "CWE-306",
+      "sev": "critical",
+      "note": "PraisonAI Browser Server allows unauthenticated WebSocket clients to hijack connected extension sessions",
+      "epss": 0.0043
+    },
+    {
+      "name": "PraisonAI",
+      "lt": "4.6.34",
+      "id": "CVE-2026-44336",
+      "ghsaId": "GHSA-9mqq-jqxf-grvw",
+      "cve": "CVE-2026-44336",
+      "cwe": "CWE-20",
+      "sev": "critical",
+      "note": "PraisonAI MCP `tools/call` path-traversal => RCE via Python `.pth` injection",
+      "epss": 0.0062
+    },
+    {
+      "name": "praisonaiagents",
+      "lt": "1.5.90",
+      "id": "CVE-2026-34938",
+      "ghsaId": "GHSA-6vh2-h83c-9294",
+      "cve": "CVE-2026-34938",
+      "cwe": "CWE-693",
+      "sev": "critical",
+      "note": "PraisonAI: Python Sandbox Escape via str Subclass startswith() Override in execute_code",
+      "epss": 0.134
+    },
+    {
+      "name": "praisonaiagents",
+      "lt": "1.5.115",
+      "id": "CVE-2026-39888",
+      "ghsaId": "GHSA-qf73-2hrx-xprp",
+      "cve": "CVE-2026-39888",
+      "cwe": "CWE-657",
+      "sev": "critical",
+      "note": "PraisonAI has sandbox escape via exception frame traversal in `execute_code` (subprocess mode)",
+      "epss": 0.005
+    },
+    {
+      "name": "praisonaiagents",
+      "lt": "1.5.128",
+      "id": "CVE-2026-40111",
+      "ghsaId": "GHSA-v7px-3835-7gjx",
+      "cve": "CVE-2026-40111",
+      "cwe": "CWE-78",
+      "sev": "critical",
+      "note": "PraisonAIAgents has an OS Command Injection via shell=True in Memory Hooks Executor (memory/hooks.py)",
+      "epss": 0.0024
+    },
+    {
+      "name": "praisonaiagents",
+      "lt": "1.5.140",
+      "id": "CVE-2026-40288",
+      "ghsaId": "GHSA-vc46-vw85-3wvm",
+      "cve": "CVE-2026-40288",
+      "cwe": "CWE-78",
+      "sev": "critical",
+      "note": "PraisonAI has critical RCE via `type: job` workflow YAML",
+      "epss": 0.0062
+    },
+    {
+      "name": "praisonaiagents",
+      "lt": "1.5.140",
+      "id": "CVE-2026-40289",
+      "ghsaId": "GHSA-8x8f-54wf-vv92",
+      "cve": "CVE-2026-40289",
+      "cwe": "CWE-306",
+      "sev": "critical",
+      "note": "PraisonAI Browser Server allows unauthenticated WebSocket clients to hijack connected extension sessions",
+      "epss": 0.0043
+    },
+    {
+      "name": "Products.SQLAlchemyDA",
+      "lt": "2.2",
+      "id": "CVE-2024-24811",
+      "ghsaId": "GHSA-r3jc-3qmm-w3pw",
+      "cve": "CVE-2024-24811",
+      "cwe": "CWE-89",
+      "sev": "critical",
+      "note": "SQLAlchemyDA unauthenticated arbitrary SQL query execution",
+      "epss": 0.0089
+    },
+    {
+      "name": "pyfory",
+      "ge": "0.12.0",
+      "lt": "0.12.3",
+      "id": "CVE-2025-61622",
+      "ghsaId": "GHSA-538v-3wq9-4h3r",
+      "cve": "CVE-2025-61622",
+      "cwe": "CWE-502",
+      "sev": "critical",
+      "note": "Apache Pyfory python is vulnerable to deserialization of untrusted data",
+      "epss": 0.4896
+    },
+    {
+      "name": "pyfury",
+      "ge": "0.1.0",
+      "le": "0.10.3",
+      "id": "CVE-2025-61622",
+      "ghsaId": "GHSA-538v-3wq9-4h3r",
+      "cve": "CVE-2025-61622",
+      "cwe": "CWE-502",
+      "sev": "critical",
+      "note": "Apache Pyfory python is vulnerable to deserialization of untrusted data",
+      "epss": 0.4896
+    },
+    {
+      "name": "pyload-ng",
+      "lt": "0.5.0b3.dev31",
+      "id": "CVE-2023-0297",
+      "ghsaId": "GHSA-pf38-5p22-x6h6",
+      "cve": "CVE-2023-0297",
+      "cwe": "CWE-94",
+      "sev": "critical",
+      "note": "Code Injection in pyload-ng",
+      "epss": 0.9591
+    },
+    {
+      "name": "pyload-ng",
+      "lt": "0.5.0b3.dev41",
+      "id": "CVE-2023-0435",
+      "ghsaId": "GHSA-6jmx-pv77-wm5w",
+      "cve": "CVE-2023-0435",
+      "cwe": "CWE-1125",
+      "sev": "critical",
+      "note": "Excessive Attack Surface in pyload-ng",
+      "epss": 0.0075
+    },
+    {
+      "name": "pyload-ng",
+      "le": "0.5.0",
+      "id": "CVE-2024-32880",
+      "ghsaId": "GHSA-3f7w-p8vr-4v5f",
+      "cve": "CVE-2024-32880",
+      "cwe": "CWE-434",
+      "sev": "critical",
+      "note": "pyLoad allows upload to arbitrary folder lead to RCE",
+      "epss": 0.0135
+    },
+    {
+      "name": "pyload-ng",
+      "le": "0.5.0b3.dev85",
+      "id": "CVE-2024-39205",
+      "ghsaId": "GHSA-r9pp-r4xf-597r",
+      "cve": "CVE-2024-39205",
+      "cwe": "CWE-94",
+      "sev": "critical",
+      "note": "pyload-ng vulnerable to RCE with js2py sandbox escape",
+      "epss": 0.1654
+    },
+    {
+      "name": "pyload-ng",
+      "lt": "0.20",
+      "id": "CVE-2025-53890",
+      "ghsaId": "GHSA-8w3f-4r8f-pf53",
+      "cve": "CVE-2025-53890",
+      "cwe": "CWE-79",
+      "sev": "critical",
+      "note": "pyLoad vulnerable to XSS through insecure CAPTCHA",
+      "epss": 0.013
+    },
+    {
+      "name": "pyload-ng",
+      "lt": "0.5.0b3.dev90",
+      "id": "CVE-2025-54802",
+      "ghsaId": "GHSA-48rp-jc79-2264",
+      "cve": "CVE-2025-54802",
+      "cwe": "CWE-22",
+      "sev": "critical",
+      "note": "pyLoad CNL Blueprint allows Path Traversal through `dlc_path` which leads to Remote Code Execution (RCE)",
+      "epss": 0.0139
+    },
+    {
+      "name": "pyload-ng",
+      "le": "0.5.0b3.dev96",
+      "id": "CVE-2026-33992",
+      "ghsaId": "GHSA-m74m-f7cr-432x",
+      "cve": "CVE-2026-33992",
+      "cwe": "CWE-918",
+      "sev": "critical",
+      "note": "pyLoad: Server-Side Request Forgery via Download Link Submission Enables Cloud Metadata Exfiltration",
+      "epss": 0.0041
+    },
+    {
+      "name": "pymetasploit3",
+      "le": "1.0.6",
+      "id": "CVE-2026-5463",
+      "ghsaId": "GHSA-qpc3-8vqg-8g6w",
+      "cve": "CVE-2026-5463",
+      "cwe": "CWE-77",
+      "sev": "critical",
+      "note": "pymetasploit3 vulnerable to command injection in console.run_module_with_output()",
+      "epss": 0.0215
+    },
+    {
+      "name": "pyminizip",
+      "le": "0.2.6",
+      "id": "CVE-2023-45853",
+      "ghsaId": "GHSA-mq29-j5xf-cjwr",
+      "cve": "CVE-2023-45853",
+      "cwe": "CWE-190",
+      "sev": "critical",
+      "note": "pyminizip affected by zlib's integer overflow/heap based buffer overflow vulnerability due to vulnerable dependency",
+      "epss": 0.0345
+    },
+    {
+      "name": "pympp",
+      "lt": "0.9.1",
+      "id": "CVE-2026-63634",
+      "ghsaId": "GHSA-v858-xh7w-8jr5",
+      "cve": "CVE-2026-63634",
+      "cwe": "CWE-20",
+      "sev": "medium",
+      "note": "pympp allows excessive sponsored transaction fees through padded calldata",
+      "epss": 0.0029
+    },
+    {
+      "name": "pymysql",
+      "lt": "1.1.1",
+      "id": "CVE-2024-36039",
+      "ghsaId": "GHSA-v9hf-5j83-6xpp",
+      "cve": "CVE-2024-36039",
+      "cwe": "CWE-89",
+      "sev": "critical",
+      "note": "PyMySQL SQL Injection vulnerability",
+      "epss": 0.0069
+    },
+    {
+      "name": "pyquokka",
+      "le": "0.3.1",
+      "id": "CVE-2025-62515",
+      "ghsaId": "GHSA-f74j-gffq-vm9p",
+      "cve": "CVE-2025-62515",
+      "cwe": "CWE-502",
+      "sev": "critical",
+      "note": "pyquokka is Vulnerable to Remote Code Execution by Pickle Deserialization via FlightServer",
+      "epss": 0.0089
+    },
+    {
+      "name": "pysha3",
+      "le": "1.0.2",
+      "id": "CVE-2022-37454",
+      "ghsaId": "GHSA-6w4m-2xhg-2658",
+      "cve": "CVE-2022-37454",
+      "cwe": "CWE-190",
+      "sev": "critical",
+      "note": "Buffer overflow in sponge queue functions",
+      "epss": 0.0741
+    },
+    {
+      "name": "python-ironic-inspector-client",
+      "lt": "0.2.5",
+      "id": "CVE-2015-5306",
+      "ghsaId": "GHSA-x64g-wjmw-w328",
+      "cve": "CVE-2015-5306",
+      "cwe": "CWE-1395",
+      "sev": "critical",
+      "note": "Injection vulnerability that affects ironic-discoverd",
+      "epss": 0.016
+    },
+    {
+      "name": "python-statemachine",
+      "ge": "3.0.0",
+      "lt": "3.2.0",
+      "id": "CVE-2026-47103",
+      "ghsaId": "GHSA-v4jc-pm6r-3vj8",
+      "cve": "CVE-2026-47103",
+      "cwe": "CWE-94",
+      "sev": "critical",
+      "note": "python-statemachine SCXML <data expr> Eval Injection",
+      "epss": 0.0136
+    },
+    {
       "name": "pytorch-lightning",
       "lt": "2.3.3",
       "id": "CVE-2024-5980",
@@ -3532,6 +4579,155 @@
       "sev": "critical",
       "note": "pytorch-lightning vulnerable to Arbitrary File Write via /v1/runs API endpoint",
       "epss": 0.0132
+    },
+    {
+      "name": "pytorch-lightning",
+      "lt": "2.4.0",
+      "id": "CVE-2024-8019",
+      "ghsaId": "GHSA-4cv3-v7pv-rfhf",
+      "cve": "CVE-2024-8019",
+      "cwe": "CWE-434",
+      "sev": "critical",
+      "note": "PyTorch Lightning path traversal vulnerability",
+      "epss": 0.0112
+    },
+    {
+      "name": "pytorch-lightning",
+      "ge": "2.6.2",
+      "le": "2.6.2",
+      "id": "CVE-2026-44484",
+      "ghsaId": "GHSA-w37p-236h-pfx3",
+      "cve": "CVE-2026-44484",
+      "cwe": "CWE-506",
+      "sev": "critical",
+      "note": "Compromise of PyTorch Lightning PyPi Package Versions",
+      "epss": 0.0039
+    },
+    {
+      "name": "pytorch-lightning",
+      "ge": "2.6.3",
+      "le": "2.6.3",
+      "id": "CVE-2026-44484",
+      "ghsaId": "GHSA-w37p-236h-pfx3",
+      "cve": "CVE-2026-44484",
+      "cwe": "CWE-506",
+      "sev": "critical",
+      "note": "Compromise of PyTorch Lightning PyPi Package Versions",
+      "epss": 0.0039
+    },
+    {
+      "name": "qdrant-client",
+      "lt": "1.9.0",
+      "id": "CVE-2024-3829",
+      "ghsaId": "GHSA-7m75-x27w-r52r",
+      "cve": "CVE-2024-3829",
+      "cwe": "CWE-20",
+      "sev": "critical",
+      "note": "qdrant input validation failure",
+      "epss": 0.0091
+    },
+    {
+      "name": "qiskit",
+      "lt": "1.4.2",
+      "id": "CVE-2025-2000",
+      "ghsaId": "GHSA-6m2c-76ff-6vrf",
+      "cve": "CVE-2025-2000",
+      "cwe": "CWE-502",
+      "sev": "critical",
+      "note": "Qiskit allows arbitrary code execution decoding QPY format versions < 13",
+      "epss": 0.0081
+    },
+    {
+      "name": "qiskit",
+      "ge": "2.0.0rc1",
+      "lt": "2.0.0rc2",
+      "id": "CVE-2025-2000",
+      "ghsaId": "GHSA-6m2c-76ff-6vrf",
+      "cve": "CVE-2025-2000",
+      "cwe": "CWE-502",
+      "sev": "critical",
+      "note": "Qiskit allows arbitrary code execution decoding QPY format versions < 13",
+      "epss": 0.0081
+    },
+    {
+      "name": "qiskit-terra",
+      "ge": "0.18.0",
+      "le": "0.46.3",
+      "id": "CVE-2025-2000",
+      "ghsaId": "GHSA-6m2c-76ff-6vrf",
+      "cve": "CVE-2025-2000",
+      "cwe": "CWE-502",
+      "sev": "critical",
+      "note": "Qiskit allows arbitrary code execution decoding QPY format versions < 13",
+      "epss": 0.0081
+    },
+    {
+      "name": "rasa",
+      "lt": "3.6.21",
+      "id": "CVE-2024-49375",
+      "ghsaId": "GHSA-cpv4-ggrr-7j9v",
+      "cve": "CVE-2024-49375",
+      "cwe": "CWE-94",
+      "sev": "critical",
+      "note": "Rasa Allows Remote Code Execution via Remote Model Loading",
+      "epss": 0.0094
+    },
+    {
+      "name": "rasa-pro",
+      "ge": "3.10.0",
+      "lt": "3.10.12",
+      "id": "CVE-2024-49375",
+      "ghsaId": "GHSA-cpv4-ggrr-7j9v",
+      "cve": "CVE-2024-49375",
+      "cwe": "CWE-94",
+      "sev": "critical",
+      "note": "Rasa Allows Remote Code Execution via Remote Model Loading",
+      "epss": 0.0094
+    },
+    {
+      "name": "rasa-pro",
+      "lt": "3.8.18",
+      "id": "CVE-2024-49375",
+      "ghsaId": "GHSA-cpv4-ggrr-7j9v",
+      "cve": "CVE-2024-49375",
+      "cwe": "CWE-94",
+      "sev": "critical",
+      "note": "Rasa Allows Remote Code Execution via Remote Model Loading",
+      "epss": 0.0094
+    },
+    {
+      "name": "rasa-pro",
+      "ge": "3.9.0",
+      "lt": "3.9.16",
+      "id": "CVE-2024-49375",
+      "ghsaId": "GHSA-cpv4-ggrr-7j9v",
+      "cve": "CVE-2024-49375",
+      "cwe": "CWE-94",
+      "sev": "critical",
+      "note": "Rasa Allows Remote Code Execution via Remote Model Loading",
+      "epss": 0.0094
+    },
+    {
+      "name": "ray",
+      "le": "2.49.2",
+      "id": "CVE-2023-48022",
+      "ghsaId": "GHSA-6wgj-66m2-xxp2",
+      "cve": "CVE-2023-48022",
+      "cwe": "CWE-829",
+      "sev": "critical",
+      "note": "Ray has arbitrary code execution via jobs submission API",
+      "epss": 0.8394
+    },
+    {
+      "name": "ray",
+      "lt": "2.8.1",
+      "id": "CVE-2023-6021",
+      "ghsaId": "GHSA-3pww-qvr8-6mhp",
+      "cve": "CVE-2023-6021",
+      "cwe": "CWE-22",
+      "sev": "critical",
+      "note": "Ray Path Traversal vulnerability",
+      "epss": 0.3723
     },
     {
       "name": "ray",
@@ -3544,6 +4740,28 @@
       "note": "Ray is vulnerable to Critical RCE via Safari & Firefox Browsers through DNS Rebinding Attack",
       "kev": true,
       "epss": 0.6015
+    },
+    {
+      "name": "reportlab",
+      "lt": "3.5.31",
+      "id": "CVE-2019-19450",
+      "ghsaId": "GHSA-pj98-2xf6-cff5",
+      "cve": "CVE-2019-19450",
+      "cwe": "CWE-91",
+      "sev": "critical",
+      "note": "ReportLab vulnerable to remote code execution via paraparser",
+      "epss": 0.0598
+    },
+    {
+      "name": "rfc3161-client",
+      "lt": "1.0.3",
+      "id": "CVE-2025-52556",
+      "ghsaId": "GHSA-6qhv-4h7r-2g9m",
+      "cve": "CVE-2025-52556",
+      "cwe": "CWE-347",
+      "sev": "critical",
+      "note": "rfc3161-client has insufficient verification for timestamp response signatures",
+      "epss": 0.0018
     },
     {
       "name": "rucio",
@@ -3588,6 +4806,42 @@
       "cwe": "CWE-287",
       "sev": "critical",
       "note": "Rucio: Unauthenticated administrator impersonation through SSH challenge tokens"
+    },
+    {
+      "name": "salt",
+      "ge": "3006.0rc1",
+      "lt": "3006.12",
+      "id": "CVE-2024-38824",
+      "ghsaId": "GHSA-8pcp-r83j-fc92",
+      "cve": "CVE-2024-38824",
+      "cwe": "CWE-22",
+      "sev": "critical",
+      "note": "Salt vulnerable to directory traversal attack in file receiving method",
+      "epss": 0.0106
+    },
+    {
+      "name": "salt",
+      "ge": "3007.0rc1",
+      "lt": "3007.4",
+      "id": "CVE-2024-38824",
+      "ghsaId": "GHSA-8pcp-r83j-fc92",
+      "cve": "CVE-2024-38824",
+      "cwe": "CWE-22",
+      "sev": "critical",
+      "note": "Salt vulnerable to directory traversal attack in file receiving method",
+      "epss": 0.0106
+    },
+    {
+      "name": "sentry",
+      "ge": "21.12.0",
+      "lt": "26.4.1",
+      "id": "CVE-2026-42354",
+      "ghsaId": "GHSA-rcmw-7mc7-3rj7",
+      "cve": "CVE-2026-42354",
+      "cwe": "CWE-290",
+      "sev": "critical",
+      "note": "Sentry's improper authentication on SAML SSO process allows user identity linking",
+      "epss": 0.0062
     },
     {
       "name": "soupsieve",
@@ -3647,6 +4901,17 @@
       "epss": 0.7029
     },
     {
+      "name": "termux-sync",
+      "lt": "1.2.4",
+      "id": "CVE-2026-86046",
+      "ghsaId": "GHSA-259w-wmqg-fp76",
+      "cve": "CVE-2026-86046",
+      "cwe": "CWE-22",
+      "sev": "high",
+      "note": "termux-sync: Arbitrary file write during restore via attacker-controlled manifest source path",
+      "epss": 0.0027
+    },
+    {
       "name": "tornado",
       "lt": "6.6.1",
       "id": "CVE-2026-126347",
@@ -3656,6 +4921,41 @@
       "sev": "low",
       "note": "Tornado: Open redirect via triple-slash redirect paths",
       "epss": 0.0016
+    },
+    {
+      "name": "wagtail",
+      "ge": "7.3",
+      "lt": "7.3.3",
+      "id": "CVE-2026-54263",
+      "ghsaId": "GHSA-23m2-mghx-vqmf",
+      "cve": "CVE-2026-54263",
+      "cwe": "CWE-79",
+      "sev": "high",
+      "note": "Wagtail: Reflected XSS in dynamic image URL generator view",
+      "epss": 0.0036
+    },
+    {
+      "name": "wagtail",
+      "ge": "7.4",
+      "lt": "7.4.2",
+      "id": "CVE-2026-54263",
+      "ghsaId": "GHSA-23m2-mghx-vqmf",
+      "cve": "CVE-2026-54263",
+      "cwe": "CWE-79",
+      "sev": "high",
+      "note": "Wagtail: Reflected XSS in dynamic image URL generator view",
+      "epss": 0.0036
+    },
+    {
+      "name": "Werkzeug",
+      "lt": "3.0.3",
+      "id": "CVE-2024-34069",
+      "ghsaId": "GHSA-2g68-c3qc-8985",
+      "cve": "CVE-2024-34069",
+      "cwe": "CWE-352",
+      "sev": "high",
+      "note": "Werkzeug debugger vulnerable to remote execution when interacting with attacker controlled domain",
+      "epss": 0.034
     }
   ],
   "maven": [
@@ -5765,6 +7065,18 @@
       "epss": 0.0028
     },
     {
+      "name": "software.amazon.jdbc:aws-advanced-jdbc-wrapper",
+      "ge": "3.3.0",
+      "lt": "4.0.1",
+      "id": "CVE-2026-14265",
+      "ghsaId": "GHSA-c5q4-97jw-jggh",
+      "cve": "CVE-2026-14265",
+      "cwe": "CWE-502",
+      "sev": "high",
+      "note": "AWS-advanced-jdbc-wrapper: Java Deserialization RCE via Cache Poisoning",
+      "epss": 0.0073
+    },
+    {
       "name": "tools.jackson.core:jackson-databind",
       "ge": "3.0.0",
       "lt": "3.1.4",
@@ -5987,6 +7299,30 @@
       "sev": "medium",
       "note": "Kubeflow Pipelines: Reflected XSS in the frontend pod information and events error responses",
       "epss": 0.0028
+    },
+    {
+      "name": "github.com/kubeshark/kubeshark",
+      "ge": "0.0.2-0.20260304171723-eb7dc42b6ea0",
+      "lt": "0.0.2-0.20260812200004-a76a1920dc75",
+      "id": "CVE-2026-129235",
+      "ghsaId": "GHSA-gj7r-p794-hhq5",
+      "cve": "CVE-2026-129235",
+      "cwe": "CWE-22",
+      "sev": "medium",
+      "note": "Kubeshark: MCP `download_file` writes fetched bytes to an unvalidated destination path",
+      "epss": 0.0019
+    },
+    {
+      "name": "github.com/kubeshark/kubeshark",
+      "ge": "0.0.2-0.20260206182249-0bbbb473ea3f",
+      "lt": "0.0.2-0.20260812200004-a76a1920dc75",
+      "id": "CVE-2026-129236",
+      "ghsaId": "GHSA-8vf2-hxg5-crqh",
+      "cve": "CVE-2026-129236",
+      "cwe": "CWE-88",
+      "sev": "high",
+      "note": "Kubeshark: MCP `start_kubeshark` argument injection via `pod_regex` → image redirect → cluster takeover",
+      "epss": 0.0022
     },
     {
       "name": "github.com/mayswind/ezbookkeeping",
@@ -6323,7 +7659,7 @@
       "sev": "critical",
       "note": "Wazuh server vulnerable to remote code execution",
       "kev": true,
-      "epss": 0.9384
+      "epss": 0.9521
     },
     {
       "name": "github.com/xuri/excelize/v2",
@@ -6396,6 +7732,28 @@
       "sev": "medium",
       "note": "opentelemetry-go: AttributeValueLengthLimit is fully bypassed by attribute values composed of valid U+FFFD runes",
       "epss": 0.0047
+    },
+    {
+      "name": "go.qbee.io/agent",
+      "lt": "0.0.0-20260908095235-eb7875f0a849",
+      "id": "CVE-2026-129237",
+      "ghsaId": "GHSA-vx32-xf7g-9ghr",
+      "cve": "CVE-2026-129237",
+      "cwe": "CWE-22",
+      "sev": "medium",
+      "note": "qbee-agent: Docker Compose build context Zip Slip writes outside context directory",
+      "epss": 0.0041
+    },
+    {
+      "name": "go.qbee.io/agent",
+      "lt": "0.0.0-20260615134032-0fdf8e411de5",
+      "id": "CVE-2026-62336",
+      "ghsaId": "GHSA-xhv5-8fpq-g7hf",
+      "cve": "CVE-2026-62336",
+      "cwe": "CWE-22",
+      "sev": "high",
+      "note": "qbee-agent: Local Privilege Escalation and Arbitrary File Tampering via Symlink Following in createFile helper",
+      "epss": 0.001
     },
     {
       "name": "gogs.io/gogs",
@@ -6646,6 +8004,28 @@
       "epss": 0.0099
     },
     {
+      "name": "zebra-chain",
+      "lt": "6.0.2",
+      "id": "CVE-2026-41584",
+      "ghsaId": "GHSA-452v-w3gx-72wg",
+      "cve": "CVE-2026-41584",
+      "cwe": "CWE-617",
+      "sev": "critical",
+      "note": "Zebra has rk Identity Point Panic in Transaction Verification",
+      "epss": 0.0027
+    },
+    {
+      "name": "zebra-consensus",
+      "lt": "5.0.2",
+      "id": "CVE-2026-40880",
+      "ghsaId": "GHSA-xvj8-ph7x-65gf",
+      "cve": "CVE-2026-40880",
+      "cwe": "CWE-1025",
+      "sev": "high",
+      "note": "Zebra: Cached Mempool Verification Bypasses Consensus Rules for Ahead-of-Tip Blocks",
+      "epss": 0.0026
+    },
+    {
       "name": "zebra-network",
       "lt": "7.0.0",
       "id": "CVE-2026-52829",
@@ -6677,6 +8057,17 @@
       "note": "zebrad vulnerable to full node denial of service via crafted Sapling receiver in z_listunifiedreceivers"
     },
     {
+      "name": "zebra-script",
+      "lt": "5.0.2",
+      "id": "CVE-2026-41583",
+      "ghsaId": "GHSA-8m29-fpq5-89jj",
+      "cve": "CVE-2026-41583",
+      "cwe": "CWE-573",
+      "sev": "critical",
+      "note": "Zebra Vulnerable to Consensus Divergence in Transparent Sighash Hash-Type Handling",
+      "epss": 0.0028
+    },
+    {
       "name": "zebra-state",
       "lt": "7.0.0",
       "id": "CVE-2026-52733",
@@ -6686,6 +8077,39 @@
       "sev": "medium",
       "note": "zebrad has persistent on-disk corruption of Sapling/Orchard subtree roots after chain fork via pop_tip",
       "epss": 0.0044
+    },
+    {
+      "name": "zebrad",
+      "lt": "4.3.1",
+      "id": "CVE-2026-40880",
+      "ghsaId": "GHSA-xvj8-ph7x-65gf",
+      "cve": "CVE-2026-40880",
+      "cwe": "CWE-1025",
+      "sev": "high",
+      "note": "Zebra: Cached Mempool Verification Bypasses Consensus Rules for Ahead-of-Tip Blocks",
+      "epss": 0.0026
+    },
+    {
+      "name": "zebrad",
+      "lt": "4.3.1",
+      "id": "CVE-2026-41583",
+      "ghsaId": "GHSA-8m29-fpq5-89jj",
+      "cve": "CVE-2026-41583",
+      "cwe": "CWE-573",
+      "sev": "critical",
+      "note": "Zebra Vulnerable to Consensus Divergence in Transparent Sighash Hash-Type Handling",
+      "epss": 0.0028
+    },
+    {
+      "name": "zebrad",
+      "lt": "4.3.1",
+      "id": "CVE-2026-41584",
+      "ghsaId": "GHSA-452v-w3gx-72wg",
+      "cve": "CVE-2026-41584",
+      "cwe": "CWE-617",
+      "sev": "critical",
+      "note": "Zebra has rk Identity Point Panic in Transaction Verification",
+      "epss": 0.0027
     },
     {
       "name": "zebrad",
@@ -7048,6 +8472,72 @@
   ],
   "composer": [
     {
+      "name": "awcodes/filament-curator",
+      "ge": "3.2.4",
+      "lt": "3.7.8",
+      "id": "CVE-2026-63389",
+      "ghsaId": "GHSA-828w-6qgx-3rcf",
+      "cve": "CVE-2026-63389",
+      "cwe": "CWE-284",
+      "sev": "medium",
+      "note": "Filament Curator: Cross-tenant media metadata disclosure via Curator picker search"
+    },
+    {
+      "name": "awcodes/filament-curator",
+      "ge": "4.0.0",
+      "lt": "4.1.1",
+      "id": "CVE-2026-63389",
+      "ghsaId": "GHSA-828w-6qgx-3rcf",
+      "cve": "CVE-2026-63389",
+      "cwe": "CWE-284",
+      "sev": "medium",
+      "note": "Filament Curator: Cross-tenant media metadata disclosure via Curator picker search"
+    },
+    {
+      "name": "awcodes/filament-curator",
+      "ge": "5.0.0",
+      "lt": "5.1.1",
+      "id": "CVE-2026-63389",
+      "ghsaId": "GHSA-828w-6qgx-3rcf",
+      "cve": "CVE-2026-63389",
+      "cwe": "CWE-284",
+      "sev": "medium",
+      "note": "Filament Curator: Cross-tenant media metadata disclosure via Curator picker search"
+    },
+    {
+      "name": "awcodes/filament-curator",
+      "ge": "3.0.0",
+      "lt": "3.7.9",
+      "id": "CVE-2026-69241",
+      "ghsaId": "GHSA-8vm9-f75m-5h2m",
+      "cve": "CVE-2026-69241",
+      "cwe": "CWE-79",
+      "sev": "medium",
+      "note": "Filament Curator: Stored XSS via unsanitized SVG upload served inline"
+    },
+    {
+      "name": "awcodes/filament-curator",
+      "ge": "4.0.0",
+      "lt": "4.1.2",
+      "id": "CVE-2026-69241",
+      "ghsaId": "GHSA-8vm9-f75m-5h2m",
+      "cve": "CVE-2026-69241",
+      "cwe": "CWE-79",
+      "sev": "medium",
+      "note": "Filament Curator: Stored XSS via unsanitized SVG upload served inline"
+    },
+    {
+      "name": "awcodes/filament-curator",
+      "ge": "5.0.0",
+      "lt": "5.1.2",
+      "id": "CVE-2026-69241",
+      "ghsaId": "GHSA-8vm9-f75m-5h2m",
+      "cve": "CVE-2026-69241",
+      "cwe": "CWE-79",
+      "sev": "medium",
+      "note": "Filament Curator: Stored XSS via unsanitized SVG upload served inline"
+    },
+    {
       "name": "craftcms/cms",
       "ge": "3.0.0",
       "lt": "3.9.14",
@@ -7229,6 +8719,29 @@
       "epss": 0.8938
     },
     {
+      "name": "egroupware/egroupware",
+      "lt": "23.1.20260601",
+      "id": "CVE-2026-63672",
+      "ghsaId": "GHSA-pr4x-6fj4-gm4h",
+      "cve": "CVE-2026-63672",
+      "cwe": "CWE-601",
+      "sev": "medium",
+      "note": "EGroupware: User-Controlled Identity Provider Selection in SAML Authentication",
+      "epss": 0.002
+    },
+    {
+      "name": "egroupware/egroupware",
+      "ge": "26.0.20251208",
+      "lt": "26.6.20260616",
+      "id": "CVE-2026-63672",
+      "ghsaId": "GHSA-pr4x-6fj4-gm4h",
+      "cve": "CVE-2026-63672",
+      "cwe": "CWE-601",
+      "sev": "medium",
+      "note": "EGroupware: User-Controlled Identity Provider Selection in SAML Authentication",
+      "epss": 0.002
+    },
+    {
       "name": "laravel/framework",
       "lt": "12.71.0",
       "id": "CVE-2026-128083",
@@ -7250,6 +8763,30 @@
       "sev": "low",
       "note": "Laravel: Task Output Injection - Concurrency Process",
       "epss": 0.007
+    },
+    {
+      "name": "litesaml/lightsaml",
+      "ge": "4.0.0",
+      "lt": "4.7.1",
+      "id": "CVE-2026-63182",
+      "ghsaId": "GHSA-w553-pwx6-3mg9",
+      "cve": "CVE-2026-63182",
+      "cwe": "CWE-347",
+      "sev": "high",
+      "note": "lightsaml allows Signature wrapping bypass",
+      "epss": 0.0019
+    },
+    {
+      "name": "litesaml/lightsaml",
+      "ge": "5.0.0",
+      "lt": "5.0.1",
+      "id": "CVE-2026-63182",
+      "ghsaId": "GHSA-w553-pwx6-3mg9",
+      "cve": "CVE-2026-63182",
+      "cwe": "CWE-347",
+      "sev": "high",
+      "note": "lightsaml allows Signature wrapping bypass",
+      "epss": 0.0019
     },
     {
       "name": "livewire/livewire",
@@ -7442,6 +8979,95 @@
       "note": "Roundcube Webmail Vulnerable to Authenticated RCE via PHP Object Deserialization",
       "kev": true,
       "epss": 0.996
+    },
+    {
+      "name": "silverstripe/framework",
+      "lt": "6.2.13",
+      "id": "CVE-2026-88987",
+      "ghsaId": "GHSA-qqrg-8jpm-8mph",
+      "cve": "CVE-2026-88987",
+      "cwe": "CWE-79",
+      "sev": "medium",
+      "note": "Silverstripe Framework: XSS via XHTML data URI",
+      "epss": 0.0023
+    },
+    {
+      "name": "silverstripe/framework",
+      "lt": "6.2.13",
+      "id": "CVE-2026-88988",
+      "ghsaId": "GHSA-xwg4-8hqh-79jq",
+      "cve": "CVE-2026-88988",
+      "cwe": "CWE-79",
+      "sev": "medium",
+      "note": "Silverstripe Framework: XSS via SVG data URI",
+      "epss": 0.0023
+    },
+    {
+      "name": "silverstripe/framework",
+      "lt": "6.2.13",
+      "id": "CVE-2026-88989",
+      "ghsaId": "GHSA-3qh3-54qg-gpq3",
+      "cve": "CVE-2026-88989",
+      "cwe": "CWE-862",
+      "sev": "medium",
+      "note": "Silverstripe Framework: Auth bypass GridFieldDetailForm",
+      "epss": 0.0024
+    },
+    {
+      "name": "silverstripe/framework",
+      "lt": "6.2.13",
+      "id": "CVE-2026-91112",
+      "ghsaId": "GHSA-rg72-5958-c65m",
+      "cve": "CVE-2026-91112",
+      "cwe": "CWE-269",
+      "sev": "medium",
+      "note": "Silverstripe Framework: CMS_ACCESS_SecurityAdmin privilege escalation",
+      "epss": 0.0028
+    },
+    {
+      "name": "silverstripe/framework",
+      "lt": "6.2.13",
+      "id": "CVE-2026-91113",
+      "ghsaId": "GHSA-4qv2-g5vp-wjjw",
+      "cve": "CVE-2026-91113",
+      "cwe": "CWE-862",
+      "sev": "medium",
+      "note": "Silverstripe Framework: User-controlled ClassName allows unauthorized record type change",
+      "epss": 0.0027
+    },
+    {
+      "name": "silverstripe/framework",
+      "ge": "6.0.0",
+      "lt": "6.2.13",
+      "id": "CVE-2026-91115",
+      "ghsaId": "GHSA-c94f-87xg-65wf",
+      "cve": "CVE-2026-91115",
+      "cwe": "CWE-470",
+      "sev": "high",
+      "note": "Silverstripe Framework: RCE via i18nTextCollectorTask writer parameter",
+      "epss": 0.0064
+    },
+    {
+      "name": "simplesamlphp/saml2",
+      "ge": "6.2.2",
+      "lt": "6.2.4",
+      "id": "CVE-2026-110782",
+      "ghsaId": "GHSA-r7hw-jx6r-756g",
+      "cve": "CVE-2026-110782",
+      "cwe": "CWE-287",
+      "sev": "high",
+      "note": "SAML2: Incomplete fix of CVE-2026-49283: unsigned embedded Response bypasses HTTP-Artifact signature verification (no embedded-Issuer binding)"
+    },
+    {
+      "name": "simplesamlphp/saml2",
+      "ge": "7.0.0-rc1",
+      "lt": "7.0.0-rc2",
+      "id": "CVE-2026-110782",
+      "ghsaId": "GHSA-r7hw-jx6r-756g",
+      "cve": "CVE-2026-110782",
+      "cwe": "CWE-287",
+      "sev": "high",
+      "note": "SAML2: Incomplete fix of CVE-2026-49283: unsigned embedded Response bypasses HTTP-Artifact signature verification (no embedded-Issuer binding)"
     },
     {
       "name": "vrana/adminer",
@@ -7832,6 +9458,53 @@
       "epss": 0.0029
     },
     {
+      "name": "erb",
+      "lt": "4.0.3.1",
+      "id": "CVE-2026-41316",
+      "ghsaId": "GHSA-q339-8rmv-2mhv",
+      "cve": "CVE-2026-41316",
+      "cwe": "CWE-502",
+      "sev": "high",
+      "note": "ERB has an @_init deserialization guard bypass via def_module / def_method / def_class",
+      "epss": 0.0113
+    },
+    {
+      "name": "erb",
+      "ge": "4.0.4",
+      "lt": "4.0.4.1",
+      "id": "CVE-2026-41316",
+      "ghsaId": "GHSA-q339-8rmv-2mhv",
+      "cve": "CVE-2026-41316",
+      "cwe": "CWE-502",
+      "sev": "high",
+      "note": "ERB has an @_init deserialization guard bypass via def_module / def_method / def_class",
+      "epss": 0.0113
+    },
+    {
+      "name": "erb",
+      "ge": "5.0.0",
+      "lt": "6.0.1.1",
+      "id": "CVE-2026-41316",
+      "ghsaId": "GHSA-q339-8rmv-2mhv",
+      "cve": "CVE-2026-41316",
+      "cwe": "CWE-502",
+      "sev": "high",
+      "note": "ERB has an @_init deserialization guard bypass via def_module / def_method / def_class",
+      "epss": 0.0113
+    },
+    {
+      "name": "erb",
+      "ge": "6.0.2",
+      "lt": "6.0.4",
+      "id": "CVE-2026-41316",
+      "ghsaId": "GHSA-q339-8rmv-2mhv",
+      "cve": "CVE-2026-41316",
+      "cwe": "CWE-502",
+      "sev": "high",
+      "note": "ERB has an @_init deserialization guard bypass via def_module / def_method / def_class",
+      "epss": 0.0113
+    },
+    {
       "name": "loofah",
       "ge": "2.21.0",
       "lt": "2.25.3",
@@ -7933,6 +9606,17 @@
       "sev": "medium",
       "note": "rails-html-sanitizer: Possible XSS via shared scrubber state in concurrent calls",
       "epss": 0.0022
+    },
+    {
+      "name": "sha3",
+      "lt": "1.0.5",
+      "id": "CVE-2022-37454",
+      "ghsaId": "GHSA-6w4m-2xhg-2658",
+      "cve": "CVE-2022-37454",
+      "cwe": "CWE-190",
+      "sev": "critical",
+      "note": "Buffer overflow in sponge queue functions",
+      "epss": 0.0741
     },
     {
       "name": "sqlite3",
