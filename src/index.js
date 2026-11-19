@@ -47,7 +47,7 @@ export function loadRules() {
     cachedRulesState = { mtimeMs: stat.mtimeMs, size: stat.size, data: parsed };
     return parsed;
   }
-  return { version: "0.4151126", totalRules: 0, rules: [] };
+  return { version: "0.5191126", totalRules: 0, rules: [] };
 }
 
 export function loadAgentRules() {

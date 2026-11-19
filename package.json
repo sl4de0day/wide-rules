@@ -1,6 +1,6 @@
 {
   "name": "wide-rules",
-  "version": "0.4151126",
+  "version": "0.5191126",
   "description": "Unified Vulnerability Database and DecisionCore Multi-Agent Primitives for the Wide Ecosystem",
   "type": "module",
   "main": "./src/index.js",

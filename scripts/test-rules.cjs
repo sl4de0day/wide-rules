@@ -270,7 +270,7 @@ async function main() {
     assert.ok(fs.existsSync(learnRes.learned[0].filePath));
 
     const cacheDir = path.join(tmpDir, 'cache');
-    const mockRulesBody = JSON.stringify({ version: '0.4151126', rules: [goodCandidate] });
+    const mockRulesBody = JSON.stringify({ version: '0.5191126', rules: [goodCandidate] });
     const mockOsvBody = JSON.stringify(syncRes.db);
     const rulesSha = crypto.createHash('sha256').update(mockRulesBody).digest('hex');
     const osvSha = crypto.createHash('sha256').update(mockOsvBody).digest('hex');
