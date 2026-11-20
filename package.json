@@ -1,7 +1,7 @@
 {
   "name": "wide-rules",
-  "version": "0.5191126",
-  "description": "Unified Vulnerability Database and DecisionCore Multi-Agent Primitives for the Wide Ecosystem",
+  "version": "0.6211126",
+  "description": "The shared security rule and advisory database behind every Wide product",
   "type": "module",
   "main": "./src/index.js",
   "types": "./src/index.d.ts",
@@ -31,7 +31,9 @@
     "sync:kev": "node src/cli.js sync --feeds --kev-limit 200",
     "sync:remote": "node src/cli.js sync --remote",
     "learn:rules": "node src/cli.js learn",
-    "test": "node scripts/test-decision.cjs && node scripts/test-rules.cjs",
+    "build:engine": "node scripts/build-engine.cjs",
+    "check:engine": "node scripts/build-engine.cjs --check",
+    "test": "node scripts/build-engine.cjs --check && node scripts/test-decision.cjs && node scripts/test-rules.cjs",
     "bench": "node scripts/bench.cjs",
     "bench:accuracy": "node scripts/bench-accuracy.cjs"
   },

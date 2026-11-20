@@ -1,7 +1,7 @@
 <p align="center">
   <img src="assets/wide-logo.png" alt="Wide Rules" width="128">
   <h1 align="center">Wide Rules</h1>
-  <p align="center">Unified vulnerability, AST pattern, and SAST security rule database for the Wide ecosystem</p>
+  <p align="center">The shared security rule and advisory database behind every Wide product</p>
 </p>
 
 <p align="center">
@@ -19,10 +19,12 @@
 
 ---
 
-**Wide Rules is the unified vulnerability database and DecisionCore multi-agent coordination library for the Wide ecosystem. Housing 729 security rules covering 90+ CWE categories and OWASP Top 10 for LLMs alongside DecisionCore algorithmic primitives (`CommitmentGate`, `PluralityConsensus`, `ClaimTable`, `PartitionAssignment`, `WeightedScorer`, `SynchronizationBarrier`), it acts as the central vulnerability and agent intelligence repository for Wide IDE, Wide CLI, Wide App, Wide Action, and Wide SDK.**
+> **Wide blends web development and web security into one AI-powered workflow.** Write the code, catch the vulnerability, and test the fix in the same place.
+
+**Wide Rules is the single source of truth for security detection across the Wide ecosystem. Its 750+ security rules cover 90+ CWE categories and the OWASP Top 10 for LLMs, backed by an OSV advisory bundle enriched with GitHub Advisories, CISA KEV, and EPSS. Wide IDE, Wide App, Wide CLI, Wide Action, and Wide SDK all ship the same rules, so a vulnerability caught in one is caught in all of them. The package also includes DecisionCore, the multi-agent coordination primitives (`CommitmentGate`, `PluralityConsensus`, `ClaimTable`, `PartitionAssignment`, `WeightedScorer`, `SynchronizationBarrier`) used by Wide's AI agents.**
 
 Wide Rules separates security definitions from scanner engines:
-- **Centralized Vulnerability Database:** Over 729 curated rules maintained independently of binary release cycles.
+- **Centralized Vulnerability Database:** 750+ curated rules maintained independently of binary release cycles.
 - **Embedded DecisionCore Primitives:** Native multi-agent consensus, anti-thrashing dwell gates, and collision-free lease tables.
 - **Threat Intelligence Feeds:** Integrated OSV advisory bundle enriched with GitHub Advisories across major ecosystems, CISA KEV flags, EPSS scoring, and SHA-256 integrity verification.
 - **ReDoS Hardened & Linear Execution:** All rule patterns and regular expressions verified against ReDoS backtracking with dedicated benchmark validation.
@@ -31,7 +33,7 @@ Wide Rules separates security definitions from scanner engines:
 
 ## Features
 
-- **Comprehensive SAST Catalog.** 729 curated security rules spanning SQL injection, command execution, path traversal, SSRF, memory safety, and AI prompt injection.
+- **Comprehensive SAST Catalog.** 750+ curated security rules spanning SQL injection, command execution, path traversal, SSRF, memory safety, and AI prompt injection.
 - **DecisionCore Multi-Agent Engine.** Out-of-the-box algorithmic coordination primitives for subagent voting, resource claiming, and patch evaluation.
 - **Multi-Language Coverage.** Tailored detection patterns for JavaScript, TypeScript, Python, PHP, Java, Go, C#, Rust, and Ruby.
 - **Schema Validated.** Every rule is verified against an explicit JSON Schema ensuring consistent metadata, CWE mapping, and severity rankings.
@@ -103,6 +105,19 @@ npm run validate
 npm run bundle
 npm test
 ```
+
+## The Wide Ecosystem
+
+Wide blends web development and web security into one AI-powered workflow. Every product runs on the same security rules, so a vulnerability caught in one place is caught everywhere.
+
+| Product | Who it is for |
+| :--- | :--- |
+| [Wide IDE](https://github.com/sl4de0day/wide-ide) | **The flagship.** A full IDE for web developers and pentesters: write code, see vulnerabilities as you type, and test them with built-in pentest tools and AI agents. |
+| [Wide App](https://github.com/sl4de0day/wide-app) | A prompt-only AI workspace for people who do not need a full IDE. Describe the task; Wide's agents build, fix, and audit the project. |
+| [Wide CLI](https://github.com/sl4de0day/wide-cli) | The same AI agents and security scanner in your terminal. |
+| [Wide Action](https://github.com/sl4de0day/wide-action) | The same rules as a pull request security gate in GitHub CI. |
+| [Wide SDK](https://github.com/sl4de0day/wide-sdk) | A Python library for building your own agents on Wide's security tooling. |
+| [Wide Rules](https://github.com/sl4de0day/wide-rules) | The shared rule and advisory database behind every Wide product. |
 
 ## License
 

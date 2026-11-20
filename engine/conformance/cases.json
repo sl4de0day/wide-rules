@@ -1,0 +1,82 @@
+{
+  "projects": [
+    {
+      "name": "js-sinks",
+      "files": [
+        { "file": "sql.js", "lang": "js", "content": "const id = req.query.id;\ndb.query(\"SELECT * FROM users WHERE id = \" + id);\n" },
+        { "file": "cmd.js", "lang": "js", "content": "const host = req.body.host;\nexec(\"ping -c 1 \" + host);\n" },
+        { "file": "xss.js", "lang": "js", "content": "const name = location.hash;\ndocument.getElementById(\"out\").innerHTML = name;\n" },
+        { "file": "ssrf.js", "lang": "js", "content": "const target = req.query.url;\nconst res = await fetch(target);\n" },
+        { "file": "path.js", "lang": "js", "content": "const f = req.params.file;\nfs.readFileSync(\"/srv/files/\" + f);\n" },
+        { "file": "redirect.js", "lang": "js", "content": "const next = req.query.next;\nres.redirect(next);\n" },
+        { "file": "code.js", "lang": "js", "content": "const expr = req.body.expr;\nconst out = eval(expr);\n" },
+        { "file": "html-send.js", "lang": "js", "content": "const q = req.query.q;\nres.send(\"<h1>\" + q + \"</h1>\");\n" },
+        { "file": "destructure.js", "lang": "js", "content": "const { user, role: r } = req.body;\ndb.query(`SELECT * FROM t WHERE u = '${user}'`);\n" },
+        { "file": "multiline.js", "lang": "js", "content": "const id = req.query.id;\ndb.query(\n  \"SELECT * FROM t WHERE id = \" +\n    id\n);\n" },
+        { "file": "reassign.ts", "lang": "ts", "content": "let v = req.query.v;\nv = \"constant\";\ndb.query(\"SELECT \" + v);\n" },
+        { "file": "append.ts", "lang": "ts", "content": "let sql = \"SELECT * FROM t WHERE a = \";\nsql += req.query.a;\ndb.query(sql);\n" }
+      ]
+    },
+    {
+      "name": "js-guards",
+      "files": [
+        { "file": "param-sql.js", "lang": "js", "content": "const id = req.query.id;\ndb.query(\"SELECT * FROM users WHERE id = $1\", [id]);\n" },
+        { "file": "path-guard.js", "lang": "js", "content": "const f = req.params.file;\nconst rel = path.relative(base, path.resolve(base, f));\nfs.readFileSync(path.join(base, f));\n" },
+        { "file": "url-guard.js", "lang": "js", "content": "const target = req.query.url;\nif (!ALLOWED_HOSTS.includes(new URL(target).hostname)) throw new Error();\nawait fetch(target);\n" },
+        { "file": "execfile.js", "lang": "js", "content": "const host = req.body.host;\nspawn(\"ping\", [\"-c\", \"1\", host]);\n" },
+        { "file": "send-json.js", "lang": "js", "content": "const q = req.query.q;\nres.send({ result: q });\n" },
+        { "file": "numeric.js", "lang": "js", "content": "const id = Number(req.query.id);\ndb.query(\"SELECT * FROM t WHERE id = \" + id);\n" },
+        { "file": "comment.js", "lang": "js", "content": "// db.query(\"SELECT \" + req.query.id);\n/* exec(req.body.cmd); */\n" },
+        { "file": "no-source.js", "lang": "js", "content": "const id = 42;\ndb.query(\"SELECT * FROM t WHERE id = \" + id);\n" }
+      ]
+    },
+    {
+      "name": "polyglot",
+      "files": [
+        { "file": "app.py", "lang": "py", "content": "name = request.args.get(\"name\")\ncursor.execute(f\"SELECT * FROM users WHERE name = '{name}'\")\n" },
+        { "file": "shell_true.py", "lang": "py", "content": "cmd = request.args.get(\"cmd\")\nsubprocess.run(cmd, shell=True)\n" },
+        { "file": "shell_list.py", "lang": "py", "content": "cmd = request.args.get(\"cmd\")\nsubprocess.run([\"ls\", cmd])\n" },
+        { "file": "pycomment.py", "lang": "py", "content": "# os.system(request.args.get(\"x\"))\n" },
+        { "file": "main.go", "lang": "go", "content": "id := r.URL.Query().Get(\"id\")\nrows, _ := db.Query(\"SELECT * FROM t WHERE id = \" + id)\n" },
+        { "file": "index.php", "lang": "php", "content": "$id = $_GET['id'];\n$conn->query(\"SELECT * FROM t WHERE id = \" . $id);\n" },
+        { "file": "Ctl.java", "lang": "java", "content": "String id = request.getParameter(\"id\");\nstmt.executeQuery(\"SELECT * FROM t WHERE id = \" + id);\n" },
+        { "file": "run.sh", "lang": "sh", "content": "# eval(req.query.x)\necho done\n" },
+        { "file": "main.rs", "lang": "rs", "content": "let arg = std::env::args().nth(1).unwrap();\nCommand::new(arg).spawn();\n" }
+      ]
+    },
+    {
+      "name": "flows",
+      "files": [
+        { "file": "lib/db.js", "lang": "js", "content": "export function findUser(name) {\n  return db.query(\"SELECT * FROM users WHERE name = '\" + name + \"'\");\n}\n" },
+        { "file": "routes/users.js", "lang": "js", "content": "import { findUser } from \"../lib/db.js\";\napp.get(\"/u\", (req, res) => {\n  findUser(req.query.name);\n});\n" },
+        { "file": "local.js", "lang": "js", "content": "const runCmd = async (cmd) => {\n  exec(\"sh -c \" + cmd);\n};\nconst c = req.body.c;\nrunCmd(c);\n" },
+        { "file": "tasks.py", "lang": "py", "content": "def run(cmd):\n    os.system(cmd)\n\n\ndef handler():\n    run(request.args.get(\"c\"))\n" },
+        { "file": "safe-call.js", "lang": "js", "content": "import { findUser } from \"./lib/db.js\";\nfindUser(\"admin\");\n" }
+      ]
+    }
+  ],
+  "secrets": [
+    { "file": "config.js", "line": "const awsKey = \"AKIAIOSFODNN7ABCDEFG\";" },
+    { "file": "config.js", "line": "const gh = \"ghp_9xK2mP7qR4tV8wZ1aB3cD5eF6gH8jL0nM2q\";" },
+    { "file": "config.js", "line": "headers: { Authorization: \"token \" + \"ghp_9xK2mP7qR4tV8wZ1aB3cD5eF6gH8jL0nM2q\" }" },
+    { "file": "config.js", "line": "const pair = \"user:pw\"; const k = \"AKIAIOSFODNN7ABCDEFG\";" },
+    { "file": "config.js", "line": "const apiKey = \"EXAMPLE_YOUR_API_KEY_HERE\";" },
+    { "file": "config.js", "line": "const apiKey = \"aaaaaaaaaaaaaaaaaaaa\";" },
+    { "file": "config.js", "line": "const apiKey = process.env.API_KEY;" },
+    { "file": "config.py", "line": "API_KEY = os.environ[\"API_KEY\"]" },
+    { "file": "workflow.yml", "line": "token: ${{ secrets.GITHUB_TOKEN }}" },
+    { "file": "config.js", "line": "const secret = \"Zx9!qL2#vB7@nM4$kP8%tR1^\";" },
+    { "file": "config.js", "line": "const password = \"changeme-please\";" },
+    { "file": "config.js", "line": "const slackToken = \"xoxb-1234567890-abcdefghij\";" },
+    { "file": "config.js", "line": "const openai = \"sk-proj-abcdefghijklmnopqrstuvwxyz012345\";" },
+    { "file": "tests/config.test.js", "line": "const secret = \"aabbccddeeffgghh\";" },
+    { "file": "src/config.js", "line": "const secret = \"aabbccddeeffgghh\";" },
+    { "file": "tests/test_config.py", "line": "secret = \"aabbccddeeffgghh\"" },
+    { "file": "app/test_config.py", "line": "secret = \"aabbccddeeffgghh\"" },
+    { "file": "app/test_data/config.py", "line": "secret = \"aabbccddeeffgghh\"" },
+    { "file": "config.js", "line": "const key = \"-----BEGIN RSA PRIVATE KEY-----\";" },
+    { "file": "config.js", "line": "" },
+    { "file": "config.js", "line": "const token = \"<API_TOKEN>\";" },
+    { "file": "config.js", "line": "const token = \"dummy-ghp_9xK2mP7qR4tV8wZ1aB3cD5eF6gH8jL0nM2q\";" }
+  ]
+}
