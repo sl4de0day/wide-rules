@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-20T23:00:38.800Z",
-  "count": 530,
+  "generatedAt": "2026-11-20T23:40:04.877Z",
+  "count": 536,
   "advisories": [
     {
       "id": "CVE-2025-3248",
@@ -14361,6 +14361,43 @@
       "epss": 0.0038
     },
     {
+      "id": "CVE-2026-63341",
+      "ghsaId": "GHSA-xxqp-5qx8-gj5q",
+      "cve": "CVE-2026-63341",
+      "cwe": "CWE-248",
+      "sev": "high",
+      "summary": "Aedes has Uncaught Exception and Uncontrolled Resource Consumption",
+      "description": "### Summary\nA remote Denial of Service (DoS) vulnerability, allows any remote client to cause a complete crash of the Aedes MQTT broker process. This is achieved by sending a specially crafted MQTT message (via PUBLISH or SUBSCRIBE), or by setting a Will message with such a topic, containing a highly recursive topic string (e.g., with thousands of '/' delimiters). The lack of input validation and error handling leads to an uncaught exception in an internal routing library, terminating the entire Node.js application.\n\n### Details\nThe Aedes broker fails to enforce limits on the depth or structural complexity of MQTT topic strings. When a client publishes to or subscribes to a topic with excessive levels of recursion, the internal routing logic cascading into the qlobber library (via mqemitter) reaches an hard-coded limit within the qlobber._split_words function.\n\nThis function throws a hard Error: too many words (found in lib/qlobber.js:604). Crucially, Aedes does not wrap the calls to these internal modules (such as in handlers/subscribe.js or the publishing logic) in try-catch blocks. Consequently, this exception propagates up to the main Node.js event loop as an unhandled exception, causing the entire broker process to crash immediately.\n\nThis vulnerability affects all stable versions of Aedes due to the underlying dependency behavior and missing perimetral validation.\n\nStack Trace from Crash:\n```Plaintext\naedes-broker  | /app/node_modules/mqemitter/node_modules/qlobber/lib/qlobber.js:604\naedes-broker  | \tthrow new Error('too many words');\naedes-broker  | \t^\naedes-broker  | \naedes-broker  | Error: too many words\naedes-broker  |     at Qlobber._split_words (/app/node_modules/mqemitter/node_modules/qlobber/lib/qlobber.js:604:15)\naedes-broker  |     at Qlobber._split (/app/node_modules/mqemitter/node_modules/qlobber/lib/qlobber.js:624:18)\naedes-broker  |     at Qlobber.add (/app/node_modules/mqemitter/node_modules/qlobber/lib/qlobber.js:651:43)\naedes-broker  |     at MQEmitter.on (/app/node_modules/mqemitter/mqemitter.js:65:17)\naedes-broker  |     at Aedes.subscribe (/app/node_modules/aedes/aedes.js:289:11)\naedes-broker  |     at SubState.addSubs (/app/node_modules/aedes/lib/handlers/subscribe.js:167:12)\n```\nThe same uncaught exception can be triggered without an explicit PUBLISH/SUBSCRIBE: a client that registers a Will message with a deeply nested topic crashes the broker when the Will is published on ungraceful disconnect, because the Will publish path ca",
+      "publishedAt": "2026-11-20T23:32:35Z",
+      "updatedAt": "2026-11-20T23:32:36Z",
+      "url": "https://github.com/advisories/GHSA-xxqp-5qx8-gj5q",
+      "references": [
+        "https://github.com/moscajs/aedes/security/advisories/GHSA-xxqp-5qx8-gj5q",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-63341",
+        "https://github.com/moscajs/aedes/commit/b9024faa4cb416c4c6980760b4d7f55336315f2d",
+        "https://github.com/moscajs/aedes/releases/tag/v1.1.1",
+        "https://github.com/advisories/GHSA-xxqp-5qx8-gj5q"
+      ],
+      "patchUrls": [
+        "https://github.com/moscajs/aedes/commit/b9024faa4cb416c4c6980760b4d7f55336315f2d"
+      ],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "aedes",
+          "lt": "1.1.1",
+          "id": "CVE-2026-63341",
+          "ghsaId": "GHSA-xxqp-5qx8-gj5q",
+          "cve": "CVE-2026-63341",
+          "cwe": "CWE-248",
+          "sev": "high",
+          "note": "Aedes has Uncaught Exception and Uncontrolled Resource Consumption"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0037
+    },
+    {
       "id": "CVE-2026-63012",
       "ghsaId": "GHSA-wgvx-x5g3-9v29",
       "cve": "CVE-2026-63012",
@@ -16983,6 +17020,56 @@
       ],
       "kev": false,
       "epss": 0.0032
+    },
+    {
+      "id": "CVE-2026-58254",
+      "ghsaId": "GHSA-p3j5-5hrq-p75h",
+      "cve": "CVE-2026-58254",
+      "cwe": "CWE-863",
+      "sev": "medium",
+      "summary": "nats-server Leaf node connections bypass Nats-Trace-Dest permission check",
+      "description": "### Background\n\nNATS.io is a high performance open source pub-sub distributed communication technology, built for the cloud, on-premise, IoT and edge computing.\n\nThe NATS Server supports leafnode connections between servers and message tracing through NATS headers.\n\n### Problem Description\n\nMessage trace destination checks were applied to ordinary client connections but not consistently to messages arriving through leafnode connections.\n\nA leafnode operator could cause trace events to be sent to subjects that would not otherwise be permitted and could use trace-only behavior to prevent normal delivery or storage of affected messages.\n\nTrace events can include routing, subscription, account, service import and JetStream metadata. The payload of the original application message is not chosen through the trace event itself.\n\n### Affected Versions\n\nVersions v2.14.2, v2.12.7 and below are vulnerable. The issue is fixed in v2.14.3 and v2.12.8.\n\n### Workarounds\n\nWhere possible, avoid granting publish paths from less-trusted leaf nodes into subjects for which trace-only behavior would affect delivery guarantees. No other known workarounds are available aside from upgrading to a fixed release.\n\n### References\n\n * GHSA advisory: <https://github.com/nats-io/nats-server/security/advisories/GHSA-p3j5-5hrq-p75h>\n * Credit: Koda Reef",
+      "publishedAt": "2026-11-20T23:31:59Z",
+      "updatedAt": "2026-11-20T23:32:00Z",
+      "url": "https://github.com/advisories/GHSA-p3j5-5hrq-p75h",
+      "references": [
+        "https://github.com/nats-io/nats-server/security/advisories/GHSA-p3j5-5hrq-p75h",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-58254",
+        "https://github.com/nats-io/nats-server/commit/cbe845932980b71563efac5cfa4cc751c88936cd",
+        "https://github.com/nats-io/nats-server/releases/tag/v2.12.8",
+        "https://github.com/nats-io/nats-server/releases/tag/v2.14.3",
+        "https://github.com/advisories/GHSA-p3j5-5hrq-p75h"
+      ],
+      "patchUrls": [
+        "https://github.com/nats-io/nats-server/commit/cbe845932980b71563efac5cfa4cc751c88936cd"
+      ],
+      "packages": [
+        {
+          "ecosystem": "go",
+          "name": "github.com/nats-io/nats-server/v2",
+          "lt": "2.12.8",
+          "id": "CVE-2026-58254",
+          "ghsaId": "GHSA-p3j5-5hrq-p75h",
+          "cve": "CVE-2026-58254",
+          "cwe": "CWE-863",
+          "sev": "medium",
+          "note": "nats-server Leaf node connections bypass Nats-Trace-Dest permission check"
+        },
+        {
+          "ecosystem": "go",
+          "name": "github.com/nats-io/nats-server/v2",
+          "ge": "2.14.0-RC.1",
+          "lt": "2.14.3",
+          "id": "CVE-2026-58254",
+          "ghsaId": "GHSA-p3j5-5hrq-p75h",
+          "cve": "CVE-2026-58254",
+          "cwe": "CWE-863",
+          "sev": "medium",
+          "note": "nats-server Leaf node connections bypass Nats-Trace-Dest permission check"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0031
     },
     {
       "id": "CVE-2026-128075",
@@ -22381,6 +22468,42 @@
       "epss": 0.0015
     },
     {
+      "id": "CVE-2026-61725",
+      "ghsaId": "GHSA-qh76-45cr-8xrc",
+      "cve": "CVE-2026-61725",
+      "cwe": "CWE-22",
+      "sev": "medium",
+      "summary": "sevenz-rust2: decompress builds each output path as dest.join(entry.name()) with no traversal guard, allowing a crafted .7z to write files outside the destination (Zip-Slip)",
+      "description": "### Summary\n\nExtracting an attacker-supplied 7z archive can write files outside the destination directory. The 7z header stores each entry's path as a UTF-16 name with nothing constraining it to a relative, in-tree path. The extractor joins that name onto the destination and writes to the result without normalizing it or checking that it stays under the destination root, so an entry named `../../etc/cron.d/x` or an absolute path escapes the target.\n\n### Details\n\nIn `src/util/decompress.rs`, `decompress_impl` computes the per-entry destination directly (line 140):\n\n```rust\nlet dest_path = dest.join(entry.name());\nextract_fn(entry, reader, &dest_path)\n```\n\n`default_entry_extract_fn` (line 154) then acts on that path:\n\n```rust\nlet file = File::create(path)\n    .map_err(|e| Error::file_open(e, path.to_string_lossy().to_string()))?;\n```\n\nThere is no normalization, no `dest_path.starts_with(dest)` check, and no symlink-entry handling. `Path::join` discards the base when the joined component is absolute, and `..` components are not collapsed against the base. The convenience entry points (`decompress`, `decompress_file`, `decompress_with_password`, `decompress_file_with_password`) all route through `decompress_impl` with `default_entry_extract_fn`, so the default API is affected.\n\nThe trust boundary is the archive bytes. Any caller that extracts an untrusted `.7z` reaches the sink.\n\n### PoC\n\n1. Build a `.7z` whose `FilesInfo` contains an entry named `../../../../tmp/pwned` (or, on Windows, an absolute path such as `C:\\Windows\\Temp\\pwned`).\n2. Call `sevenz_rust2::decompress_file(\"evil.7z\", \"./out\")`.\n3. The file is created at the traversed location outside `./out`. Targeting a startup/cron path or a config file turns the write into code execution or persistence.\n\n### Impact\n\nArbitrary file write outside the intended directory (CWE-22 / CWE-23, the Zip-Slip class). On extraction of an attacker-controlled archive, an entry overwrites files outside the destination — config, cron, autostart, or build artifacts — which can escalate to code execution. Reachable by upload-handling backends, malware-analysis sandboxes, mod/game installers, and CI steps that unpack user-supplied 7z files.\n\n### Suggested remediation\n\nReject any entry whose name contains a `ParentDir`, `RootDir`, or `Prefix` component, or canonicalize the joined path and verify `starts_with(dest)` before creating it. Apply the guard inside `default_entry_extract_fn` (and `decompress_impl`) so the hardening i",
+      "publishedAt": "2026-11-20T23:33:14Z",
+      "updatedAt": "2026-11-20T23:33:15Z",
+      "url": "https://github.com/advisories/GHSA-qh76-45cr-8xrc",
+      "references": [
+        "https://github.com/hasenbanck/sevenz-rust2/security/advisories/GHSA-qh76-45cr-8xrc",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-61725",
+        "https://github.com/hasenbanck/sevenz-rust2/commit/ef760b61f3535ac8b93006212aef41bfebc237eb",
+        "https://github.com/advisories/GHSA-qh76-45cr-8xrc"
+      ],
+      "patchUrls": [
+        "https://github.com/hasenbanck/sevenz-rust2/commit/ef760b61f3535ac8b93006212aef41bfebc237eb"
+      ],
+      "packages": [
+        {
+          "ecosystem": "cargo",
+          "name": "sevenz-rust2",
+          "lt": "0.21.1",
+          "id": "CVE-2026-61725",
+          "ghsaId": "GHSA-qh76-45cr-8xrc",
+          "cve": "CVE-2026-61725",
+          "cwe": "CWE-22",
+          "sev": "medium",
+          "note": "sevenz-rust2: decompress builds each output path as dest.join(entry.name()) with no traversal guard, allowing a crafted .7z to write files outside the destination (Zip-Slip)"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0014
+    },
+    {
       "id": "CVE-2026-76090",
       "ghsaId": "GHSA-gpcc-36pq-8qxr",
       "cve": "CVE-2026-76090",
@@ -23173,6 +23296,121 @@
       ],
       "kev": false,
       "epss": 0.0005
+    },
+    {
+      "id": "CVE-2026-77331",
+      "ghsaId": "GHSA-72jh-722p-rqr3",
+      "cve": "CVE-2026-77331",
+      "cwe": "CWE-362",
+      "sev": "low",
+      "summary": "memtomem-stm: Concurrent LTM recovery can duplicate reconnects or reuse a cancelled transport session",
+      "description": "Concurrent surfacing RPC failures can trigger more than one reconnect for the same dirty session, and cancellation during a post-reconnect retry can leave the replacement session reusable despite an interrupted protocol exchange. The private fix introduces monotonic session generations, one shielded shared reconnect flight per dirty generation, and generation-aware cancellation handling across search, access-count, and scratch RPCs. The duplicate-reconnect subcase was introduced in 0.1.24; cancellation recovery affects the broader listed range.",
+      "publishedAt": "2026-11-20T23:38:15Z",
+      "updatedAt": "2026-11-20T23:38:16Z",
+      "url": "https://github.com/advisories/GHSA-72jh-722p-rqr3",
+      "references": [
+        "https://github.com/memtomem/memtomem-stm/security/advisories/GHSA-72jh-722p-rqr3",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-77331",
+        "https://github.com/memtomem/memtomem-stm/commit/761db1802df7ce4881ff4c3acee6d674925da498",
+        "https://github.com/memtomem/memtomem-stm/releases/tag/v0.1.34",
+        "https://github.com/advisories/GHSA-72jh-722p-rqr3"
+      ],
+      "patchUrls": [
+        "https://github.com/memtomem/memtomem-stm/commit/761db1802df7ce4881ff4c3acee6d674925da498"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "memtomem-stm",
+          "ge": "0.1.2",
+          "lt": "0.1.34",
+          "id": "CVE-2026-77331",
+          "ghsaId": "GHSA-72jh-722p-rqr3",
+          "cve": "CVE-2026-77331",
+          "cwe": "CWE-362",
+          "sev": "low",
+          "note": "memtomem-stm: Concurrent LTM recovery can duplicate reconnects or reuse a cancelled transport session"
+        }
+      ],
+      "kev": false,
+      "epss": 0
+    },
+    {
+      "id": "CVE-2026-77332",
+      "ghsaId": "GHSA-43hx-xm7w-3mhj",
+      "cve": "CVE-2026-77332",
+      "cwe": "CWE-116",
+      "sev": "low",
+      "summary": "memtomem-stm: Surfaced memory data can escape the Markdown compatibility boundary",
+      "description": "Untrusted long-term and working-memory fields can introduce Markdown or HTML-compatible structure into the surfaced-memory envelope. A crafted memory may create misleading structural boundaries or visually conceal content. The private fix serializes every untrusted field as inert single-line data, validates copyable memory identifiers, and pins an explicit untrusted-data preamble. Ordinary natural-language persuasion remains a residual model-level risk.",
+      "publishedAt": "2026-11-20T23:37:39Z",
+      "updatedAt": "2026-11-20T23:37:41Z",
+      "url": "https://github.com/advisories/GHSA-43hx-xm7w-3mhj",
+      "references": [
+        "https://github.com/memtomem/memtomem-stm/security/advisories/GHSA-43hx-xm7w-3mhj",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-77332",
+        "https://github.com/memtomem/memtomem-stm/commit/3d50ba61cbfafba6db261e35c18eed0c3805b390",
+        "https://github.com/memtomem/memtomem-stm/releases/tag/v0.1.34",
+        "https://github.com/advisories/GHSA-43hx-xm7w-3mhj"
+      ],
+      "patchUrls": [
+        "https://github.com/memtomem/memtomem-stm/commit/3d50ba61cbfafba6db261e35c18eed0c3805b390"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "memtomem-stm",
+          "ge": "0.1.0",
+          "lt": "0.1.34",
+          "id": "CVE-2026-77332",
+          "ghsaId": "GHSA-43hx-xm7w-3mhj",
+          "cve": "CVE-2026-77332",
+          "cwe": "CWE-116",
+          "sev": "low",
+          "note": "memtomem-stm: Surfaced memory data can escape the Markdown compatibility boundary"
+        }
+      ],
+      "kev": false,
+      "epss": 0
+    },
+    {
+      "id": "CVE-2026-77309",
+      "ghsaId": "GHSA-jrjx-9jjw-747m",
+      "cve": "CVE-2026-77309",
+      "cwe": "CWE-22",
+      "sev": "high",
+      "summary": "AIT-GUI route chain allows unauthenticated Python execution in server process",
+      "description": "## Summary\nA security issue exists where unauthenticated callers can instruct the AIT-GUI server to execute arbitrary Python scripts. The attack vector involves obtaining a session cookie through GET /, followed by a malicious POST /script/run request containing an absolute file path that bypasses the configured script directory restrictions.\n\n### Patches\n* 2.5.1\n\n### Impact\nThis vulnerability allows unauthenticated remote code execution on the AIT-GUI server. Any attacker with network access can execute arbitrary Python code with daemon privileges.\n\n## Details\n_Chain:_\n1. `POST /tlm/query` writes the user-controlled `fields` value into `fields_in.txt` under the AIT-GUI static directory.\n   *  If the supplied `dataDir` has no `.pcap` files, the route returns the expected `400 Bad Request` before deleting that file.\n2. `POST /script/run` accepts `scriptPath=../static/fields_in.txt`.\n   * AIT-GUI reads that file and runs it as Python.\n\n_Relevant code:_\n- `ait/gui/__init__.py:930,935,942-944`: `/tlm/query` writes `fields` to `fields_in.txt`.\n- `ait/gui/__init__.py:952-958,978`: the no-PCAP error path aborts before cleanup.\n- `ait/gui/__init__.py:1130-1136`: `/script/run` joins `scriptPath` with `ScriptRoot` and only checks that the path exists.\n- `ait/gui/__init__.py:1186-1191`: the selected file is read and executed as Python.\n- `ait/gui/__init__.py:1105-1108`: nearby `/scripts/load/<name>` has a path containment check, but `/script/run` does not.\n\n### Fix Information\nRestricted script execution paths and avoided using static temp files.\n\n## PoC\n1. `POST /tlm/query` writes the user-controlled `fields` value into `fields_in.txt` under the AIT-GUI static directory.\n   *  If the supplied `dataDir` has no `.pcap` files, the route returns the expected `400 Bad Request` before deleting that file.\n```\n# Remove file to ensure nothing exists\nAIT-GUI % rm <path>/fields_in.txt\n\n# With server started, send POST request to /tlm/query endpoint\nAIT-GUI % curl -X POST http://localhost:8080/tlm/query \\  -d \"dataDir=<path>\" \\     \n  -d \"timeField=time\" \\\n  -d \"packet=CCSDS_HEADER\" \\\n  -d \"fields=field1,field2,field3\" \\\n  -d \"startTime=2026-07-01T00:00:00\" \\\n  -d \"endTime=2026-07-10T00:00:00\" \\\n  -o query_out.csv\n  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n100   925  100   782  100   143  34798   6363 --:--:-- --:--:-- --:--:-- 42045\n\n# AIT-server log verify that P",
+      "publishedAt": "2026-11-20T23:36:41Z",
+      "updatedAt": "2026-11-20T23:36:41Z",
+      "url": "https://github.com/advisories/GHSA-jrjx-9jjw-747m",
+      "references": [
+        "https://github.com/NASA-AMMOS/AIT-GUI/security/advisories/GHSA-jrjx-9jjw-747m",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-77309",
+        "https://github.com/NASA-AMMOS/AIT-GUI/commit/beb8fc0813eded89f985d3eb9a73535dd327726d",
+        "https://github.com/NASA-AMMOS/AIT-GUI/blob/2.5.1/CHANGELOG.md",
+        "https://github.com/NASA-AMMOS/AIT-GUI/releases/tag/2.5.1",
+        "https://github.com/advisories/GHSA-jrjx-9jjw-747m"
+      ],
+      "patchUrls": [
+        "https://github.com/NASA-AMMOS/AIT-GUI/commit/beb8fc0813eded89f985d3eb9a73535dd327726d"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "ait-gui",
+          "ge": "1.0.0",
+          "lt": "2.5.1",
+          "id": "CVE-2026-77309",
+          "ghsaId": "GHSA-jrjx-9jjw-747m",
+          "cve": "CVE-2026-77309",
+          "cwe": "CWE-22",
+          "sev": "high",
+          "note": "AIT-GUI route chain allows unauthenticated Python execution in server process"
+        }
+      ],
+      "kev": false,
+      "epss": 0
     },
     {
       "id": "GHSA-6g8r-74qp-6859",
