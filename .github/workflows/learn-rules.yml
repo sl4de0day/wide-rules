@@ -10,12 +10,17 @@ permissions:
   pull-requests: write
   models: read
 
+concurrency:
+  group: wide-rules-bot
+  cancel-in-progress: false
+
 env:
   FORCE_JAVASCRIPT_ACTIONS_TO_NODE24: "true"
 
 jobs:
   learn-rules:
     runs-on: ubuntu-latest
+    timeout-minutes: 90
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v7
@@ -63,26 +68,44 @@ jobs:
         if: steps.learn.outputs.has_rules == 'true'
         uses: peter-evans/create-pull-request@v8
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.WIDE_ECOSYSTEM_TOKEN || secrets.GITHUB_TOKEN }}
+          committer: wide-rules-bot <wide-rules-bot@users.noreply.github.com>
+          author: wide-rules-bot <wide-rules-bot@users.noreply.github.com>
           commit-message: "chore(rules): add dynamically learned CVE rules"
           title: "chore(rules): add verified CVE rules from internet feeds"
           body: "Automated candidate rules synthesized from verified advisories and validated through schema, ReDoS, fixture, AI FP review, and clean-corpus accuracy checks."
           branch: chore/learned-rules
           delete-branch: true
 
-      - name: Auto-Merge Verified Rules PR
+      - name: Auto-Merge Verified Rules PR After Required Checks
         id: merge_pr
         if: steps.learn.outputs.has_rules == 'true' && steps.create_pr.outputs.pull-request-number != ''
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           PR_NUMBER: ${{ steps.create_pr.outputs.pull-request-number }}
         run: |
-          gh pr merge "$PR_NUMBER" --repo "${{ github.repository }}" --squash --delete-branch || gh pr merge "$PR_NUMBER" --repo "${{ github.repository }}" --auto --squash --delete-branch
+          gh pr merge "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --auto --squash --delete-branch
+          for i in $(seq 1 80); do
+            state=$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json state -q .state)
+            if [ "$state" = "MERGED" ]; then
+              sha=$(gh pr view "$PR_NUMBER" --repo "$GITHUB_REPOSITORY" --json mergeCommit -q .mergeCommit.oid)
+              echo "merge_sha=$sha" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+            if [ "$state" = "CLOSED" ]; then
+              echo "PR #$PR_NUMBER was closed without merging."
+              exit 1
+            fi
+            sleep 30
+          done
+          echo "PR #$PR_NUMBER was not merged within 40 minutes; required checks may not have run."
+          exit 1
 
       - name: Trigger wide-action Bundle Sync
-        if: steps.learn.outputs.has_rules == 'true' && steps.merge_pr.outcome == 'success'
+        if: steps.merge_pr.outputs.merge_sha != ''
         env:
           WIDE_ECOSYSTEM_TOKEN: ${{ secrets.WIDE_ECOSYSTEM_TOKEN }}
+          MERGE_SHA: ${{ steps.merge_pr.outputs.merge_sha }}
         run: |
           if [ -z "$WIDE_ECOSYSTEM_TOKEN" ]; then
             echo "WIDE_ECOSYSTEM_TOKEN secret not configured; skipping cross-repo dispatch to sl4de0day/wide-action."
@@ -93,4 +116,4 @@ jobs:
             -H "Authorization: Bearer $WIDE_ECOSYSTEM_TOKEN" \
             -H "X-GitHub-Api-Version: 2022-11-28" \
             https://api.github.com/repos/sl4de0day/wide-action/dispatches \
-            -d "{\"event_type\":\"wide-rules-updated\",\"client_payload\":{\"source\":\"wide-rules\",\"sha\":\"${GITHUB_SHA}\"}}"
+            -d "{\"event_type\":\"wide-rules-updated\",\"client_payload\":{\"source\":\"wide-rules\",\"sha\":\"${MERGE_SHA}\"}}"
