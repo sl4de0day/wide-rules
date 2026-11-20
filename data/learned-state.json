@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-18T11:00:53.510Z",
+  "updatedAt": "2026-11-19T11:03:22.622Z",
   "processed": {
     "CVE-2025-3248": {
       "status": "learned",
@@ -39,6 +39,33 @@
       "status": "skipped",
       "reason": "internal vendor implementation detail handled by OSV SCA",
       "at": "2026-11-18T10:59:57.274Z"
+    },
+    "CVE-2024-56145": {
+      "status": "learned",
+      "ruleId": "wide/vuln-cve-2024-56145",
+      "file": "rules/learned/vuln-cve-2024-56145.yml",
+      "at": "2026-11-19T11:01:58.447Z"
+    },
+    "CVE-2026-33017": {
+      "status": "learned",
+      "ruleId": "wide/vuln-cve-2026-33017",
+      "file": "rules/learned/vuln-cve-2026-33017.yml",
+      "at": "2026-11-19T11:02:55.915Z"
+    },
+    "CVE-2025-54068": {
+      "status": "skipped",
+      "reason": "internal vendor implementation detail handled by OSV SCA",
+      "at": "2026-11-19T11:03:05.928Z"
+    },
+    "CVE-2025-11953": {
+      "status": "skipped",
+      "reason": "The vulnerability is in an internal middleware (`openURLMiddleware`) of the `@react-native-community/cli-server-api` package, which is part of the Metro Development Server. This component is not typically called or implemented directly by application developers, but rather used internally by the React Native CLI. Therefore, it's an internal vendor implementation detail handled by OSV SCA through package version updates.",
+      "at": "2026-11-19T11:03:20.120Z"
+    },
+    "CVE-2025-34291": {
+      "status": "skipped",
+      "reason": "No retrievable GitHub patch diff",
+      "at": "2026-11-19T11:03:22.622Z"
     }
   }
 }
