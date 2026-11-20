@@ -1,11 +1,11 @@
 {
   "version": "0.6211126",
-  "generatedAt": "2026-11-20T22:40:17.423Z",
-  "totalRules": 751,
+  "generatedAt": "2026-11-20T23:03:00.968Z",
+  "totalRules": 753,
   "categories": {
     "AI_SECURITY": 13,
     "AUTH": 115,
-    "INJECTION": 186,
+    "INJECTION": 188,
     "GENERAL": 77,
     "CRYPTO": 26,
     "DESERIALIZATION": 51,
@@ -19,7 +19,7 @@
   "severities": {
     "HIGH": 467,
     "MEDIUM": 154,
-    "CRITICAL": 95,
+    "CRITICAL": 97,
     "LOW": 35
   },
   "rules": [
@@ -15701,6 +15701,48 @@
       "confidence": "high"
     },
     {
+      "id": "wide/vuln-cve-2024-56145",
+      "name": "vuln-cve-2024-56145",
+      "category": "INJECTION",
+      "severity": "CRITICAL",
+      "languages": [
+        "php"
+      ],
+      "cwe": "CWE-78",
+      "cve": "CVE-2024-56145",
+      "pattern": "\\$environment\\s*=\\s*App::cliOption\\('--env',\\s*true\\)",
+      "not-match": "\\$environment\\s*=\\s*\\$findConfig\\('--env',\\s*'CRAFT_ENVIRONMENT'\\)",
+      "confidence": "high",
+      "message": "Craft CMS is vulnerable to RCE if PHP's register_argc_argv is enabled, due to insecure handling of the --env CLI option.",
+      "why": "The application directly uses App::cliOption('--env', true) to set the environment, which can be manipulated via $_SERVER['argv'] when register_argc_argv is enabled, leading to OS command injection.",
+      "remediation": "Update Craft CMS to version 3.9.14, 4.13.2, or 5.5.2. Alternatively, disable the register_argc_argv PHP configuration setting.",
+      "references": [
+        "https://github.com/craftcms/cms/security/advisories/GHSA-2p6p-9rc9-62j9",
+        "https://github.com/craftcms/cms/commit/82e893fb794d30563da296bca31379c0df0079b3",
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-56145",
+        "https://github.com/Chocapikk/CVE-2024-56145",
+        "https://www.cisa.gov/known-exploited-vulnerabilities-catalog?field_cve=CVE-2024-56145",
+        "https://github.com/advisories/GHSA-2p6p-9rc9-62j9"
+      ],
+      "metadata": {
+        "source": "wide-rules-auto-learn",
+        "status": "experimental",
+        "quarantineUntil": "2026-11-26T11:01:40.609Z",
+        "kev": true,
+        "epss": 0.9748,
+        "learnedAt": "2026-11-19T11:01:40.609Z",
+        "advisoryUrl": "https://github.com/advisories/GHSA-2p6p-9rc9-62j9"
+      },
+      "tests": {
+        "positive": [
+          "$environment = App::cliOption('--env', true) ?? App::env('CRAFT_ENVIRONMENT') ?? App::env('ENVIRONMENT') ?? $_SERVER['SERVER_NAME'] ?? null;"
+        ],
+        "negative": [
+          "$environment = $findConfig('--env', 'CRAFT_ENVIRONMENT') ?? App::env('ENVIRONMENT') ?? $_SERVER['SERVER_NAME'] ?? null;"
+        ]
+      }
+    },
+    {
       "id": "wide/vuln-cve-2025-24893",
       "name": "vuln-cve-2025-24893",
       "category": "INJECTION",
@@ -15821,6 +15863,48 @@
         "negative": [
           "async def post_validate_code(code: Code, _current_user: CurrentActiveUser) -> CodeValidationResponse:",
           "async def post_validate_code(code: Code, user=Depends(get_current_user)):"
+        ]
+      }
+    },
+    {
+      "id": "wide/vuln-cve-2026-33017",
+      "name": "vuln-cve-2026-33017",
+      "category": "INJECTION",
+      "severity": "CRITICAL",
+      "languages": [
+        "py"
+      ],
+      "cwe": "CWE-94",
+      "cve": "CVE-2026-33017",
+      "pattern": "^\\s*data:\\s*Annotated\\[FlowDataRequest\\s*\\|\\s*None,\\s*Body\\(embed=True\\)\\s*\\]\\s*=\\s*None,",
+      "not-match": "(?!)",
+      "confidence": "high",
+      "message": "Unauthenticated Remote Code Execution in Langflow via public flow build endpoint accepting attacker-controlled flow data.",
+      "why": "The `build_public_tmp` endpoint, designed for unauthenticated public flows, incorrectly accepts an optional `data` parameter. This parameter allows attackers to supply arbitrary Python code within flow definitions, which is then executed via `exec()` without sandboxing.",
+      "remediation": "Remove the `data` parameter from the `build_public_tmp` function signature and ensure that public flows always load their definitions from the database, preventing attacker-supplied flow data from being processed.",
+      "references": [
+        "https://github.com/langflow-ai/langflow/security/advisories/GHSA-vwmf-pq79-vjvx",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-33017",
+        "https://github.com/langflow-ai/langflow/pull/12160",
+        "https://github.com/langflow-ai/langflow/commit/73b6612e3ef25fdae0a752d75b0fabd47328d4f0",
+        "https://medium.com/@aviral23/cve-2026-33017-how-i-found-an-unauthenticated-rce-in-langflow-by-reading-the-code-they-already-dc96cdce5896",
+        "https://www.sysdig.com/blog/cve-2026-33017-how-attackers-compromised-langflow-ai-pipelines-in-20-hours"
+      ],
+      "metadata": {
+        "source": "wide-rules-auto-learn",
+        "status": "experimental",
+        "quarantineUntil": "2026-11-26T11:02:36.668Z",
+        "kev": true,
+        "epss": 0.9681,
+        "learnedAt": "2026-11-19T11:02:36.668Z",
+        "advisoryUrl": "https://github.com/advisories/GHSA-vwmf-pq79-vjvx"
+      },
+      "tests": {
+        "positive": [
+          "    data: Annotated[FlowDataRequest | None, Body(embed=True)] = None,"
+        ],
+        "negative": [
+          "    inputs: Annotated[InputValueRequest | None, Body(embed=True)] = None,"
         ]
       }
     },
