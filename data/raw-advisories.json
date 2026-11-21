@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-20T23:40:04.877Z",
-  "count": 536,
+  "generatedAt": "2026-11-21T05:31:16.628Z",
+  "count": 550,
   "advisories": [
     {
       "id": "CVE-2025-3248",
@@ -9190,6 +9190,42 @@
       "epss": 0.0057
     },
     {
+      "id": "CVE-2026-33203",
+      "ghsaId": "GHSA-3g9h-9hp4-654v",
+      "cve": "CVE-2026-33203",
+      "cwe": "CWE-248",
+      "sev": "high",
+      "summary": "SiYuan has an Unauthenticated WebSocket DoS via Auth Keepalive Bypass",
+      "description": "## Summary\nThe SiYuan kernel WebSocket server accepts unauthenticated connections when a specific “auth keepalive” query parameter is present. After connection, incoming messages are parsed using unchecked type assertions on attacker-controlled JSON.\n\nA remote attacker can send malformed messages that trigger a runtime panic, potentially crashing the kernel process and causing denial of service.\n\n## Details\n**1. Authentication Bypass via Keepalive Query**\n\nUnauthenticated connections are accepted if the request URI matches a specific pattern intended for an authentication page keepalive.\n\n**File: kernel/server/serve.go**\n\n```\nif !authOk {\n    authOk = strings.Contains(s.Request.RequestURI, \"/ws?app=siyuan\") &&\n             strings.Contains(s.Request.RequestURI, \"&id=auth&type=auth\")\n}\n\n```\n\n**2. Unsafe Type Assertions on Untrusted Input**\n\nIncoming JSON messages are parsed into a generic map and fields are accessed without validation.\n\n**File: kernel/server/serve.go**\n\n```\ncmdStr := request[\"cmd\"].(string)\ncmdId  := request[\"reqId\"].(float64)\nparam  := request[\"param\"].(map[string]interface{})\n\n```\nMalformed or missing fields trigger a runtime panic.\nThe handler does not implement local panic recovery, allowing crashes to propagate.\n\n## PoC\n**Step 1 — Prepare workspace directory**\n\n```sh\nmkdir -p ./workspace\n```\n\n**Step 2 — Run SiYuan container**\n\n```\ndocker run -d \\\n  -p 6806:6806 \\\n  -e SIYUAN_ACCESS_AUTH_CODE_BYPASS=true \\\n  -v $(pwd)/workspace:/siyuan/workspace \\\n  b3log/siyuan \\\n  --workspace=/siyuan/workspace\n```\n\nService becomes reachable at http://127.0.0.1:6806\n\n**Step 3 — Confirm service availability**\n\nOpen in browser:\n\n```sh\nhttp://127.0.0.1:6806\n```\n\n**Step 4 — Connect to unauthenticated WebSocket endpoint**\n\n```sh\nws://127.0.0.1:6806/ws?app=siyuan&id=auth&type=auth\n```\n\nThis connection is accepted without credentials.\n\n**Step 5 — Send malformed payload**\n\nPayload:\n\n```sh\n\n{}\n\n```\n\n**Step 6 — Observe behavior**\n\nMonitor container logs:\n\n```sh\n\ndocker logs -f <container_id>\n\n```\n## Impact\nAn unauthenticated attacker with network access can repeatedly crash the kernel, causing persistent denial of service.\n\nImpact is highest when the service is exposed beyond localhost (e.g., Docker deployments, reverse proxies, LAN access, or public hosting).",
+      "publishedAt": "2026-03-18T20:11:00Z",
+      "updatedAt": "2026-11-21T05:15:31Z",
+      "url": "https://github.com/advisories/GHSA-3g9h-9hp4-654v",
+      "references": [
+        "https://github.com/siyuan-note/siyuan/security/advisories/GHSA-3g9h-9hp4-654v",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-33203",
+        "https://github.com/siyuan-note/siyuan/commit/1048a2bc38d0024f88da1ba97b2d037d43042575",
+        "https://github.com/advisories/GHSA-3g9h-9hp4-654v"
+      ],
+      "patchUrls": [
+        "https://github.com/siyuan-note/siyuan/commit/1048a2bc38d0024f88da1ba97b2d037d43042575"
+      ],
+      "packages": [
+        {
+          "ecosystem": "go",
+          "name": "github.com/siyuan-note/siyuan/kernel",
+          "lt": "3.6.2",
+          "id": "CVE-2026-33203",
+          "ghsaId": "GHSA-3g9h-9hp4-654v",
+          "cve": "CVE-2026-33203",
+          "cwe": "CWE-248",
+          "sev": "high",
+          "note": "SiYuan has an Unauthenticated WebSocket DoS via Auth Keepalive Bypass"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0056
+    },
+    {
       "id": "CVE-2026-126303",
       "ghsaId": "GHSA-8fx7-8jr8-84rv",
       "cve": "CVE-2026-126303",
@@ -11232,6 +11268,43 @@
       "epss": 0.0047
     },
     {
+      "id": "CVE-2026-45325",
+      "ghsaId": "GHSA-cmxg-94mg-jq94",
+      "cve": "CVE-2026-45325",
+      "cwe": "CWE-1321",
+      "sev": "high",
+      "summary": "@tmlmobilidade/utils has prototype pollution in its setValueAtPath",
+      "description": "### Impact\nPrototype pollution vulnerability in @tmlmobilidade/utils for setValueAtPath().\n\n### Patches\nA fix is available in versions 20260509.340.15 and up.",
+      "publishedAt": "2026-05-18T17:07:04Z",
+      "updatedAt": "2026-11-21T05:15:45Z",
+      "url": "https://github.com/advisories/GHSA-cmxg-94mg-jq94",
+      "references": [
+        "https://github.com/tmlmobilidade/go/security/advisories/GHSA-cmxg-94mg-jq94",
+        "https://github.com/tmlmobilidade/go/commit/b10505baa7ba0701f830a05f3007c0a6bdd00eb7",
+        "https://github.com/tmlmobilidade/go/blob/prd/packages/utils/src/generic/value-at-path.ts",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-45325",
+        "https://github.com/advisories/GHSA-cmxg-94mg-jq94"
+      ],
+      "patchUrls": [
+        "https://github.com/tmlmobilidade/go/commit/b10505baa7ba0701f830a05f3007c0a6bdd00eb7"
+      ],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "@tmlmobilidade/utils",
+          "lt": "20260509.340.15",
+          "id": "CVE-2026-45325",
+          "ghsaId": "GHSA-cmxg-94mg-jq94",
+          "cve": "CVE-2026-45325",
+          "cwe": "CWE-1321",
+          "sev": "high",
+          "note": "@tmlmobilidade/utils has prototype pollution in its setValueAtPath"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0046
+    },
+    {
       "id": "CVE-2026-7813",
       "ghsaId": "GHSA-h2x2-q2mc-24gw",
       "cve": "CVE-2026-7813",
@@ -12645,6 +12718,66 @@
       ],
       "kev": false,
       "epss": 0.0043
+    },
+    {
+      "id": "CVE-2026-55621",
+      "ghsaId": "GHSA-64f3-v33m-w89f",
+      "cve": "CVE-2026-55621",
+      "cwe": "CWE-284",
+      "sev": "high",
+      "summary": "Incus has a project restriction bypass for custom volume copy across projects",
+      "description": "### Summary\n\nMissing authorization checks exist for custom volume copying where an attacker who knows the name of a project that they don't have access to and the name of a custom volume in that project can copy the custom volume to a new project. This issue could allow an attacker to access secrets in custom volumes they are not authorized to access.\n\n### Details\n\nThe storage volume creation handler authorizes creation in the target project, then passes `req.Source.Project` into the custom-volume copy path without checking that the caller can view the source volume. `req.Source.Project` is the attacker-controlled field. It is resolved to a storage volume project name and passed directly to `CreateCustomVolumeFromCopy`. No `allowPermission` or entitlement check (e.g. `CanView` on the source volume) is performed.\n\nThe copy must occur on the same server. However, once the copy has been done, nothing prevents a malicious actor from moving the volume to another server.\n\n### PoC\n#### Setup\n\nAssume the target server is remotely accessible and a user/certificate has been added.\n\n```\n# create a new project and instance\nincus project create secrets\nincus profile show default | incus --project secrets edit default\nincus --project secrets storage volume create default secret-vol\n\n# restrict an existing certificate to prevent access to the project\nincus config trust edit cert-fp\n#> set, for example\nrestricted: true\nprojects:\n  - default\n\n# verification, with the restricted certificate\nincus --project secrets storage volume ls remote:default\n```\n\n#### Exploitation\n\nThe below script was partly generated. To copy the secret instance to the default project, the following command can be used.\n\n```\npython3 poc.py --url https://IP-REMOTE:8443 \\\n    --cert path/to/client.crt --key path/to/client.key \\\n    --target-project default --source-project secrets \\\n    --source-volume secret-vol --name copy-secret-vol \\\n    --pool default --source-pool default \\\n    --insecure\n```\n\nWait a bit for the custom volume to be copied, then `incus storage volume ls remote:default` to see the copied instance.\n\n```\n#!/usr/bin/env python3\n\"\"\"Copy a custom storage volume from another project into an allowed project.\"\"\"\n\nfrom __future__ import annotations\n\nimport argparse\nimport json\nimport ssl\nimport sys\nimport urllib.error\nimport urllib.parse\nimport urllib.request\n\n\ndef post(url: str, path: str, body: dict, cert: str, key: str, insecure: bool) -> bytes:\n    ctx = ssl.create_default_context()\n   ",
+      "publishedAt": "2026-08-28T18:52:05Z",
+      "updatedAt": "2026-11-21T05:15:44Z",
+      "url": "https://github.com/advisories/GHSA-64f3-v33m-w89f",
+      "references": [
+        "https://github.com/lxc/incus/security/advisories/GHSA-64f3-v33m-w89f",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-55621",
+        "https://github.com/lxc/incus/commit/2e01078366e2653712719dec82318e51c6d21b28",
+        "https://github.com/lxc/incus/releases/tag/v7.2.0",
+        "https://github.com/canonical/lxd/security/advisories/GHSA-7mr3-28h5-m5vx",
+        "https://github.com/advisories/GHSA-64f3-v33m-w89f"
+      ],
+      "patchUrls": [
+        "https://github.com/lxc/incus/commit/2e01078366e2653712719dec82318e51c6d21b28"
+      ],
+      "packages": [
+        {
+          "ecosystem": "go",
+          "name": "github.com/lxc/incus/v7",
+          "lt": "7.2.0",
+          "id": "CVE-2026-55621",
+          "ghsaId": "GHSA-64f3-v33m-w89f",
+          "cve": "CVE-2026-55621",
+          "cwe": "CWE-284",
+          "sev": "high",
+          "note": "Incus has a project restriction bypass for custom volume copy across projects"
+        },
+        {
+          "ecosystem": "go",
+          "name": "github.com/lxc/incus/v6",
+          "le": "6.23.0",
+          "id": "CVE-2026-55621",
+          "ghsaId": "GHSA-64f3-v33m-w89f",
+          "cve": "CVE-2026-55621",
+          "cwe": "CWE-284",
+          "sev": "high",
+          "note": "Incus has a project restriction bypass for custom volume copy across projects"
+        },
+        {
+          "ecosystem": "go",
+          "name": "github.com/lxc/incus",
+          "le": "0.7.0",
+          "id": "CVE-2026-55621",
+          "ghsaId": "GHSA-64f3-v33m-w89f",
+          "cve": "CVE-2026-55621",
+          "cwe": "CWE-284",
+          "sev": "high",
+          "note": "Incus has a project restriction bypass for custom volume copy across projects"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0042
     },
     {
       "id": "CVE-2026-129226",
@@ -23298,6 +23431,428 @@
       "epss": 0.0005
     },
     {
+      "id": "CVE-2026-122247",
+      "ghsaId": "GHSA-25qc-m4pw-2w8r",
+      "cve": "CVE-2026-122247",
+      "cwe": "CWE-284",
+      "sev": "high",
+      "summary": "Budibase: Unauthenticated global-admin & database creation via tenant-confusion bypass of the one-time init guard (`POST /api/global/users/init`)",
+      "description": "## Description\n\n### Summary\n\nOn a self-hosted, single-tenant Budibase instance (`multiTenancy:false`), the public bootstrap endpoint `POST /api/global/users/init` remains fully exploitable **after** the instance has been provisioned. Its \"already initialised\" guard (`checkAnyUserExists()`) is evaluated inside a **tenant-scoped** database context derived from an **attacker-controlled `tenantId`** in the request body. Because the tenancy layer never constrains that `tenantId` to the only legitimate tenant (`default`) on a single-tenant deployment, an unauthenticated attacker simply supplies any unused tenant name to make the guard see an empty user list, and the endpoint then creates a brand-new CouchDB database (`<tenantId>_global-db`) and a **global-admin** user document (`admin.global = true`, `builder.global = true`) inside it - with no authentication and no CSRF token.\n\nThis is (a) a bypass of the security control meant to permanently close first-run setup, and (b) an unauthenticated, persistent write primitive that lets an anonymous attacker create an unbounded number of databases and admin-user documents - a resource-exhaustion / denial-of-service vector against the CouchDB datastore, plus creation of latent rogue admin accounts.\n\n### Details\n\nRoot cause chain (source, tag v3.44.0):\n\n1. `packages/worker/src/api/index.ts:41` - `POST /api/global/users/init` is in `PUBLIC_ENDPOINTS`, so `auth.buildAuthMiddleware(PUBLIC_ENDPOINTS)` marks it `publicEndpoint` and the \"no public access to worker\" gate (`api/index.ts:159-165`) lets it through **without any session**. It is also in `NO_TENANCY_ENDPOINTS` (`api/index.ts:83`), so the tenancy middleware does **not** pin the request to `default` - the tenant is taken verbatim from the request body - and in `NO_CSRF_ENDPOINTS`.\n2. `packages/worker/src/middleware/cloudRestricted.ts:10,25` - the `cloudRestricted` guard only enforces the internal API key when `!env.SELF_HOSTED && !env.DISABLE_ACCOUNT_PORTAL`. On a self-hosted instance (`SELF_HOSTED=true`) it is a **no-op** (`return next()`), so `cloudRestrictedRoutes` provides no protection here.\n3. `packages/worker/src/api/routes/global/users.ts:69-79` - `cloudRestrictedRoutes.post(\"/api/global/users/init\", … controller.adminUser)`.\n4. `packages/worker/src/api/controllers/global/users.ts:232` - the handler runs `await tenancy.doInTenant(tenantId, …)` using the **attacker-supplied** `tenantId`.\n5. `packages/worker/src/api/controllers/global/users.ts:238` - the only gu",
+      "publishedAt": "2026-11-20T23:50:01Z",
+      "updatedAt": "2026-11-20T23:50:04Z",
+      "url": "https://github.com/advisories/GHSA-25qc-m4pw-2w8r",
+      "references": [
+        "https://github.com/Budibase/budibase/security/advisories/GHSA-25qc-m4pw-2w8r",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-122247",
+        "https://github.com/Budibase/budibase/commit/362a7fe9aea594531ece1cf15be76cc00bfb88b9",
+        "https://github.com/Budibase/budibase/releases/tag/v3.50.0",
+        "https://github.com/Budibase/budibase/releases/tag/v4.0.0",
+        "https://github.com/advisories/GHSA-25qc-m4pw-2w8r"
+      ],
+      "patchUrls": [
+        "https://github.com/Budibase/budibase/commit/362a7fe9aea594531ece1cf15be76cc00bfb88b9"
+      ],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "@budibase/server",
+          "le": "3.38.1",
+          "id": "CVE-2026-122247",
+          "ghsaId": "GHSA-25qc-m4pw-2w8r",
+          "cve": "CVE-2026-122247",
+          "cwe": "CWE-284",
+          "sev": "high",
+          "note": "Budibase: Unauthenticated global-admin & database creation via tenant-confusion bypass of the one-time init guard (`POST /api/global/users/init`)"
+        }
+      ],
+      "kev": false,
+      "epss": 0
+    },
+    {
+      "id": "CVE-2026-122244",
+      "ghsaId": "GHSA-r2q3-7m4h-63qg",
+      "cve": "CVE-2026-122244",
+      "cwe": "CWE-79",
+      "sev": "high",
+      "summary": "Budibase: Cross-privilege Stored XSS in the Budibase Builder via broken HTML-escaping in `jsonFormatter.format()` rendered through `{@html}` in the CSP-less Builder origin",
+      "description": "## Description\n\n### Summary\n\nA **low-privileged application end-user** (role `BASIC` - **not** a builder or admin, and on a public data-collection form, an unauthenticated visitor) can store an HTML/JavaScript payload in ordinary row data. When a **builder or admin** later opens that table in the Budibase Builder and evaluates any Handlebars binding whose Preview surfaces the value (the Data-section **Formula** column editor, or any binding drawer), the stored value is rendered as **raw HTML** and the attacker's JavaScript executes in the Builder's origin.\n\nThe Builder SPA is served by nginx with **no Content-Security-Policy** (the CSP middleware only decorates the server-rendered *published-app* document, not `/builder/`). The injected script therefore runs unrestricted in the highest-trust surface of the product - the admin/builder session that can create datasources, run server-side JavaScript via automations, read and modify every table, and manage users. This is a **cross-privilege stored XSS** (app end-user → builder/admin), i.e. full workspace takeover, not self-XSS.\n\n### Details\n\n**Root cause 1 - the escaper is a no-op.**\n`packages/frontend-core/src/utils/jsonFormatter.ts` (`format()`):\n\n```js\njsonString = jsonString\n  .replace(/&/g, \"&\")   // no-op: replaces \"&\" with \"&\"  (should be \"&amp;\")\n  .replace(/</g, \"<\")   // no-op                          (should be \"&lt;\")\n  .replace(/>/g, \">\")   // no-op                          (should be \"&gt;\")\n\nreturn jsonString.replace(\n  /(\"(\\\\u[a-zA-Z0-9]{4}|\\\\[^u]|[^\\\\\"])*\"(\\s*:)?|\\b(true|false|null)\\b|-?\\d+...)/g,\n  (match) => {\n    if (/^\"/.test(match)) {\n      if (/:$/.test(match)) { color = colors.keyColor }                        // KEY: NOT escaped\n      else { match = '\"' + escapeHtml(match.substr(1, match.length - 2)) + '\"' } // string VALUE: escaped\n    }\n    return `<span style=\"...\">${match}</span>`\n  })\n```\n\nOnly quoted JSON *string values* are passed through `escapeHtml`. Everything else is emitted verbatim, because the leading `.replace(/&/g,\"&\")…` chain replaces each character with itself. Two consequences:\n\n1. A **raw, non-JSON string** (the normal result of a Handlebars binding that resolves to a plain text field value) matches none of the regex tokens and is returned **completely un-escaped**.\n2. **Object keys** are never escaped.\n\n**Root cause 2 - the output is injected with `{@html}`.**\n`packages/builder/src/components/common/bindings/EvaluationSidePanel.svelte`:\n\n- line 116: `{@html logLine",
+      "publishedAt": "2026-11-20T23:49:47Z",
+      "updatedAt": "2026-11-20T23:49:49Z",
+      "url": "https://github.com/advisories/GHSA-r2q3-7m4h-63qg",
+      "references": [
+        "https://github.com/Budibase/budibase/security/advisories/GHSA-r2q3-7m4h-63qg",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-122244",
+        "https://github.com/Budibase/budibase/commit/5f37fb43728639c540cc7233283f1100e9315424",
+        "https://github.com/Budibase/budibase/releases/tag/v3.50.0",
+        "https://github.com/Budibase/budibase/releases/tag/v4.0.0",
+        "https://github.com/advisories/GHSA-r2q3-7m4h-63qg"
+      ],
+      "patchUrls": [
+        "https://github.com/Budibase/budibase/commit/5f37fb43728639c540cc7233283f1100e9315424"
+      ],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "@budibase/server",
+          "le": "3.38.1",
+          "id": "CVE-2026-122244",
+          "ghsaId": "GHSA-r2q3-7m4h-63qg",
+          "cve": "CVE-2026-122244",
+          "cwe": "CWE-79",
+          "sev": "high",
+          "note": "Budibase: Cross-privilege Stored XSS in the Budibase Builder via broken HTML-escaping in `jsonFormatter.format()` rendered through `{@html}` in the CSP-less Builder origin"
+        }
+      ],
+      "kev": false,
+      "epss": 0
+    },
+    {
+      "id": "CVE-2026-132276",
+      "ghsaId": "GHSA-53pm-wgxf-c6qf",
+      "cve": "CVE-2026-132276",
+      "cwe": "CWE-1333",
+      "sev": "medium",
+      "summary": "wcmatch: Polynomial-time ReDoS when matching untrusted names against multi-star patterns (default flags)",
+      "description": "# Summary\n\nWith default flags, a pattern that contains several `*` wildcards takes polynomial time, O(n^k) for k stars, to reject a crafted file name. The pattern is an ordinary developer constant such as `*_*_*_*_*.csv`; only the string being matched comes from the attacker. A 255-byte file name (the maximum on common filesystems) takes 73 s with `fnmatch.fnmatch()` and 86 s with `glob.globmatch()`. The standard library's `fnmatch` handles the same input in under a millisecond.\n\nThis is different from GHSA-84v8-qmgq-9g88: that advisory covers extglob patterns, while this case needs no flags and no attacker-controlled pattern.\n\n# Details\n\nEvery `*` is translated to a lazy `.*?` (`_STAR`, `wcmatch/_wcparse.py:212`; `_PATH_STAR` `[^/]*?`, `:218`), which is emitted in `_handle_star` (`:1405-1424`):\n\n```text\n*_*_*_*_*.csv  ->  ^(?s:(?=.)(?![.]).*?_.*?_.*?_.*?_.*?\\.csv)$\n```\n\nWhen the subject consists of many `_` and does not end in `.csv`, the regex engine tries every way of splitting it between the stars. CPython fixed the same problem in its own `fnmatch` (bpo-40480) by making every star segment except the last one atomic.\n\n# PoC\n\n```python\nimport time, fnmatch as std\nfrom wcmatch import fnmatch, glob\n\nfor pat, n in [('*_*_*_*.csv', 255), ('*_*_*_*.csv', 400), ('*_*_*_*_*.csv', 150),\n               ('*_*_*_*_*.csv', 200), ('*_*_*_*_*.csv', 255)]:\n    name = '_' * n\n    t = time.perf_counter(); fnmatch.fnmatch(name, pat); w = time.perf_counter() - t\n    t = time.perf_counter(); std.fnmatchcase(name, pat); s = time.perf_counter() - t\n    print(f'{pat:15} len={n}  wcmatch={w:.3f}s  stdlib={s:.5f}s')\n\nt = time.perf_counter(); glob.globmatch('uploads/' + '_' * 255, 'uploads/*_*_*_*_*.csv')\nprint(f'globmatch {time.perf_counter() - t:.2f}s')\n```\n\nwcmatch 11.1, CPython 3.13, macOS:\n\n```text\n*_*_*_*.csv     len=255  wcmatch=1.412s   stdlib=0.00001s\n*_*_*_*.csv     len=400  wcmatch=8.599s   stdlib=0.00004s\n*_*_*_*_*.csv   len=150  wcmatch=5.333s   stdlib=0.00003s\n*_*_*_*_*.csv   len=200  wcmatch=22.415s  stdlib=0.00007s\n*_*_*_*_*.csv   len=255  wcmatch=72.732s  stdlib=0.00047s\nglobmatch 85.75s\n```\n\n`glob.glob('*_*_*_*.csv', root_dir=d)` on a real directory that contains one file named `'_' * 255` takes 1.7 s.\n\n# Impact\n\nApplications that match untrusted names against multi-star patterns can be blocked on a single CPU core for minutes per name. Examples: upload handlers, archive or object-store key filters, and `glob`/`WcMatch` scans of directories where other users ca",
+      "publishedAt": "2026-11-20T23:49:18Z",
+      "updatedAt": "2026-11-20T23:49:19Z",
+      "url": "https://github.com/advisories/GHSA-53pm-wgxf-c6qf",
+      "references": [
+        "https://github.com/facelessuser/wcmatch/security/advisories/GHSA-53pm-wgxf-c6qf",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-132276",
+        "https://github.com/facelessuser/wcmatch/commit/83491aadde57780330f993620083e979f645c80c",
+        "https://github.com/facelessuser/wcmatch/releases/tag/11.2",
+        "https://github.com/advisories/GHSA-53pm-wgxf-c6qf"
+      ],
+      "patchUrls": [
+        "https://github.com/facelessuser/wcmatch/commit/83491aadde57780330f993620083e979f645c80c"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "wcmatch",
+          "lt": "11.2",
+          "id": "CVE-2026-132276",
+          "ghsaId": "GHSA-53pm-wgxf-c6qf",
+          "cve": "CVE-2026-132276",
+          "cwe": "CWE-1333",
+          "sev": "medium",
+          "note": "wcmatch: Polynomial-time ReDoS when matching untrusted names against multi-star patterns (default flags)"
+        }
+      ],
+      "kev": false,
+      "epss": 0
+    },
+    {
+      "id": "CVE-2026-132277",
+      "ghsaId": "GHSA-q87h-c5m7-659j",
+      "cve": "CVE-2026-132277",
+      "cwe": "CWE-400",
+      "sev": "medium",
+      "summary": "Inscriptis: Quadratic memory growth from sibling <table> elements in get_text()",
+      "description": "# Summary\n\nEvery sibling `<table>` adds another level of the parent's indentation, so the size of `get_text()` output grows quadratically with the number of tables. In the measurements below, a 240 KB HTML document produces about 1 billion characters and uses about 1 GB of memory.\n\n# Details\n\n`table_end_handler()` (`model/tag/table_tag.py`) writes the rendered table into the parent element with `HtmlElement.write_verbatim_text()` (`model/html_element.py`). For a block-level parent, `write_verbatim_text()` calls `canvas.open_block()`, which pushes the parent's `padding_inline` onto the prefix stack. The following `close_block()` never pops it; only `Canvas.close_tag()` calls `prefix.remove_last_prefix()`. So each table leaves one extra padding entry on the stack.\n\nThis has been present since 2.0 (commit 84ec720).\n\n```python\n>>> get_text('<ul>' + '<table><tr><td>a</td></tr></table>' * 4 + '</ul>')\n'        a\\n        \\n            a\\n            \\n                a\\n                \\n                    a\\n                    '\n```\n\n# PoC\n\n```python\nimport sys, time, resource\nfrom inscriptis import get_text\n\nn = int(sys.argv[1])\nhtml = \"<ul>\" + \"<table></table>\" * n + \"</ul>\"\nt = time.time(); out = get_text(html)\nprint(len(html), f\"{time.time()-t:.2f}s\", len(out), resource.getrusage(resource.RUSAGE_SELF).ru_maxrss // 2**20, \"MiB\")\n```\n\ninscriptis 2.7.5, Python 3.11, macOS (2.0.0 behaves the same):\n\n| tables | HTML | time | output chars | peak RSS |\n|---|---|---|---|---|\n| 1,000 | 15 KB | 0.02 s | 4.0 M | 31 MiB |\n| 4,000 | 60 KB | 0.33 s | 64 M | 154 MiB |\n| 8,000 | 120 KB | 1.31 s | 256 M | 463 MiB |\n| 16,000 | 240 KB | 5.63 s | 1,024 M | 991 MiB |\n\nWhen the input doubles, output size and memory grow about 4 times.\n\n# Impact\n\nAny application that converts untrusted HTML with inscriptis can be made to exhaust memory with a small document. This includes crawlers, RAG and LLM ingestion pipelines, and `inscriptis-api`. No authentication and no user interaction are needed.\n\n# Fix\n\n```diff\n         self.canvas.write(self, text, whitespace=WhiteSpace.pre)\n\n         if self.display == Display.block:\n+            self.canvas.current_block.prefix.remove_last_prefix()\n             self.canvas.close_block(self)\n```\n\nWith this change the 240 KB input above produces 288 K characters in 0.14 s with 27 MiB peak RSS. A single table renders exactly as before, and the existing test suite passes.",
+      "publishedAt": "2026-11-20T23:48:51Z",
+      "updatedAt": "2026-11-20T23:48:53Z",
+      "url": "https://github.com/advisories/GHSA-q87h-c5m7-659j",
+      "references": [
+        "https://github.com/weblyzard/inscriptis/security/advisories/GHSA-q87h-c5m7-659j",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-132277",
+        "https://github.com/weblyzard/inscriptis/commit/dc122894cd671a0227f8fdad60464acddaf40fc8",
+        "https://github.com/weblyzard/inscriptis/releases/tag/2.7.6",
+        "https://github.com/advisories/GHSA-q87h-c5m7-659j"
+      ],
+      "patchUrls": [
+        "https://github.com/weblyzard/inscriptis/commit/dc122894cd671a0227f8fdad60464acddaf40fc8"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "inscriptis",
+          "ge": "2.0.0",
+          "lt": "2.7.6",
+          "id": "CVE-2026-132277",
+          "ghsaId": "GHSA-q87h-c5m7-659j",
+          "cve": "CVE-2026-132277",
+          "cwe": "CWE-400",
+          "sev": "medium",
+          "note": "Inscriptis: Quadratic memory growth from sibling <table> elements in get_text()"
+        }
+      ],
+      "kev": false,
+      "epss": 0
+    },
+    {
+      "id": "CVE-2026-132275",
+      "ghsaId": "GHSA-555j-qj3j-c8jv",
+      "cve": "CVE-2026-132275",
+      "cwe": "CWE-400",
+      "sev": "high",
+      "summary": "svglib: Exponential resource consumption via nested <use> references in svg2rlg",
+      "description": "# Summary\n\n`svg2rlg()` expands `<use>` references without any limit on the total number of expansions. Only direct cycles are rejected (`CircularRefError`). A group containing N `<use>` elements that point to another such group multiplies the work by N per nesting level, so an SVG of about 1.4 KB makes svglib clone and render over 100,000 nodes, taking tens of seconds of CPU time and hundreds of MiB of memory. Each additional level adds about 245 bytes to the document and multiplies time by ~10.\n\nThis is the SVG `<use>` variant of the XML \"billion laughs\" attack (the same class as librsvg CVE-2019-20446).\n\n# Details\n\n`SvgRenderer.renderUse()` in `src/svglib/svglib.py`:\n\n```python\ntry:\n    item = self.xlink_href_target(node, group=group)\nexcept CircularRefError:\n    node.parent.etree_element.remove(node.etree_element)\n    return group\n...\nif len(node.getchildren()) == 0:\n    # Append a copy of the referenced node as the <use> child (if not\n    # already done)\n    node.append(copy.deepcopy(item))\nself.renderNode(list(node.iter_children())[-1], parent=group)\n```\n\nThe referenced node is deep-copied under the `<use>` element and rendered. Any `<use>` elements inside the copied subtree go through `renderUse()` again. `xlink_href_target()` raises `CircularRefError` only for a direct cycle, so a reference DAG with fan-out is expanded fully: `fan ** levels` renders.\n\nPayload shape (fan = 10, levels = 5):\n\n```xml\n<svg xmlns=\"http://www.w3.org/2000/svg\" xmlns:xlink=\"http://www.w3.org/1999/xlink\" width=\"10\" height=\"10\">\n  <defs>\n    <rect id=\"l0\" width=\"1\" height=\"1\"/>\n    <g id=\"l1\"><use xlink:href=\"#l0\"/> ... 10 times ... </g>\n    <g id=\"l2\"><use xlink:href=\"#l1\"/> ... 10 times ... </g>\n    ...\n    <g id=\"l5\"><use xlink:href=\"#l4\"/> ... 10 times ... </g>\n  </defs>\n  <use xlink:href=\"#l5\"/>\n</svg>\n```\n\n# Impact\n\nDenial of service (CPU and memory exhaustion) for any application that renders SVG from an untrusted source with svglib: thumbnail/preview generation, SVG-to-PDF conversion, report generation. Only the SVG document needs to be attacker-controlled; no non-default option is required.\n\nThe same happens through `xhtml2pdf`, which depends on svglib to render SVG images. An HTML document containing `<img src=\"data:image/svg+xml;base64,...\">` passed to `pisa.CreatePDF()` triggers the expansion. HTML-to-PDF conversion of user-supplied content is a common use of xhtml2pdf in web applications.\n\n# Reproduction\n\nMinimal local PoC, non-destructive:\n\n```python\nimport io, t",
+      "publishedAt": "2026-11-20T23:47:58Z",
+      "updatedAt": "2026-11-20T23:47:59Z",
+      "url": "https://github.com/advisories/GHSA-555j-qj3j-c8jv",
+      "references": [
+        "https://github.com/deeplook/svglib/security/advisories/GHSA-555j-qj3j-c8jv",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-132275",
+        "https://github.com/deeplook/svglib/commit/7380d3c3836940fd75f8e203fff80077b7d5a425",
+        "https://github.com/deeplook/svglib/releases/tag/v2.3.1",
+        "https://github.com/advisories/GHSA-555j-qj3j-c8jv"
+      ],
+      "patchUrls": [
+        "https://github.com/deeplook/svglib/commit/7380d3c3836940fd75f8e203fff80077b7d5a425"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "svglib",
+          "lt": "2.3.1",
+          "id": "CVE-2026-132275",
+          "ghsaId": "GHSA-555j-qj3j-c8jv",
+          "cve": "CVE-2026-132275",
+          "cwe": "CWE-400",
+          "sev": "high",
+          "note": "svglib: Exponential resource consumption via nested <use> references in svg2rlg"
+        }
+      ],
+      "kev": false,
+      "epss": 0
+    },
+    {
+      "id": "CVE-2026-104884",
+      "ghsaId": "GHSA-h57j-5f5m-789v",
+      "cve": "CVE-2026-104884",
+      "cwe": "CWE-79",
+      "sev": "medium",
+      "summary": "contao/core-bundle: Cross-site scripting in the frontend search results",
+      "description": "Commit `23e8cca3136a` hardened the search-result title against insert-tag/XSS by setting `$objTemplate->title = StringUtil::specialchars(StringUtil::stripInsertTags($arrResult[$i]['title']))`. But the legacy HTML5 template does not use that `title` variable - it prints the raw `link` variable, which is assigned without escaping.\n\n## Impact\n\nAffected configuration (important): on 5.7.9 the default search template is the Twig `search_default.html.twig`, which does not use the raw `link` variable and auto-escapes - so a default Twig install is not affected. The vulnerable raw echo is in the legacy `search_default.html5` template (still shipped and selectable in 5.7.9, line 8: `<?= $this->link ?>`); exploitation requires that legacy template to be active for the search module (common on sites migrated from earlier Contao / using custom template selection). Where the legacy template is used, the sink is unambiguously raw and `ModuleSearch::compile()` assigns `link` from the entity-decoded indexed title.\n\nA backend page editor can store script that executes for anonymous front-end visitors (and admins) viewing search results, a stored XSS crossing the editor -> anonymous-visitor boundary.\n\n## Credits\n\nThis security vulnerability was found by @HDWSec",
+      "publishedAt": "2026-11-20T23:46:56Z",
+      "updatedAt": "2026-11-20T23:46:58Z",
+      "url": "https://github.com/advisories/GHSA-h57j-5f5m-789v",
+      "references": [
+        "https://github.com/contao/contao/security/advisories/GHSA-h57j-5f5m-789v",
+        "https://github.com/contao/contao/pull/10153",
+        "https://github.com/contao/contao/commit/9519c1049462da35054c114d07efdeecaef32d06",
+        "https://github.com/contao/contao/commit/a58eb71ef5a7a87da9d90980579dbeb6688448b4",
+        "https://github.com/FriendsOfPHP/security-advisories/blob/master/contao/contao/CVE-2026-104884.yaml",
+        "https://github.com/FriendsOfPHP/security-advisories/blob/master/contao/core-bundle/CVE-2026-104884.yaml",
+        "https://github.com/contao/contao/blob/a11109b60dedcbd99e32a4e8550afdadb500f2c5/CHANGELOG.md",
+        "https://github.com/contao/contao/blob/a6543f49a92187a7368f51b290179c4795386e23/CHANGELOG.md",
+        "https://github.com/contao/contao/tree/5.3.50",
+        "https://github.com/contao/contao/tree/5.7.12",
+        "https://github.com/advisories/GHSA-h57j-5f5m-789v"
+      ],
+      "patchUrls": [
+        "https://github.com/contao/contao/pull/10153",
+        "https://github.com/contao/contao/commit/9519c1049462da35054c114d07efdeecaef32d06",
+        "https://github.com/contao/contao/commit/a58eb71ef5a7a87da9d90980579dbeb6688448b4"
+      ],
+      "packages": [
+        {
+          "ecosystem": "composer",
+          "name": "contao/core-bundle",
+          "ge": "4.9.0",
+          "lt": "5.3.50",
+          "id": "CVE-2026-104884",
+          "ghsaId": "GHSA-h57j-5f5m-789v",
+          "cve": "CVE-2026-104884",
+          "cwe": "CWE-79",
+          "sev": "medium",
+          "note": "contao/core-bundle: Cross-site scripting in the frontend search results"
+        },
+        {
+          "ecosystem": "composer",
+          "name": "contao/core-bundle",
+          "ge": "5.4.0-RC1",
+          "lt": "5.7.12",
+          "id": "CVE-2026-104884",
+          "ghsaId": "GHSA-h57j-5f5m-789v",
+          "cve": "CVE-2026-104884",
+          "cwe": "CWE-79",
+          "sev": "medium",
+          "note": "contao/core-bundle: Cross-site scripting in the frontend search results"
+        }
+      ],
+      "kev": false,
+      "epss": 0
+    },
+    {
+      "id": "CVE-2026-104883",
+      "ghsaId": "GHSA-r9qp-pqx5-8369",
+      "cve": "CVE-2026-104883",
+      "cwe": "CWE-94",
+      "sev": "high",
+      "summary": "contao/core-bundle: Non-admin users can self-grant permissions that implicitly make them administrators",
+      "description": "Commit `2b83a60f7763` (5.7.3) hardened the template editor: it added `TemplateEditorModuleVoter` + `CheckTemplateEditorSaveListener` so a non-admin cannot self-grant the `tpl_editor` backend module (editable PHP-capable templates permit server-side code execution). That voter supports only the `modules` field and the literal value `tpl_editor`.\n\nThe equally RCE-capable `theme_import` capability lives in a different field - the `themes` checkbox field (tl_user_group.php:98-105 options include `theme_import`; identical on tl_user.php:248-253) - which has no save_callback and no voter. `TemplateEditorModuleVoter` is the only DC voter registered for tl_user_group, and it does not cover the `themes` field. So a delegated user manager can add `theme_import` to their own (or a managed) account.\n\nLive repro (Contao 5.7.9):\n1. As admin, create a non-admin backend group with the `user` (or `group`) module (a delegated user manager), and a user in it. Confirm the user cannot access `tpl_editor` (blocked by the 5.7.3 voter).\n2. As that non-admin, edit a group/account: add `themes` to the modules field and `theme_import` to the themes field (both accepted - only `tpl_editor` is blocked). Re-authenticate.\n\n## Impact\n\nA delegated user/group manager (a role explicitly not trusted with template/code access) escalates to arbitrary PHP execution on the server, fully compromising the installation. This bypasses the exact protection the 5.7.3 `tpl_editor` fix introduced.\n\n## Credits\n\nThis security vulnerability was found by @HDWSec",
+      "publishedAt": "2026-11-20T23:45:41Z",
+      "updatedAt": "2026-11-20T23:45:43Z",
+      "url": "https://github.com/advisories/GHSA-r9qp-pqx5-8369",
+      "references": [
+        "https://github.com/contao/contao/security/advisories/GHSA-r9qp-pqx5-8369",
+        "https://github.com/contao/contao/pull/10153",
+        "https://github.com/contao/contao/commit/211498f28d4c86484b96eb0612c1193105b79e51",
+        "https://github.com/contao/contao/commit/a58eb71ef5a7a87da9d90980579dbeb6688448b4",
+        "https://github.com/FriendsOfPHP/security-advisories/blob/master/contao/contao/CVE-2026-104883.yaml",
+        "https://github.com/FriendsOfPHP/security-advisories/blob/master/contao/core-bundle/CVE-2026-104883.yaml",
+        "https://github.com/contao/contao/blob/a11109b60dedcbd99e32a4e8550afdadb500f2c5/CHANGELOG.md",
+        "https://github.com/contao/contao/blob/a6543f49a92187a7368f51b290179c4795386e23/CHANGELOG.md",
+        "https://github.com/contao/contao/tree/5.3.50",
+        "https://github.com/contao/contao/tree/5.7.12",
+        "https://github.com/advisories/GHSA-r9qp-pqx5-8369"
+      ],
+      "patchUrls": [
+        "https://github.com/contao/contao/pull/10153",
+        "https://github.com/contao/contao/commit/211498f28d4c86484b96eb0612c1193105b79e51",
+        "https://github.com/contao/contao/commit/a58eb71ef5a7a87da9d90980579dbeb6688448b4"
+      ],
+      "packages": [
+        {
+          "ecosystem": "composer",
+          "name": "contao/core-bundle",
+          "ge": "5.0.0",
+          "lt": "5.3.50",
+          "id": "CVE-2026-104883",
+          "ghsaId": "GHSA-r9qp-pqx5-8369",
+          "cve": "CVE-2026-104883",
+          "cwe": "CWE-94",
+          "sev": "high",
+          "note": "contao/core-bundle: Non-admin users can self-grant permissions that implicitly make them administrators"
+        },
+        {
+          "ecosystem": "composer",
+          "name": "contao/core-bundle",
+          "ge": "5.4.0-RC1",
+          "lt": "5.7.12",
+          "id": "CVE-2026-104883",
+          "ghsaId": "GHSA-r9qp-pqx5-8369",
+          "cve": "CVE-2026-104883",
+          "cwe": "CWE-94",
+          "sev": "high",
+          "note": "contao/core-bundle: Non-admin users can self-grant permissions that implicitly make them administrators"
+        }
+      ],
+      "kev": false,
+      "epss": 0
+    },
+    {
+      "id": "CVE-2026-104882",
+      "ghsaId": "GHSA-23w9-4pg3-xwm3",
+      "cve": "CVE-2026-104882",
+      "cwe": "CWE-639",
+      "sev": "medium",
+      "summary": "contao/core-bundle: Improper access control in the CSV import wizard",
+      "description": "Custom backend module \"key\" actions are dispatched in `Backend::getBackendModule()` (Backend.php:322-327) after only the module-level `USER_CAN_ACCESS_MODULE` check - no per-record voter runs.\n\n## Impact\n\nA non-admin editor scoped to certain pages/forms can overwrite the tableitems/listitems/options of arbitrary tl_content / tl_form_field records outside their scope, defeating the per-record access control. Integrity IDOR (blind content overwrite; the value written is `serialize()` of a plain string array from the CSV - not object injection).\n\n## Credits\n\nThis security vulnerability was found by @HDWSec",
+      "publishedAt": "2026-11-20T23:44:33Z",
+      "updatedAt": "2026-11-20T23:44:34Z",
+      "url": "https://github.com/advisories/GHSA-23w9-4pg3-xwm3",
+      "references": [
+        "https://github.com/contao/contao/security/advisories/GHSA-23w9-4pg3-xwm3",
+        "https://github.com/contao/contao/pull/10153",
+        "https://github.com/contao/contao/commit/a58eb71ef5a7a87da9d90980579dbeb6688448b4",
+        "https://github.com/contao/contao/commit/eb8088bcd547964657a1411a34842b441393a81c",
+        "https://github.com/FriendsOfPHP/security-advisories/blob/master/contao/contao/CVE-2026-104882.yaml",
+        "https://github.com/FriendsOfPHP/security-advisories/blob/master/contao/core-bundle/CVE-2026-104882.yaml",
+        "https://github.com/contao/contao/blob/a11109b60dedcbd99e32a4e8550afdadb500f2c5/CHANGELOG.md",
+        "https://github.com/contao/contao/blob/a6543f49a92187a7368f51b290179c4795386e23/CHANGELOG.md",
+        "https://github.com/contao/contao/tree/5.3.50",
+        "https://github.com/contao/contao/tree/5.7.12",
+        "https://github.com/advisories/GHSA-23w9-4pg3-xwm3"
+      ],
+      "patchUrls": [
+        "https://github.com/contao/contao/pull/10153",
+        "https://github.com/contao/contao/commit/a58eb71ef5a7a87da9d90980579dbeb6688448b4",
+        "https://github.com/contao/contao/commit/eb8088bcd547964657a1411a34842b441393a81c"
+      ],
+      "packages": [
+        {
+          "ecosystem": "composer",
+          "name": "contao/core-bundle",
+          "ge": "5.0.0",
+          "lt": "5.3.50",
+          "id": "CVE-2026-104882",
+          "ghsaId": "GHSA-23w9-4pg3-xwm3",
+          "cve": "CVE-2026-104882",
+          "cwe": "CWE-639",
+          "sev": "medium",
+          "note": "contao/core-bundle: Improper access control in the CSV import wizard"
+        },
+        {
+          "ecosystem": "composer",
+          "name": "contao/core-bundle",
+          "ge": "5.4.0-RC1",
+          "lt": "5.7.12",
+          "id": "CVE-2026-104882",
+          "ghsaId": "GHSA-23w9-4pg3-xwm3",
+          "cve": "CVE-2026-104882",
+          "cwe": "CWE-639",
+          "sev": "medium",
+          "note": "contao/core-bundle: Improper access control in the CSV import wizard"
+        }
+      ],
+      "kev": false,
+      "epss": 0
+    },
+    {
+      "id": "CVE-2026-104881",
+      "ghsaId": "GHSA-3r9g-pfhv-3228",
+      "cve": "CVE-2026-104881",
+      "cwe": "CWE-639",
+      "sev": "medium",
+      "summary": "contao/newsletter-bundle: Contao newsletter custom actions bypass channel-scoped authorization",
+      "description": "Channel access is enforced only by the DataContainer voters (`NewsletterChannelAccessVoter` / `NewsletterRecipientsAccessVoter`, requiring USER_CAN_EDIT_CHANNEL), whose `supportsType()` fires exclusively for Create/Read/Update/DeleteAction subjects dispatched inside DC_Table's create/edit/delete methods. The newsletter custom key-actions are dispatched directly by `Backend::getBackendModule()` (Backend.php:324-327) after only the module-level `USER_CAN_ACCESS_MODULE` check; the DC_Table constructor runs no per-record ReadAction vote for a key-action. `Newsletter.php` contains no `isGranted` / `denyAccess` / `isAdmin` / `hasAccess` calls, and none of the newsletter DCAs have a `checkPermission` onload callback.\n\n## Impact\n\nA channel-scoped newsletter editor can inject recipients into, mass-mail, and in some versions, delete/denylist recipients of channels they are not authorized to edit - defeating the per-channel permission model (integrity + abuse of the mail-sending capability).\n\n## Credits\n\nThis security vulnerability was found by @HDWSec",
+      "publishedAt": "2026-11-20T23:43:26Z",
+      "updatedAt": "2026-11-20T23:43:27Z",
+      "url": "https://github.com/advisories/GHSA-3r9g-pfhv-3228",
+      "references": [
+        "https://github.com/contao/contao/security/advisories/GHSA-3r9g-pfhv-3228",
+        "https://github.com/contao/contao/pull/10153",
+        "https://github.com/contao/contao/commit/1471dcaf4fe3d07a415e756dc54ce1f46d2ee879",
+        "https://github.com/contao/contao/commit/17fe7a52fc5df47209603708c6136a060f8eea43",
+        "https://github.com/contao/contao/commit/a58eb71ef5a7a87da9d90980579dbeb6688448b4",
+        "https://github.com/FriendsOfPHP/security-advisories/blob/master/contao/contao/CVE-2026-104881.yaml",
+        "https://github.com/FriendsOfPHP/security-advisories/blob/master/contao/newsletter-bundle/CVE-2026-104881.yaml",
+        "https://github.com/contao/contao/blob/a11109b60dedcbd99e32a4e8550afdadb500f2c5/CHANGELOG.md",
+        "https://github.com/contao/contao/blob/a6543f49a92187a7368f51b290179c4795386e23/CHANGELOG.md",
+        "https://github.com/contao/contao/tree/5.3.50",
+        "https://github.com/contao/contao/tree/5.7.12",
+        "https://github.com/advisories/GHSA-3r9g-pfhv-3228"
+      ],
+      "patchUrls": [
+        "https://github.com/contao/contao/pull/10153",
+        "https://github.com/contao/contao/commit/1471dcaf4fe3d07a415e756dc54ce1f46d2ee879",
+        "https://github.com/contao/contao/commit/17fe7a52fc5df47209603708c6136a060f8eea43",
+        "https://github.com/contao/contao/commit/a58eb71ef5a7a87da9d90980579dbeb6688448b4"
+      ],
+      "packages": [
+        {
+          "ecosystem": "composer",
+          "name": "contao/newsletter-bundle",
+          "ge": "5.0.0",
+          "lt": "5.3.50",
+          "id": "CVE-2026-104881",
+          "ghsaId": "GHSA-3r9g-pfhv-3228",
+          "cve": "CVE-2026-104881",
+          "cwe": "CWE-639",
+          "sev": "medium",
+          "note": "contao/newsletter-bundle: Contao newsletter custom actions bypass channel-scoped authorization"
+        },
+        {
+          "ecosystem": "composer",
+          "name": "contao/newsletter-bundle",
+          "ge": "5.4.0-RC1",
+          "lt": "5.7.12",
+          "id": "CVE-2026-104881",
+          "ghsaId": "GHSA-3r9g-pfhv-3228",
+          "cve": "CVE-2026-104881",
+          "cwe": "CWE-639",
+          "sev": "medium",
+          "note": "contao/newsletter-bundle: Contao newsletter custom actions bypass channel-scoped authorization"
+        }
+      ],
+      "kev": false,
+      "epss": 0
+    },
+    {
       "id": "CVE-2026-77331",
       "ghsaId": "GHSA-72jh-722p-rqr3",
       "cve": "CVE-2026-77331",
@@ -24451,6 +25006,78 @@
       ],
       "kev": false,
       "epss": 0.0135
+    },
+    {
+      "id": "CVE-2022-24905",
+      "ghsaId": "GHSA-xmg8-99r8-jc2j",
+      "cve": "CVE-2022-24905",
+      "cwe": "CWE-20",
+      "sev": "medium",
+      "summary": "Argo CD: Login screen allows message spoofing if SSO is enabled",
+      "description": "### Impact\n\nA vulnerability was found in Argo CD that allows an attacker to spoof error messages on the login screen when SSO is enabled.\n\nIn order to exploit this vulnerability, an attacker would have to trick the victim to visit a specially crafted URL which contains the message to be displayed.\n\nAs far as the research of the Argo CD team concluded, it is not possible to specify any active content (e.g. Javascript) or other HTML fragments (e.g. clickable links) in the spoofed message.\n\n### Patched versions\n\nA patch for this vulnerability has been released in the following Argo CD versions:\n\n* v2.3.4\n* v2.2.9\n* v2.1.15\n\n### Workarounds\n\nNo workaround available.\n\n#### Mitigations\n\nIt is advised to update to an Argo CD version containing a fix for this issue (see *Patched versions* above).\n\n### Credits\n\nThis vulnerability was discovered by Naufal Septiadi (<naufal@horangi.com>) and reported to us in a responsible way. \n\n### For more information\n\n<!-- Use only one of the paragraphs below. Remove all others. -->\n\n<!-- For Argo CD -->\n\n* Open an issue in [the Argo CD issue tracker](https://github.com/argoproj/argo-cd/issues) or [discussions](https://github.com/argoproj/argo-cd/discussions)\n* Join us on [Slack](https://argoproj.github.io/community/join-slack) in channel #argo-cd",
+      "publishedAt": "2022-05-24T12:26:59Z",
+      "updatedAt": "2026-11-20T23:55:10Z",
+      "url": "https://github.com/advisories/GHSA-xmg8-99r8-jc2j",
+      "references": [
+        "https://github.com/argoproj/argo-cd/security/advisories/GHSA-xmg8-99r8-jc2j",
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-24905",
+        "https://github.com/argoproj/argo-cd/releases/tag/v2.1.15",
+        "https://github.com/argoproj/argo-cd/releases/tag/v2.2.9",
+        "https://github.com/argoproj/argo-cd/releases/tag/v2.3.4",
+        "https://github.com/advisories/GHSA-xmg8-99r8-jc2j"
+      ],
+      "patchUrls": [],
+      "packages": [
+        {
+          "ecosystem": "go",
+          "name": "github.com/argoproj/argo-cd/v2",
+          "ge": "2.3.0",
+          "lt": "2.3.4",
+          "id": "CVE-2022-24905",
+          "ghsaId": "GHSA-xmg8-99r8-jc2j",
+          "cve": "CVE-2022-24905",
+          "cwe": "CWE-20",
+          "sev": "medium",
+          "note": "Argo CD: Login screen allows message spoofing if SSO is enabled"
+        },
+        {
+          "ecosystem": "go",
+          "name": "github.com/argoproj/argo-cd/v2",
+          "ge": "2.2.0",
+          "lt": "2.2.9",
+          "id": "CVE-2022-24905",
+          "ghsaId": "GHSA-xmg8-99r8-jc2j",
+          "cve": "CVE-2022-24905",
+          "cwe": "CWE-20",
+          "sev": "medium",
+          "note": "Argo CD: Login screen allows message spoofing if SSO is enabled"
+        },
+        {
+          "ecosystem": "go",
+          "name": "github.com/argoproj/argo-cd/v2",
+          "ge": "2.0.0",
+          "lt": "2.1.15",
+          "id": "CVE-2022-24905",
+          "ghsaId": "GHSA-xmg8-99r8-jc2j",
+          "cve": "CVE-2022-24905",
+          "cwe": "CWE-20",
+          "sev": "medium",
+          "note": "Argo CD: Login screen allows message spoofing if SSO is enabled"
+        },
+        {
+          "ecosystem": "go",
+          "name": "github.com/argoproj/argo-cd",
+          "lt": "2.1.15",
+          "id": "CVE-2022-24905",
+          "ghsaId": "GHSA-xmg8-99r8-jc2j",
+          "cve": "CVE-2022-24905",
+          "cwe": "CWE-20",
+          "sev": "medium",
+          "note": "Argo CD: Login screen allows message spoofing if SSO is enabled"
+        }
+      ],
+      "kev": false,
+      "epss": 0.013
     },
     {
       "id": "CVE-2025-62515",
@@ -25893,6 +26520,41 @@
       ],
       "kev": false,
       "epss": 0.0024
+    },
+    {
+      "id": "CVE-2026-27119",
+      "ghsaId": "GHSA-h7h7-mm68-gmrc",
+      "cve": "CVE-2026-27119",
+      "cwe": "CWE-79",
+      "sev": "medium",
+      "summary": "Svelte affected by XSS in SSR `<option>` element",
+      "description": "In certain circumstances, the server-side rendering output of an `<option>` element does not properly escape its content, potentially allowing HTML injection in the SSR output. Client-side rendering is not affected.",
+      "publishedAt": "2026-02-19T15:18:19Z",
+      "updatedAt": "2026-11-20T23:52:22Z",
+      "url": "https://github.com/advisories/GHSA-h7h7-mm68-gmrc",
+      "references": [
+        "https://github.com/sveltejs/svelte/security/advisories/GHSA-h7h7-mm68-gmrc",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-27119",
+        "https://github.com/sveltejs/svelte/releases/tag/svelte@5.51.5",
+        "https://github.com/advisories/GHSA-h7h7-mm68-gmrc"
+      ],
+      "patchUrls": [],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "svelte",
+          "ge": "5.39.3",
+          "lt": "5.51.5",
+          "id": "CVE-2026-27119",
+          "ghsaId": "GHSA-h7h7-mm68-gmrc",
+          "cve": "CVE-2026-27119",
+          "cwe": "CWE-79",
+          "sev": "medium",
+          "note": "Svelte affected by XSS in SSR `<option>` element"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0021
     },
     {
       "id": "CVE-2026-22696",
