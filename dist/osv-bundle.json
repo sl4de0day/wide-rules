@@ -1,23 +1,23 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-20T23:40:04.877Z",
+  "generatedAt": "2026-11-21T05:31:16.628Z",
   "sources": [
     "github-advisories",
     "cisa-kev",
     "first-epss"
   ],
   "stats": {
-    "total": 989,
+    "total": 1012,
     "kevCount": 155,
     "highEpssCount": 103,
     "byEcosystem": {
-      "npm": 317,
-      "pip": 182,
+      "npm": 321,
+      "pip": 185,
       "maven": 192,
-      "go": 106,
+      "go": 114,
       "cargo": 61,
       "nuget": 21,
-      "composer": 64,
+      "composer": 72,
       "rubygems": 46
     }
   },
@@ -158,6 +158,26 @@
       "sev": "medium",
       "note": "tiny-secp256k1: Stale buffer after ignored wasm failure accepts invalid infinity tweak",
       "epss": 0.0029
+    },
+    {
+      "name": "@budibase/server",
+      "le": "3.38.1",
+      "id": "CVE-2026-122244",
+      "ghsaId": "GHSA-r2q3-7m4h-63qg",
+      "cve": "CVE-2026-122244",
+      "cwe": "CWE-79",
+      "sev": "high",
+      "note": "Budibase: Cross-privilege Stored XSS in the Budibase Builder via broken HTML-escaping in `jsonFormatter.format()` rendered through `{@html}` in the CSP-less Builder origin"
+    },
+    {
+      "name": "@budibase/server",
+      "le": "3.38.1",
+      "id": "CVE-2026-122247",
+      "ghsaId": "GHSA-25qc-m4pw-2w8r",
+      "cve": "CVE-2026-122247",
+      "cwe": "CWE-284",
+      "sev": "high",
+      "note": "Budibase: Unauthenticated global-admin & database creation via tenant-confusion bypass of the one-time init guard (`POST /api/global/users/init`)"
     },
     {
       "name": "@cedar-policy/cedar-wasm",
@@ -1747,6 +1767,17 @@
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
       "epss": 0.0328
+    },
+    {
+      "name": "@tmlmobilidade/utils",
+      "lt": "20260509.340.15",
+      "id": "CVE-2026-45325",
+      "ghsaId": "GHSA-cmxg-94mg-jq94",
+      "cve": "CVE-2026-45325",
+      "cwe": "CWE-1321",
+      "sev": "high",
+      "note": "@tmlmobilidade/utils has prototype pollution in its setValueAtPath",
+      "epss": 0.0046
     },
     {
       "name": "@tsparticles/mcp-server",
@@ -3544,6 +3575,18 @@
       "epss": 0.0036
     },
     {
+      "name": "svelte",
+      "ge": "5.39.3",
+      "lt": "5.51.5",
+      "id": "CVE-2026-27119",
+      "ghsaId": "GHSA-h7h7-mm68-gmrc",
+      "cve": "CVE-2026-27119",
+      "cwe": "CWE-79",
+      "sev": "medium",
+      "note": "Svelte affected by XSS in SSR `<option>` element",
+      "epss": 0.0021
+    },
+    {
       "name": "synckit",
       "ge": "0.11.9",
       "lt": "0.11.10",
@@ -4074,6 +4117,17 @@
       "sev": "medium",
       "note": "Guard Core: Unvalidated X-Forwarded-For-derived string used as a Redis key component and interpolated into a KEYS glob pattern",
       "epss": 0.0024
+    },
+    {
+      "name": "inscriptis",
+      "ge": "2.0.0",
+      "lt": "2.7.6",
+      "id": "CVE-2026-132277",
+      "ghsaId": "GHSA-q87h-c5m7-659j",
+      "cve": "CVE-2026-132277",
+      "cwe": "CWE-400",
+      "sev": "medium",
+      "note": "Inscriptis: Quadratic memory growth from sibling <table> elements in get_text()"
     },
     {
       "name": "ironic-inspector",
@@ -5778,6 +5832,16 @@
       "epss": 0.7029
     },
     {
+      "name": "svglib",
+      "lt": "2.3.1",
+      "id": "CVE-2026-132275",
+      "ghsaId": "GHSA-555j-qj3j-c8jv",
+      "cve": "CVE-2026-132275",
+      "cwe": "CWE-400",
+      "sev": "high",
+      "note": "svglib: Exponential resource consumption via nested <use> references in svg2rlg"
+    },
+    {
       "name": "termux-sync",
       "lt": "1.2.4",
       "id": "CVE-2026-86046",
@@ -5822,6 +5886,16 @@
       "sev": "high",
       "note": "Wagtail: Reflected XSS in dynamic image URL generator view",
       "epss": 0.0036
+    },
+    {
+      "name": "wcmatch",
+      "lt": "11.2",
+      "id": "CVE-2026-132276",
+      "ghsaId": "GHSA-53pm-wgxf-c6qf",
+      "cve": "CVE-2026-132276",
+      "cwe": "CWE-1333",
+      "sev": "medium",
+      "note": "wcmatch: Polynomial-time ReDoS when matching untrusted names against multi-star patterns (default flags)"
     },
     {
       "name": "Werkzeug",
@@ -8156,6 +8230,53 @@
       "epss": 0.6151
     },
     {
+      "name": "github.com/argoproj/argo-cd",
+      "lt": "2.1.15",
+      "id": "CVE-2022-24905",
+      "ghsaId": "GHSA-xmg8-99r8-jc2j",
+      "cve": "CVE-2022-24905",
+      "cwe": "CWE-20",
+      "sev": "medium",
+      "note": "Argo CD: Login screen allows message spoofing if SSO is enabled",
+      "epss": 0.013
+    },
+    {
+      "name": "github.com/argoproj/argo-cd/v2",
+      "ge": "2.0.0",
+      "lt": "2.1.15",
+      "id": "CVE-2022-24905",
+      "ghsaId": "GHSA-xmg8-99r8-jc2j",
+      "cve": "CVE-2022-24905",
+      "cwe": "CWE-20",
+      "sev": "medium",
+      "note": "Argo CD: Login screen allows message spoofing if SSO is enabled",
+      "epss": 0.013
+    },
+    {
+      "name": "github.com/argoproj/argo-cd/v2",
+      "ge": "2.2.0",
+      "lt": "2.2.9",
+      "id": "CVE-2022-24905",
+      "ghsaId": "GHSA-xmg8-99r8-jc2j",
+      "cve": "CVE-2022-24905",
+      "cwe": "CWE-20",
+      "sev": "medium",
+      "note": "Argo CD: Login screen allows message spoofing if SSO is enabled",
+      "epss": 0.013
+    },
+    {
+      "name": "github.com/argoproj/argo-cd/v2",
+      "ge": "2.3.0",
+      "lt": "2.3.4",
+      "id": "CVE-2022-24905",
+      "ghsaId": "GHSA-xmg8-99r8-jc2j",
+      "cve": "CVE-2022-24905",
+      "cwe": "CWE-20",
+      "sev": "medium",
+      "note": "Argo CD: Login screen allows message spoofing if SSO is enabled",
+      "epss": 0.013
+    },
+    {
       "name": "github.com/bep/imagemeta",
       "lt": "0.17.3",
       "id": "CVE-2026-103025",
@@ -8572,6 +8693,39 @@
       "sev": "high",
       "note": "Kubeshark: MCP `start_kubeshark` argument injection via `pod_regex` → image redirect → cluster takeover",
       "epss": 0.0022
+    },
+    {
+      "name": "github.com/lxc/incus",
+      "le": "0.7.0",
+      "id": "CVE-2026-55621",
+      "ghsaId": "GHSA-64f3-v33m-w89f",
+      "cve": "CVE-2026-55621",
+      "cwe": "CWE-284",
+      "sev": "high",
+      "note": "Incus has a project restriction bypass for custom volume copy across projects",
+      "epss": 0.0042
+    },
+    {
+      "name": "github.com/lxc/incus/v6",
+      "le": "6.23.0",
+      "id": "CVE-2026-55621",
+      "ghsaId": "GHSA-64f3-v33m-w89f",
+      "cve": "CVE-2026-55621",
+      "cwe": "CWE-284",
+      "sev": "high",
+      "note": "Incus has a project restriction bypass for custom volume copy across projects",
+      "epss": 0.0042
+    },
+    {
+      "name": "github.com/lxc/incus/v7",
+      "lt": "7.2.0",
+      "id": "CVE-2026-55621",
+      "ghsaId": "GHSA-64f3-v33m-w89f",
+      "cve": "CVE-2026-55621",
+      "cwe": "CWE-284",
+      "sev": "high",
+      "note": "Incus has a project restriction bypass for custom volume copy across projects",
+      "epss": 0.0042
     },
     {
       "name": "github.com/mayswind/ezbookkeeping",
@@ -9065,6 +9219,17 @@
       "sev": "medium",
       "note": "Cosign's verify-blob-attestation reports false positive when payload parsing fails",
       "epss": 0.0025
+    },
+    {
+      "name": "github.com/siyuan-note/siyuan/kernel",
+      "lt": "3.6.2",
+      "id": "CVE-2026-33203",
+      "ghsaId": "GHSA-3g9h-9hp4-654v",
+      "cve": "CVE-2026-33203",
+      "cwe": "CWE-248",
+      "sev": "high",
+      "note": "SiYuan has an Unauthenticated WebSocket DoS via Auth Keepalive Bypass",
+      "epss": 0.0056
     },
     {
       "name": "github.com/StacklokLabs/sqlite-mcp",
@@ -10383,6 +10548,94 @@
       "sev": "medium",
       "note": "Bolt: Prevent SSRF due to unchecked followed redirects",
       "epss": 0.0037
+    },
+    {
+      "name": "contao/core-bundle",
+      "ge": "5.0.0",
+      "lt": "5.3.50",
+      "id": "CVE-2026-104882",
+      "ghsaId": "GHSA-23w9-4pg3-xwm3",
+      "cve": "CVE-2026-104882",
+      "cwe": "CWE-639",
+      "sev": "medium",
+      "note": "contao/core-bundle: Improper access control in the CSV import wizard"
+    },
+    {
+      "name": "contao/core-bundle",
+      "ge": "5.4.0-RC1",
+      "lt": "5.7.12",
+      "id": "CVE-2026-104882",
+      "ghsaId": "GHSA-23w9-4pg3-xwm3",
+      "cve": "CVE-2026-104882",
+      "cwe": "CWE-639",
+      "sev": "medium",
+      "note": "contao/core-bundle: Improper access control in the CSV import wizard"
+    },
+    {
+      "name": "contao/core-bundle",
+      "ge": "5.0.0",
+      "lt": "5.3.50",
+      "id": "CVE-2026-104883",
+      "ghsaId": "GHSA-r9qp-pqx5-8369",
+      "cve": "CVE-2026-104883",
+      "cwe": "CWE-94",
+      "sev": "high",
+      "note": "contao/core-bundle: Non-admin users can self-grant permissions that implicitly make them administrators"
+    },
+    {
+      "name": "contao/core-bundle",
+      "ge": "5.4.0-RC1",
+      "lt": "5.7.12",
+      "id": "CVE-2026-104883",
+      "ghsaId": "GHSA-r9qp-pqx5-8369",
+      "cve": "CVE-2026-104883",
+      "cwe": "CWE-94",
+      "sev": "high",
+      "note": "contao/core-bundle: Non-admin users can self-grant permissions that implicitly make them administrators"
+    },
+    {
+      "name": "contao/core-bundle",
+      "ge": "4.9.0",
+      "lt": "5.3.50",
+      "id": "CVE-2026-104884",
+      "ghsaId": "GHSA-h57j-5f5m-789v",
+      "cve": "CVE-2026-104884",
+      "cwe": "CWE-79",
+      "sev": "medium",
+      "note": "contao/core-bundle: Cross-site scripting in the frontend search results"
+    },
+    {
+      "name": "contao/core-bundle",
+      "ge": "5.4.0-RC1",
+      "lt": "5.7.12",
+      "id": "CVE-2026-104884",
+      "ghsaId": "GHSA-h57j-5f5m-789v",
+      "cve": "CVE-2026-104884",
+      "cwe": "CWE-79",
+      "sev": "medium",
+      "note": "contao/core-bundle: Cross-site scripting in the frontend search results"
+    },
+    {
+      "name": "contao/newsletter-bundle",
+      "ge": "5.0.0",
+      "lt": "5.3.50",
+      "id": "CVE-2026-104881",
+      "ghsaId": "GHSA-3r9g-pfhv-3228",
+      "cve": "CVE-2026-104881",
+      "cwe": "CWE-639",
+      "sev": "medium",
+      "note": "contao/newsletter-bundle: Contao newsletter custom actions bypass channel-scoped authorization"
+    },
+    {
+      "name": "contao/newsletter-bundle",
+      "ge": "5.4.0-RC1",
+      "lt": "5.7.12",
+      "id": "CVE-2026-104881",
+      "ghsaId": "GHSA-3r9g-pfhv-3228",
+      "cve": "CVE-2026-104881",
+      "cwe": "CWE-639",
+      "sev": "medium",
+      "note": "contao/newsletter-bundle: Contao newsletter custom actions bypass channel-scoped authorization"
     },
     {
       "name": "craftcms/cms",
