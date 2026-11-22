@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-21T22:45:01.523Z",
+  "generatedAt": "2026-11-22T23:12:24.366Z",
   "sources": [
     "github-advisories",
     "cisa-kev",
@@ -3237,7 +3237,7 @@
       "cwe": "CWE-94",
       "sev": "critical",
       "note": "protobufjs has an arbitrary code execution issue",
-      "epss": 0.008
+      "epss": 0.014
     },
     {
       "name": "protobufjs",
@@ -3249,7 +3249,7 @@
       "cwe": "CWE-94",
       "sev": "critical",
       "note": "protobufjs has an arbitrary code execution issue",
-      "epss": 0.008
+      "epss": 0.014
     },
     {
       "name": "protobufjs",
@@ -3261,7 +3261,7 @@
       "cwe": "CWE-94",
       "sev": "critical",
       "note": "protobufjs has an arbitrary code execution issue",
-      "epss": 0.008
+      "epss": 0.014
     },
     {
       "name": "qwc2",
@@ -3925,7 +3925,7 @@
       "cwe": "CWE-384",
       "sev": "medium",
       "note": "CKAN: Session Fixation in Registration View",
-      "epss": 0.0033
+      "epss": 0.0052
     },
     {
       "name": "ckan",
@@ -3937,7 +3937,7 @@
       "cwe": "CWE-384",
       "sev": "medium",
       "note": "CKAN: Session Fixation in Registration View",
-      "epss": 0.0033
+      "epss": 0.0052
     },
     {
       "name": "compose-lint",
@@ -4015,7 +4015,7 @@
       "cwe": "CWE-407",
       "sev": "medium",
       "note": "eml_parser: Algorithmic-complexity DoS (O(n^4) regex backtracking) in Received-header parsing",
-      "epss": 0.0029
+      "epss": 0.0046
     },
     {
       "name": "envd",
@@ -4461,7 +4461,7 @@
       "cwe": "CWE-116",
       "sev": "low",
       "note": "memtomem-stm: Surfaced memory data can escape the Markdown compatibility boundary",
-      "epss": 0.0057
+      "epss": 0.0068
     },
     {
       "name": "mistune",
@@ -4736,7 +4736,7 @@
       "cwe": "CWE-674",
       "sev": "medium",
       "note": "NLTK: Uncontrolled recursion in semantic-logic type parser causes denial of service via nested type strings",
-      "epss": 0.0042
+      "epss": 0.0048
     },
     {
       "name": "nltk",
@@ -4747,7 +4747,7 @@
       "cwe": "CWE-674",
       "sev": "medium",
       "note": "NLTK: Uncontrolled recursion in Tree.fromlist causes denial of service via deeply nested list input",
-      "epss": 0.0042
+      "epss": 0.0048
     },
     {
       "name": "nltk",
@@ -4758,7 +4758,7 @@
       "cwe": "CWE-674",
       "sev": "medium",
       "note": "NLTK: Uncontrolled recursion in Toolbox settings helpers causes denial of service via deeply nested input",
-      "epss": 0.0047
+      "epss": 0.0054
     },
     {
       "name": "nltk",
@@ -4815,7 +4815,7 @@
       "cwe": "CWE-200",
       "sev": "medium",
       "note": "NLTK: StreamBackedCorpusView constructor os.stat leaks out-of-root file existence, size, and mtime bypassing pathsec ENFORCE",
-      "epss": 0.0034
+      "epss": 0.004
     },
     {
       "name": "nltk",
@@ -5356,7 +5356,7 @@
       "cwe": "CWE-1125",
       "sev": "critical",
       "note": "Excessive Attack Surface in pyload-ng",
-      "epss": 0.0075
+      "epss": 0.0079
     },
     {
       "name": "pyload-ng",
@@ -5411,7 +5411,7 @@
       "cwe": "CWE-918",
       "sev": "critical",
       "note": "pyLoad: Server-Side Request Forgery via Download Link Submission Enables Cloud Metadata Exfiltration",
-      "epss": 0.0041
+      "epss": 0.0044
     },
     {
       "name": "pymetasploit3",
@@ -6121,7 +6121,7 @@
       "cwe": "CWE-862",
       "sev": "medium",
       "note": "OpenRemote: Cross-realm MQTT session disconnect without authorization",
-      "epss": 0.0032
+      "epss": 0.0047
     },
     {
       "name": "io.undertow:undertow-core",
@@ -6132,7 +6132,7 @@
       "cwe": "CWE-444",
       "sev": "high",
       "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling",
-      "epss": 0.0072
+      "epss": 0.0081
     },
     {
       "name": "io.undertow:undertow-core",
@@ -6144,7 +6144,7 @@
       "cwe": "CWE-444",
       "sev": "high",
       "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling",
-      "epss": 0.0072
+      "epss": 0.0081
     },
     {
       "name": "io.undertow:undertow-core",
@@ -6155,7 +6155,7 @@
       "cwe": "CWE-444",
       "sev": "high",
       "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling",
-      "epss": 0.0073
+      "epss": 0.008
     },
     {
       "name": "io.undertow:undertow-core",
@@ -6167,7 +6167,7 @@
       "cwe": "CWE-444",
       "sev": "high",
       "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling",
-      "epss": 0.0073
+      "epss": 0.008
     },
     {
       "name": "io.undertow:undertow-core",
@@ -6178,7 +6178,7 @@
       "cwe": "CWE-444",
       "sev": "high",
       "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling",
-      "epss": 0.0069
+      "epss": 0.0077
     },
     {
       "name": "io.undertow:undertow-core",
@@ -6190,7 +6190,7 @@
       "cwe": "CWE-444",
       "sev": "high",
       "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling",
-      "epss": 0.0069
+      "epss": 0.0077
     },
     {
       "name": "org.apache.activemq:activemq-all",
@@ -8756,7 +8756,7 @@
       "cwe": "CWE-248",
       "sev": "medium",
       "note": "NATS Server: MQTT-over-WebSocket Path Can Crash WebSocket-Only JetStream Servers Before MQTT Is Enabled",
-      "epss": 0.0034
+      "epss": 0.0041
     },
     {
       "name": "github.com/nats-io/nats-server/v2",
@@ -8768,7 +8768,7 @@
       "cwe": "CWE-248",
       "sev": "medium",
       "note": "NATS Server: MQTT-over-WebSocket Path Can Crash WebSocket-Only JetStream Servers Before MQTT Is Enabled",
-      "epss": 0.0034
+      "epss": 0.0041
     },
     {
       "name": "github.com/nats-io/nats-server/v2",
@@ -8779,7 +8779,7 @@
       "cwe": "CWE-863",
       "sev": "medium",
       "note": "NATS Server MQTT retained messages and QoS replay bypass subscription deny rules",
-      "epss": 0.0034
+      "epss": 0.0032
     },
     {
       "name": "github.com/nats-io/nats-server/v2",
@@ -8791,7 +8791,7 @@
       "cwe": "CWE-863",
       "sev": "medium",
       "note": "NATS Server MQTT retained messages and QoS replay bypass subscription deny rules",
-      "epss": 0.0034
+      "epss": 0.0032
     },
     {
       "name": "github.com/nats-io/nats-server/v2",
@@ -8802,7 +8802,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "NATS Server allows unauthenticated memory exhaustion through incomplete MQTT CONNECT packets",
-      "epss": 0.0074
+      "epss": 0.0062
     },
     {
       "name": "github.com/nats-io/nats-server/v2",
@@ -8814,7 +8814,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "NATS Server allows unauthenticated memory exhaustion through incomplete MQTT CONNECT packets",
-      "epss": 0.0074
+      "epss": 0.0062
     },
     {
       "name": "github.com/nats-io/nats-server/v2",
@@ -8871,7 +8871,7 @@
       "cwe": "CWE-863",
       "sev": "medium",
       "note": "nats-server Leaf node connections bypass Nats-Trace-Dest permission check",
-      "epss": 0.0031
+      "epss": 0.0022
     },
     {
       "name": "github.com/nats-io/nats-server/v2",
@@ -8883,7 +8883,7 @@
       "cwe": "CWE-863",
       "sev": "medium",
       "note": "nats-server Leaf node connections bypass Nats-Trace-Dest permission check",
-      "epss": 0.0031
+      "epss": 0.0022
     },
     {
       "name": "github.com/OliveTin/OliveTin",
@@ -9843,7 +9843,7 @@
       "cwe": "CWE-20",
       "sev": "low",
       "note": "uu_env incorrectly rejects backslashes within single-quoted strings accepted by GNU env",
-      "epss": 0.0011
+      "epss": 0.0017
     },
     {
       "name": "uu_split",
@@ -9854,7 +9854,7 @@
       "cwe": "CWE-59",
       "sev": "medium",
       "note": "split: TOCTOU output-open allows truncating a swapped file",
-      "epss": 0.0008
+      "epss": 0.0009
     },
     {
       "name": "uv",
@@ -10377,7 +10377,7 @@
       "cwe": "CWE-829",
       "sev": "high",
       "note": "Refitter: Unrestricted OpenAPI references permit build-host SSRF and file inclusion",
-      "epss": 0.0041
+      "epss": 0.0064
     },
     {
       "name": "Refitter",

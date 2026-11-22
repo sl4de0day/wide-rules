@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-21T22:45:01.523Z",
+  "generatedAt": "2026-11-22T23:12:24.366Z",
   "count": 550,
   "advisories": [
     {
@@ -4745,6 +4745,76 @@
       "epss": 0.0167
     },
     {
+      "id": "CVE-2026-41242",
+      "ghsaId": "GHSA-xq3m-2v4x-88gg",
+      "cve": "CVE-2026-41242",
+      "cwe": "CWE-94",
+      "sev": "critical",
+      "summary": "protobufjs has an arbitrary code execution issue",
+      "description": "## Summary\n\nprotobufjs could execute generated JavaScript code derived from protobuf schema metadata. When loading a crafted JSON descriptor, schema-controlled type names and type references could reach runtime code generation without sufficient validation.\n\n## Impact\n\nAn attacker who can provide a malicious protobuf definition or JSON descriptor to an application may be able to execute arbitrary JavaScript in the context of the process using protobufjs.\n\nThis requires control over the protobuf schema or descriptor being loaded. Applications that only decode messages using trusted, application-defined schemas are not directly affected by this issue.\n\n## Preconditions\n\n- The application must allow an attacker to control or influence a protobuf definition or JSON descriptor.\n- The application must load that definition through protobufjs reflection APIs such as descriptor loading.\n- The affected generated-code path must be reached, for example by performing an operation on the loaded type.\n\n## Workarounds\n\nDo not load protobuf definitions or JSON descriptors from untrusted sources with affected versions. If untrusted schemas must be accepted, validate or restrict them before loading and run schema processing in an isolated environment.",
+      "publishedAt": "2026-04-16T22:34:57Z",
+      "updatedAt": "2026-11-04T17:14:43Z",
+      "url": "https://github.com/advisories/GHSA-xq3m-2v4x-88gg",
+      "references": [
+        "https://github.com/protobufjs/protobuf.js/security/advisories/GHSA-xq3m-2v4x-88gg",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-41242",
+        "https://github.com/protobufjs/protobuf.js/commit/535df444ac060243722ac5d672db205e5c531d75",
+        "https://github.com/protobufjs/protobuf.js/commit/ff7b2afef8754837cc6dc64c864cd111ab477956",
+        "https://github.com/protobufjs/protobuf.js/releases/tag/protobufjs-v7.5.5",
+        "https://github.com/protobufjs/protobuf.js/releases/tag/protobufjs-v8.0.1",
+        "https://github.com/protobufjs/protobuf.js/commit/086916b4a52c9f73ce88956edbb38fc902e54bbf",
+        "https://access.redhat.com/errata/RHSA-2026:21338",
+        "https://access.redhat.com/errata/RHSA-2026:24977",
+        "https://access.redhat.com/errata/RHSA-2026:26234",
+        "https://access.redhat.com/errata/RHSA-2026:37275",
+        "https://access.redhat.com/errata/RHSA-2026:62260"
+      ],
+      "patchUrls": [
+        "https://github.com/protobufjs/protobuf.js/commit/535df444ac060243722ac5d672db205e5c531d75",
+        "https://github.com/protobufjs/protobuf.js/commit/ff7b2afef8754837cc6dc64c864cd111ab477956",
+        "https://github.com/protobufjs/protobuf.js/commit/086916b4a52c9f73ce88956edbb38fc902e54bbf"
+      ],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "protobufjs",
+          "ge": "8.0.0",
+          "lt": "8.0.1",
+          "id": "CVE-2026-41242",
+          "ghsaId": "GHSA-xq3m-2v4x-88gg",
+          "cve": "CVE-2026-41242",
+          "cwe": "CWE-94",
+          "sev": "critical",
+          "note": "protobufjs has an arbitrary code execution issue"
+        },
+        {
+          "ecosystem": "npm",
+          "name": "protobufjs",
+          "ge": "7.0.0",
+          "lt": "7.5.5",
+          "id": "CVE-2026-41242",
+          "ghsaId": "GHSA-xq3m-2v4x-88gg",
+          "cve": "CVE-2026-41242",
+          "cwe": "CWE-94",
+          "sev": "critical",
+          "note": "protobufjs has an arbitrary code execution issue"
+        },
+        {
+          "ecosystem": "npm",
+          "name": "protobufjs",
+          "lt": "6.11.6",
+          "id": "CVE-2026-41242",
+          "ghsaId": "GHSA-xq3m-2v4x-88gg",
+          "cve": "CVE-2026-41242",
+          "cwe": "CWE-94",
+          "sev": "critical",
+          "note": "protobufjs has an arbitrary code execution issue"
+        }
+      ],
+      "kev": false,
+      "epss": 0.014
+    },
+    {
       "id": "CVE-2025-54802",
       "ghsaId": "GHSA-48rp-jc79-2264",
       "cve": "CVE-2025-54802",
@@ -6133,6 +6203,61 @@
       "epss": 0.0084
     },
     {
+      "id": "CVE-2026-28367",
+      "ghsaId": "GHSA-3gv6-g396-9v4r",
+      "cve": "CVE-2026-28367",
+      "cwe": "CWE-444",
+      "sev": "high",
+      "summary": "Undertow is Vulnerable to HTTP Request/Response Smuggling",
+      "description": "A flaw was found in Undertow. A remote attacker can exploit this vulnerability by sending `\\r\\r\\r` as a header block terminator. This can be used for request smuggling with certain proxy servers, such as older versions of Apache Traffic Server and Google Cloud Classic Application Load Balancer, potentially leading to unauthorized access or manipulation of web requests.",
+      "publishedAt": "2026-03-27T18:31:27Z",
+      "updatedAt": "2026-11-04T21:12:32Z",
+      "url": "https://github.com/advisories/GHSA-3gv6-g396-9v4r",
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-28367",
+        "https://access.redhat.com/security/cve/CVE-2026-28367",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=2443260",
+        "https://access.redhat.com/errata/RHSA-2026:25125",
+        "https://access.redhat.com/errata/RHSA-2026:25126",
+        "https://github.com/undertow-io/undertow/commit/3ece0bf2b2cf5e01db8ca25e41b831e66d3f5961",
+        "https://github.com/undertow-io/undertow/commit/904e26f1be62fb00b440538608a9574839821878",
+        "https://github.com/undertow-io/undertow/commit/c5dc41479e9c3576552d7e98e31bb1c237ae155e",
+        "https://github.com/advisories/GHSA-3gv6-g396-9v4r"
+      ],
+      "patchUrls": [
+        "https://github.com/undertow-io/undertow/commit/3ece0bf2b2cf5e01db8ca25e41b831e66d3f5961",
+        "https://github.com/undertow-io/undertow/commit/904e26f1be62fb00b440538608a9574839821878",
+        "https://github.com/undertow-io/undertow/commit/c5dc41479e9c3576552d7e98e31bb1c237ae155e"
+      ],
+      "packages": [
+        {
+          "ecosystem": "maven",
+          "name": "io.undertow:undertow-core",
+          "ge": "2.3.0.Final",
+          "lt": "2.3.25.Final",
+          "id": "CVE-2026-28367",
+          "ghsaId": "GHSA-3gv6-g396-9v4r",
+          "cve": "CVE-2026-28367",
+          "cwe": "CWE-444",
+          "sev": "high",
+          "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling"
+        },
+        {
+          "ecosystem": "maven",
+          "name": "io.undertow:undertow-core",
+          "lt": "2.2.40.Final",
+          "id": "CVE-2026-28367",
+          "ghsaId": "GHSA-3gv6-g396-9v4r",
+          "cve": "CVE-2026-28367",
+          "cwe": "CWE-444",
+          "sev": "high",
+          "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0081
+    },
+    {
       "id": "CVE-2026-61689",
       "ghsaId": "GHSA-jmmc-wjpc-pg34",
       "cve": "CVE-2026-61689",
@@ -6204,74 +6329,97 @@
       "epss": 0.008
     },
     {
-      "id": "CVE-2026-41242",
-      "ghsaId": "GHSA-xq3m-2v4x-88gg",
-      "cve": "CVE-2026-41242",
-      "cwe": "CWE-94",
-      "sev": "critical",
-      "summary": "protobufjs has an arbitrary code execution issue",
-      "description": "## Summary\n\nprotobufjs could execute generated JavaScript code derived from protobuf schema metadata. When loading a crafted JSON descriptor, schema-controlled type names and type references could reach runtime code generation without sufficient validation.\n\n## Impact\n\nAn attacker who can provide a malicious protobuf definition or JSON descriptor to an application may be able to execute arbitrary JavaScript in the context of the process using protobufjs.\n\nThis requires control over the protobuf schema or descriptor being loaded. Applications that only decode messages using trusted, application-defined schemas are not directly affected by this issue.\n\n## Preconditions\n\n- The application must allow an attacker to control or influence a protobuf definition or JSON descriptor.\n- The application must load that definition through protobufjs reflection APIs such as descriptor loading.\n- The affected generated-code path must be reached, for example by performing an operation on the loaded type.\n\n## Workarounds\n\nDo not load protobuf definitions or JSON descriptors from untrusted sources with affected versions. If untrusted schemas must be accepted, validate or restrict them before loading and run schema processing in an isolated environment.",
-      "publishedAt": "2026-04-16T22:34:57Z",
-      "updatedAt": "2026-11-04T17:14:43Z",
-      "url": "https://github.com/advisories/GHSA-xq3m-2v4x-88gg",
+      "id": "CVE-2026-28368",
+      "ghsaId": "GHSA-8v4x-mgvp-p658",
+      "cve": "CVE-2026-28368",
+      "cwe": "CWE-444",
+      "sev": "high",
+      "summary": "Undertow is Vulnerable to HTTP Request/Response Smuggling",
+      "description": "A flaw was found in Undertow. This vulnerability allows a remote attacker to construct specially crafted requests where header names are parsed differently by Undertow compared to upstream proxies. This discrepancy in header interpretation can be exploited to launch request smuggling attacks, potentially bypassing security controls and accessing unauthorized resources.",
+      "publishedAt": "2026-03-27T18:31:27Z",
+      "updatedAt": "2026-11-04T21:17:20Z",
+      "url": "https://github.com/advisories/GHSA-8v4x-mgvp-p658",
       "references": [
-        "https://github.com/protobufjs/protobuf.js/security/advisories/GHSA-xq3m-2v4x-88gg",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-41242",
-        "https://github.com/protobufjs/protobuf.js/commit/535df444ac060243722ac5d672db205e5c531d75",
-        "https://github.com/protobufjs/protobuf.js/commit/ff7b2afef8754837cc6dc64c864cd111ab477956",
-        "https://github.com/protobufjs/protobuf.js/releases/tag/protobufjs-v7.5.5",
-        "https://github.com/protobufjs/protobuf.js/releases/tag/protobufjs-v8.0.1",
-        "https://github.com/protobufjs/protobuf.js/commit/086916b4a52c9f73ce88956edbb38fc902e54bbf",
-        "https://access.redhat.com/errata/RHSA-2026:21338",
-        "https://access.redhat.com/errata/RHSA-2026:24977",
-        "https://access.redhat.com/errata/RHSA-2026:26234",
-        "https://access.redhat.com/errata/RHSA-2026:37275",
-        "https://access.redhat.com/errata/RHSA-2026:62260"
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-28368",
+        "https://access.redhat.com/security/cve/CVE-2026-28368",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=2443261",
+        "https://access.redhat.com/errata/RHSA-2026:25125",
+        "https://access.redhat.com/errata/RHSA-2026:25126",
+        "https://github.com/undertow-io/undertow/commit/3ece0bf2b2cf5e01db8ca25e41b831e66d3f5961",
+        "https://github.com/undertow-io/undertow/commit/904e26f1be62fb00b440538608a9574839821878",
+        "https://github.com/undertow-io/undertow/commit/c5dc41479e9c3576552d7e98e31bb1c237ae155e",
+        "https://github.com/advisories/GHSA-8v4x-mgvp-p658"
       ],
       "patchUrls": [
-        "https://github.com/protobufjs/protobuf.js/commit/535df444ac060243722ac5d672db205e5c531d75",
-        "https://github.com/protobufjs/protobuf.js/commit/ff7b2afef8754837cc6dc64c864cd111ab477956",
-        "https://github.com/protobufjs/protobuf.js/commit/086916b4a52c9f73ce88956edbb38fc902e54bbf"
+        "https://github.com/undertow-io/undertow/commit/3ece0bf2b2cf5e01db8ca25e41b831e66d3f5961",
+        "https://github.com/undertow-io/undertow/commit/904e26f1be62fb00b440538608a9574839821878",
+        "https://github.com/undertow-io/undertow/commit/c5dc41479e9c3576552d7e98e31bb1c237ae155e"
       ],
       "packages": [
         {
-          "ecosystem": "npm",
-          "name": "protobufjs",
-          "ge": "8.0.0",
-          "lt": "8.0.1",
-          "id": "CVE-2026-41242",
-          "ghsaId": "GHSA-xq3m-2v4x-88gg",
-          "cve": "CVE-2026-41242",
-          "cwe": "CWE-94",
-          "sev": "critical",
-          "note": "protobufjs has an arbitrary code execution issue"
+          "ecosystem": "maven",
+          "name": "io.undertow:undertow-core",
+          "lt": "2.2.40.Final",
+          "id": "CVE-2026-28368",
+          "ghsaId": "GHSA-8v4x-mgvp-p658",
+          "cve": "CVE-2026-28368",
+          "cwe": "CWE-444",
+          "sev": "high",
+          "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling"
         },
         {
-          "ecosystem": "npm",
-          "name": "protobufjs",
-          "ge": "7.0.0",
-          "lt": "7.5.5",
-          "id": "CVE-2026-41242",
-          "ghsaId": "GHSA-xq3m-2v4x-88gg",
-          "cve": "CVE-2026-41242",
-          "cwe": "CWE-94",
-          "sev": "critical",
-          "note": "protobufjs has an arbitrary code execution issue"
-        },
-        {
-          "ecosystem": "npm",
-          "name": "protobufjs",
-          "lt": "6.11.6",
-          "id": "CVE-2026-41242",
-          "ghsaId": "GHSA-xq3m-2v4x-88gg",
-          "cve": "CVE-2026-41242",
-          "cwe": "CWE-94",
-          "sev": "critical",
-          "note": "protobufjs has an arbitrary code execution issue"
+          "ecosystem": "maven",
+          "name": "io.undertow:undertow-core",
+          "ge": "2.3.0.Final",
+          "lt": "2.3.25.Final",
+          "id": "CVE-2026-28368",
+          "ghsaId": "GHSA-8v4x-mgvp-p658",
+          "cve": "CVE-2026-28368",
+          "cwe": "CWE-444",
+          "sev": "high",
+          "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling"
         }
       ],
       "kev": false,
       "epss": 0.008
+    },
+    {
+      "id": "CVE-2023-0435",
+      "ghsaId": "GHSA-6jmx-pv77-wm5w",
+      "cve": "CVE-2023-0435",
+      "cwe": "CWE-1125",
+      "sev": "critical",
+      "summary": "Excessive Attack Surface in pyload-ng",
+      "description": "Excessive Attack Surface in GitHub repository pyload/pyload prior to 0.5.0b3.dev41.",
+      "publishedAt": "2023-01-23T00:30:26Z",
+      "updatedAt": "2026-11-16T16:03:44Z",
+      "url": "https://github.com/advisories/GHSA-6jmx-pv77-wm5w",
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2023-0435",
+        "https://github.com/pyload/pyload/commit/431ea6f0371d748df66b344a05ca1a8e0310cff3",
+        "https://huntr.dev/bounties/a3e32ad5-caee-4f43-b10a-4a876d4e3f1d",
+        "https://github.com/pypa/advisory-database/tree/main/vulns/pyload-ng/PYSEC-2026-494.yaml",
+        "https://pypi.org/project/pyload-ng",
+        "https://github.com/advisories/GHSA-6jmx-pv77-wm5w"
+      ],
+      "patchUrls": [
+        "https://github.com/pyload/pyload/commit/431ea6f0371d748df66b344a05ca1a8e0310cff3"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "pyload-ng",
+          "lt": "0.5.0b3.dev41",
+          "id": "CVE-2023-0435",
+          "ghsaId": "GHSA-6jmx-pv77-wm5w",
+          "cve": "CVE-2023-0435",
+          "cwe": "CWE-1125",
+          "sev": "critical",
+          "note": "Excessive Attack Surface in pyload-ng"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0079
     },
     {
       "id": "CVE-2026-12151",
@@ -6445,6 +6593,61 @@
       "epss": 0.0078
     },
     {
+      "id": "CVE-2026-28369",
+      "ghsaId": "GHSA-vqqj-9cmv-hx43",
+      "cve": "CVE-2026-28369",
+      "cwe": "CWE-444",
+      "sev": "high",
+      "summary": "Undertow is Vulnerable to HTTP Request/Response Smuggling",
+      "description": "A flaw was found in Undertow. When Undertow receives an HTTP request where the first header line starts with one or more spaces, it incorrectly processes the request by stripping these leading spaces. This behavior, which violates HTTP standards, can be exploited by a remote attacker to perform request smuggling. Request smuggling allows an attacker to bypass security mechanisms, access restricted information, or manipulate web caches, potentially leading to unauthorized actions or data exposure.",
+      "publishedAt": "2026-03-27T18:31:27Z",
+      "updatedAt": "2026-11-04T20:42:49Z",
+      "url": "https://github.com/advisories/GHSA-vqqj-9cmv-hx43",
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-28369",
+        "https://access.redhat.com/security/cve/CVE-2026-28369",
+        "https://bugzilla.redhat.com/show_bug.cgi?id=2443262",
+        "https://access.redhat.com/errata/RHSA-2026:25125",
+        "https://access.redhat.com/errata/RHSA-2026:25126",
+        "https://github.com/undertow-io/undertow/commit/3ece0bf2b2cf5e01db8ca25e41b831e66d3f5961",
+        "https://github.com/undertow-io/undertow/commit/904e26f1be62fb00b440538608a9574839821878",
+        "https://github.com/undertow-io/undertow/commit/c5dc41479e9c3576552d7e98e31bb1c237ae155e",
+        "https://github.com/advisories/GHSA-vqqj-9cmv-hx43"
+      ],
+      "patchUrls": [
+        "https://github.com/undertow-io/undertow/commit/3ece0bf2b2cf5e01db8ca25e41b831e66d3f5961",
+        "https://github.com/undertow-io/undertow/commit/904e26f1be62fb00b440538608a9574839821878",
+        "https://github.com/undertow-io/undertow/commit/c5dc41479e9c3576552d7e98e31bb1c237ae155e"
+      ],
+      "packages": [
+        {
+          "ecosystem": "maven",
+          "name": "io.undertow:undertow-core",
+          "lt": "2.2.40.Final",
+          "id": "CVE-2026-28369",
+          "ghsaId": "GHSA-vqqj-9cmv-hx43",
+          "cve": "CVE-2026-28369",
+          "cwe": "CWE-444",
+          "sev": "high",
+          "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling"
+        },
+        {
+          "ecosystem": "maven",
+          "name": "io.undertow:undertow-core",
+          "ge": "2.3.0.Final",
+          "lt": "2.3.25.Final",
+          "id": "CVE-2026-28369",
+          "ghsaId": "GHSA-vqqj-9cmv-hx43",
+          "cve": "CVE-2026-28369",
+          "cwe": "CWE-444",
+          "sev": "high",
+          "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0077
+    },
+    {
       "id": "CVE-2026-32846",
       "ghsaId": "GHSA-hggm-x7r9-mm7v",
       "cve": "CVE-2026-32846",
@@ -6518,96 +6721,6 @@
       ],
       "kev": false,
       "epss": 0.0075
-    },
-    {
-      "id": "CVE-2023-0435",
-      "ghsaId": "GHSA-6jmx-pv77-wm5w",
-      "cve": "CVE-2023-0435",
-      "cwe": "CWE-1125",
-      "sev": "critical",
-      "summary": "Excessive Attack Surface in pyload-ng",
-      "description": "Excessive Attack Surface in GitHub repository pyload/pyload prior to 0.5.0b3.dev41.",
-      "publishedAt": "2023-01-23T00:30:26Z",
-      "updatedAt": "2026-11-16T16:03:44Z",
-      "url": "https://github.com/advisories/GHSA-6jmx-pv77-wm5w",
-      "references": [
-        "https://nvd.nist.gov/vuln/detail/CVE-2023-0435",
-        "https://github.com/pyload/pyload/commit/431ea6f0371d748df66b344a05ca1a8e0310cff3",
-        "https://huntr.dev/bounties/a3e32ad5-caee-4f43-b10a-4a876d4e3f1d",
-        "https://github.com/pypa/advisory-database/tree/main/vulns/pyload-ng/PYSEC-2026-494.yaml",
-        "https://pypi.org/project/pyload-ng",
-        "https://github.com/advisories/GHSA-6jmx-pv77-wm5w"
-      ],
-      "patchUrls": [
-        "https://github.com/pyload/pyload/commit/431ea6f0371d748df66b344a05ca1a8e0310cff3"
-      ],
-      "packages": [
-        {
-          "ecosystem": "pip",
-          "name": "pyload-ng",
-          "lt": "0.5.0b3.dev41",
-          "id": "CVE-2023-0435",
-          "ghsaId": "GHSA-6jmx-pv77-wm5w",
-          "cve": "CVE-2023-0435",
-          "cwe": "CWE-1125",
-          "sev": "critical",
-          "note": "Excessive Attack Surface in pyload-ng"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0075
-    },
-    {
-      "id": "CVE-2026-58210",
-      "ghsaId": "GHSA-r72h-j7qq-v6qg",
-      "cve": "CVE-2026-58210",
-      "cwe": "CWE-400",
-      "sev": "high",
-      "summary": "NATS Server allows unauthenticated memory exhaustion through incomplete MQTT CONNECT packets",
-      "description": "### Background\n\nNATS.io is a high performance open source pub-sub distributed communication technology, built for the cloud, on-premise, IoT and edge computing.\n\nThe NATS Server supports MQTT clients, including authentication and parsing of MQTT `CONNECT` packets.\n\n### Problem Description\n\nAn unauthenticated MQTT client could cause the server to retain large incomplete MQTT `CONNECT` packets before authentication completed.\n\nThe parser retained partial pre-authentication packet data while waiting for the advertised MQTT packet length to be completed. An attacker could therefore consume server memory until authentication timeouts closed the connections.\n\n### Affected Versions\n\nVersions v2.14.2, v2.12.11 and below are vulnerable. The issue is fixed in v2.14.3 and v2.12.12.\n\n### Workarounds\n\nDeployments not using MQTT are not affected. Deployments that need MQTT should upgrade to a fixed release.\n\n### References\n\n * GHSA advisory: <https://github.com/nats-io/nats-server/security/advisories/GHSA-r72h-j7qq-v6qg>\n * Credit: Asritha Bodepudi, Trail of Bits",
-      "publishedAt": "2026-11-20T00:04:46Z",
-      "updatedAt": "2026-11-20T00:04:47Z",
-      "url": "https://github.com/advisories/GHSA-r72h-j7qq-v6qg",
-      "references": [
-        "https://github.com/nats-io/nats-server/security/advisories/GHSA-r72h-j7qq-v6qg",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-58210",
-        "https://github.com/nats-io/nats-server/commit/bce9ef39469e610aeddb819194ceb7f7edfc0861",
-        "https://github.com/nats-io/nats-server/commit/e016e47bbf70304945f2ae9dc397e4862adefaf5",
-        "https://github.com/nats-io/nats-server/releases/tag/v2.12.12",
-        "https://github.com/nats-io/nats-server/releases/tag/v2.14.3",
-        "https://github.com/advisories/GHSA-r72h-j7qq-v6qg"
-      ],
-      "patchUrls": [
-        "https://github.com/nats-io/nats-server/commit/bce9ef39469e610aeddb819194ceb7f7edfc0861",
-        "https://github.com/nats-io/nats-server/commit/e016e47bbf70304945f2ae9dc397e4862adefaf5"
-      ],
-      "packages": [
-        {
-          "ecosystem": "go",
-          "name": "github.com/nats-io/nats-server/v2",
-          "lt": "2.12.12",
-          "id": "CVE-2026-58210",
-          "ghsaId": "GHSA-r72h-j7qq-v6qg",
-          "cve": "CVE-2026-58210",
-          "cwe": "CWE-400",
-          "sev": "high",
-          "note": "NATS Server allows unauthenticated memory exhaustion through incomplete MQTT CONNECT packets"
-        },
-        {
-          "ecosystem": "go",
-          "name": "github.com/nats-io/nats-server/v2",
-          "ge": "2.14.0-RC.1",
-          "lt": "2.14.3",
-          "id": "CVE-2026-58210",
-          "ghsaId": "GHSA-r72h-j7qq-v6qg",
-          "cve": "CVE-2026-58210",
-          "cwe": "CWE-400",
-          "sev": "high",
-          "note": "NATS Server allows unauthenticated memory exhaustion through incomplete MQTT CONNECT packets"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0074
     },
     {
       "id": "CVE-2026-122006",
@@ -6940,61 +7053,6 @@
       "epss": 0.0073
     },
     {
-      "id": "CVE-2026-28368",
-      "ghsaId": "GHSA-8v4x-mgvp-p658",
-      "cve": "CVE-2026-28368",
-      "cwe": "CWE-444",
-      "sev": "high",
-      "summary": "Undertow is Vulnerable to HTTP Request/Response Smuggling",
-      "description": "A flaw was found in Undertow. This vulnerability allows a remote attacker to construct specially crafted requests where header names are parsed differently by Undertow compared to upstream proxies. This discrepancy in header interpretation can be exploited to launch request smuggling attacks, potentially bypassing security controls and accessing unauthorized resources.",
-      "publishedAt": "2026-03-27T18:31:27Z",
-      "updatedAt": "2026-11-04T21:17:20Z",
-      "url": "https://github.com/advisories/GHSA-8v4x-mgvp-p658",
-      "references": [
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-28368",
-        "https://access.redhat.com/security/cve/CVE-2026-28368",
-        "https://bugzilla.redhat.com/show_bug.cgi?id=2443261",
-        "https://access.redhat.com/errata/RHSA-2026:25125",
-        "https://access.redhat.com/errata/RHSA-2026:25126",
-        "https://github.com/undertow-io/undertow/commit/3ece0bf2b2cf5e01db8ca25e41b831e66d3f5961",
-        "https://github.com/undertow-io/undertow/commit/904e26f1be62fb00b440538608a9574839821878",
-        "https://github.com/undertow-io/undertow/commit/c5dc41479e9c3576552d7e98e31bb1c237ae155e",
-        "https://github.com/advisories/GHSA-8v4x-mgvp-p658"
-      ],
-      "patchUrls": [
-        "https://github.com/undertow-io/undertow/commit/3ece0bf2b2cf5e01db8ca25e41b831e66d3f5961",
-        "https://github.com/undertow-io/undertow/commit/904e26f1be62fb00b440538608a9574839821878",
-        "https://github.com/undertow-io/undertow/commit/c5dc41479e9c3576552d7e98e31bb1c237ae155e"
-      ],
-      "packages": [
-        {
-          "ecosystem": "maven",
-          "name": "io.undertow:undertow-core",
-          "lt": "2.2.40.Final",
-          "id": "CVE-2026-28368",
-          "ghsaId": "GHSA-8v4x-mgvp-p658",
-          "cve": "CVE-2026-28368",
-          "cwe": "CWE-444",
-          "sev": "high",
-          "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling"
-        },
-        {
-          "ecosystem": "maven",
-          "name": "io.undertow:undertow-core",
-          "ge": "2.3.0.Final",
-          "lt": "2.3.25.Final",
-          "id": "CVE-2026-28368",
-          "ghsaId": "GHSA-8v4x-mgvp-p658",
-          "cve": "CVE-2026-28368",
-          "cwe": "CWE-444",
-          "sev": "high",
-          "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0073
-    },
-    {
       "id": "CVE-2026-76088",
       "ghsaId": "GHSA-cvx8-9ff6-54xq",
       "cve": "CVE-2026-76088",
@@ -7122,61 +7180,6 @@
           "cwe": "CWE-22",
           "sev": "high",
           "note": "isomorphic-git: Arbitrary file write outside of working tree via directory symlink during checkout (potential RCE)"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0072
-    },
-    {
-      "id": "CVE-2026-28367",
-      "ghsaId": "GHSA-3gv6-g396-9v4r",
-      "cve": "CVE-2026-28367",
-      "cwe": "CWE-444",
-      "sev": "high",
-      "summary": "Undertow is Vulnerable to HTTP Request/Response Smuggling",
-      "description": "A flaw was found in Undertow. A remote attacker can exploit this vulnerability by sending `\\r\\r\\r` as a header block terminator. This can be used for request smuggling with certain proxy servers, such as older versions of Apache Traffic Server and Google Cloud Classic Application Load Balancer, potentially leading to unauthorized access or manipulation of web requests.",
-      "publishedAt": "2026-03-27T18:31:27Z",
-      "updatedAt": "2026-11-04T21:12:32Z",
-      "url": "https://github.com/advisories/GHSA-3gv6-g396-9v4r",
-      "references": [
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-28367",
-        "https://access.redhat.com/security/cve/CVE-2026-28367",
-        "https://bugzilla.redhat.com/show_bug.cgi?id=2443260",
-        "https://access.redhat.com/errata/RHSA-2026:25125",
-        "https://access.redhat.com/errata/RHSA-2026:25126",
-        "https://github.com/undertow-io/undertow/commit/3ece0bf2b2cf5e01db8ca25e41b831e66d3f5961",
-        "https://github.com/undertow-io/undertow/commit/904e26f1be62fb00b440538608a9574839821878",
-        "https://github.com/undertow-io/undertow/commit/c5dc41479e9c3576552d7e98e31bb1c237ae155e",
-        "https://github.com/advisories/GHSA-3gv6-g396-9v4r"
-      ],
-      "patchUrls": [
-        "https://github.com/undertow-io/undertow/commit/3ece0bf2b2cf5e01db8ca25e41b831e66d3f5961",
-        "https://github.com/undertow-io/undertow/commit/904e26f1be62fb00b440538608a9574839821878",
-        "https://github.com/undertow-io/undertow/commit/c5dc41479e9c3576552d7e98e31bb1c237ae155e"
-      ],
-      "packages": [
-        {
-          "ecosystem": "maven",
-          "name": "io.undertow:undertow-core",
-          "ge": "2.3.0.Final",
-          "lt": "2.3.25.Final",
-          "id": "CVE-2026-28367",
-          "ghsaId": "GHSA-3gv6-g396-9v4r",
-          "cve": "CVE-2026-28367",
-          "cwe": "CWE-444",
-          "sev": "high",
-          "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling"
-        },
-        {
-          "ecosystem": "maven",
-          "name": "io.undertow:undertow-core",
-          "lt": "2.2.40.Final",
-          "id": "CVE-2026-28367",
-          "ghsaId": "GHSA-3gv6-g396-9v4r",
-          "cve": "CVE-2026-28367",
-          "cwe": "CWE-444",
-          "sev": "high",
-          "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling"
         }
       ],
       "kev": false,
@@ -7496,61 +7499,6 @@
           "cwe": "CWE-89",
           "sev": "critical",
           "note": "PyMySQL SQL Injection vulnerability"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0069
-    },
-    {
-      "id": "CVE-2026-28369",
-      "ghsaId": "GHSA-vqqj-9cmv-hx43",
-      "cve": "CVE-2026-28369",
-      "cwe": "CWE-444",
-      "sev": "high",
-      "summary": "Undertow is Vulnerable to HTTP Request/Response Smuggling",
-      "description": "A flaw was found in Undertow. When Undertow receives an HTTP request where the first header line starts with one or more spaces, it incorrectly processes the request by stripping these leading spaces. This behavior, which violates HTTP standards, can be exploited by a remote attacker to perform request smuggling. Request smuggling allows an attacker to bypass security mechanisms, access restricted information, or manipulate web caches, potentially leading to unauthorized actions or data exposure.",
-      "publishedAt": "2026-03-27T18:31:27Z",
-      "updatedAt": "2026-11-04T20:42:49Z",
-      "url": "https://github.com/advisories/GHSA-vqqj-9cmv-hx43",
-      "references": [
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-28369",
-        "https://access.redhat.com/security/cve/CVE-2026-28369",
-        "https://bugzilla.redhat.com/show_bug.cgi?id=2443262",
-        "https://access.redhat.com/errata/RHSA-2026:25125",
-        "https://access.redhat.com/errata/RHSA-2026:25126",
-        "https://github.com/undertow-io/undertow/commit/3ece0bf2b2cf5e01db8ca25e41b831e66d3f5961",
-        "https://github.com/undertow-io/undertow/commit/904e26f1be62fb00b440538608a9574839821878",
-        "https://github.com/undertow-io/undertow/commit/c5dc41479e9c3576552d7e98e31bb1c237ae155e",
-        "https://github.com/advisories/GHSA-vqqj-9cmv-hx43"
-      ],
-      "patchUrls": [
-        "https://github.com/undertow-io/undertow/commit/3ece0bf2b2cf5e01db8ca25e41b831e66d3f5961",
-        "https://github.com/undertow-io/undertow/commit/904e26f1be62fb00b440538608a9574839821878",
-        "https://github.com/undertow-io/undertow/commit/c5dc41479e9c3576552d7e98e31bb1c237ae155e"
-      ],
-      "packages": [
-        {
-          "ecosystem": "maven",
-          "name": "io.undertow:undertow-core",
-          "lt": "2.2.40.Final",
-          "id": "CVE-2026-28369",
-          "ghsaId": "GHSA-vqqj-9cmv-hx43",
-          "cve": "CVE-2026-28369",
-          "cwe": "CWE-444",
-          "sev": "high",
-          "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling"
-        },
-        {
-          "ecosystem": "maven",
-          "name": "io.undertow:undertow-core",
-          "ge": "2.3.0.Final",
-          "lt": "2.3.25.Final",
-          "id": "CVE-2026-28369",
-          "ghsaId": "GHSA-vqqj-9cmv-hx43",
-          "cve": "CVE-2026-28369",
-          "cwe": "CWE-444",
-          "sev": "high",
-          "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling"
         }
       ],
       "kev": false,
@@ -7910,6 +7858,44 @@
       "epss": 0.0068
     },
     {
+      "id": "CVE-2026-77332",
+      "ghsaId": "GHSA-43hx-xm7w-3mhj",
+      "cve": "CVE-2026-77332",
+      "cwe": "CWE-116",
+      "sev": "low",
+      "summary": "memtomem-stm: Surfaced memory data can escape the Markdown compatibility boundary",
+      "description": "Untrusted long-term and working-memory fields can introduce Markdown or HTML-compatible structure into the surfaced-memory envelope. A crafted memory may create misleading structural boundaries or visually conceal content. The private fix serializes every untrusted field as inert single-line data, validates copyable memory identifiers, and pins an explicit untrusted-data preamble. Ordinary natural-language persuasion remains a residual model-level risk.",
+      "publishedAt": "2026-11-20T23:37:39Z",
+      "updatedAt": "2026-11-20T23:37:41Z",
+      "url": "https://github.com/advisories/GHSA-43hx-xm7w-3mhj",
+      "references": [
+        "https://github.com/memtomem/memtomem-stm/security/advisories/GHSA-43hx-xm7w-3mhj",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-77332",
+        "https://github.com/memtomem/memtomem-stm/commit/3d50ba61cbfafba6db261e35c18eed0c3805b390",
+        "https://github.com/memtomem/memtomem-stm/releases/tag/v0.1.34",
+        "https://github.com/advisories/GHSA-43hx-xm7w-3mhj"
+      ],
+      "patchUrls": [
+        "https://github.com/memtomem/memtomem-stm/commit/3d50ba61cbfafba6db261e35c18eed0c3805b390"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "memtomem-stm",
+          "ge": "0.1.0",
+          "lt": "0.1.34",
+          "id": "CVE-2026-77332",
+          "ghsaId": "GHSA-43hx-xm7w-3mhj",
+          "cve": "CVE-2026-77332",
+          "cwe": "CWE-116",
+          "sev": "low",
+          "note": "memtomem-stm: Surfaced memory data can escape the Markdown compatibility boundary"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0068
+    },
+    {
       "id": "CVE-2026-128138",
       "ghsaId": "GHSA-x8q7-6c7m-52gw",
       "cve": "CVE-2026-128138",
@@ -8214,6 +8200,51 @@
           "cwe": "CWE-777",
           "sev": "high",
           "note": "Git LFS may execute arbitrary commands via crafted Git LFS configurations"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0064
+    },
+    {
+      "id": "CVE-2026-63184",
+      "ghsaId": "GHSA-x6w4-f264-3vvr",
+      "cve": "CVE-2026-63184",
+      "cwe": "CWE-829",
+      "sev": "high",
+      "summary": "Refitter: Unrestricted OpenAPI references permit build-host SSRF and file inclusion",
+      "description": "### Summary\n\nRefitter (the `refitter` dotnet tool, built on NJsonSchema for `$ref` resolution) fetches remote\n`http(s)` URLs and reads local files (including absolute paths and `../` traversal outside the input\ndirectory), inlining the referenced schema into the generated Refit interface/contracts. Running\n`refitter <spec> --output Out.cs` on a spec whose `$ref` points at an attacker/internal URL or an\narbitrary local file yields SSRF, remote file inclusion, and local file inclusion. Verified on\nRefitter 2.0.0.\n\n### Details\n\n- `$ref: http://attacker-or-internal/evil.json#/...` -> build host fetches (SSRF) and inlines the\n  remote schema (RFI); confirmed property `REMOTE_REFIT_PROP`.\n- `$ref: /abs/path.json#/...` or `../../secret.json#/...` -> out-of-tree local file read + inlined\n  (LFI); confirmed property `REFIT_LFI_MARKER`. Both absolute and relative traversal work.\n\nNo RCE: Refitter emits Refit interfaces with no baseUrl string literal (Refit sets the base address at\nruntime), enum values use C# verbatim-string doubling, and string defaults are escaped. The chain\nstops at SSRF + RFI + LFI.\n\nThe `$ref` resolution is performed by Refitter's NJsonSchema dependency, which Refitter ships and\ninvokes with these unsafe defaults.\n\n### PoC\n\n`reproduce.sh` (+ `make_spec.py`, `listener.py`) attached: installs the .NET SDK + Refitter if needed,\nconfirms LFI (out-of-tree read), SSRF (listener hit during generation), and RFI (remote schema\ninlined). Verified on 2.0.0.\n\n### Impact\n\nBuild-time SSRF (CWE-918) from the developer or CI host, disclosure of arbitrary local files\n(CWE-22), and inclusion of untrusted remote content (CWE-829), from running Refitter on an\nattacker-controlled or attacker-influenced OpenAPI description. No code execution. Estimated\nMedium-High, e.g. `[reproduce.sh](https://github.com/user-attachments/files/29395269/reproduce.sh)` (the CNA sets the final score).\n\n### Suggested fix\n\nDon't resolve remote `$ref`s by default (opt-in + host allowlist); confine local `$ref` resolution to\nthe input directory tree (reject absolute paths and `../` escapes). Apply at all nesting levels.\nCoordinate with NJsonSchema, where the resolver lives.\n[maintainer-report.txt](https://github.com/user-attachments/files/29395271/maintainer-report.txt)\n[advisory.md](https://github.com/user-attachments/files/29395272/advisory.md)\n[reproduce.sh](https://github.com/user-attachments/files/29395283/reproduce.sh)\n[maintainer-report.txt](https://github.com/user-attachments/files",
+      "publishedAt": "2026-11-20T14:35:29Z",
+      "updatedAt": "2026-11-20T14:35:31Z",
+      "url": "https://github.com/advisories/GHSA-x6w4-f264-3vvr",
+      "references": [
+        "https://github.com/christianhelle/refitter/security/advisories/GHSA-x6w4-f264-3vvr",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-63184",
+        "https://github.com/christianhelle/refitter/pull/1173",
+        "https://github.com/christianhelle/refitter/commit/6ad20a3803561225100b0a4bb6b12f947d23db7b",
+        "https://github.com/christianhelle/refitter/releases/tag/2.1.1",
+        "https://github.com/user-attachments/files/29395269/reproduce.sh",
+        "https://github.com/user-attachments/files/29395271/maintainer-report.txt",
+        "https://github.com/user-attachments/files/29395272/advisory.md",
+        "https://github.com/user-attachments/files/29395283/reproduce.sh",
+        "https://github.com/user-attachments/files/29395284/maintainer-report.txt",
+        "https://github.com/user-attachments/files/29395285/advisory.md",
+        "https://github.com/user-attachments/files/29395286/listener.py"
+      ],
+      "patchUrls": [
+        "https://github.com/christianhelle/refitter/pull/1173",
+        "https://github.com/christianhelle/refitter/commit/6ad20a3803561225100b0a4bb6b12f947d23db7b"
+      ],
+      "packages": [
+        {
+          "ecosystem": "nuget",
+          "name": "Refitter",
+          "lt": "2.1.1",
+          "id": "CVE-2026-63184",
+          "ghsaId": "GHSA-x6w4-f264-3vvr",
+          "cve": "CVE-2026-63184",
+          "cwe": "CWE-829",
+          "sev": "high",
+          "note": "Refitter: Unrestricted OpenAPI references permit build-host SSRF and file inclusion"
         }
       ],
       "kev": false,
@@ -8583,6 +8614,58 @@
           "cwe": "CWE-129",
           "sev": "high",
           "note": "go-guerrilla crashes on a bare XCLIENT command (7-byte slice off-by-one panic)"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0062
+    },
+    {
+      "id": "CVE-2026-58210",
+      "ghsaId": "GHSA-r72h-j7qq-v6qg",
+      "cve": "CVE-2026-58210",
+      "cwe": "CWE-400",
+      "sev": "high",
+      "summary": "NATS Server allows unauthenticated memory exhaustion through incomplete MQTT CONNECT packets",
+      "description": "### Background\n\nNATS.io is a high performance open source pub-sub distributed communication technology, built for the cloud, on-premise, IoT and edge computing.\n\nThe NATS Server supports MQTT clients, including authentication and parsing of MQTT `CONNECT` packets.\n\n### Problem Description\n\nAn unauthenticated MQTT client could cause the server to retain large incomplete MQTT `CONNECT` packets before authentication completed.\n\nThe parser retained partial pre-authentication packet data while waiting for the advertised MQTT packet length to be completed. An attacker could therefore consume server memory until authentication timeouts closed the connections.\n\n### Affected Versions\n\nVersions v2.14.2, v2.12.11 and below are vulnerable. The issue is fixed in v2.14.3 and v2.12.12.\n\n### Workarounds\n\nDeployments not using MQTT are not affected. Deployments that need MQTT should upgrade to a fixed release.\n\n### References\n\n * GHSA advisory: <https://github.com/nats-io/nats-server/security/advisories/GHSA-r72h-j7qq-v6qg>\n * Credit: Asritha Bodepudi, Trail of Bits",
+      "publishedAt": "2026-11-20T00:04:46Z",
+      "updatedAt": "2026-11-20T00:04:47Z",
+      "url": "https://github.com/advisories/GHSA-r72h-j7qq-v6qg",
+      "references": [
+        "https://github.com/nats-io/nats-server/security/advisories/GHSA-r72h-j7qq-v6qg",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-58210",
+        "https://github.com/nats-io/nats-server/commit/bce9ef39469e610aeddb819194ceb7f7edfc0861",
+        "https://github.com/nats-io/nats-server/commit/e016e47bbf70304945f2ae9dc397e4862adefaf5",
+        "https://github.com/nats-io/nats-server/releases/tag/v2.12.12",
+        "https://github.com/nats-io/nats-server/releases/tag/v2.14.3",
+        "https://github.com/advisories/GHSA-r72h-j7qq-v6qg"
+      ],
+      "patchUrls": [
+        "https://github.com/nats-io/nats-server/commit/bce9ef39469e610aeddb819194ceb7f7edfc0861",
+        "https://github.com/nats-io/nats-server/commit/e016e47bbf70304945f2ae9dc397e4862adefaf5"
+      ],
+      "packages": [
+        {
+          "ecosystem": "go",
+          "name": "github.com/nats-io/nats-server/v2",
+          "lt": "2.12.12",
+          "id": "CVE-2026-58210",
+          "ghsaId": "GHSA-r72h-j7qq-v6qg",
+          "cve": "CVE-2026-58210",
+          "cwe": "CWE-400",
+          "sev": "high",
+          "note": "NATS Server allows unauthenticated memory exhaustion through incomplete MQTT CONNECT packets"
+        },
+        {
+          "ecosystem": "go",
+          "name": "github.com/nats-io/nats-server/v2",
+          "ge": "2.14.0-RC.1",
+          "lt": "2.14.3",
+          "id": "CVE-2026-58210",
+          "ghsaId": "GHSA-r72h-j7qq-v6qg",
+          "cve": "CVE-2026-58210",
+          "cwe": "CWE-400",
+          "sev": "high",
+          "note": "NATS Server allows unauthenticated memory exhaustion through incomplete MQTT CONNECT packets"
         }
       ],
       "kev": false,
@@ -9501,44 +9584,6 @@
       ],
       "kev": false,
       "epss": 0.0058
-    },
-    {
-      "id": "CVE-2026-77332",
-      "ghsaId": "GHSA-43hx-xm7w-3mhj",
-      "cve": "CVE-2026-77332",
-      "cwe": "CWE-116",
-      "sev": "low",
-      "summary": "memtomem-stm: Surfaced memory data can escape the Markdown compatibility boundary",
-      "description": "Untrusted long-term and working-memory fields can introduce Markdown or HTML-compatible structure into the surfaced-memory envelope. A crafted memory may create misleading structural boundaries or visually conceal content. The private fix serializes every untrusted field as inert single-line data, validates copyable memory identifiers, and pins an explicit untrusted-data preamble. Ordinary natural-language persuasion remains a residual model-level risk.",
-      "publishedAt": "2026-11-20T23:37:39Z",
-      "updatedAt": "2026-11-20T23:37:41Z",
-      "url": "https://github.com/advisories/GHSA-43hx-xm7w-3mhj",
-      "references": [
-        "https://github.com/memtomem/memtomem-stm/security/advisories/GHSA-43hx-xm7w-3mhj",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-77332",
-        "https://github.com/memtomem/memtomem-stm/commit/3d50ba61cbfafba6db261e35c18eed0c3805b390",
-        "https://github.com/memtomem/memtomem-stm/releases/tag/v0.1.34",
-        "https://github.com/advisories/GHSA-43hx-xm7w-3mhj"
-      ],
-      "patchUrls": [
-        "https://github.com/memtomem/memtomem-stm/commit/3d50ba61cbfafba6db261e35c18eed0c3805b390"
-      ],
-      "packages": [
-        {
-          "ecosystem": "pip",
-          "name": "memtomem-stm",
-          "ge": "0.1.0",
-          "lt": "0.1.34",
-          "id": "CVE-2026-77332",
-          "ghsaId": "GHSA-43hx-xm7w-3mhj",
-          "cve": "CVE-2026-77332",
-          "cwe": "CWE-116",
-          "sev": "low",
-          "note": "memtomem-stm: Surfaced memory data can escape the Markdown compatibility boundary"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0057
     },
     {
       "id": "CVE-2026-104099",
@@ -10573,6 +10618,45 @@
       "epss": 0.0054
     },
     {
+      "id": "CVE-2026-129228",
+      "ghsaId": "GHSA-f2h2-f4fc-p978",
+      "cve": "CVE-2026-129228",
+      "cwe": "CWE-674",
+      "sev": "medium",
+      "summary": "NLTK: Uncontrolled recursion in Toolbox settings helpers causes denial of service via deeply nested input",
+      "description": "## Root Cause\nThe Toolbox settings-tree helpers recurse over the parsed element tree without any depth\nbound. `_to_settings_string` (`nltk/toolbox.py:418`), `remove_blanks`\n(`nltk/toolbox.py:432`), `add_default_fields` (`nltk/toolbox.py:451`), `_sort_fields`\n(`nltk/toolbox.py:484`), and `add_blank_lines` (`nltk/toolbox.py:502,516`) each recurse once\nper element level with no depth counter or explicit stack. The producer\n`ToolboxSettings.parse` builds the element tree iteratively, so nesting depth is driven\nentirely by attacker-supplied `\\+marker` / `\\-marker` pairs.\n\n## Impact\nAn application that parses an untrusted Toolbox settings file and then serialises or\ntransforms it through any of the public helper functions aborts with an unhandled\n`RecursionError`, terminating the affected operation or request worker (denial of service,\nCWE-674). The recursion is pure Python, yielding a catchable `RecursionError` rather than\nmemory corruption or code execution. Confidentiality and integrity are unaffected.\n\n## Attack Chain\n1. The application parses an untrusted settings file via `ToolboxSettings.open_string` /\n   `open` plus `parse`, producing an *N*-deep element tree; parsing is iterative and\n   completes without error.\n2. The application passes the tree to a public helper — `to_settings_string`,\n   `remove_blanks`, `add_default_fields`, `sort_fields`, or `add_blank_lines` — as in the\n   module's own parse-then-serialise round trip.\n3. The helper recurses once per element level with no depth guard, consuming call-stack\n   frames. This holds even when the helper's configuration dictionaries are empty.\n4. Once the nesting depth exceeds the interpreter recursion limit, an unhandled\n   `RecursionError` propagates out of the public API.\n\n## Bypass Evidence\nAgainst the shipped source at the default recursion limit, a settings input nested 5 levels\ndeep traverses cleanly through every helper, while a well-formed input nested 5000 levels\ndeep drives each of the five helpers to an unhandled `RecursionError`; the iterative parse\nbuilds the 4999-deep tree without error, isolating the fault to the recursive helpers. The\nconfig-taking helpers (`add_default_fields`, `sort_fields`, `add_blank_lines`) recurse to\nfailure even with empty configuration dictionaries. A repository-wide search confirms no\ndepth guard exists anywhere in this module.\n\n## Suggested Fix\nCap nesting depth at the shared producer `ToolboxSettings.parse` (the choke point that\nbuilds the tree), or convert the",
+      "publishedAt": "2026-11-19T23:50:37Z",
+      "updatedAt": "2026-11-19T23:50:38Z",
+      "url": "https://github.com/advisories/GHSA-f2h2-f4fc-p978",
+      "references": [
+        "https://github.com/nltk/nltk/security/advisories/GHSA-f2h2-f4fc-p978",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-129228",
+        "https://github.com/nltk/nltk/pull/3885",
+        "https://github.com/nltk/nltk/commit/0b6975377d0334af604d32c9d83b26b46e1d437c",
+        "https://github.com/nltk/nltk/releases/tag/v3.10.4",
+        "https://github.com/advisories/GHSA-f2h2-f4fc-p978"
+      ],
+      "patchUrls": [
+        "https://github.com/nltk/nltk/pull/3885",
+        "https://github.com/nltk/nltk/commit/0b6975377d0334af604d32c9d83b26b46e1d437c"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "nltk",
+          "lt": "3.10.4",
+          "id": "CVE-2026-129228",
+          "ghsaId": "GHSA-f2h2-f4fc-p978",
+          "cve": "CVE-2026-129228",
+          "cwe": "CWE-674",
+          "sev": "medium",
+          "note": "NLTK: Uncontrolled recursion in Toolbox settings helpers causes denial of service via deeply nested input"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0054
+    },
+    {
       "id": "CVE-2026-129232",
       "ghsaId": "GHSA-cj8f-5fp3-6m88",
       "cve": "CVE-2026-129232",
@@ -11239,6 +11323,65 @@
       ],
       "kev": false,
       "epss": 0.0053
+    },
+    {
+      "id": "CVE-2026-104773",
+      "ghsaId": "GHSA-6499-jgj4-2wpf",
+      "cve": "CVE-2026-104773",
+      "cwe": "CWE-384",
+      "sev": "medium",
+      "summary": "CKAN: Session Fixation in Registration View",
+      "description": "## Description\n\nWeb user registration form is vulnerable to session fixation if the site is configured with server-side session storage (CKAN uses cookie-based session storage by default). The attacker would need to either set a cookie on the victim's browser or steal the victim's currently valid session. Session identifiers are now regenerated after registration.\n\n## Patches\n\nThis vulnerability has been fixed in CKAN 2.10.11, 2.11.6 and 2.12.0\n\n## Workarounds\n\nswitch to cookie-based session storage (the default) or disable web user registration by setting `ckan.auth.create_user_via_web` to false (the default)",
+      "publishedAt": "2026-11-20T16:25:26Z",
+      "updatedAt": "2026-11-20T16:25:28Z",
+      "url": "https://github.com/advisories/GHSA-6499-jgj4-2wpf",
+      "references": [
+        "https://github.com/ckan/ckan/security/advisories/GHSA-6499-jgj4-2wpf",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-104773",
+        "https://github.com/ckan/ckan/commit/6eae4e9c430e163b9d6cc75a3fd2ca82e79d80f6",
+        "https://github.com/ckan/ckan/commit/8f8e8b587461b66120ec7a85c17a34ecea213f57",
+        "https://github.com/ckan/ckan/commit/a25e2f3080a79a94eb04dcf02e16ded3e5fadeb2",
+        "https://github.com/ckan/ckan/commit/c30bae7fdd616d98a5d47cc31f9e8d5d1ad7bcd2",
+        "https://github.com/ckan/ckan/commit/c72815a5afd50cf689fcfb688f431dec21a85915",
+        "https://github.com/ckan/ckan/releases/tag/ckan-2.10.11",
+        "https://github.com/ckan/ckan/releases/tag/ckan-2.11.6",
+        "https://github.com/ckan/ckan/releases/tag/ckan-2.12.0",
+        "https://github.com/advisories/GHSA-6499-jgj4-2wpf"
+      ],
+      "patchUrls": [
+        "https://github.com/ckan/ckan/commit/6eae4e9c430e163b9d6cc75a3fd2ca82e79d80f6",
+        "https://github.com/ckan/ckan/commit/8f8e8b587461b66120ec7a85c17a34ecea213f57",
+        "https://github.com/ckan/ckan/commit/a25e2f3080a79a94eb04dcf02e16ded3e5fadeb2",
+        "https://github.com/ckan/ckan/commit/c30bae7fdd616d98a5d47cc31f9e8d5d1ad7bcd2",
+        "https://github.com/ckan/ckan/commit/c72815a5afd50cf689fcfb688f431dec21a85915"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "ckan",
+          "lt": "2.10.11",
+          "id": "CVE-2026-104773",
+          "ghsaId": "GHSA-6499-jgj4-2wpf",
+          "cve": "CVE-2026-104773",
+          "cwe": "CWE-384",
+          "sev": "medium",
+          "note": "CKAN: Session Fixation in Registration View"
+        },
+        {
+          "ecosystem": "pip",
+          "name": "ckan",
+          "ge": "2.11.0",
+          "lt": "2.11.6",
+          "id": "CVE-2026-104773",
+          "ghsaId": "GHSA-6499-jgj4-2wpf",
+          "cve": "CVE-2026-104773",
+          "cwe": "CWE-384",
+          "sev": "medium",
+          "note": "CKAN: Session Fixation in Registration View"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0052
     },
     {
       "id": "CVE-2026-58192",
@@ -12204,6 +12347,86 @@
       "epss": 0.0048
     },
     {
+      "id": "CVE-2026-129226",
+      "ghsaId": "GHSA-w3pv-xfw4-ghr7",
+      "cve": "CVE-2026-129226",
+      "cwe": "CWE-674",
+      "sev": "medium",
+      "summary": "NLTK: Uncontrolled recursion in semantic-logic type parser causes denial of service via nested type strings",
+      "description": "## Root Cause\nThe semantic-logic type parser `read_type` (`nltk/sem/logic.py:866`) recurses on both\nhalves of every `<a,b>` complex type (`nltk/sem/logic.py:882-884`) with no depth or length\nbound — only an `isinstance` assertion and a parenthesis-balance assertion. The\n`LogicParser.MAX_PARSE_DEPTH` guard (`nltk/sem/logic.py:107,294`) protects the expression\nparser but never runs on the `read_type` path, which is reached directly by the public\n`Type.fromstring` classmethod and by signature-string type checking.\n\n## Impact\nAn application that parses an untrusted type string, or type-checks an expression against\nan attacker-influenced signature, aborts with an unhandled `RecursionError`, terminating\nthe affected operation or request worker (denial of service, CWE-674). The recursion is\npure Python, yielding a catchable `RecursionError` rather than memory corruption or code\nexecution. Confidentiality and integrity are unaffected. Exposure is narrower than a\ngeneral-purpose parser because the input must reach a type-string or signature parameter.\n\n## Attack Chain\n1. The application calls `nltk.sem.logic.Type.fromstring(s)` (`nltk/sem/logic.py:736`) — or\n   `Expression.typecheck(signature)` / `Expression.fromstring(expr, type_check=True,\n   signature=...)`, which reach `read_type` for each type-string signature value\n   (`nltk/sem/logic.py:1080`) — with a deeply nested type string such as\n   `\"<\" * n + \"e,e\" + \">\" * n`.\n2. `Type.fromstring` passes the string straight to `read_type` with no length or depth\n   check (only assertions on type and parenthesis balance).\n3. `read_type` recurses on both halves of each `<a,b>` level, consuming one stack frame per\n   nesting level; the `MAX_PARSE_DEPTH` guard on the separate `LogicParser` class does not\n   execute here.\n4. Once the depth exceeds the interpreter recursion limit, an unhandled `RecursionError`\n   propagates out of the public API.\n\n## Bypass Evidence\nRunning the shipped `read_type`/`ComplexType`/`Type` source verbatim at the default\nrecursion limit: depth 5 parses cleanly to a `ComplexType` (both assertions satisfied at\nevery level), while depth 5000 raises an unhandled `RecursionError`. The clean shallow\nparse shows the failure is depth-driven rather than an assertion failure. A code review\nconfirms the `MAX_PARSE_DEPTH` bound lives on the `LogicParser` class and is not applied to\n`read_type`, whose own module docstring for that guard explicitly names uncontrolled\nrecursion (CWE-674) as the risk it addresse",
+      "publishedAt": "2026-11-19T23:51:48Z",
+      "updatedAt": "2026-11-19T23:51:48Z",
+      "url": "https://github.com/advisories/GHSA-w3pv-xfw4-ghr7",
+      "references": [
+        "https://github.com/nltk/nltk/security/advisories/GHSA-w3pv-xfw4-ghr7",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-129226",
+        "https://github.com/nltk/nltk/pull/3885",
+        "https://github.com/nltk/nltk/commit/2f4f0d47e2c452c89cabc2a5f761332d51066ea8",
+        "https://github.com/nltk/nltk/commit/a8036c5e7f820ac09c96b969d6e7f19bfa6e6aeb",
+        "https://github.com/nltk/nltk/releases/tag/v3.10.4",
+        "https://github.com/advisories/GHSA-w3pv-xfw4-ghr7"
+      ],
+      "patchUrls": [
+        "https://github.com/nltk/nltk/pull/3885",
+        "https://github.com/nltk/nltk/commit/2f4f0d47e2c452c89cabc2a5f761332d51066ea8",
+        "https://github.com/nltk/nltk/commit/a8036c5e7f820ac09c96b969d6e7f19bfa6e6aeb"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "nltk",
+          "lt": "3.10.4",
+          "id": "CVE-2026-129226",
+          "ghsaId": "GHSA-w3pv-xfw4-ghr7",
+          "cve": "CVE-2026-129226",
+          "cwe": "CWE-674",
+          "sev": "medium",
+          "note": "NLTK: Uncontrolled recursion in semantic-logic type parser causes denial of service via nested type strings"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0048
+    },
+    {
+      "id": "CVE-2026-129227",
+      "ghsaId": "GHSA-63wh-5r5m-wxr7",
+      "cve": "CVE-2026-129227",
+      "cwe": "CWE-674",
+      "sev": "medium",
+      "summary": "NLTK: Uncontrolled recursion in Tree.fromlist causes denial of service via deeply nested list input",
+      "description": "## Root Cause\n`Tree.fromlist` (`nltk/tree/tree.py:767`) converts a nested list into a `Tree` by recursing\nonce per nesting level (`nltk/tree/tree.py:780`) with no depth bound — its only validation\nis `type(l) == list and len(l) > 0`. The sibling constructor `Tree.fromstring` was hardened\nwith a `MAX_TREE_DEPTH` cap (`nltk/tree/tree.py:31,695`) that rejects adversarially deep\ninput with a bounded `ValueError`, but that guard was not applied to `fromlist`, which\nbuilds `Tree` objects identically.\n\n## Impact\nAn application that builds a `Tree` from an attacker-controlled nested list — for example\n`Tree.fromlist(json.loads(untrusted))` — aborts with an unhandled `RecursionError`,\nterminating the affected operation or request worker (denial of service, CWE-674). Any\nlater recursive traversal of an over-deep tree (`height`, `pformat`, equality) fails the\nsame way. The recursion is pure Python, yielding a catchable `RecursionError` rather than\nmemory corruption or code execution. Confidentiality and integrity are unaffected.\n\n## Attack Chain\n1. The application obtains an attacker-controlled deeply nested list, typically by decoding\n   an untrusted JSON payload, and calls `nltk.tree.Tree.fromlist(l)`.\n2. `fromlist` checks only that the argument is a non-empty list; it applies no depth cap.\n3. `fromlist` recurses once per nesting level, consuming call-stack frames; the\n   `MAX_TREE_DEPTH` guard used by `fromstring` is never invoked on this path.\n4. Once the nesting depth exceeds the interpreter recursion limit, an unhandled\n   `RecursionError` propagates out of the public API.\n\n## Bypass Evidence\nRunning the shipped `fromlist` body verbatim at the default recursion limit: depth 5 builds\ncleanly while depth 5000 raises an unhandled `RecursionError`. The realistic JSON-delivery\nobjection does not hold: CPython's C JSON decoder tolerates far deeper nesting than the\npure-Python `fromlist` recursion, so there is a wide window (measured from roughly depth 500\nup to ~1500 at the default limit) in which `json.loads` succeeds and `fromlist` is the\ncomponent that raises. Notably the `fromlist` crash threshold (~500) coincides with the\nproject's own `MAX_TREE_DEPTH = 500` — the exact depth already deemed adversarial on the\nstring path is left unbounded on the list path.\n\n## Suggested Fix\nApply the existing `MAX_TREE_DEPTH` bound (or an equivalent depth counter) inside\n`Tree.fromlist`, so the list-construction path rejects adversarially deep input with the\nsame bounded `ValueE",
+      "publishedAt": "2026-11-19T23:51:08Z",
+      "updatedAt": "2026-11-19T23:51:08Z",
+      "url": "https://github.com/advisories/GHSA-63wh-5r5m-wxr7",
+      "references": [
+        "https://github.com/nltk/nltk/security/advisories/GHSA-63wh-5r5m-wxr7",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-129227",
+        "https://github.com/nltk/nltk/pull/3885",
+        "https://github.com/nltk/nltk/commit/ae4c5c900a81608026a43bd4ed17ff048c447c8c",
+        "https://github.com/nltk/nltk/releases/tag/v3.10.4",
+        "https://github.com/advisories/GHSA-63wh-5r5m-wxr7"
+      ],
+      "patchUrls": [
+        "https://github.com/nltk/nltk/pull/3885",
+        "https://github.com/nltk/nltk/commit/ae4c5c900a81608026a43bd4ed17ff048c447c8c"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "nltk",
+          "lt": "3.10.4",
+          "id": "CVE-2026-129227",
+          "ghsaId": "GHSA-63wh-5r5m-wxr7",
+          "cve": "CVE-2026-129227",
+          "cwe": "CWE-674",
+          "sev": "medium",
+          "note": "NLTK: Uncontrolled recursion in Tree.fromlist causes denial of service via deeply nested list input"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0048
+    },
+    {
       "id": "CVE-2026-129231",
       "ghsaId": "GHSA-q4c8-9gwf-255x",
       "cve": "CVE-2026-129231",
@@ -12499,6 +12722,43 @@
       "epss": 0.0048
     },
     {
+      "id": "CVE-2026-104885",
+      "ghsaId": "GHSA-3h6w-xcw3-9xjj",
+      "cve": "CVE-2026-104885",
+      "cwe": "CWE-862",
+      "sev": "medium",
+      "summary": "OpenRemote: Cross-realm MQTT session disconnect without authorization",
+      "description": "### Summary\n\nCross-realm MQTT session disconnect without authorization\n\n## Vulnerability\n\nThe `disconnectUserSession` endpoint in `UserResourceImpl.java` (line 443) accepts a `realm` path parameter but ignores it entirely, performing no authorization or realm-boundary check before force-disconnecting an MQTT session. Any authenticated user from any realm can disconnect MQTT broker sessions belonging to users in other realms by supplying the target session ID.\n\nFile: `manager/src/main/java/org/openremote/manager/security/UserResourceImpl.java`, lines 443-447\n\n```java\n@Override\npublic void disconnectUserSession(RequestParams requestParams, String realm, String sessionID) {\n    if (!mqttBrokerService.disconnectSession(sessionID)) {\n        throw new NotFoundException(\"User session not found\");\n    }\n}\n```\n\nThe REST interface at `model/src/main/java/org/openremote/model/security/UserResource.java` (line 201-204) maps this to `GET {realm}/disconnect/{sessionID}` with no `@RolesAllowed` annotation, so any authenticated user (not just admins) can call it.\n\n## Root Cause\n\nCVE-2026-54641 (commit de89b8d) fixed cross-realm information disclosure in three read methods of the same file (`get()`, `getUserClientRoles()`, `getUserRealmRoles()`) and also added a realm check to `getClientRoles()`. The fix added `throwIfCannotReadUserInRealm()` and `throwIfCannotAdminRealm()` guards. However, `disconnectUserSession` was not patched and remains unprotected. Every other mutating method in this class has either a `@RolesAllowed` annotation on the interface or an explicit realm check in the implementation. This one has neither.\n\n## Proof of Concept\n\nGiven two realms, \"master\" and \"building\":\n\n1. User A authenticates in the \"building\" realm (any role, no admin needed).\n2. User B has an active MQTT session in the \"master\" realm with session ID `S`.\n3. User A sends: `GET /api/master/user/master/disconnect/S` with their building-realm bearer token.\n4. The handler ignores the realm path segments, looks up session `S` in the global `connectionIDConnectionMap`, and calls `doForceDisconnect()`. User B's MQTT connection is terminated.\n\nSession IDs use the Netty `ChannelId.asLongText()` format (deterministic, partially sequential). While not trivially brute-forceable, IDs can leak through monitoring, logs, or correlated API calls. Within the same realm, any user (not just admins) can also disconnect sessions they should not have access to.\n\n## Impact\n\nIn a multi-tenant IoT deployment, an",
+      "publishedAt": "2026-11-20T14:56:58Z",
+      "updatedAt": "2026-11-20T14:56:59Z",
+      "url": "https://github.com/advisories/GHSA-3h6w-xcw3-9xjj",
+      "references": [
+        "https://github.com/openremote/core/security/advisories/GHSA-3h6w-xcw3-9xjj",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-104885",
+        "https://github.com/openremote/core/commit/51dce18d9e00d671a5e032d942ece186bdada560",
+        "https://github.com/openremote/core/releases/tag/1.31.0",
+        "https://github.com/advisories/GHSA-3h6w-xcw3-9xjj"
+      ],
+      "patchUrls": [
+        "https://github.com/openremote/core/commit/51dce18d9e00d671a5e032d942ece186bdada560"
+      ],
+      "packages": [
+        {
+          "ecosystem": "maven",
+          "name": "io.openremote:openremote-manager",
+          "lt": "1.31.0",
+          "id": "CVE-2026-104885",
+          "ghsaId": "GHSA-3h6w-xcw3-9xjj",
+          "cve": "CVE-2026-104885",
+          "cwe": "CWE-862",
+          "sev": "medium",
+          "note": "OpenRemote: Cross-realm MQTT session disconnect without authorization"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0047
+    },
+    {
       "id": "CVE-2026-63012",
       "ghsaId": "GHSA-wgvx-x5g3-9v29",
       "cve": "CVE-2026-63012",
@@ -12532,45 +12792,6 @@
           "cwe": "CWE-290",
           "sev": "medium",
           "note": "baserCMS administrative API authorization bypass through session fallback"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0047
-    },
-    {
-      "id": "CVE-2026-129228",
-      "ghsaId": "GHSA-f2h2-f4fc-p978",
-      "cve": "CVE-2026-129228",
-      "cwe": "CWE-674",
-      "sev": "medium",
-      "summary": "NLTK: Uncontrolled recursion in Toolbox settings helpers causes denial of service via deeply nested input",
-      "description": "## Root Cause\nThe Toolbox settings-tree helpers recurse over the parsed element tree without any depth\nbound. `_to_settings_string` (`nltk/toolbox.py:418`), `remove_blanks`\n(`nltk/toolbox.py:432`), `add_default_fields` (`nltk/toolbox.py:451`), `_sort_fields`\n(`nltk/toolbox.py:484`), and `add_blank_lines` (`nltk/toolbox.py:502,516`) each recurse once\nper element level with no depth counter or explicit stack. The producer\n`ToolboxSettings.parse` builds the element tree iteratively, so nesting depth is driven\nentirely by attacker-supplied `\\+marker` / `\\-marker` pairs.\n\n## Impact\nAn application that parses an untrusted Toolbox settings file and then serialises or\ntransforms it through any of the public helper functions aborts with an unhandled\n`RecursionError`, terminating the affected operation or request worker (denial of service,\nCWE-674). The recursion is pure Python, yielding a catchable `RecursionError` rather than\nmemory corruption or code execution. Confidentiality and integrity are unaffected.\n\n## Attack Chain\n1. The application parses an untrusted settings file via `ToolboxSettings.open_string` /\n   `open` plus `parse`, producing an *N*-deep element tree; parsing is iterative and\n   completes without error.\n2. The application passes the tree to a public helper — `to_settings_string`,\n   `remove_blanks`, `add_default_fields`, `sort_fields`, or `add_blank_lines` — as in the\n   module's own parse-then-serialise round trip.\n3. The helper recurses once per element level with no depth guard, consuming call-stack\n   frames. This holds even when the helper's configuration dictionaries are empty.\n4. Once the nesting depth exceeds the interpreter recursion limit, an unhandled\n   `RecursionError` propagates out of the public API.\n\n## Bypass Evidence\nAgainst the shipped source at the default recursion limit, a settings input nested 5 levels\ndeep traverses cleanly through every helper, while a well-formed input nested 5000 levels\ndeep drives each of the five helpers to an unhandled `RecursionError`; the iterative parse\nbuilds the 4999-deep tree without error, isolating the fault to the recursive helpers. The\nconfig-taking helpers (`add_default_fields`, `sort_fields`, `add_blank_lines`) recurse to\nfailure even with empty configuration dictionaries. A repository-wide search confirms no\ndepth guard exists anywhere in this module.\n\n## Suggested Fix\nCap nesting depth at the shared producer `ToolboxSettings.parse` (the choke point that\nbuilds the tree), or convert the",
-      "publishedAt": "2026-11-19T23:50:37Z",
-      "updatedAt": "2026-11-19T23:50:38Z",
-      "url": "https://github.com/advisories/GHSA-f2h2-f4fc-p978",
-      "references": [
-        "https://github.com/nltk/nltk/security/advisories/GHSA-f2h2-f4fc-p978",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-129228",
-        "https://github.com/nltk/nltk/pull/3885",
-        "https://github.com/nltk/nltk/commit/0b6975377d0334af604d32c9d83b26b46e1d437c",
-        "https://github.com/nltk/nltk/releases/tag/v3.10.4",
-        "https://github.com/advisories/GHSA-f2h2-f4fc-p978"
-      ],
-      "patchUrls": [
-        "https://github.com/nltk/nltk/pull/3885",
-        "https://github.com/nltk/nltk/commit/0b6975377d0334af604d32c9d83b26b46e1d437c"
-      ],
-      "packages": [
-        {
-          "ecosystem": "pip",
-          "name": "nltk",
-          "lt": "3.10.4",
-          "id": "CVE-2026-129228",
-          "ghsaId": "GHSA-f2h2-f4fc-p978",
-          "cve": "CVE-2026-129228",
-          "cwe": "CWE-674",
-          "sev": "medium",
-          "note": "NLTK: Uncontrolled recursion in Toolbox settings helpers causes denial of service via deeply nested input"
         }
       ],
       "kev": false,
@@ -12786,6 +13007,43 @@
           "cwe": "CWE-1321",
           "sev": "high",
           "note": "@tmlmobilidade/utils has prototype pollution in its setValueAtPath"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0046
+    },
+    {
+      "id": "CVE-2026-129307",
+      "ghsaId": "GHSA-m4g8-47f9-h588",
+      "cve": "CVE-2026-129307",
+      "cwe": "CWE-407",
+      "sev": "medium",
+      "summary": "eml_parser: Algorithmic-complexity DoS (O(n^4) regex backtracking) in Received-header parsing",
+      "description": "### Summary\n\n`eml_parser.routing.parserouting()` dynamically builds a regex from up to four greedy `.*` groups (`from (?P<from>.*)by (?P<by>.*)with (?P<with>.*)for (?P<for>.*)`) terminated by an escaped literal of the date extracted from a **normalized** copy of the `Received` header. Because the date literal comes from the normalized text but is searched in the original line, a crafted header can make the trailing literal unmatchable; the search then fails at every start position only after exhaustively backtracking the four nested greedy groups — **O(n^4)** in header length. A single ~5.9 KB email pins one CPU core for ~12 seconds; doubling the input multiplies the cost ~25x, so a ~13 KB header takes minutes and a ~25 KB header effectively hangs the parse worker.\n\n### Details\n\nRoot cause: `eml_parser/routing.py:140-148` (v3.0.3):\n\n```python\nreg = ''\nfor item in tout:\n    reg += item[1] + '(?P<' + item[1].strip() + '>.*)'   # e.g. 'from (?P<from>.*)'\nif npdate:\n    reg += eml_parser.regexes.escape_special_regex_chars.sub(r\"\"\"\\\\\\1\"\"\", npdate)\nreparse = re.compile(reg)\nreparseg = reparse.search(line)   # searched in the ORIGINAL line\n```\n\n`npdate` is extracted from `npline`, a normalized copy of the header (spacing added around `(`, `)`, `;` at routing.py:79-81; parenthesized text removed at line 82; whitespace collapsed at line 83), so it is not guaranteed to be a substring of `line`. An unbalanced `(` in the date tail (e.g. `+0000(comment`) becomes ` ( comment` in `npline` but stays `(comment` in `line`, making the mandatory trailing literal unmatchable.\n\nData flow: attacker-controlled `Received:` header (arbitrary length; the custom policy sets `max_line_length=0`) -> `parser.py:352-355` (lowercased, whitespace-flattened, no size cap - unlike body text, which is sliced) -> `parser.py:365` `routing.parserouting(...)` -> O(n^4) search. Every Received header is processed, multiplying the cost, and the behavior cannot be disabled via any `EmlParser` option.\n\nMeasured on Python 3.14 (identical with stdlib `re` and the optional `regex` module):\n\n| Segments | Header size | Wall time |\n|---|---|---|\n| 20 | 1.4 KB | 0.022 s |\n| 40 | 2.9 KB | 0.43 s |\n| 80 | 5.8 KB | 12 s |\n| 160 (extrapolated) | 13 KB | ~5 min |\n\ncProfile attributes 83% of wall time to `re.Pattern.search` called from `routing.parserouting`. The parse completes normally (no exception) - it is pure CPU exhaustion.\n\nThis is distinct from GHSA-g47v-rwmh-r9f8 (recursion DoS in `get_raw_body_text()`, f",
+      "publishedAt": "2026-11-19T22:47:08Z",
+      "updatedAt": "2026-11-19T22:47:09Z",
+      "url": "https://github.com/advisories/GHSA-m4g8-47f9-h588",
+      "references": [
+        "https://github.com/GOVCERT-LU/eml_parser/security/advisories/GHSA-m4g8-47f9-h588",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-129307",
+        "https://github.com/GOVCERT-LU/eml_parser/commit/54ea6e9f54fecda3059283ccdb6a6fd99e7ce92f",
+        "https://github.com/GOVCERT-LU/eml_parser/releases/tag/v3.0.4",
+        "https://github.com/advisories/GHSA-m4g8-47f9-h588"
+      ],
+      "patchUrls": [
+        "https://github.com/GOVCERT-LU/eml_parser/commit/54ea6e9f54fecda3059283ccdb6a6fd99e7ce92f"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "eml-parser",
+          "lt": "3.0.4",
+          "id": "CVE-2026-129307",
+          "ghsaId": "GHSA-m4g8-47f9-h588",
+          "cve": "CVE-2026-129307",
+          "cwe": "CWE-407",
+          "sev": "medium",
+          "note": "eml_parser: Algorithmic-complexity DoS (O(n^4) regex backtracking) in Received-header parsing"
         }
       ],
       "kev": false,
@@ -13454,6 +13712,44 @@
           "cwe": "CWE-74",
           "sev": "high",
           "note": "NATS Server: MQTT SUBSCRIBE Protocol Injection via Leaf Node/Route Forwarding allows arbitrary NATS command injection"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0044
+    },
+    {
+      "id": "CVE-2026-33992",
+      "ghsaId": "GHSA-m74m-f7cr-432x",
+      "cve": "CVE-2026-33992",
+      "cwe": "CWE-918",
+      "sev": "critical",
+      "summary": "pyLoad: Server-Side Request Forgery via Download Link Submission Enables Cloud Metadata Exfiltration",
+      "description": "## Summary\n\nPyLoad's download engine accepts arbitrary URLs without validation, enabling Server-Side Request Forgery (SSRF) attacks. An authenticated attacker can exploit this to access internal network services and exfiltrate cloud provider metadata. On DigitalOcean droplets, this exposes sensitive infrastructure data including droplet ID, network configuration, region, authentication keys, and SSH keys configured in user-data/cloud-init.\n\n## Details\n\nThe vulnerability exists in PyLoad's download package functionality (`/api/addPackage` endpoint), which directly passes user-supplied URLs to the download engine without validating the destination. The affected code in `src/pyload/webui/app/blueprints/api_blueprint.py`:\n\n```python\n@bp.route(\"/addPackage\", methods=[\"POST\"], endpoint=\"add_package\")\n@login_required\ndef add_package():\n    name = flask.request.form[\"add_name\"]\n    links = flask.request.form[\"add_links\"].split(\"\\n\")\n    # ... validation omitted ...\n    api.add_package(name, links, dest)  # No URL validation\n```\n\nThe download engine in `src/pyload/core/managers/download.py` accepts any URL scheme and initiates HTTP requests to arbitrary destinations, including internal network addresses and cloud metadata endpoints.\n\n## Proof of Concept\n\n**Live Demo Instance:** http://143.244.141.81:8000  \n**Credentials:** `pyload` / `pyload`\n\n- Login into the pyload application\n- Navigate to package tab and enter the package name and fill the Link section with the following URL\n\n```\nhttp://169.254.169.254/metadata/v1.json\n```\n\n<img width=\"1851\" height=\"786\" alt=\"image\" src=\"https://github.com/user-attachments/assets/18e7aedf-7663-4a57-8f3e-5200be2c958e\" />\n\n- Now navigate to Files section and download the link.\n\n<img width=\"1429\" height=\"870\" alt=\"image\" src=\"https://github.com/user-attachments/assets/9b8b9cd6-afb7-461c-b058-a3cc4f26e2e6\" />\n\n- It was observed that we are able to Read the Digital Ocean Metadata\n\n<img width=\"1872\" height=\"837\" alt=\"image\" src=\"https://github.com/user-attachments/assets/d30d2d74-53e9-46f8-8206-894a275ac831\" />\n\nThe downloaded `v1.json` file contains sensitive cloud infrastructure data:\n- **Droplet ID**: Unique identifier for the instance\n- **Network Configuration**: Public/private IP addresses, VPC topology\n- **Authentication Keys**: Cloud provider auth tokens\n- **SSH Keys**: Public keys configured in droplet metadata\n- **Region and Datacenter**: Infrastructure location\n\n## Impact\n\n**Vulnerability Type:** Server-Side Request Forgery",
+      "publishedAt": "2026-03-27T18:00:43Z",
+      "updatedAt": "2026-11-16T16:02:46Z",
+      "url": "https://github.com/advisories/GHSA-m74m-f7cr-432x",
+      "references": [
+        "https://github.com/pyload/pyload/security/advisories/GHSA-m74m-f7cr-432x",
+        "https://github.com/pyload/pyload/commit/b76b6d4ee5e32d2118d26afdee1d0a9e57d4bfe8",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-33992",
+        "https://github.com/pypa/advisory-database/tree/main/vulns/pyload-ng/PYSEC-2026-497.yaml",
+        "https://pypi.org/project/pyload-ng",
+        "https://github.com/advisories/GHSA-m74m-f7cr-432x"
+      ],
+      "patchUrls": [
+        "https://github.com/pyload/pyload/commit/b76b6d4ee5e32d2118d26afdee1d0a9e57d4bfe8"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "pyload-ng",
+          "le": "0.5.0b3.dev96",
+          "id": "CVE-2026-33992",
+          "ghsaId": "GHSA-m74m-f7cr-432x",
+          "cve": "CVE-2026-33992",
+          "cwe": "CWE-918",
+          "sev": "critical",
+          "note": "pyLoad: Server-Side Request Forgery via Download Link Submission Enables Cloud Metadata Exfiltration"
         }
       ],
       "kev": false,
@@ -14392,86 +14688,6 @@
       "epss": 0.0042
     },
     {
-      "id": "CVE-2026-129226",
-      "ghsaId": "GHSA-w3pv-xfw4-ghr7",
-      "cve": "CVE-2026-129226",
-      "cwe": "CWE-674",
-      "sev": "medium",
-      "summary": "NLTK: Uncontrolled recursion in semantic-logic type parser causes denial of service via nested type strings",
-      "description": "## Root Cause\nThe semantic-logic type parser `read_type` (`nltk/sem/logic.py:866`) recurses on both\nhalves of every `<a,b>` complex type (`nltk/sem/logic.py:882-884`) with no depth or length\nbound — only an `isinstance` assertion and a parenthesis-balance assertion. The\n`LogicParser.MAX_PARSE_DEPTH` guard (`nltk/sem/logic.py:107,294`) protects the expression\nparser but never runs on the `read_type` path, which is reached directly by the public\n`Type.fromstring` classmethod and by signature-string type checking.\n\n## Impact\nAn application that parses an untrusted type string, or type-checks an expression against\nan attacker-influenced signature, aborts with an unhandled `RecursionError`, terminating\nthe affected operation or request worker (denial of service, CWE-674). The recursion is\npure Python, yielding a catchable `RecursionError` rather than memory corruption or code\nexecution. Confidentiality and integrity are unaffected. Exposure is narrower than a\ngeneral-purpose parser because the input must reach a type-string or signature parameter.\n\n## Attack Chain\n1. The application calls `nltk.sem.logic.Type.fromstring(s)` (`nltk/sem/logic.py:736`) — or\n   `Expression.typecheck(signature)` / `Expression.fromstring(expr, type_check=True,\n   signature=...)`, which reach `read_type` for each type-string signature value\n   (`nltk/sem/logic.py:1080`) — with a deeply nested type string such as\n   `\"<\" * n + \"e,e\" + \">\" * n`.\n2. `Type.fromstring` passes the string straight to `read_type` with no length or depth\n   check (only assertions on type and parenthesis balance).\n3. `read_type` recurses on both halves of each `<a,b>` level, consuming one stack frame per\n   nesting level; the `MAX_PARSE_DEPTH` guard on the separate `LogicParser` class does not\n   execute here.\n4. Once the depth exceeds the interpreter recursion limit, an unhandled `RecursionError`\n   propagates out of the public API.\n\n## Bypass Evidence\nRunning the shipped `read_type`/`ComplexType`/`Type` source verbatim at the default\nrecursion limit: depth 5 parses cleanly to a `ComplexType` (both assertions satisfied at\nevery level), while depth 5000 raises an unhandled `RecursionError`. The clean shallow\nparse shows the failure is depth-driven rather than an assertion failure. A code review\nconfirms the `MAX_PARSE_DEPTH` bound lives on the `LogicParser` class and is not applied to\n`read_type`, whose own module docstring for that guard explicitly names uncontrolled\nrecursion (CWE-674) as the risk it addresse",
-      "publishedAt": "2026-11-19T23:51:48Z",
-      "updatedAt": "2026-11-19T23:51:48Z",
-      "url": "https://github.com/advisories/GHSA-w3pv-xfw4-ghr7",
-      "references": [
-        "https://github.com/nltk/nltk/security/advisories/GHSA-w3pv-xfw4-ghr7",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-129226",
-        "https://github.com/nltk/nltk/pull/3885",
-        "https://github.com/nltk/nltk/commit/2f4f0d47e2c452c89cabc2a5f761332d51066ea8",
-        "https://github.com/nltk/nltk/commit/a8036c5e7f820ac09c96b969d6e7f19bfa6e6aeb",
-        "https://github.com/nltk/nltk/releases/tag/v3.10.4",
-        "https://github.com/advisories/GHSA-w3pv-xfw4-ghr7"
-      ],
-      "patchUrls": [
-        "https://github.com/nltk/nltk/pull/3885",
-        "https://github.com/nltk/nltk/commit/2f4f0d47e2c452c89cabc2a5f761332d51066ea8",
-        "https://github.com/nltk/nltk/commit/a8036c5e7f820ac09c96b969d6e7f19bfa6e6aeb"
-      ],
-      "packages": [
-        {
-          "ecosystem": "pip",
-          "name": "nltk",
-          "lt": "3.10.4",
-          "id": "CVE-2026-129226",
-          "ghsaId": "GHSA-w3pv-xfw4-ghr7",
-          "cve": "CVE-2026-129226",
-          "cwe": "CWE-674",
-          "sev": "medium",
-          "note": "NLTK: Uncontrolled recursion in semantic-logic type parser causes denial of service via nested type strings"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0042
-    },
-    {
-      "id": "CVE-2026-129227",
-      "ghsaId": "GHSA-63wh-5r5m-wxr7",
-      "cve": "CVE-2026-129227",
-      "cwe": "CWE-674",
-      "sev": "medium",
-      "summary": "NLTK: Uncontrolled recursion in Tree.fromlist causes denial of service via deeply nested list input",
-      "description": "## Root Cause\n`Tree.fromlist` (`nltk/tree/tree.py:767`) converts a nested list into a `Tree` by recursing\nonce per nesting level (`nltk/tree/tree.py:780`) with no depth bound — its only validation\nis `type(l) == list and len(l) > 0`. The sibling constructor `Tree.fromstring` was hardened\nwith a `MAX_TREE_DEPTH` cap (`nltk/tree/tree.py:31,695`) that rejects adversarially deep\ninput with a bounded `ValueError`, but that guard was not applied to `fromlist`, which\nbuilds `Tree` objects identically.\n\n## Impact\nAn application that builds a `Tree` from an attacker-controlled nested list — for example\n`Tree.fromlist(json.loads(untrusted))` — aborts with an unhandled `RecursionError`,\nterminating the affected operation or request worker (denial of service, CWE-674). Any\nlater recursive traversal of an over-deep tree (`height`, `pformat`, equality) fails the\nsame way. The recursion is pure Python, yielding a catchable `RecursionError` rather than\nmemory corruption or code execution. Confidentiality and integrity are unaffected.\n\n## Attack Chain\n1. The application obtains an attacker-controlled deeply nested list, typically by decoding\n   an untrusted JSON payload, and calls `nltk.tree.Tree.fromlist(l)`.\n2. `fromlist` checks only that the argument is a non-empty list; it applies no depth cap.\n3. `fromlist` recurses once per nesting level, consuming call-stack frames; the\n   `MAX_TREE_DEPTH` guard used by `fromstring` is never invoked on this path.\n4. Once the nesting depth exceeds the interpreter recursion limit, an unhandled\n   `RecursionError` propagates out of the public API.\n\n## Bypass Evidence\nRunning the shipped `fromlist` body verbatim at the default recursion limit: depth 5 builds\ncleanly while depth 5000 raises an unhandled `RecursionError`. The realistic JSON-delivery\nobjection does not hold: CPython's C JSON decoder tolerates far deeper nesting than the\npure-Python `fromlist` recursion, so there is a wide window (measured from roughly depth 500\nup to ~1500 at the default limit) in which `json.loads` succeeds and `fromlist` is the\ncomponent that raises. Notably the `fromlist` crash threshold (~500) coincides with the\nproject's own `MAX_TREE_DEPTH = 500` — the exact depth already deemed adversarial on the\nstring path is left unbounded on the list path.\n\n## Suggested Fix\nApply the existing `MAX_TREE_DEPTH` bound (or an equivalent depth counter) inside\n`Tree.fromlist`, so the list-construction path rejects adversarially deep input with the\nsame bounded `ValueE",
-      "publishedAt": "2026-11-19T23:51:08Z",
-      "updatedAt": "2026-11-19T23:51:08Z",
-      "url": "https://github.com/advisories/GHSA-63wh-5r5m-wxr7",
-      "references": [
-        "https://github.com/nltk/nltk/security/advisories/GHSA-63wh-5r5m-wxr7",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-129227",
-        "https://github.com/nltk/nltk/pull/3885",
-        "https://github.com/nltk/nltk/commit/ae4c5c900a81608026a43bd4ed17ff048c447c8c",
-        "https://github.com/nltk/nltk/releases/tag/v3.10.4",
-        "https://github.com/advisories/GHSA-63wh-5r5m-wxr7"
-      ],
-      "patchUrls": [
-        "https://github.com/nltk/nltk/pull/3885",
-        "https://github.com/nltk/nltk/commit/ae4c5c900a81608026a43bd4ed17ff048c447c8c"
-      ],
-      "packages": [
-        {
-          "ecosystem": "pip",
-          "name": "nltk",
-          "lt": "3.10.4",
-          "id": "CVE-2026-129227",
-          "ghsaId": "GHSA-63wh-5r5m-wxr7",
-          "cve": "CVE-2026-129227",
-          "cwe": "CWE-674",
-          "sev": "medium",
-          "note": "NLTK: Uncontrolled recursion in Tree.fromlist causes denial of service via deeply nested list input"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0042
-    },
-    {
       "id": "CVE-2026-109549",
       "ghsaId": "GHSA-w3w6-9m25-g88p",
       "cve": "CVE-2026-109549",
@@ -14923,51 +15139,6 @@
       "epss": 0.0042
     },
     {
-      "id": "CVE-2026-63184",
-      "ghsaId": "GHSA-x6w4-f264-3vvr",
-      "cve": "CVE-2026-63184",
-      "cwe": "CWE-829",
-      "sev": "high",
-      "summary": "Refitter: Unrestricted OpenAPI references permit build-host SSRF and file inclusion",
-      "description": "### Summary\n\nRefitter (the `refitter` dotnet tool, built on NJsonSchema for `$ref` resolution) fetches remote\n`http(s)` URLs and reads local files (including absolute paths and `../` traversal outside the input\ndirectory), inlining the referenced schema into the generated Refit interface/contracts. Running\n`refitter <spec> --output Out.cs` on a spec whose `$ref` points at an attacker/internal URL or an\narbitrary local file yields SSRF, remote file inclusion, and local file inclusion. Verified on\nRefitter 2.0.0.\n\n### Details\n\n- `$ref: http://attacker-or-internal/evil.json#/...` -> build host fetches (SSRF) and inlines the\n  remote schema (RFI); confirmed property `REMOTE_REFIT_PROP`.\n- `$ref: /abs/path.json#/...` or `../../secret.json#/...` -> out-of-tree local file read + inlined\n  (LFI); confirmed property `REFIT_LFI_MARKER`. Both absolute and relative traversal work.\n\nNo RCE: Refitter emits Refit interfaces with no baseUrl string literal (Refit sets the base address at\nruntime), enum values use C# verbatim-string doubling, and string defaults are escaped. The chain\nstops at SSRF + RFI + LFI.\n\nThe `$ref` resolution is performed by Refitter's NJsonSchema dependency, which Refitter ships and\ninvokes with these unsafe defaults.\n\n### PoC\n\n`reproduce.sh` (+ `make_spec.py`, `listener.py`) attached: installs the .NET SDK + Refitter if needed,\nconfirms LFI (out-of-tree read), SSRF (listener hit during generation), and RFI (remote schema\ninlined). Verified on 2.0.0.\n\n### Impact\n\nBuild-time SSRF (CWE-918) from the developer or CI host, disclosure of arbitrary local files\n(CWE-22), and inclusion of untrusted remote content (CWE-829), from running Refitter on an\nattacker-controlled or attacker-influenced OpenAPI description. No code execution. Estimated\nMedium-High, e.g. `[reproduce.sh](https://github.com/user-attachments/files/29395269/reproduce.sh)` (the CNA sets the final score).\n\n### Suggested fix\n\nDon't resolve remote `$ref`s by default (opt-in + host allowlist); confine local `$ref` resolution to\nthe input directory tree (reject absolute paths and `../` escapes). Apply at all nesting levels.\nCoordinate with NJsonSchema, where the resolver lives.\n[maintainer-report.txt](https://github.com/user-attachments/files/29395271/maintainer-report.txt)\n[advisory.md](https://github.com/user-attachments/files/29395272/advisory.md)\n[reproduce.sh](https://github.com/user-attachments/files/29395283/reproduce.sh)\n[maintainer-report.txt](https://github.com/user-attachments/files",
-      "publishedAt": "2026-11-20T14:35:29Z",
-      "updatedAt": "2026-11-20T14:35:31Z",
-      "url": "https://github.com/advisories/GHSA-x6w4-f264-3vvr",
-      "references": [
-        "https://github.com/christianhelle/refitter/security/advisories/GHSA-x6w4-f264-3vvr",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-63184",
-        "https://github.com/christianhelle/refitter/pull/1173",
-        "https://github.com/christianhelle/refitter/commit/6ad20a3803561225100b0a4bb6b12f947d23db7b",
-        "https://github.com/christianhelle/refitter/releases/tag/2.1.1",
-        "https://github.com/user-attachments/files/29395269/reproduce.sh",
-        "https://github.com/user-attachments/files/29395271/maintainer-report.txt",
-        "https://github.com/user-attachments/files/29395272/advisory.md",
-        "https://github.com/user-attachments/files/29395283/reproduce.sh",
-        "https://github.com/user-attachments/files/29395284/maintainer-report.txt",
-        "https://github.com/user-attachments/files/29395285/advisory.md",
-        "https://github.com/user-attachments/files/29395286/listener.py"
-      ],
-      "patchUrls": [
-        "https://github.com/christianhelle/refitter/pull/1173",
-        "https://github.com/christianhelle/refitter/commit/6ad20a3803561225100b0a4bb6b12f947d23db7b"
-      ],
-      "packages": [
-        {
-          "ecosystem": "nuget",
-          "name": "Refitter",
-          "lt": "2.1.1",
-          "id": "CVE-2026-63184",
-          "ghsaId": "GHSA-x6w4-f264-3vvr",
-          "cve": "CVE-2026-63184",
-          "cwe": "CWE-829",
-          "sev": "high",
-          "note": "Refitter: Unrestricted OpenAPI references permit build-host SSRF and file inclusion"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0041
-    },
-    {
       "id": "CVE-2026-103033",
       "ghsaId": "GHSA-gfwj-45pc-w6r5",
       "cve": "CVE-2026-103033",
@@ -15000,6 +15171,58 @@
           "cwe": "CWE-248",
           "sev": "medium",
           "note": "ALTCHA: Nil-map panic (pre-verification DoS) in v1 parseServerSignature on malformed VerificationData"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0041
+    },
+    {
+      "id": "CVE-2026-58208",
+      "ghsaId": "GHSA-p957-7v2w-g93g",
+      "cve": "CVE-2026-58208",
+      "cwe": "CWE-248",
+      "sev": "medium",
+      "summary": "NATS Server: MQTT-over-WebSocket Path Can Crash WebSocket-Only JetStream Servers Before MQTT Is Enabled",
+      "description": "### Background\n\nNATS.io is a high performance open source pub-sub distributed communication technology, built for the cloud, on-premise, IoT and edge computing.\n\nThe NATS Server can accept client connections over WebSocket and can also support MQTT over WebSocket when MQTT is configured.\n\n### Problem Description\n\nA WebSocket listener could route requests for the MQTT-over-WebSocket path into MQTT handling even when MQTT was not configured.\n\nOn affected deployments, an unauthenticated client with access to the WebSocket listener could reach uninitialized MQTT state and crash the server process.\n\nThis affects deployments that enable WebSocket while leaving MQTT disabled. Deployments where MQTT is intentionally configured initialize the MQTT state and are not affected in the same way.\n\n### Affected Versions\n\nVersions v2.14.2, v2.12.11 and below are vulnerable. The issue is fixed in v2.14.3 and v2.12.12.\n\n### Workarounds\n\nDeployments not using WebSocket are not affected. Deployments using both WebSockets and MQTT are not affected. No known workaround for deployments that need WebSocket without MQTT-over-WebSocket. Upgrade to a fixed release.\n\n### References\n\n * GHSA advisory: <https://github.com/nats-io/nats-server/security/advisories/GHSA-p957-7v2w-g93g>\n * Credit: Vasco Franco, Trail of Bits",
+      "publishedAt": "2026-11-20T00:05:17Z",
+      "updatedAt": "2026-11-20T00:05:17Z",
+      "url": "https://github.com/advisories/GHSA-p957-7v2w-g93g",
+      "references": [
+        "https://github.com/nats-io/nats-server/security/advisories/GHSA-p957-7v2w-g93g",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-58208",
+        "https://github.com/nats-io/nats-server/commit/73b3dd9a5ea0fa7bf08b702338676355b29b5fb4",
+        "https://github.com/nats-io/nats-server/commit/837536b98b3a9280b993282155ff2bdd3ca38c30",
+        "https://github.com/nats-io/nats-server/releases/tag/v2.12.12",
+        "https://github.com/nats-io/nats-server/releases/tag/v2.14.3",
+        "https://github.com/advisories/GHSA-p957-7v2w-g93g"
+      ],
+      "patchUrls": [
+        "https://github.com/nats-io/nats-server/commit/73b3dd9a5ea0fa7bf08b702338676355b29b5fb4",
+        "https://github.com/nats-io/nats-server/commit/837536b98b3a9280b993282155ff2bdd3ca38c30"
+      ],
+      "packages": [
+        {
+          "ecosystem": "go",
+          "name": "github.com/nats-io/nats-server/v2",
+          "lt": "2.12.12",
+          "id": "CVE-2026-58208",
+          "ghsaId": "GHSA-p957-7v2w-g93g",
+          "cve": "CVE-2026-58208",
+          "cwe": "CWE-248",
+          "sev": "medium",
+          "note": "NATS Server: MQTT-over-WebSocket Path Can Crash WebSocket-Only JetStream Servers Before MQTT Is Enabled"
+        },
+        {
+          "ecosystem": "go",
+          "name": "github.com/nats-io/nats-server/v2",
+          "ge": "2.14.0-RC.1",
+          "lt": "2.14.3",
+          "id": "CVE-2026-58208",
+          "ghsaId": "GHSA-p957-7v2w-g93g",
+          "cve": "CVE-2026-58208",
+          "cwe": "CWE-248",
+          "sev": "medium",
+          "note": "NATS Server: MQTT-over-WebSocket Path Can Crash WebSocket-Only JetStream Servers Before MQTT Is Enabled"
         }
       ],
       "kev": false,
@@ -15039,44 +15262,6 @@
           "cwe": "CWE-22",
           "sev": "medium",
           "note": "qbee-agent: Docker Compose build context Zip Slip writes outside context directory"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0041
-    },
-    {
-      "id": "CVE-2026-33992",
-      "ghsaId": "GHSA-m74m-f7cr-432x",
-      "cve": "CVE-2026-33992",
-      "cwe": "CWE-918",
-      "sev": "critical",
-      "summary": "pyLoad: Server-Side Request Forgery via Download Link Submission Enables Cloud Metadata Exfiltration",
-      "description": "## Summary\n\nPyLoad's download engine accepts arbitrary URLs without validation, enabling Server-Side Request Forgery (SSRF) attacks. An authenticated attacker can exploit this to access internal network services and exfiltrate cloud provider metadata. On DigitalOcean droplets, this exposes sensitive infrastructure data including droplet ID, network configuration, region, authentication keys, and SSH keys configured in user-data/cloud-init.\n\n## Details\n\nThe vulnerability exists in PyLoad's download package functionality (`/api/addPackage` endpoint), which directly passes user-supplied URLs to the download engine without validating the destination. The affected code in `src/pyload/webui/app/blueprints/api_blueprint.py`:\n\n```python\n@bp.route(\"/addPackage\", methods=[\"POST\"], endpoint=\"add_package\")\n@login_required\ndef add_package():\n    name = flask.request.form[\"add_name\"]\n    links = flask.request.form[\"add_links\"].split(\"\\n\")\n    # ... validation omitted ...\n    api.add_package(name, links, dest)  # No URL validation\n```\n\nThe download engine in `src/pyload/core/managers/download.py` accepts any URL scheme and initiates HTTP requests to arbitrary destinations, including internal network addresses and cloud metadata endpoints.\n\n## Proof of Concept\n\n**Live Demo Instance:** http://143.244.141.81:8000  \n**Credentials:** `pyload` / `pyload`\n\n- Login into the pyload application\n- Navigate to package tab and enter the package name and fill the Link section with the following URL\n\n```\nhttp://169.254.169.254/metadata/v1.json\n```\n\n<img width=\"1851\" height=\"786\" alt=\"image\" src=\"https://github.com/user-attachments/assets/18e7aedf-7663-4a57-8f3e-5200be2c958e\" />\n\n- Now navigate to Files section and download the link.\n\n<img width=\"1429\" height=\"870\" alt=\"image\" src=\"https://github.com/user-attachments/assets/9b8b9cd6-afb7-461c-b058-a3cc4f26e2e6\" />\n\n- It was observed that we are able to Read the Digital Ocean Metadata\n\n<img width=\"1872\" height=\"837\" alt=\"image\" src=\"https://github.com/user-attachments/assets/d30d2d74-53e9-46f8-8206-894a275ac831\" />\n\nThe downloaded `v1.json` file contains sensitive cloud infrastructure data:\n- **Droplet ID**: Unique identifier for the instance\n- **Network Configuration**: Public/private IP addresses, VPC topology\n- **Authentication Keys**: Cloud provider auth tokens\n- **SSH Keys**: Public keys configured in droplet metadata\n- **Region and Datacenter**: Infrastructure location\n\n## Impact\n\n**Vulnerability Type:** Server-Side Request Forgery",
-      "publishedAt": "2026-03-27T18:00:43Z",
-      "updatedAt": "2026-11-16T16:02:46Z",
-      "url": "https://github.com/advisories/GHSA-m74m-f7cr-432x",
-      "references": [
-        "https://github.com/pyload/pyload/security/advisories/GHSA-m74m-f7cr-432x",
-        "https://github.com/pyload/pyload/commit/b76b6d4ee5e32d2118d26afdee1d0a9e57d4bfe8",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-33992",
-        "https://github.com/pypa/advisory-database/tree/main/vulns/pyload-ng/PYSEC-2026-497.yaml",
-        "https://pypi.org/project/pyload-ng",
-        "https://github.com/advisories/GHSA-m74m-f7cr-432x"
-      ],
-      "patchUrls": [
-        "https://github.com/pyload/pyload/commit/b76b6d4ee5e32d2118d26afdee1d0a9e57d4bfe8"
-      ],
-      "packages": [
-        {
-          "ecosystem": "pip",
-          "name": "pyload-ng",
-          "le": "0.5.0b3.dev96",
-          "id": "CVE-2026-33992",
-          "ghsaId": "GHSA-m74m-f7cr-432x",
-          "cve": "CVE-2026-33992",
-          "cwe": "CWE-918",
-          "sev": "critical",
-          "note": "pyLoad: Server-Side Request Forgery via Download Link Submission Enables Cloud Metadata Exfiltration"
         }
       ],
       "kev": false,
@@ -15404,6 +15589,48 @@
           "cwe": "CWE-639",
           "sev": "critical",
           "note": "Daptin: Broken Access Control (IDOR) in the generic YJS collaboration endpoint"
+        }
+      ],
+      "kev": false,
+      "epss": 0.004
+    },
+    {
+      "id": "CVE-2026-129233",
+      "ghsaId": "GHSA-w674-vqhw-g3pg",
+      "cve": "CVE-2026-129233",
+      "cwe": "CWE-200",
+      "sev": "medium",
+      "summary": "NLTK: StreamBackedCorpusView constructor os.stat leaks out-of-root file existence, size, and mtime bypassing pathsec ENFORCE",
+      "description": "## Summary\n\n`StreamBackedCorpusView`, a public API in `nltk/corpus/reader/util.py`, applies the pathsec sandbox to the file content it reads but not to the file metadata it probes in its constructor. When the view is created with a plain string fileid, `__init__` calls `os.stat(self._fileid).st_size` with no pathsec validation, so an application that passes an attacker influenced path to the constructor discloses whether an arbitrary out of root file exists and, if it does, its exact byte size and modification time, even when `nltk.pathsec.ENFORCE` is `True`. This is the residual metadata channel left open by the fix for CVE-2026-63312 (GHSA-x5ph-mj9p-rfr8), which closed arbitrary content read on the same code path but did not bring the sibling `os.stat` under the sandbox.\n\n## Root Cause\n\nThe pathsec sandbox is intended to confine all NLTK filesystem access to allowed data roots. The fix for CVE-2026-63312 enforced this for content reads by routing `StreamBackedCorpusView._open` through `nltk.pathsec.open` (`_secure_open`). The constructor, however, computes the end of file position eagerly, and on the non `PathPointer` branch it stats the caller supplied path directly. The `PathPointer` branch is validated (it calls `PathPointer.file_size()`), but the plain string branch reaches `os.stat` with no `validate_path`, `_secure_open`, or `required_root` check. The security invariant \"no filesystem access outside allowed roots under ENFORCE\" is therefore violated for the metadata channel: `os.stat` is filesystem access, and it is performed on the same untrusted string entry point that the content read fix protected.\n\n```text\nAffected component: nltk.corpus.reader.util.StreamBackedCorpusView.__init__\nSink:   nltk/corpus/reader/util.py, os.stat(self._fileid).st_size on the plain-string branch\nGuarded sibling: _open() (routes through nltk.pathsec.open); the constructor os.stat is not guarded\n```\n\n## Impact\n\nAn attacker who can influence the fileid string passed to `StreamBackedCorpusView(...)` (the same attacker model under which CVE-2026-63312 was published for content read) obtains a filesystem oracle that operates across the process visible filesystem regardless of the pathsec data roots and with `ENFORCE=True`:\n\n- Existence: a present path returns a size; a missing path raises `ValueError` whose message embeds the underlying OS error, so ENOENT, EACCES, and ENOTDIR are distinguishable, adding a permission and type probe.\n- Exact size: `st_size` of the target fi",
+      "publishedAt": "2026-11-19T23:47:58Z",
+      "updatedAt": "2026-11-19T23:47:59Z",
+      "url": "https://github.com/advisories/GHSA-w674-vqhw-g3pg",
+      "references": [
+        "https://github.com/nltk/nltk/security/advisories/GHSA-w674-vqhw-g3pg",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-129233",
+        "https://github.com/nltk/nltk/pull/3888",
+        "https://github.com/nltk/nltk/commit/2c563b13f9dce7c15eefd4b03463e1b69b64f1f3",
+        "https://github.com/nltk/nltk/commit/68434c0427f8d296f3adfddb518525038d1f7bfa",
+        "https://github.com/nltk/nltk/releases/tag/v3.10.4",
+        "https://github.com/advisories/GHSA-w674-vqhw-g3pg"
+      ],
+      "patchUrls": [
+        "https://github.com/nltk/nltk/pull/3888",
+        "https://github.com/nltk/nltk/commit/2c563b13f9dce7c15eefd4b03463e1b69b64f1f3",
+        "https://github.com/nltk/nltk/commit/68434c0427f8d296f3adfddb518525038d1f7bfa"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "nltk",
+          "ge": "3.10.0",
+          "lt": "3.10.4",
+          "id": "CVE-2026-129233",
+          "ghsaId": "GHSA-w674-vqhw-g3pg",
+          "cve": "CVE-2026-129233",
+          "cwe": "CWE-200",
+          "sev": "medium",
+          "note": "NLTK: StreamBackedCorpusView constructor os.stat leaks out-of-root file existence, size, and mtime bypassing pathsec ENFORCE"
         }
       ],
       "kev": false,
@@ -17354,152 +17581,6 @@
       "epss": 0.0035
     },
     {
-      "id": "CVE-2026-58208",
-      "ghsaId": "GHSA-p957-7v2w-g93g",
-      "cve": "CVE-2026-58208",
-      "cwe": "CWE-248",
-      "sev": "medium",
-      "summary": "NATS Server: MQTT-over-WebSocket Path Can Crash WebSocket-Only JetStream Servers Before MQTT Is Enabled",
-      "description": "### Background\n\nNATS.io is a high performance open source pub-sub distributed communication technology, built for the cloud, on-premise, IoT and edge computing.\n\nThe NATS Server can accept client connections over WebSocket and can also support MQTT over WebSocket when MQTT is configured.\n\n### Problem Description\n\nA WebSocket listener could route requests for the MQTT-over-WebSocket path into MQTT handling even when MQTT was not configured.\n\nOn affected deployments, an unauthenticated client with access to the WebSocket listener could reach uninitialized MQTT state and crash the server process.\n\nThis affects deployments that enable WebSocket while leaving MQTT disabled. Deployments where MQTT is intentionally configured initialize the MQTT state and are not affected in the same way.\n\n### Affected Versions\n\nVersions v2.14.2, v2.12.11 and below are vulnerable. The issue is fixed in v2.14.3 and v2.12.12.\n\n### Workarounds\n\nDeployments not using WebSocket are not affected. Deployments using both WebSockets and MQTT are not affected. No known workaround for deployments that need WebSocket without MQTT-over-WebSocket. Upgrade to a fixed release.\n\n### References\n\n * GHSA advisory: <https://github.com/nats-io/nats-server/security/advisories/GHSA-p957-7v2w-g93g>\n * Credit: Vasco Franco, Trail of Bits",
-      "publishedAt": "2026-11-20T00:05:17Z",
-      "updatedAt": "2026-11-20T00:05:17Z",
-      "url": "https://github.com/advisories/GHSA-p957-7v2w-g93g",
-      "references": [
-        "https://github.com/nats-io/nats-server/security/advisories/GHSA-p957-7v2w-g93g",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-58208",
-        "https://github.com/nats-io/nats-server/commit/73b3dd9a5ea0fa7bf08b702338676355b29b5fb4",
-        "https://github.com/nats-io/nats-server/commit/837536b98b3a9280b993282155ff2bdd3ca38c30",
-        "https://github.com/nats-io/nats-server/releases/tag/v2.12.12",
-        "https://github.com/nats-io/nats-server/releases/tag/v2.14.3",
-        "https://github.com/advisories/GHSA-p957-7v2w-g93g"
-      ],
-      "patchUrls": [
-        "https://github.com/nats-io/nats-server/commit/73b3dd9a5ea0fa7bf08b702338676355b29b5fb4",
-        "https://github.com/nats-io/nats-server/commit/837536b98b3a9280b993282155ff2bdd3ca38c30"
-      ],
-      "packages": [
-        {
-          "ecosystem": "go",
-          "name": "github.com/nats-io/nats-server/v2",
-          "lt": "2.12.12",
-          "id": "CVE-2026-58208",
-          "ghsaId": "GHSA-p957-7v2w-g93g",
-          "cve": "CVE-2026-58208",
-          "cwe": "CWE-248",
-          "sev": "medium",
-          "note": "NATS Server: MQTT-over-WebSocket Path Can Crash WebSocket-Only JetStream Servers Before MQTT Is Enabled"
-        },
-        {
-          "ecosystem": "go",
-          "name": "github.com/nats-io/nats-server/v2",
-          "ge": "2.14.0-RC.1",
-          "lt": "2.14.3",
-          "id": "CVE-2026-58208",
-          "ghsaId": "GHSA-p957-7v2w-g93g",
-          "cve": "CVE-2026-58208",
-          "cwe": "CWE-248",
-          "sev": "medium",
-          "note": "NATS Server: MQTT-over-WebSocket Path Can Crash WebSocket-Only JetStream Servers Before MQTT Is Enabled"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0034
-    },
-    {
-      "id": "CVE-2026-58209",
-      "ghsaId": "GHSA-7qmq-8cc4-hxwg",
-      "cve": "CVE-2026-58209",
-      "cwe": "CWE-863",
-      "sev": "medium",
-      "summary": "NATS Server MQTT retained messages and QoS replay bypass subscription deny rules",
-      "description": "### Background\n\nNATS.io is a high performance open source pub-sub distributed communication technology, built for the cloud, on-premise, IoT and edge computing.\n\nThe NATS Server MQTT support includes retained messages and QoS1+ durable delivery. NATS subscription permissions can allow broad wildcard subscriptions while denying more sensitive subjects.\n\n### Problem Description\n\nMQTT retained message delivery and QoS1+ durable replay could deliver messages whose original topics matched a subscriber's configured subscribe deny rules.\n\nNormal live delivery applied the delivery-time deny check. These MQTT delivery paths did not consistently recheck the concrete original topic before sending the MQTT `PUBLISH` to the subscriber.\n\nThe issue affects MQTT subscribers with broad wildcard subscribe permissions where more specific topics are denied. Normal live delivery can be blocked while retained or replayed delivery still sends the denied topic.\n\n### Affected Versions\n\nVersions v2.14.2, v2.12.11 and below are vulnerable. The issue is fixed in v2.14.3 and v2.12.12.\n\n### Workarounds\n\nNo known workaround for deployments that require MQTT. Upgrade to a fixed release. Deployments not using MQTT are not affected.\n\n### References\n\n * GHSA advisory: <https://github.com/nats-io/nats-server/security/advisories/GHSA-7qmq-8cc4-hxwg>\n * Credit: Asritha Bodepudi, Trail of Bits",
-      "publishedAt": "2026-11-20T00:04:27Z",
-      "updatedAt": "2026-11-20T00:04:30Z",
-      "url": "https://github.com/advisories/GHSA-7qmq-8cc4-hxwg",
-      "references": [
-        "https://github.com/nats-io/nats-server/security/advisories/GHSA-7qmq-8cc4-hxwg",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-58209",
-        "https://github.com/nats-io/nats-server/commit/181b1f51f40b9954c57e9d478e051fb257679356",
-        "https://github.com/nats-io/nats-server/commit/1c429b6fdc5afd4188cc5faf1127f6334896cd87",
-        "https://github.com/nats-io/nats-server/releases/tag/v2.12.12",
-        "https://github.com/nats-io/nats-server/releases/tag/v2.14.3",
-        "https://github.com/advisories/GHSA-7qmq-8cc4-hxwg"
-      ],
-      "patchUrls": [
-        "https://github.com/nats-io/nats-server/commit/181b1f51f40b9954c57e9d478e051fb257679356",
-        "https://github.com/nats-io/nats-server/commit/1c429b6fdc5afd4188cc5faf1127f6334896cd87"
-      ],
-      "packages": [
-        {
-          "ecosystem": "go",
-          "name": "github.com/nats-io/nats-server/v2",
-          "lt": "2.12.12",
-          "id": "CVE-2026-58209",
-          "ghsaId": "GHSA-7qmq-8cc4-hxwg",
-          "cve": "CVE-2026-58209",
-          "cwe": "CWE-863",
-          "sev": "medium",
-          "note": "NATS Server MQTT retained messages and QoS replay bypass subscription deny rules"
-        },
-        {
-          "ecosystem": "go",
-          "name": "github.com/nats-io/nats-server/v2",
-          "ge": "2.14.0-RC.1",
-          "lt": "2.14.3",
-          "id": "CVE-2026-58209",
-          "ghsaId": "GHSA-7qmq-8cc4-hxwg",
-          "cve": "CVE-2026-58209",
-          "cwe": "CWE-863",
-          "sev": "medium",
-          "note": "NATS Server MQTT retained messages and QoS replay bypass subscription deny rules"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0034
-    },
-    {
-      "id": "CVE-2026-129233",
-      "ghsaId": "GHSA-w674-vqhw-g3pg",
-      "cve": "CVE-2026-129233",
-      "cwe": "CWE-200",
-      "sev": "medium",
-      "summary": "NLTK: StreamBackedCorpusView constructor os.stat leaks out-of-root file existence, size, and mtime bypassing pathsec ENFORCE",
-      "description": "## Summary\n\n`StreamBackedCorpusView`, a public API in `nltk/corpus/reader/util.py`, applies the pathsec sandbox to the file content it reads but not to the file metadata it probes in its constructor. When the view is created with a plain string fileid, `__init__` calls `os.stat(self._fileid).st_size` with no pathsec validation, so an application that passes an attacker influenced path to the constructor discloses whether an arbitrary out of root file exists and, if it does, its exact byte size and modification time, even when `nltk.pathsec.ENFORCE` is `True`. This is the residual metadata channel left open by the fix for CVE-2026-63312 (GHSA-x5ph-mj9p-rfr8), which closed arbitrary content read on the same code path but did not bring the sibling `os.stat` under the sandbox.\n\n## Root Cause\n\nThe pathsec sandbox is intended to confine all NLTK filesystem access to allowed data roots. The fix for CVE-2026-63312 enforced this for content reads by routing `StreamBackedCorpusView._open` through `nltk.pathsec.open` (`_secure_open`). The constructor, however, computes the end of file position eagerly, and on the non `PathPointer` branch it stats the caller supplied path directly. The `PathPointer` branch is validated (it calls `PathPointer.file_size()`), but the plain string branch reaches `os.stat` with no `validate_path`, `_secure_open`, or `required_root` check. The security invariant \"no filesystem access outside allowed roots under ENFORCE\" is therefore violated for the metadata channel: `os.stat` is filesystem access, and it is performed on the same untrusted string entry point that the content read fix protected.\n\n```text\nAffected component: nltk.corpus.reader.util.StreamBackedCorpusView.__init__\nSink:   nltk/corpus/reader/util.py, os.stat(self._fileid).st_size on the plain-string branch\nGuarded sibling: _open() (routes through nltk.pathsec.open); the constructor os.stat is not guarded\n```\n\n## Impact\n\nAn attacker who can influence the fileid string passed to `StreamBackedCorpusView(...)` (the same attacker model under which CVE-2026-63312 was published for content read) obtains a filesystem oracle that operates across the process visible filesystem regardless of the pathsec data roots and with `ENFORCE=True`:\n\n- Existence: a present path returns a size; a missing path raises `ValueError` whose message embeds the underlying OS error, so ENOENT, EACCES, and ENOTDIR are distinguishable, adding a permission and type probe.\n- Exact size: `st_size` of the target fi",
-      "publishedAt": "2026-11-19T23:47:58Z",
-      "updatedAt": "2026-11-19T23:47:59Z",
-      "url": "https://github.com/advisories/GHSA-w674-vqhw-g3pg",
-      "references": [
-        "https://github.com/nltk/nltk/security/advisories/GHSA-w674-vqhw-g3pg",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-129233",
-        "https://github.com/nltk/nltk/pull/3888",
-        "https://github.com/nltk/nltk/commit/2c563b13f9dce7c15eefd4b03463e1b69b64f1f3",
-        "https://github.com/nltk/nltk/commit/68434c0427f8d296f3adfddb518525038d1f7bfa",
-        "https://github.com/nltk/nltk/releases/tag/v3.10.4",
-        "https://github.com/advisories/GHSA-w674-vqhw-g3pg"
-      ],
-      "patchUrls": [
-        "https://github.com/nltk/nltk/pull/3888",
-        "https://github.com/nltk/nltk/commit/2c563b13f9dce7c15eefd4b03463e1b69b64f1f3",
-        "https://github.com/nltk/nltk/commit/68434c0427f8d296f3adfddb518525038d1f7bfa"
-      ],
-      "packages": [
-        {
-          "ecosystem": "pip",
-          "name": "nltk",
-          "ge": "3.10.0",
-          "lt": "3.10.4",
-          "id": "CVE-2026-129233",
-          "ghsaId": "GHSA-w674-vqhw-g3pg",
-          "cve": "CVE-2026-129233",
-          "cwe": "CWE-200",
-          "sev": "medium",
-          "note": "NLTK: StreamBackedCorpusView constructor os.stat leaks out-of-root file existence, size, and mtime bypassing pathsec ENFORCE"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0034
-    },
-    {
       "id": "CVE-2026-112366",
       "ghsaId": "GHSA-fc5q-39xc-vjpf",
       "cve": "CVE-2026-112366",
@@ -17820,65 +17901,6 @@
       "epss": 0.0034
     },
     {
-      "id": "CVE-2026-104773",
-      "ghsaId": "GHSA-6499-jgj4-2wpf",
-      "cve": "CVE-2026-104773",
-      "cwe": "CWE-384",
-      "sev": "medium",
-      "summary": "CKAN: Session Fixation in Registration View",
-      "description": "## Description\n\nWeb user registration form is vulnerable to session fixation if the site is configured with server-side session storage (CKAN uses cookie-based session storage by default). The attacker would need to either set a cookie on the victim's browser or steal the victim's currently valid session. Session identifiers are now regenerated after registration.\n\n## Patches\n\nThis vulnerability has been fixed in CKAN 2.10.11, 2.11.6 and 2.12.0\n\n## Workarounds\n\nswitch to cookie-based session storage (the default) or disable web user registration by setting `ckan.auth.create_user_via_web` to false (the default)",
-      "publishedAt": "2026-11-20T16:25:26Z",
-      "updatedAt": "2026-11-20T16:25:28Z",
-      "url": "https://github.com/advisories/GHSA-6499-jgj4-2wpf",
-      "references": [
-        "https://github.com/ckan/ckan/security/advisories/GHSA-6499-jgj4-2wpf",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-104773",
-        "https://github.com/ckan/ckan/commit/6eae4e9c430e163b9d6cc75a3fd2ca82e79d80f6",
-        "https://github.com/ckan/ckan/commit/8f8e8b587461b66120ec7a85c17a34ecea213f57",
-        "https://github.com/ckan/ckan/commit/a25e2f3080a79a94eb04dcf02e16ded3e5fadeb2",
-        "https://github.com/ckan/ckan/commit/c30bae7fdd616d98a5d47cc31f9e8d5d1ad7bcd2",
-        "https://github.com/ckan/ckan/commit/c72815a5afd50cf689fcfb688f431dec21a85915",
-        "https://github.com/ckan/ckan/releases/tag/ckan-2.10.11",
-        "https://github.com/ckan/ckan/releases/tag/ckan-2.11.6",
-        "https://github.com/ckan/ckan/releases/tag/ckan-2.12.0",
-        "https://github.com/advisories/GHSA-6499-jgj4-2wpf"
-      ],
-      "patchUrls": [
-        "https://github.com/ckan/ckan/commit/6eae4e9c430e163b9d6cc75a3fd2ca82e79d80f6",
-        "https://github.com/ckan/ckan/commit/8f8e8b587461b66120ec7a85c17a34ecea213f57",
-        "https://github.com/ckan/ckan/commit/a25e2f3080a79a94eb04dcf02e16ded3e5fadeb2",
-        "https://github.com/ckan/ckan/commit/c30bae7fdd616d98a5d47cc31f9e8d5d1ad7bcd2",
-        "https://github.com/ckan/ckan/commit/c72815a5afd50cf689fcfb688f431dec21a85915"
-      ],
-      "packages": [
-        {
-          "ecosystem": "pip",
-          "name": "ckan",
-          "lt": "2.10.11",
-          "id": "CVE-2026-104773",
-          "ghsaId": "GHSA-6499-jgj4-2wpf",
-          "cve": "CVE-2026-104773",
-          "cwe": "CWE-384",
-          "sev": "medium",
-          "note": "CKAN: Session Fixation in Registration View"
-        },
-        {
-          "ecosystem": "pip",
-          "name": "ckan",
-          "ge": "2.11.0",
-          "lt": "2.11.6",
-          "id": "CVE-2026-104773",
-          "ghsaId": "GHSA-6499-jgj4-2wpf",
-          "cve": "CVE-2026-104773",
-          "cwe": "CWE-384",
-          "sev": "medium",
-          "note": "CKAN: Session Fixation in Registration View"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0033
-    },
-    {
       "id": "CVE-2026-119347",
       "ghsaId": "GHSA-7qx7-33qx-rqx2",
       "cve": "CVE-2026-119347",
@@ -17971,37 +17993,52 @@
       "epss": 0.0033
     },
     {
-      "id": "CVE-2026-104885",
-      "ghsaId": "GHSA-3h6w-xcw3-9xjj",
-      "cve": "CVE-2026-104885",
-      "cwe": "CWE-862",
+      "id": "CVE-2026-58209",
+      "ghsaId": "GHSA-7qmq-8cc4-hxwg",
+      "cve": "CVE-2026-58209",
+      "cwe": "CWE-863",
       "sev": "medium",
-      "summary": "OpenRemote: Cross-realm MQTT session disconnect without authorization",
-      "description": "### Summary\n\nCross-realm MQTT session disconnect without authorization\n\n## Vulnerability\n\nThe `disconnectUserSession` endpoint in `UserResourceImpl.java` (line 443) accepts a `realm` path parameter but ignores it entirely, performing no authorization or realm-boundary check before force-disconnecting an MQTT session. Any authenticated user from any realm can disconnect MQTT broker sessions belonging to users in other realms by supplying the target session ID.\n\nFile: `manager/src/main/java/org/openremote/manager/security/UserResourceImpl.java`, lines 443-447\n\n```java\n@Override\npublic void disconnectUserSession(RequestParams requestParams, String realm, String sessionID) {\n    if (!mqttBrokerService.disconnectSession(sessionID)) {\n        throw new NotFoundException(\"User session not found\");\n    }\n}\n```\n\nThe REST interface at `model/src/main/java/org/openremote/model/security/UserResource.java` (line 201-204) maps this to `GET {realm}/disconnect/{sessionID}` with no `@RolesAllowed` annotation, so any authenticated user (not just admins) can call it.\n\n## Root Cause\n\nCVE-2026-54641 (commit de89b8d) fixed cross-realm information disclosure in three read methods of the same file (`get()`, `getUserClientRoles()`, `getUserRealmRoles()`) and also added a realm check to `getClientRoles()`. The fix added `throwIfCannotReadUserInRealm()` and `throwIfCannotAdminRealm()` guards. However, `disconnectUserSession` was not patched and remains unprotected. Every other mutating method in this class has either a `@RolesAllowed` annotation on the interface or an explicit realm check in the implementation. This one has neither.\n\n## Proof of Concept\n\nGiven two realms, \"master\" and \"building\":\n\n1. User A authenticates in the \"building\" realm (any role, no admin needed).\n2. User B has an active MQTT session in the \"master\" realm with session ID `S`.\n3. User A sends: `GET /api/master/user/master/disconnect/S` with their building-realm bearer token.\n4. The handler ignores the realm path segments, looks up session `S` in the global `connectionIDConnectionMap`, and calls `doForceDisconnect()`. User B's MQTT connection is terminated.\n\nSession IDs use the Netty `ChannelId.asLongText()` format (deterministic, partially sequential). While not trivially brute-forceable, IDs can leak through monitoring, logs, or correlated API calls. Within the same realm, any user (not just admins) can also disconnect sessions they should not have access to.\n\n## Impact\n\nIn a multi-tenant IoT deployment, an",
-      "publishedAt": "2026-11-20T14:56:58Z",
-      "updatedAt": "2026-11-20T14:56:59Z",
-      "url": "https://github.com/advisories/GHSA-3h6w-xcw3-9xjj",
+      "summary": "NATS Server MQTT retained messages and QoS replay bypass subscription deny rules",
+      "description": "### Background\n\nNATS.io is a high performance open source pub-sub distributed communication technology, built for the cloud, on-premise, IoT and edge computing.\n\nThe NATS Server MQTT support includes retained messages and QoS1+ durable delivery. NATS subscription permissions can allow broad wildcard subscriptions while denying more sensitive subjects.\n\n### Problem Description\n\nMQTT retained message delivery and QoS1+ durable replay could deliver messages whose original topics matched a subscriber's configured subscribe deny rules.\n\nNormal live delivery applied the delivery-time deny check. These MQTT delivery paths did not consistently recheck the concrete original topic before sending the MQTT `PUBLISH` to the subscriber.\n\nThe issue affects MQTT subscribers with broad wildcard subscribe permissions where more specific topics are denied. Normal live delivery can be blocked while retained or replayed delivery still sends the denied topic.\n\n### Affected Versions\n\nVersions v2.14.2, v2.12.11 and below are vulnerable. The issue is fixed in v2.14.3 and v2.12.12.\n\n### Workarounds\n\nNo known workaround for deployments that require MQTT. Upgrade to a fixed release. Deployments not using MQTT are not affected.\n\n### References\n\n * GHSA advisory: <https://github.com/nats-io/nats-server/security/advisories/GHSA-7qmq-8cc4-hxwg>\n * Credit: Asritha Bodepudi, Trail of Bits",
+      "publishedAt": "2026-11-20T00:04:27Z",
+      "updatedAt": "2026-11-20T00:04:30Z",
+      "url": "https://github.com/advisories/GHSA-7qmq-8cc4-hxwg",
       "references": [
-        "https://github.com/openremote/core/security/advisories/GHSA-3h6w-xcw3-9xjj",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-104885",
-        "https://github.com/openremote/core/commit/51dce18d9e00d671a5e032d942ece186bdada560",
-        "https://github.com/openremote/core/releases/tag/1.31.0",
-        "https://github.com/advisories/GHSA-3h6w-xcw3-9xjj"
+        "https://github.com/nats-io/nats-server/security/advisories/GHSA-7qmq-8cc4-hxwg",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-58209",
+        "https://github.com/nats-io/nats-server/commit/181b1f51f40b9954c57e9d478e051fb257679356",
+        "https://github.com/nats-io/nats-server/commit/1c429b6fdc5afd4188cc5faf1127f6334896cd87",
+        "https://github.com/nats-io/nats-server/releases/tag/v2.12.12",
+        "https://github.com/nats-io/nats-server/releases/tag/v2.14.3",
+        "https://github.com/advisories/GHSA-7qmq-8cc4-hxwg"
       ],
       "patchUrls": [
-        "https://github.com/openremote/core/commit/51dce18d9e00d671a5e032d942ece186bdada560"
+        "https://github.com/nats-io/nats-server/commit/181b1f51f40b9954c57e9d478e051fb257679356",
+        "https://github.com/nats-io/nats-server/commit/1c429b6fdc5afd4188cc5faf1127f6334896cd87"
       ],
       "packages": [
         {
-          "ecosystem": "maven",
-          "name": "io.openremote:openremote-manager",
-          "lt": "1.31.0",
-          "id": "CVE-2026-104885",
-          "ghsaId": "GHSA-3h6w-xcw3-9xjj",
-          "cve": "CVE-2026-104885",
-          "cwe": "CWE-862",
+          "ecosystem": "go",
+          "name": "github.com/nats-io/nats-server/v2",
+          "lt": "2.12.12",
+          "id": "CVE-2026-58209",
+          "ghsaId": "GHSA-7qmq-8cc4-hxwg",
+          "cve": "CVE-2026-58209",
+          "cwe": "CWE-863",
           "sev": "medium",
-          "note": "OpenRemote: Cross-realm MQTT session disconnect without authorization"
+          "note": "NATS Server MQTT retained messages and QoS replay bypass subscription deny rules"
+        },
+        {
+          "ecosystem": "go",
+          "name": "github.com/nats-io/nats-server/v2",
+          "ge": "2.14.0-RC.1",
+          "lt": "2.14.3",
+          "id": "CVE-2026-58209",
+          "ghsaId": "GHSA-7qmq-8cc4-hxwg",
+          "cve": "CVE-2026-58209",
+          "cwe": "CWE-863",
+          "sev": "medium",
+          "note": "NATS Server MQTT retained messages and QoS replay bypass subscription deny rules"
         }
       ],
       "kev": false,
@@ -18196,56 +18233,6 @@
       ],
       "kev": false,
       "epss": 0.0032
-    },
-    {
-      "id": "CVE-2026-58254",
-      "ghsaId": "GHSA-p3j5-5hrq-p75h",
-      "cve": "CVE-2026-58254",
-      "cwe": "CWE-863",
-      "sev": "medium",
-      "summary": "nats-server Leaf node connections bypass Nats-Trace-Dest permission check",
-      "description": "### Background\n\nNATS.io is a high performance open source pub-sub distributed communication technology, built for the cloud, on-premise, IoT and edge computing.\n\nThe NATS Server supports leafnode connections between servers and message tracing through NATS headers.\n\n### Problem Description\n\nMessage trace destination checks were applied to ordinary client connections but not consistently to messages arriving through leafnode connections.\n\nA leafnode operator could cause trace events to be sent to subjects that would not otherwise be permitted and could use trace-only behavior to prevent normal delivery or storage of affected messages.\n\nTrace events can include routing, subscription, account, service import and JetStream metadata. The payload of the original application message is not chosen through the trace event itself.\n\n### Affected Versions\n\nVersions v2.14.2, v2.12.7 and below are vulnerable. The issue is fixed in v2.14.3 and v2.12.8.\n\n### Workarounds\n\nWhere possible, avoid granting publish paths from less-trusted leaf nodes into subjects for which trace-only behavior would affect delivery guarantees. No other known workarounds are available aside from upgrading to a fixed release.\n\n### References\n\n * GHSA advisory: <https://github.com/nats-io/nats-server/security/advisories/GHSA-p3j5-5hrq-p75h>\n * Credit: Koda Reef",
-      "publishedAt": "2026-11-20T23:31:59Z",
-      "updatedAt": "2026-11-20T23:32:00Z",
-      "url": "https://github.com/advisories/GHSA-p3j5-5hrq-p75h",
-      "references": [
-        "https://github.com/nats-io/nats-server/security/advisories/GHSA-p3j5-5hrq-p75h",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-58254",
-        "https://github.com/nats-io/nats-server/commit/cbe845932980b71563efac5cfa4cc751c88936cd",
-        "https://github.com/nats-io/nats-server/releases/tag/v2.12.8",
-        "https://github.com/nats-io/nats-server/releases/tag/v2.14.3",
-        "https://github.com/advisories/GHSA-p3j5-5hrq-p75h"
-      ],
-      "patchUrls": [
-        "https://github.com/nats-io/nats-server/commit/cbe845932980b71563efac5cfa4cc751c88936cd"
-      ],
-      "packages": [
-        {
-          "ecosystem": "go",
-          "name": "github.com/nats-io/nats-server/v2",
-          "lt": "2.12.8",
-          "id": "CVE-2026-58254",
-          "ghsaId": "GHSA-p3j5-5hrq-p75h",
-          "cve": "CVE-2026-58254",
-          "cwe": "CWE-863",
-          "sev": "medium",
-          "note": "nats-server Leaf node connections bypass Nats-Trace-Dest permission check"
-        },
-        {
-          "ecosystem": "go",
-          "name": "github.com/nats-io/nats-server/v2",
-          "ge": "2.14.0-RC.1",
-          "lt": "2.14.3",
-          "id": "CVE-2026-58254",
-          "ghsaId": "GHSA-p3j5-5hrq-p75h",
-          "cve": "CVE-2026-58254",
-          "cwe": "CWE-863",
-          "sev": "medium",
-          "note": "nats-server Leaf node connections bypass Nats-Trace-Dest permission check"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0031
     },
     {
       "id": "CVE-2026-128075",
@@ -18674,43 +18661,6 @@
           "cwe": "CWE-89",
           "sev": "medium",
           "note": "Bolt ListFormatHelper SQL injection"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0029
-    },
-    {
-      "id": "CVE-2026-129307",
-      "ghsaId": "GHSA-m4g8-47f9-h588",
-      "cve": "CVE-2026-129307",
-      "cwe": "CWE-407",
-      "sev": "medium",
-      "summary": "eml_parser: Algorithmic-complexity DoS (O(n^4) regex backtracking) in Received-header parsing",
-      "description": "### Summary\n\n`eml_parser.routing.parserouting()` dynamically builds a regex from up to four greedy `.*` groups (`from (?P<from>.*)by (?P<by>.*)with (?P<with>.*)for (?P<for>.*)`) terminated by an escaped literal of the date extracted from a **normalized** copy of the `Received` header. Because the date literal comes from the normalized text but is searched in the original line, a crafted header can make the trailing literal unmatchable; the search then fails at every start position only after exhaustively backtracking the four nested greedy groups — **O(n^4)** in header length. A single ~5.9 KB email pins one CPU core for ~12 seconds; doubling the input multiplies the cost ~25x, so a ~13 KB header takes minutes and a ~25 KB header effectively hangs the parse worker.\n\n### Details\n\nRoot cause: `eml_parser/routing.py:140-148` (v3.0.3):\n\n```python\nreg = ''\nfor item in tout:\n    reg += item[1] + '(?P<' + item[1].strip() + '>.*)'   # e.g. 'from (?P<from>.*)'\nif npdate:\n    reg += eml_parser.regexes.escape_special_regex_chars.sub(r\"\"\"\\\\\\1\"\"\", npdate)\nreparse = re.compile(reg)\nreparseg = reparse.search(line)   # searched in the ORIGINAL line\n```\n\n`npdate` is extracted from `npline`, a normalized copy of the header (spacing added around `(`, `)`, `;` at routing.py:79-81; parenthesized text removed at line 82; whitespace collapsed at line 83), so it is not guaranteed to be a substring of `line`. An unbalanced `(` in the date tail (e.g. `+0000(comment`) becomes ` ( comment` in `npline` but stays `(comment` in `line`, making the mandatory trailing literal unmatchable.\n\nData flow: attacker-controlled `Received:` header (arbitrary length; the custom policy sets `max_line_length=0`) -> `parser.py:352-355` (lowercased, whitespace-flattened, no size cap - unlike body text, which is sliced) -> `parser.py:365` `routing.parserouting(...)` -> O(n^4) search. Every Received header is processed, multiplying the cost, and the behavior cannot be disabled via any `EmlParser` option.\n\nMeasured on Python 3.14 (identical with stdlib `re` and the optional `regex` module):\n\n| Segments | Header size | Wall time |\n|---|---|---|\n| 20 | 1.4 KB | 0.022 s |\n| 40 | 2.9 KB | 0.43 s |\n| 80 | 5.8 KB | 12 s |\n| 160 (extrapolated) | 13 KB | ~5 min |\n\ncProfile attributes 83% of wall time to `re.Pattern.search` called from `routing.parserouting`. The parse completes normally (no exception) - it is pure CPU exhaustion.\n\nThis is distinct from GHSA-g47v-rwmh-r9f8 (recursion DoS in `get_raw_body_text()`, f",
-      "publishedAt": "2026-11-19T22:47:08Z",
-      "updatedAt": "2026-11-19T22:47:09Z",
-      "url": "https://github.com/advisories/GHSA-m4g8-47f9-h588",
-      "references": [
-        "https://github.com/GOVCERT-LU/eml_parser/security/advisories/GHSA-m4g8-47f9-h588",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-129307",
-        "https://github.com/GOVCERT-LU/eml_parser/commit/54ea6e9f54fecda3059283ccdb6a6fd99e7ce92f",
-        "https://github.com/GOVCERT-LU/eml_parser/releases/tag/v3.0.4",
-        "https://github.com/advisories/GHSA-m4g8-47f9-h588"
-      ],
-      "patchUrls": [
-        "https://github.com/GOVCERT-LU/eml_parser/commit/54ea6e9f54fecda3059283ccdb6a6fd99e7ce92f"
-      ],
-      "packages": [
-        {
-          "ecosystem": "pip",
-          "name": "eml-parser",
-          "lt": "3.0.4",
-          "id": "CVE-2026-129307",
-          "ghsaId": "GHSA-m4g8-47f9-h588",
-          "cve": "CVE-2026-129307",
-          "cwe": "CWE-407",
-          "sev": "medium",
-          "note": "eml_parser: Algorithmic-complexity DoS (O(n^4) regex backtracking) in Received-header parsing"
         }
       ],
       "kev": false,
@@ -21431,6 +21381,56 @@
       "epss": 0.0023
     },
     {
+      "id": "CVE-2026-58254",
+      "ghsaId": "GHSA-p3j5-5hrq-p75h",
+      "cve": "CVE-2026-58254",
+      "cwe": "CWE-863",
+      "sev": "medium",
+      "summary": "nats-server Leaf node connections bypass Nats-Trace-Dest permission check",
+      "description": "### Background\n\nNATS.io is a high performance open source pub-sub distributed communication technology, built for the cloud, on-premise, IoT and edge computing.\n\nThe NATS Server supports leafnode connections between servers and message tracing through NATS headers.\n\n### Problem Description\n\nMessage trace destination checks were applied to ordinary client connections but not consistently to messages arriving through leafnode connections.\n\nA leafnode operator could cause trace events to be sent to subjects that would not otherwise be permitted and could use trace-only behavior to prevent normal delivery or storage of affected messages.\n\nTrace events can include routing, subscription, account, service import and JetStream metadata. The payload of the original application message is not chosen through the trace event itself.\n\n### Affected Versions\n\nVersions v2.14.2, v2.12.7 and below are vulnerable. The issue is fixed in v2.14.3 and v2.12.8.\n\n### Workarounds\n\nWhere possible, avoid granting publish paths from less-trusted leaf nodes into subjects for which trace-only behavior would affect delivery guarantees. No other known workarounds are available aside from upgrading to a fixed release.\n\n### References\n\n * GHSA advisory: <https://github.com/nats-io/nats-server/security/advisories/GHSA-p3j5-5hrq-p75h>\n * Credit: Koda Reef",
+      "publishedAt": "2026-11-20T23:31:59Z",
+      "updatedAt": "2026-11-20T23:32:00Z",
+      "url": "https://github.com/advisories/GHSA-p3j5-5hrq-p75h",
+      "references": [
+        "https://github.com/nats-io/nats-server/security/advisories/GHSA-p3j5-5hrq-p75h",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-58254",
+        "https://github.com/nats-io/nats-server/commit/cbe845932980b71563efac5cfa4cc751c88936cd",
+        "https://github.com/nats-io/nats-server/releases/tag/v2.12.8",
+        "https://github.com/nats-io/nats-server/releases/tag/v2.14.3",
+        "https://github.com/advisories/GHSA-p3j5-5hrq-p75h"
+      ],
+      "patchUrls": [
+        "https://github.com/nats-io/nats-server/commit/cbe845932980b71563efac5cfa4cc751c88936cd"
+      ],
+      "packages": [
+        {
+          "ecosystem": "go",
+          "name": "github.com/nats-io/nats-server/v2",
+          "lt": "2.12.8",
+          "id": "CVE-2026-58254",
+          "ghsaId": "GHSA-p3j5-5hrq-p75h",
+          "cve": "CVE-2026-58254",
+          "cwe": "CWE-863",
+          "sev": "medium",
+          "note": "nats-server Leaf node connections bypass Nats-Trace-Dest permission check"
+        },
+        {
+          "ecosystem": "go",
+          "name": "github.com/nats-io/nats-server/v2",
+          "ge": "2.14.0-RC.1",
+          "lt": "2.14.3",
+          "id": "CVE-2026-58254",
+          "ghsaId": "GHSA-p3j5-5hrq-p75h",
+          "cve": "CVE-2026-58254",
+          "cwe": "CWE-863",
+          "sev": "medium",
+          "note": "nats-server Leaf node connections bypass Nats-Trace-Dest permission check"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0022
+    },
+    {
       "id": "CVE-2026-128135",
       "ghsaId": "GHSA-wr3g-j6qj-xpgh",
       "cve": "CVE-2026-128135",
@@ -22631,6 +22631,43 @@
       "epss": 0.0018
     },
     {
+      "id": "CVE-2026-35377",
+      "ghsaId": "GHSA-xhrc-7f76-vh96",
+      "cve": "CVE-2026-35377",
+      "cwe": "CWE-20",
+      "sev": "low",
+      "summary": "uu_env incorrectly rejects backslashes within single-quoted strings accepted by GNU env",
+      "description": "In `env -S`, GNU keeps backslashes literal inside single quotes (except `\\\\` and `\\'`); uutils errors on sequences like `\\a`. This is the backslash-handling issue of the broader `-S`/`--split-string` parsing divergence.\n```\nenv -S\"printf %s '\\''\\\\x'\\''\"   # GNU prints \\x ; uutils: invalid sequence '\\x' in -S (125)\n```\n\n---\n_Zellic private finding (zellic-ext/coreutils-private PR #117). Reported in the Zellic *uutils coreutils Program Security Assessment* (for Canonical, Jan 2026), audited commit `3a07ffc5a9bd4c283e75afa548ba1f1957bad242`._",
+      "publishedAt": "2026-11-20T16:36:31Z",
+      "updatedAt": "2026-11-20T16:36:32Z",
+      "url": "https://github.com/advisories/GHSA-xhrc-7f76-vh96",
+      "references": [
+        "https://github.com/uutils/coreutils/security/advisories/GHSA-xhrc-7f76-vh96",
+        "https://github.com/uutils/coreutils/pull/11512",
+        "https://github.com/uutils/coreutils/commit/9d7a0e849109c82262ac2d65324739aac690200f",
+        "https://github.com/advisories/GHSA-xhrc-7f76-vh96"
+      ],
+      "patchUrls": [
+        "https://github.com/uutils/coreutils/pull/11512",
+        "https://github.com/uutils/coreutils/commit/9d7a0e849109c82262ac2d65324739aac690200f"
+      ],
+      "packages": [
+        {
+          "ecosystem": "cargo",
+          "name": "uu_env",
+          "lt": "0.10.0",
+          "id": "CVE-2026-35377",
+          "ghsaId": "GHSA-xhrc-7f76-vh96",
+          "cve": "CVE-2026-35377",
+          "cwe": "CWE-20",
+          "sev": "low",
+          "note": "uu_env incorrectly rejects backslashes within single-quoted strings accepted by GNU env"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0017
+    },
+    {
       "id": "CVE-2026-121717",
       "ghsaId": "GHSA-7rj6-7pqx-v7rm",
       "cve": "CVE-2026-121717",
@@ -23497,43 +23534,6 @@
       "epss": 0.0011
     },
     {
-      "id": "CVE-2026-35377",
-      "ghsaId": "GHSA-xhrc-7f76-vh96",
-      "cve": "CVE-2026-35377",
-      "cwe": "CWE-20",
-      "sev": "low",
-      "summary": "uu_env incorrectly rejects backslashes within single-quoted strings accepted by GNU env",
-      "description": "In `env -S`, GNU keeps backslashes literal inside single quotes (except `\\\\` and `\\'`); uutils errors on sequences like `\\a`. This is the backslash-handling issue of the broader `-S`/`--split-string` parsing divergence.\n```\nenv -S\"printf %s '\\''\\\\x'\\''\"   # GNU prints \\x ; uutils: invalid sequence '\\x' in -S (125)\n```\n\n---\n_Zellic private finding (zellic-ext/coreutils-private PR #117). Reported in the Zellic *uutils coreutils Program Security Assessment* (for Canonical, Jan 2026), audited commit `3a07ffc5a9bd4c283e75afa548ba1f1957bad242`._",
-      "publishedAt": "2026-11-20T16:36:31Z",
-      "updatedAt": "2026-11-20T16:36:32Z",
-      "url": "https://github.com/advisories/GHSA-xhrc-7f76-vh96",
-      "references": [
-        "https://github.com/uutils/coreutils/security/advisories/GHSA-xhrc-7f76-vh96",
-        "https://github.com/uutils/coreutils/pull/11512",
-        "https://github.com/uutils/coreutils/commit/9d7a0e849109c82262ac2d65324739aac690200f",
-        "https://github.com/advisories/GHSA-xhrc-7f76-vh96"
-      ],
-      "patchUrls": [
-        "https://github.com/uutils/coreutils/pull/11512",
-        "https://github.com/uutils/coreutils/commit/9d7a0e849109c82262ac2d65324739aac690200f"
-      ],
-      "packages": [
-        {
-          "ecosystem": "cargo",
-          "name": "uu_env",
-          "lt": "0.10.0",
-          "id": "CVE-2026-35377",
-          "ghsaId": "GHSA-xhrc-7f76-vh96",
-          "cve": "CVE-2026-35377",
-          "cwe": "CWE-20",
-          "sev": "low",
-          "note": "uu_env incorrectly rejects backslashes within single-quoted strings accepted by GNU env"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0011
-    },
-    {
       "id": "CVE-2026-75518",
       "ghsaId": "GHSA-vg83-hcp4-5qcc",
       "cve": "CVE-2026-75518",
@@ -23647,6 +23647,45 @@
       "epss": 0.001
     },
     {
+      "id": "CVE-2026-35374",
+      "ghsaId": "GHSA-fjjq-8hw5-cf9f",
+      "cve": "CVE-2026-35374",
+      "cwe": "CWE-59",
+      "sev": "medium",
+      "summary": "split: TOCTOU output-open allows truncating a swapped file",
+      "description": "`split` checks input/output identity by path before opening the output, then opens with truncation, leaving a race window on mutable path components. GNU opens first and compares the opened output inode against the input before truncating. The race can cause `split` to truncate/write a file different from the one validated — including the input file or another file the process can access.\n\n**Fixed in 0.10.0** (PR #12565, commit 58040feb5c66fce588a7ffac299b3a23bd55cd81): the output open path is hardened against TOCTOU target swaps.\n\n---\n_Zellic private finding (zellic-ext/coreutils-private PR #119). Reported in the Zellic *uutils coreutils Program Security Assessment* (for Canonical, Jan 2026), audited commit `3a07ffc5a9bd4c283e75afa548ba1f1957bad242`._",
+      "publishedAt": "2026-11-20T16:33:27Z",
+      "updatedAt": "2026-11-20T16:33:27Z",
+      "url": "https://github.com/advisories/GHSA-fjjq-8hw5-cf9f",
+      "references": [
+        "https://github.com/uutils/coreutils/security/advisories/GHSA-fjjq-8hw5-cf9f",
+        "https://github.com/uutils/coreutils/pull/11401",
+        "https://github.com/uutils/coreutils/pull/12565",
+        "https://github.com/uutils/coreutils/commit/58040feb5c66fce588a7ffac299b3a23bd55cd81",
+        "https://github.com/advisories/GHSA-fjjq-8hw5-cf9f"
+      ],
+      "patchUrls": [
+        "https://github.com/uutils/coreutils/pull/11401",
+        "https://github.com/uutils/coreutils/pull/12565",
+        "https://github.com/uutils/coreutils/commit/58040feb5c66fce588a7ffac299b3a23bd55cd81"
+      ],
+      "packages": [
+        {
+          "ecosystem": "cargo",
+          "name": "uu_split",
+          "lt": "0.10.0",
+          "id": "CVE-2026-35374",
+          "ghsaId": "GHSA-fjjq-8hw5-cf9f",
+          "cve": "CVE-2026-35374",
+          "cwe": "CWE-59",
+          "sev": "medium",
+          "note": "split: TOCTOU output-open allows truncating a swapped file"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0009
+    },
+    {
       "id": "CVE-2026-76101",
       "ghsaId": "GHSA-j282-pjg5-j643",
       "cve": "CVE-2026-76101",
@@ -23693,45 +23732,6 @@
       ],
       "kev": false,
       "epss": 0.0009
-    },
-    {
-      "id": "CVE-2026-35374",
-      "ghsaId": "GHSA-fjjq-8hw5-cf9f",
-      "cve": "CVE-2026-35374",
-      "cwe": "CWE-59",
-      "sev": "medium",
-      "summary": "split: TOCTOU output-open allows truncating a swapped file",
-      "description": "`split` checks input/output identity by path before opening the output, then opens with truncation, leaving a race window on mutable path components. GNU opens first and compares the opened output inode against the input before truncating. The race can cause `split` to truncate/write a file different from the one validated — including the input file or another file the process can access.\n\n**Fixed in 0.10.0** (PR #12565, commit 58040feb5c66fce588a7ffac299b3a23bd55cd81): the output open path is hardened against TOCTOU target swaps.\n\n---\n_Zellic private finding (zellic-ext/coreutils-private PR #119). Reported in the Zellic *uutils coreutils Program Security Assessment* (for Canonical, Jan 2026), audited commit `3a07ffc5a9bd4c283e75afa548ba1f1957bad242`._",
-      "publishedAt": "2026-11-20T16:33:27Z",
-      "updatedAt": "2026-11-20T16:33:27Z",
-      "url": "https://github.com/advisories/GHSA-fjjq-8hw5-cf9f",
-      "references": [
-        "https://github.com/uutils/coreutils/security/advisories/GHSA-fjjq-8hw5-cf9f",
-        "https://github.com/uutils/coreutils/pull/11401",
-        "https://github.com/uutils/coreutils/pull/12565",
-        "https://github.com/uutils/coreutils/commit/58040feb5c66fce588a7ffac299b3a23bd55cd81",
-        "https://github.com/advisories/GHSA-fjjq-8hw5-cf9f"
-      ],
-      "patchUrls": [
-        "https://github.com/uutils/coreutils/pull/11401",
-        "https://github.com/uutils/coreutils/pull/12565",
-        "https://github.com/uutils/coreutils/commit/58040feb5c66fce588a7ffac299b3a23bd55cd81"
-      ],
-      "packages": [
-        {
-          "ecosystem": "cargo",
-          "name": "uu_split",
-          "lt": "0.10.0",
-          "id": "CVE-2026-35374",
-          "ghsaId": "GHSA-fjjq-8hw5-cf9f",
-          "cve": "CVE-2026-35374",
-          "cwe": "CWE-59",
-          "sev": "medium",
-          "note": "split: TOCTOU output-open allows truncating a swapped file"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0008
     },
     {
       "id": "CVE-2026-104884",
