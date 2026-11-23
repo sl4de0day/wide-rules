@@ -1,19 +1,19 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-22T23:12:24.366Z",
+  "generatedAt": "2026-11-23T17:19:24.084Z",
   "sources": [
     "github-advisories",
     "cisa-kev",
     "first-epss"
   ],
   "stats": {
-    "total": 1012,
+    "total": 1018,
     "kevCount": 155,
     "highEpssCount": 103,
     "byEcosystem": {
       "npm": 321,
-      "pip": 185,
-      "maven": 192,
+      "pip": 187,
+      "maven": 196,
       "go": 114,
       "cargo": 61,
       "nuget": 21,
@@ -1779,7 +1779,7 @@
       "cwe": "CWE-1321",
       "sev": "high",
       "note": "@tmlmobilidade/utils has prototype pollution in its setValueAtPath",
-      "epss": 0.0046
+      "epss": 0.0032
     },
     {
       "name": "@tsparticles/mcp-server",
@@ -2051,7 +2051,7 @@
       "cwe": "CWE-200",
       "sev": "high",
       "note": "Directus: Authenticated Users Can Extract Concealed Fields via Aggregate Queries",
-      "epss": 0.0034
+      "epss": 0.0035
     },
     {
       "name": "dompurify",
@@ -3586,7 +3586,7 @@
       "cwe": "CWE-79",
       "sev": "medium",
       "note": "Svelte affected by XSS in SSR `<option>` element",
-      "epss": 0.0021
+      "epss": 0.0024
     },
     {
       "name": "synckit",
@@ -3880,6 +3880,29 @@
       "epss": 0.0055
     },
     {
+      "name": "borgbackup",
+      "lt": "1.4.5",
+      "id": "CVE-2026-62268",
+      "ghsaId": "GHSA-gfp8-w835-v44j",
+      "cve": "CVE-2026-62268",
+      "cwe": "CWE-59",
+      "sev": "medium",
+      "note": "borg extract might modify out-of-tree files when extracting maliciously crafted archives",
+      "epss": 0.0016
+    },
+    {
+      "name": "borgbackup",
+      "ge": "2.0.0b1",
+      "lt": "2.0.0b22",
+      "id": "CVE-2026-62268",
+      "ghsaId": "GHSA-gfp8-w835-v44j",
+      "cve": "CVE-2026-62268",
+      "cwe": "CWE-59",
+      "sev": "medium",
+      "note": "borg extract might modify out-of-tree files when extracting maliciously crafted archives",
+      "epss": 0.0016
+    },
+    {
       "name": "brotli",
       "ge": "1.0.3",
       "lt": "1.2.1",
@@ -4119,7 +4142,7 @@
       "cwe": "CWE-20",
       "sev": "medium",
       "note": "Guard Core: Unvalidated X-Forwarded-For-derived string used as a Redis key component and interpolated into a KEYS glob pattern",
-      "epss": 0.0024
+      "epss": 0.0037
     },
     {
       "name": "inscriptis",
@@ -4293,7 +4316,7 @@
       "sev": "high",
       "note": "LiteLLM has a sandbox escape in custom-code guardrail",
       "kev": true,
-      "epss": 0.78
+      "epss": 0.828
     },
     {
       "name": "litellm",
@@ -4425,7 +4448,7 @@
       "cwe": "CWE-345",
       "sev": "high",
       "note": "Model Context Protocol Python SDK: OAuth client could send credentials to an authorization server chosen by the MCP server",
-      "epss": 0.0028
+      "epss": 0.0033
     },
     {
       "name": "mcp",
@@ -4437,7 +4460,7 @@
       "cwe": "CWE-345",
       "sev": "high",
       "note": "Model Context Protocol Python SDK: OAuth client could send credentials to an authorization server chosen by the MCP server",
-      "epss": 0.0028
+      "epss": 0.0033
     },
     {
       "name": "memtomem-stm",
@@ -4622,7 +4645,7 @@
       "cwe": "CWE-502",
       "sev": "medium",
       "note": "NLTK: AllowlistUnpickler does not deny numpy submodule-local file-I/O sinks",
-      "epss": 0.0024
+      "epss": 0.0036
     },
     {
       "name": "nltk",
@@ -7961,6 +7984,52 @@
       "epss": 0.6117
     },
     {
+      "name": "org.gradle:gradle-core",
+      "lt": "8.14.4",
+      "id": "CVE-2026-22816",
+      "ghsaId": "GHSA-w78c-w6vf-rw82",
+      "cve": "CVE-2026-22816",
+      "cwe": "CWE-494",
+      "sev": "high",
+      "note": "Gradle causes Failure to disable repositories can expose builds to malicious artifacts",
+      "epss": 0.0017
+    },
+    {
+      "name": "org.gradle:gradle-core",
+      "ge": "9.0.0",
+      "lt": "9.3.0",
+      "id": "CVE-2026-22816",
+      "ghsaId": "GHSA-w78c-w6vf-rw82",
+      "cve": "CVE-2026-22816",
+      "cwe": "CWE-494",
+      "sev": "high",
+      "note": "Gradle causes Failure to disable repositories can expose builds to malicious artifacts",
+      "epss": 0.0017
+    },
+    {
+      "name": "org.gradle:gradle-core",
+      "lt": "8.14.4",
+      "id": "CVE-2026-22865",
+      "ghsaId": "GHSA-mqwm-5m85-gmcv",
+      "cve": "CVE-2026-22865",
+      "cwe": "CWE-494",
+      "sev": "high",
+      "note": "Gradle causes failure to disable repositories exposing builds to malicious artifacts",
+      "epss": 0.0016
+    },
+    {
+      "name": "org.gradle:gradle-core",
+      "ge": "9.0.0",
+      "lt": "9.3.0",
+      "id": "CVE-2026-22865",
+      "ghsaId": "GHSA-mqwm-5m85-gmcv",
+      "cve": "CVE-2026-22865",
+      "cwe": "CWE-494",
+      "sev": "high",
+      "note": "Gradle causes failure to disable repositories exposing builds to malicious artifacts",
+      "epss": 0.0016
+    },
+    {
       "name": "org.jenkins-ci.main:jenkins-core",
       "lt": "2.46.2",
       "id": "CVE-2017-1000353",
@@ -8246,7 +8315,7 @@
       "cwe": "CWE-20",
       "sev": "medium",
       "note": "Argo CD: Login screen allows message spoofing if SSO is enabled",
-      "epss": 0.013
+      "epss": 0.0149
     },
     {
       "name": "github.com/argoproj/argo-cd/v2",
@@ -8258,7 +8327,7 @@
       "cwe": "CWE-20",
       "sev": "medium",
       "note": "Argo CD: Login screen allows message spoofing if SSO is enabled",
-      "epss": 0.013
+      "epss": 0.0149
     },
     {
       "name": "github.com/argoproj/argo-cd/v2",
@@ -8270,7 +8339,7 @@
       "cwe": "CWE-20",
       "sev": "medium",
       "note": "Argo CD: Login screen allows message spoofing if SSO is enabled",
-      "epss": 0.013
+      "epss": 0.0149
     },
     {
       "name": "github.com/argoproj/argo-cd/v2",
@@ -8282,7 +8351,7 @@
       "cwe": "CWE-20",
       "sev": "medium",
       "note": "Argo CD: Login screen allows message spoofing if SSO is enabled",
-      "epss": 0.013
+      "epss": 0.0149
     },
     {
       "name": "github.com/bep/imagemeta",
@@ -8305,7 +8374,7 @@
       "cwe": "CWE-248",
       "sev": "high",
       "note": "containerd image-triggered daemon crash via malformed digest in subject-annotated descriptor",
-      "epss": 0.004
+      "epss": 0.0048
     },
     {
       "name": "github.com/containerd/containerd/v2",
@@ -8317,7 +8386,7 @@
       "cwe": "CWE-248",
       "sev": "high",
       "note": "containerd image-triggered daemon crash via malformed digest in subject-annotated descriptor",
-      "epss": 0.004
+      "epss": 0.0048
     },
     {
       "name": "github.com/containerd/containerd/v2",
@@ -8329,7 +8398,7 @@
       "cwe": "CWE-248",
       "sev": "high",
       "note": "containerd image-triggered daemon crash via malformed digest in subject-annotated descriptor",
-      "epss": 0.004
+      "epss": 0.0048
     },
     {
       "name": "github.com/dagu-org/dagu/v2",
@@ -8711,7 +8780,7 @@
       "cwe": "CWE-284",
       "sev": "high",
       "note": "Incus has a project restriction bypass for custom volume copy across projects",
-      "epss": 0.0042
+      "epss": 0.0037
     },
     {
       "name": "github.com/lxc/incus/v6",
@@ -8722,7 +8791,7 @@
       "cwe": "CWE-284",
       "sev": "high",
       "note": "Incus has a project restriction bypass for custom volume copy across projects",
-      "epss": 0.0042
+      "epss": 0.0037
     },
     {
       "name": "github.com/lxc/incus/v7",
@@ -8733,7 +8802,7 @@
       "cwe": "CWE-284",
       "sev": "high",
       "note": "Incus has a project restriction bypass for custom volume copy across projects",
-      "epss": 0.0042
+      "epss": 0.0037
     },
     {
       "name": "github.com/mayswind/ezbookkeeping",
@@ -8905,7 +8974,7 @@
       "cwe": "CWE-125",
       "sev": "medium",
       "note": "Aether Project amf: panic on an unrecovered NGAP goroutine",
-      "epss": 0.0036
+      "epss": 0.0041
     },
     {
       "name": "github.com/pavel-v-chernykh/keystore-go",
@@ -10511,7 +10580,7 @@
       "cwe": "CWE-601",
       "sev": "medium",
       "note": "Bolt: Open redirect enables post-authentication redirection to arbitrary domains",
-      "epss": 0.0028
+      "epss": 0.0032
     },
     {
       "name": "bolt/core",
@@ -10522,7 +10591,7 @@
       "cwe": "CWE-918",
       "sev": "medium",
       "note": "Bolt: Server-Side Request Forgery (SSRF) in URL-upload and embed endpoints",
-      "epss": 0.0028
+      "epss": 0.0033
     },
     {
       "name": "bolt/core",
@@ -11081,7 +11150,7 @@
       "cwe": "CWE-470",
       "sev": "high",
       "note": "Paymenter: Unauthenticated arbitrary method invocation in Livewire components",
-      "epss": 0.0036
+      "epss": 0.0046
     },
     {
       "name": "phpmailer/phpmailer",
