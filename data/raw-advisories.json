@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-22T23:12:24.366Z",
-  "count": 550,
+  "generatedAt": "2026-11-23T17:19:24.084Z",
+  "count": 553,
   "advisories": [
     {
       "id": "CVE-2025-3248",
@@ -2374,7 +2374,7 @@
         }
       ],
       "kev": true,
-      "epss": 0.78
+      "epss": 0.828
     },
     {
       "id": "CVE-2026-0770",
@@ -12466,6 +12466,76 @@
       "epss": 0.0048
     },
     {
+      "id": "CVE-2026-95839",
+      "ghsaId": "GHSA-vwhp-8p66-mq4f",
+      "cve": "CVE-2026-95839",
+      "cwe": "CWE-248",
+      "sev": "high",
+      "summary": "containerd image-triggered daemon crash via malformed digest in subject-annotated descriptor",
+      "description": "### Impact\n\nA bug in containerd's image manifest processing causes an unrecovered panic when a child descriptor contains the `io.containerd.manifest.subject` annotation and a malformed digest. Pulling or importing such an image through the transfer service (including default CRI `PullImage` requests) crashes the containerd daemon. In Kubernetes environments, `kubelet` retries failed image pulls with backoff, allowing a pod referencing an untrusted image to repeatedly crash containerd and disrupt container operations on the worker node.\n\n### Patches\n\nThis bug has been fixed in containerd 2.4.2, 2.3.7, and 2.2.10. Users should update to these versions to resolve the issue.\n\n### Workarounds\n\nRestrict pod image references to trusted registries (for example, using a Kubernetes `ValidatingAdmissionPolicy` or admission webhook) and only pull or import images from trusted sources.\n\n### Credits\n\nThe containerd project would like to thank @melihgurlek, LEI WANG (@ssst0n3) and Haoyuan Zhang (@zj1ng7), and OpenSec Intelligence who independently discovered and responsibly disclosed this issue in accordance with the [containerd security policy](https://github.com/containerd/project/blob/main/SECURITY.md).\n\n### For more information\n\nIf you have any questions or comments about this advisory:\n\n* Open an issue in [containerd](https://github.com/containerd/containerd/issues/new/choose)\n* Email us at [security@containerd.io](mailto:security@containerd.io)\n\nTo report a security issue in containerd:\n* [Report a new vulnerability](https://github.com/containerd/containerd/security/advisories/new)\n* Email us at [security@containerd.io](mailto:security@containerd.io)",
+      "publishedAt": "2026-11-19T22:46:24Z",
+      "updatedAt": "2026-11-19T22:46:25Z",
+      "url": "https://github.com/advisories/GHSA-vwhp-8p66-mq4f",
+      "references": [
+        "https://github.com/containerd/containerd/security/advisories/GHSA-vwhp-8p66-mq4f",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-95839",
+        "https://github.com/containerd/containerd/commit/20a3b31390653d7a83fdaeb0c318b01a263c9d9a",
+        "https://github.com/containerd/containerd/commit/2181d7baa2a303ea2082e5c0f1a7697787b61ef2",
+        "https://github.com/containerd/containerd/commit/2455fec2f7bfa63adb1f993c63ba0cea9cdedb8c",
+        "https://github.com/containerd/containerd/commit/a2eb01f667b320b00ec218216f26f7b79197d4cd",
+        "https://github.com/containerd/containerd/releases/tag/v2.2.10",
+        "https://github.com/containerd/containerd/releases/tag/v2.3.7",
+        "https://github.com/containerd/containerd/releases/tag/v2.4.2",
+        "https://github.com/advisories/GHSA-vwhp-8p66-mq4f"
+      ],
+      "patchUrls": [
+        "https://github.com/containerd/containerd/commit/20a3b31390653d7a83fdaeb0c318b01a263c9d9a",
+        "https://github.com/containerd/containerd/commit/2181d7baa2a303ea2082e5c0f1a7697787b61ef2",
+        "https://github.com/containerd/containerd/commit/2455fec2f7bfa63adb1f993c63ba0cea9cdedb8c",
+        "https://github.com/containerd/containerd/commit/a2eb01f667b320b00ec218216f26f7b79197d4cd"
+      ],
+      "packages": [
+        {
+          "ecosystem": "go",
+          "name": "github.com/containerd/containerd/v2",
+          "ge": "2.2.0",
+          "lt": "2.2.10",
+          "id": "CVE-2026-95839",
+          "ghsaId": "GHSA-vwhp-8p66-mq4f",
+          "cve": "CVE-2026-95839",
+          "cwe": "CWE-248",
+          "sev": "high",
+          "note": "containerd image-triggered daemon crash via malformed digest in subject-annotated descriptor"
+        },
+        {
+          "ecosystem": "go",
+          "name": "github.com/containerd/containerd/v2",
+          "ge": "2.3.0",
+          "lt": "2.3.7",
+          "id": "CVE-2026-95839",
+          "ghsaId": "GHSA-vwhp-8p66-mq4f",
+          "cve": "CVE-2026-95839",
+          "cwe": "CWE-248",
+          "sev": "high",
+          "note": "containerd image-triggered daemon crash via malformed digest in subject-annotated descriptor"
+        },
+        {
+          "ecosystem": "go",
+          "name": "github.com/containerd/containerd/v2",
+          "ge": "2.4.0",
+          "lt": "2.4.2",
+          "id": "CVE-2026-95839",
+          "ghsaId": "GHSA-vwhp-8p66-mq4f",
+          "cve": "CVE-2026-95839",
+          "cwe": "CWE-248",
+          "sev": "high",
+          "note": "containerd image-triggered daemon crash via malformed digest in subject-annotated descriptor"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0048
+    },
+    {
       "id": "CVE-2026-119348",
       "ghsaId": "GHSA-pc58-hwjq-p385",
       "cve": "CVE-2026-119348",
@@ -12976,37 +13046,37 @@
       "epss": 0.0047
     },
     {
-      "id": "CVE-2026-45325",
-      "ghsaId": "GHSA-cmxg-94mg-jq94",
-      "cve": "CVE-2026-45325",
-      "cwe": "CWE-1321",
+      "id": "CVE-2026-103026",
+      "ghsaId": "GHSA-prhx-9q2h-ph2x",
+      "cve": "CVE-2026-103026",
+      "cwe": "CWE-470",
       "sev": "high",
-      "summary": "@tmlmobilidade/utils has prototype pollution in its setValueAtPath",
-      "description": "### Impact\nPrototype pollution vulnerability in @tmlmobilidade/utils for setValueAtPath().\n\n### Patches\nA fix is available in versions 20260509.340.15 and up.",
-      "publishedAt": "2026-05-18T17:07:04Z",
-      "updatedAt": "2026-11-21T05:15:45Z",
-      "url": "https://github.com/advisories/GHSA-cmxg-94mg-jq94",
+      "summary": "Paymenter: Unauthenticated arbitrary method invocation in Livewire components",
+      "description": "### Summary\n\nA Livewire function allowed attackers to call any public function, allowing attackers to call any public method on the component. Because an attacker can call any function, they can also overwrite locked data.\n\n### Technical Details\n\n`app/Livewire/Traits/HasConfirmation.php` exposed a public Livewire action that dispatches to any method that exists on the component:\n\n```php\npublic function executeConfirmedAction($action, $parameters = [])\n{\n    if (method_exists($this, $action)) {\n        return $this->{$action}(...$parameters);\n    }\n    throw new \\Exception(\"Method {$action} does not exist\");\n}\n```\n\nThe trait is applied on the base component, `app/Livewire/Component.php` (`use Disabled, HasConfirmation, HasNotifications;`), so it is present on all 36 client-facing components. \n`executeConfirmedAction` is itself invocable, and because it only checks `method_exists` it re-admits the whole inherited framework API. The most important is `InteractsWithProperties::fill()`, which uses data_set() and therefore writes any public property, including properties marked `#[Locked]`, and supports dotted paths that reach into hydrated Eloquent models.\nThis was a piece of dead code and has been removed\n\n### Impact\nAn unauthenticated attacker could invoke arbitrary public methods exposed by any client-facing Livewire component through the `executeConfirmedAction` action.\n\nDepending on the properties and methods exposed by an individual component, this could allow an attacker to bypass intended authorization and data-integrity protections and modify server-side state that was intended to be immutable or protected from client-side manipulation.",
+      "publishedAt": "2026-11-20T14:56:03Z",
+      "updatedAt": "2026-11-20T14:56:04Z",
+      "url": "https://github.com/advisories/GHSA-prhx-9q2h-ph2x",
       "references": [
-        "https://github.com/tmlmobilidade/go/security/advisories/GHSA-cmxg-94mg-jq94",
-        "https://github.com/tmlmobilidade/go/commit/b10505baa7ba0701f830a05f3007c0a6bdd00eb7",
-        "https://github.com/tmlmobilidade/go/blob/prd/packages/utils/src/generic/value-at-path.ts",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-45325",
-        "https://github.com/advisories/GHSA-cmxg-94mg-jq94"
+        "https://github.com/Paymenter/Paymenter/security/advisories/GHSA-prhx-9q2h-ph2x",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-103026",
+        "https://github.com/Paymenter/Paymenter/commit/e0c04af1707a65d8fb91879883aa7eae3292cedc",
+        "https://github.com/Paymenter/Paymenter/releases/tag/v1.5.7",
+        "https://github.com/advisories/GHSA-prhx-9q2h-ph2x"
       ],
       "patchUrls": [
-        "https://github.com/tmlmobilidade/go/commit/b10505baa7ba0701f830a05f3007c0a6bdd00eb7"
+        "https://github.com/Paymenter/Paymenter/commit/e0c04af1707a65d8fb91879883aa7eae3292cedc"
       ],
       "packages": [
         {
-          "ecosystem": "npm",
-          "name": "@tmlmobilidade/utils",
-          "lt": "20260509.340.15",
-          "id": "CVE-2026-45325",
-          "ghsaId": "GHSA-cmxg-94mg-jq94",
-          "cve": "CVE-2026-45325",
-          "cwe": "CWE-1321",
+          "ecosystem": "composer",
+          "name": "paymenter/paymenter",
+          "lt": "1.5.7",
+          "id": "CVE-2026-103026",
+          "ghsaId": "GHSA-prhx-9q2h-ph2x",
+          "cve": "CVE-2026-103026",
+          "cwe": "CWE-470",
           "sev": "high",
-          "note": "@tmlmobilidade/utils has prototype pollution in its setValueAtPath"
+          "note": "Paymenter: Unauthenticated arbitrary method invocation in Livewire components"
         }
       ],
       "kev": false,
@@ -14628,66 +14698,6 @@
       "epss": 0.0043
     },
     {
-      "id": "CVE-2026-55621",
-      "ghsaId": "GHSA-64f3-v33m-w89f",
-      "cve": "CVE-2026-55621",
-      "cwe": "CWE-284",
-      "sev": "high",
-      "summary": "Incus has a project restriction bypass for custom volume copy across projects",
-      "description": "### Summary\n\nMissing authorization checks exist for custom volume copying where an attacker who knows the name of a project that they don't have access to and the name of a custom volume in that project can copy the custom volume to a new project. This issue could allow an attacker to access secrets in custom volumes they are not authorized to access.\n\n### Details\n\nThe storage volume creation handler authorizes creation in the target project, then passes `req.Source.Project` into the custom-volume copy path without checking that the caller can view the source volume. `req.Source.Project` is the attacker-controlled field. It is resolved to a storage volume project name and passed directly to `CreateCustomVolumeFromCopy`. No `allowPermission` or entitlement check (e.g. `CanView` on the source volume) is performed.\n\nThe copy must occur on the same server. However, once the copy has been done, nothing prevents a malicious actor from moving the volume to another server.\n\n### PoC\n#### Setup\n\nAssume the target server is remotely accessible and a user/certificate has been added.\n\n```\n# create a new project and instance\nincus project create secrets\nincus profile show default | incus --project secrets edit default\nincus --project secrets storage volume create default secret-vol\n\n# restrict an existing certificate to prevent access to the project\nincus config trust edit cert-fp\n#> set, for example\nrestricted: true\nprojects:\n  - default\n\n# verification, with the restricted certificate\nincus --project secrets storage volume ls remote:default\n```\n\n#### Exploitation\n\nThe below script was partly generated. To copy the secret instance to the default project, the following command can be used.\n\n```\npython3 poc.py --url https://IP-REMOTE:8443 \\\n    --cert path/to/client.crt --key path/to/client.key \\\n    --target-project default --source-project secrets \\\n    --source-volume secret-vol --name copy-secret-vol \\\n    --pool default --source-pool default \\\n    --insecure\n```\n\nWait a bit for the custom volume to be copied, then `incus storage volume ls remote:default` to see the copied instance.\n\n```\n#!/usr/bin/env python3\n\"\"\"Copy a custom storage volume from another project into an allowed project.\"\"\"\n\nfrom __future__ import annotations\n\nimport argparse\nimport json\nimport ssl\nimport sys\nimport urllib.error\nimport urllib.parse\nimport urllib.request\n\n\ndef post(url: str, path: str, body: dict, cert: str, key: str, insecure: bool) -> bytes:\n    ctx = ssl.create_default_context()\n   ",
-      "publishedAt": "2026-08-28T18:52:05Z",
-      "updatedAt": "2026-11-21T05:15:44Z",
-      "url": "https://github.com/advisories/GHSA-64f3-v33m-w89f",
-      "references": [
-        "https://github.com/lxc/incus/security/advisories/GHSA-64f3-v33m-w89f",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-55621",
-        "https://github.com/lxc/incus/commit/2e01078366e2653712719dec82318e51c6d21b28",
-        "https://github.com/lxc/incus/releases/tag/v7.2.0",
-        "https://github.com/canonical/lxd/security/advisories/GHSA-7mr3-28h5-m5vx",
-        "https://github.com/advisories/GHSA-64f3-v33m-w89f"
-      ],
-      "patchUrls": [
-        "https://github.com/lxc/incus/commit/2e01078366e2653712719dec82318e51c6d21b28"
-      ],
-      "packages": [
-        {
-          "ecosystem": "go",
-          "name": "github.com/lxc/incus/v7",
-          "lt": "7.2.0",
-          "id": "CVE-2026-55621",
-          "ghsaId": "GHSA-64f3-v33m-w89f",
-          "cve": "CVE-2026-55621",
-          "cwe": "CWE-284",
-          "sev": "high",
-          "note": "Incus has a project restriction bypass for custom volume copy across projects"
-        },
-        {
-          "ecosystem": "go",
-          "name": "github.com/lxc/incus/v6",
-          "le": "6.23.0",
-          "id": "CVE-2026-55621",
-          "ghsaId": "GHSA-64f3-v33m-w89f",
-          "cve": "CVE-2026-55621",
-          "cwe": "CWE-284",
-          "sev": "high",
-          "note": "Incus has a project restriction bypass for custom volume copy across projects"
-        },
-        {
-          "ecosystem": "go",
-          "name": "github.com/lxc/incus",
-          "le": "0.7.0",
-          "id": "CVE-2026-55621",
-          "ghsaId": "GHSA-64f3-v33m-w89f",
-          "cve": "CVE-2026-55621",
-          "cwe": "CWE-284",
-          "sev": "high",
-          "note": "Incus has a project restriction bypass for custom volume copy across projects"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0042
-    },
-    {
       "id": "CVE-2026-109549",
       "ghsaId": "GHSA-w3w6-9m25-g88p",
       "cve": "CVE-2026-109549",
@@ -15177,6 +15187,45 @@
       "epss": 0.0041
     },
     {
+      "id": "CVE-2026-102945",
+      "ghsaId": "GHSA-v6w5-38cf-pcv8",
+      "cve": "CVE-2026-102945",
+      "cwe": "CWE-125",
+      "sev": "medium",
+      "summary": "Aether Project amf: panic on an unrecovered NGAP goroutine",
+      "description": "## Summary\n\nHandlePathSwitchRequest guards the UESecurityCapabilities IE for presence but never for length, and the extensible APER type silently yields an empty bit string, so six unguarded index-zero reads panic on an unrecovered goroutine and terminate the AMF. The AMF is the control-plane entry point for a 5G core, so terminating it drops mobility management for every subscriber. Confirmed at HEAD daed5a2 (present in v3.1.5).\n\n## The defect\n\nngap/handler.go:\n\n```go\nif uESecurityCapabilities != nil {                                                                              // line 3267, PRESENCE only\n    amfUe.UESecurityCapability.SetEA1_128_5G((uESecurityCapabilities.NRencryptionAlgorithms.Value.Bytes[0] & 0x80) >> 7)   // line 3268\n    ... (five more Bytes[0] reads, lines 3269-3273)\n}\n```\n\nSix index-zero reads, all guarded only by a nil check on the containing IE. Why the bit string can be empty: the field is declared `aper:\"sizeExt,sizeLB:16,sizeUB:16\"`. Because the type is EXTENSIBLE, parseBitString DISCARDS the SIZE(16) constraint when the peer sets the extension bit, and then `if rawLength == 0 { return bitString, nil }` returns a bit string with an empty Bytes slice and NO ERROR. So the decoder hands the handler a well-formed, error-free value whose Bytes has length zero, and the handler indexes it. The length guarantee the maintainers rely on comes from an ASN.1 SIZE constraint that the encoder rules legitimately waive on the extension path.\n\n## Verification\n\nProven dynamically, not by reading. Eight crafted bytes (40 00 80 00 80 00 80 00) decode cleanly through the REAL APER decoder, and the handler's exact expression then panics with \"index out of range [0] with length 0\". Panic discipline was checked first: the NGAP receive path has NO recover() (the only recover in the package is on SendToRan, the transmit path), so this is a genuine process kill and the AMF terminates.\n\nAttacker model, stated conservatively: a rogue or compromised gNB on the N2 interface, which additionally needs one registered UE's AMF-UE-NGAP-ID. This is NOT reachable by a bare over-the-air UE; the realistic scenario is a compromised or malicious base station, the threat model N2 security exists to address.\n\n## Suggested fix\n\nCheck the length of Bytes before indexing, in all six places, and treat a short or empty bit string as a malformed IE with a PathSwitchRequestFailure rather than proceeding. More durably: since the SIZE constraint is waived on the extension path b",
+      "publishedAt": "2026-11-20T00:20:38Z",
+      "updatedAt": "2026-11-20T00:20:39Z",
+      "url": "https://github.com/advisories/GHSA-v6w5-38cf-pcv8",
+      "references": [
+        "https://github.com/omec-project/amf/security/advisories/GHSA-v6w5-38cf-pcv8",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-102945",
+        "https://github.com/omec-project/amf/pull/767",
+        "https://github.com/omec-project/amf/commit/d28042aaaea0221c5ea93c3e069a1dd5e7436f4c",
+        "https://github.com/omec-project/amf/releases/tag/v3.1.6",
+        "https://github.com/advisories/GHSA-v6w5-38cf-pcv8"
+      ],
+      "patchUrls": [
+        "https://github.com/omec-project/amf/pull/767",
+        "https://github.com/omec-project/amf/commit/d28042aaaea0221c5ea93c3e069a1dd5e7436f4c"
+      ],
+      "packages": [
+        {
+          "ecosystem": "go",
+          "name": "github.com/omec-project/amf",
+          "lt": "1.7.1-0.20260725031321-d28042aaaea0",
+          "id": "CVE-2026-102945",
+          "ghsaId": "GHSA-v6w5-38cf-pcv8",
+          "cve": "CVE-2026-102945",
+          "cwe": "CWE-125",
+          "sev": "medium",
+          "note": "Aether Project amf: panic on an unrecovered NGAP goroutine"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0041
+    },
+    {
       "id": "CVE-2026-58208",
       "ghsaId": "GHSA-p957-7v2w-g93g",
       "cve": "CVE-2026-58208",
@@ -15631,76 +15680,6 @@
           "cwe": "CWE-200",
           "sev": "medium",
           "note": "NLTK: StreamBackedCorpusView constructor os.stat leaks out-of-root file existence, size, and mtime bypassing pathsec ENFORCE"
-        }
-      ],
-      "kev": false,
-      "epss": 0.004
-    },
-    {
-      "id": "CVE-2026-95839",
-      "ghsaId": "GHSA-vwhp-8p66-mq4f",
-      "cve": "CVE-2026-95839",
-      "cwe": "CWE-248",
-      "sev": "high",
-      "summary": "containerd image-triggered daemon crash via malformed digest in subject-annotated descriptor",
-      "description": "### Impact\n\nA bug in containerd's image manifest processing causes an unrecovered panic when a child descriptor contains the `io.containerd.manifest.subject` annotation and a malformed digest. Pulling or importing such an image through the transfer service (including default CRI `PullImage` requests) crashes the containerd daemon. In Kubernetes environments, `kubelet` retries failed image pulls with backoff, allowing a pod referencing an untrusted image to repeatedly crash containerd and disrupt container operations on the worker node.\n\n### Patches\n\nThis bug has been fixed in containerd 2.4.2, 2.3.7, and 2.2.10. Users should update to these versions to resolve the issue.\n\n### Workarounds\n\nRestrict pod image references to trusted registries (for example, using a Kubernetes `ValidatingAdmissionPolicy` or admission webhook) and only pull or import images from trusted sources.\n\n### Credits\n\nThe containerd project would like to thank @melihgurlek, LEI WANG (@ssst0n3) and Haoyuan Zhang (@zj1ng7), and OpenSec Intelligence who independently discovered and responsibly disclosed this issue in accordance with the [containerd security policy](https://github.com/containerd/project/blob/main/SECURITY.md).\n\n### For more information\n\nIf you have any questions or comments about this advisory:\n\n* Open an issue in [containerd](https://github.com/containerd/containerd/issues/new/choose)\n* Email us at [security@containerd.io](mailto:security@containerd.io)\n\nTo report a security issue in containerd:\n* [Report a new vulnerability](https://github.com/containerd/containerd/security/advisories/new)\n* Email us at [security@containerd.io](mailto:security@containerd.io)",
-      "publishedAt": "2026-11-19T22:46:24Z",
-      "updatedAt": "2026-11-19T22:46:25Z",
-      "url": "https://github.com/advisories/GHSA-vwhp-8p66-mq4f",
-      "references": [
-        "https://github.com/containerd/containerd/security/advisories/GHSA-vwhp-8p66-mq4f",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-95839",
-        "https://github.com/containerd/containerd/commit/20a3b31390653d7a83fdaeb0c318b01a263c9d9a",
-        "https://github.com/containerd/containerd/commit/2181d7baa2a303ea2082e5c0f1a7697787b61ef2",
-        "https://github.com/containerd/containerd/commit/2455fec2f7bfa63adb1f993c63ba0cea9cdedb8c",
-        "https://github.com/containerd/containerd/commit/a2eb01f667b320b00ec218216f26f7b79197d4cd",
-        "https://github.com/containerd/containerd/releases/tag/v2.2.10",
-        "https://github.com/containerd/containerd/releases/tag/v2.3.7",
-        "https://github.com/containerd/containerd/releases/tag/v2.4.2",
-        "https://github.com/advisories/GHSA-vwhp-8p66-mq4f"
-      ],
-      "patchUrls": [
-        "https://github.com/containerd/containerd/commit/20a3b31390653d7a83fdaeb0c318b01a263c9d9a",
-        "https://github.com/containerd/containerd/commit/2181d7baa2a303ea2082e5c0f1a7697787b61ef2",
-        "https://github.com/containerd/containerd/commit/2455fec2f7bfa63adb1f993c63ba0cea9cdedb8c",
-        "https://github.com/containerd/containerd/commit/a2eb01f667b320b00ec218216f26f7b79197d4cd"
-      ],
-      "packages": [
-        {
-          "ecosystem": "go",
-          "name": "github.com/containerd/containerd/v2",
-          "ge": "2.2.0",
-          "lt": "2.2.10",
-          "id": "CVE-2026-95839",
-          "ghsaId": "GHSA-vwhp-8p66-mq4f",
-          "cve": "CVE-2026-95839",
-          "cwe": "CWE-248",
-          "sev": "high",
-          "note": "containerd image-triggered daemon crash via malformed digest in subject-annotated descriptor"
-        },
-        {
-          "ecosystem": "go",
-          "name": "github.com/containerd/containerd/v2",
-          "ge": "2.3.0",
-          "lt": "2.3.7",
-          "id": "CVE-2026-95839",
-          "ghsaId": "GHSA-vwhp-8p66-mq4f",
-          "cve": "CVE-2026-95839",
-          "cwe": "CWE-248",
-          "sev": "high",
-          "note": "containerd image-triggered daemon crash via malformed digest in subject-annotated descriptor"
-        },
-        {
-          "ecosystem": "go",
-          "name": "github.com/containerd/containerd/v2",
-          "ge": "2.4.0",
-          "lt": "2.4.2",
-          "id": "CVE-2026-95839",
-          "ghsaId": "GHSA-vwhp-8p66-mq4f",
-          "cve": "CVE-2026-95839",
-          "cwe": "CWE-248",
-          "sev": "high",
-          "note": "containerd image-triggered daemon crash via malformed digest in subject-annotated descriptor"
         }
       ],
       "kev": false,
@@ -16366,6 +16345,66 @@
       "epss": 0.0038
     },
     {
+      "id": "CVE-2026-55621",
+      "ghsaId": "GHSA-64f3-v33m-w89f",
+      "cve": "CVE-2026-55621",
+      "cwe": "CWE-284",
+      "sev": "high",
+      "summary": "Incus has a project restriction bypass for custom volume copy across projects",
+      "description": "### Summary\n\nMissing authorization checks exist for custom volume copying where an attacker who knows the name of a project that they don't have access to and the name of a custom volume in that project can copy the custom volume to a new project. This issue could allow an attacker to access secrets in custom volumes they are not authorized to access.\n\n### Details\n\nThe storage volume creation handler authorizes creation in the target project, then passes `req.Source.Project` into the custom-volume copy path without checking that the caller can view the source volume. `req.Source.Project` is the attacker-controlled field. It is resolved to a storage volume project name and passed directly to `CreateCustomVolumeFromCopy`. No `allowPermission` or entitlement check (e.g. `CanView` on the source volume) is performed.\n\nThe copy must occur on the same server. However, once the copy has been done, nothing prevents a malicious actor from moving the volume to another server.\n\n### PoC\n#### Setup\n\nAssume the target server is remotely accessible and a user/certificate has been added.\n\n```\n# create a new project and instance\nincus project create secrets\nincus profile show default | incus --project secrets edit default\nincus --project secrets storage volume create default secret-vol\n\n# restrict an existing certificate to prevent access to the project\nincus config trust edit cert-fp\n#> set, for example\nrestricted: true\nprojects:\n  - default\n\n# verification, with the restricted certificate\nincus --project secrets storage volume ls remote:default\n```\n\n#### Exploitation\n\nThe below script was partly generated. To copy the secret instance to the default project, the following command can be used.\n\n```\npython3 poc.py --url https://IP-REMOTE:8443 \\\n    --cert path/to/client.crt --key path/to/client.key \\\n    --target-project default --source-project secrets \\\n    --source-volume secret-vol --name copy-secret-vol \\\n    --pool default --source-pool default \\\n    --insecure\n```\n\nWait a bit for the custom volume to be copied, then `incus storage volume ls remote:default` to see the copied instance.\n\n```\n#!/usr/bin/env python3\n\"\"\"Copy a custom storage volume from another project into an allowed project.\"\"\"\n\nfrom __future__ import annotations\n\nimport argparse\nimport json\nimport ssl\nimport sys\nimport urllib.error\nimport urllib.parse\nimport urllib.request\n\n\ndef post(url: str, path: str, body: dict, cert: str, key: str, insecure: bool) -> bytes:\n    ctx = ssl.create_default_context()\n   ",
+      "publishedAt": "2026-08-28T18:52:05Z",
+      "updatedAt": "2026-11-21T05:15:44Z",
+      "url": "https://github.com/advisories/GHSA-64f3-v33m-w89f",
+      "references": [
+        "https://github.com/lxc/incus/security/advisories/GHSA-64f3-v33m-w89f",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-55621",
+        "https://github.com/lxc/incus/commit/2e01078366e2653712719dec82318e51c6d21b28",
+        "https://github.com/lxc/incus/releases/tag/v7.2.0",
+        "https://github.com/canonical/lxd/security/advisories/GHSA-7mr3-28h5-m5vx",
+        "https://github.com/advisories/GHSA-64f3-v33m-w89f"
+      ],
+      "patchUrls": [
+        "https://github.com/lxc/incus/commit/2e01078366e2653712719dec82318e51c6d21b28"
+      ],
+      "packages": [
+        {
+          "ecosystem": "go",
+          "name": "github.com/lxc/incus/v7",
+          "lt": "7.2.0",
+          "id": "CVE-2026-55621",
+          "ghsaId": "GHSA-64f3-v33m-w89f",
+          "cve": "CVE-2026-55621",
+          "cwe": "CWE-284",
+          "sev": "high",
+          "note": "Incus has a project restriction bypass for custom volume copy across projects"
+        },
+        {
+          "ecosystem": "go",
+          "name": "github.com/lxc/incus/v6",
+          "le": "6.23.0",
+          "id": "CVE-2026-55621",
+          "ghsaId": "GHSA-64f3-v33m-w89f",
+          "cve": "CVE-2026-55621",
+          "cwe": "CWE-284",
+          "sev": "high",
+          "note": "Incus has a project restriction bypass for custom volume copy across projects"
+        },
+        {
+          "ecosystem": "go",
+          "name": "github.com/lxc/incus",
+          "le": "0.7.0",
+          "id": "CVE-2026-55621",
+          "ghsaId": "GHSA-64f3-v33m-w89f",
+          "cve": "CVE-2026-55621",
+          "cwe": "CWE-284",
+          "sev": "high",
+          "note": "Incus has a project restriction bypass for custom volume copy across projects"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0037
+    },
+    {
       "id": "CVE-2026-77380",
       "ghsaId": "GHSA-3xjf-9q55-vxw4",
       "cve": "CVE-2026-77380",
@@ -16435,6 +16474,46 @@
           "cwe": "CWE-918",
           "sev": "high",
           "note": "Flyto2 Core: http.paginate follows server-supplied next-page URLs (Link header / cursor) without SSRF revalidation"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0037
+    },
+    {
+      "id": "CVE-2026-129304",
+      "ghsaId": "GHSA-gm9r-hvc9-96gv",
+      "cve": "CVE-2026-129304",
+      "cwe": "CWE-20",
+      "sev": "medium",
+      "summary": "Guard Core: Unvalidated X-Forwarded-For-derived string used as a Redis key component and interpolated into a KEYS glob pattern",
+      "description": "### Summary\n\n`_extract_from_forwarded_header()` (`guard_core/utils.py:172-181` in 3.12.0; `:179` on master `08780f1`) returns the selected `X-Forwarded-For` entry **without any `ipaddress` validation**. When that entry is attacker-controlled, an arbitrary string becomes `client_ip` and flows into `BehaviorTracker` (`guard_core/handlers/behavior_handler.py:83-102`), which interpolates it verbatim into both a Redis key name and a `KEYS` glob pattern:\n\n```python\nkey = f\"behavior:usage:{endpoint_id}:{client_ip}\"\nawait self.redis_handler.set_key(\"behavior_usage\", f\"{key}:{current_time}\", \"1\", ttl=rule.window)\npattern = f\"behavior_usage:{key}:*\"\nkeys = await self.redis_handler.keys(pattern)      # blocking KEYS, O(N) over keyspace\n```\n\nSame shape in `track_return_pattern()` (`behavior_handler.py:135-142`). `redis_handler.keys()` maps to the blocking Redis `KEYS` command (`guard_core/handlers/redis_handler.py:265-275`).\n\n### Details\n\nThree consequences, in increasing severity:\n\n1. **Cross-client counter contamination.** `X-Forwarded-For: *` makes the glob match *every* client's behavior-usage keys for the endpoint. Verified with a fake-Redis harness: a client `9.9.9.9` hit an endpoint 3 times (threshold=3 rule), then a single attacker request carrying `XFF: *` issued the pattern `behavior_usage:behavior:usage:app.login:*:*`, counted the victim's events, and tripped the rule on its **first** request. An embedded `:` also shifts which key segment is parsed as the timestamp (`behavior_handler.py:94-100`).\n2. **Unbounded key-space growth + blocking scans.** Each request creates a **new unique key** (`f\"{key}:{current_time}\"`) and then issues a blocking `KEYS` scan whose cost grows with total keys — on the shared Redis instance, degrading every guard-core instance using it. Rotating arbitrary XFF strings multiplies distinct keys without bound.\n3. **Error path.** A tripped `ban` action passes the non-IP string to `ip_ban_manager.ban_ip()`, whose `ipaddress` validation raises `ValueError` uncaught in the behavioral processor — the request 500s.\n\n### PoC\n\n```python\nimport asyncio\nfrom types import SimpleNamespace\nfrom guard_core.models import SecurityConfig\nfrom guard_core.utils import extract_client_ip\n\nclass CIHeaders(dict):\n    def get(self, key, default=None):\n        for k, v in self.items():\n            if k.lower() == key.lower():\n                return v\n        return default\n\nclass FakeRequest:\n    def __init__(self, xff):\n        self.state = SimpleNamespace()",
+      "publishedAt": "2026-11-19T22:50:33Z",
+      "updatedAt": "2026-11-19T22:50:34Z",
+      "url": "https://github.com/advisories/GHSA-gm9r-hvc9-96gv",
+      "references": [
+        "https://github.com/Guard-Core/guard-core/security/advisories/GHSA-gm9r-hvc9-96gv",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-129304",
+        "https://github.com/Guard-Core/guard-core/pull/68",
+        "https://github.com/Guard-Core/guard-core/commit/c07239fa1c5aa93e3f179440e79dad652977d3e4",
+        "https://github.com/Guard-Core/guard-core/releases/tag/3.13.0",
+        "https://github.com/advisories/GHSA-gm9r-hvc9-96gv"
+      ],
+      "patchUrls": [
+        "https://github.com/Guard-Core/guard-core/pull/68",
+        "https://github.com/Guard-Core/guard-core/commit/c07239fa1c5aa93e3f179440e79dad652977d3e4"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "guard-core",
+          "ge": "1.0.0",
+          "lt": "3.13.0",
+          "id": "CVE-2026-129304",
+          "ghsaId": "GHSA-gm9r-hvc9-96gv",
+          "cve": "CVE-2026-129304",
+          "cwe": "CWE-20",
+          "sev": "medium",
+          "note": "Guard Core: Unvalidated X-Forwarded-For-derived string used as a Redis key component and interpolated into a KEYS glob pattern"
         }
       ],
       "kev": false,
@@ -16824,43 +16903,6 @@
       "epss": 0.0037
     },
     {
-      "id": "CVE-2026-103026",
-      "ghsaId": "GHSA-prhx-9q2h-ph2x",
-      "cve": "CVE-2026-103026",
-      "cwe": "CWE-470",
-      "sev": "high",
-      "summary": "Paymenter: Unauthenticated arbitrary method invocation in Livewire components",
-      "description": "### Summary\n\nA Livewire function allowed attackers to call any public function, allowing attackers to call any public method on the component. Because an attacker can call any function, they can also overwrite locked data.\n\n### Technical Details\n\n`app/Livewire/Traits/HasConfirmation.php` exposed a public Livewire action that dispatches to any method that exists on the component:\n\n```php\npublic function executeConfirmedAction($action, $parameters = [])\n{\n    if (method_exists($this, $action)) {\n        return $this->{$action}(...$parameters);\n    }\n    throw new \\Exception(\"Method {$action} does not exist\");\n}\n```\n\nThe trait is applied on the base component, `app/Livewire/Component.php` (`use Disabled, HasConfirmation, HasNotifications;`), so it is present on all 36 client-facing components. \n`executeConfirmedAction` is itself invocable, and because it only checks `method_exists` it re-admits the whole inherited framework API. The most important is `InteractsWithProperties::fill()`, which uses data_set() and therefore writes any public property, including properties marked `#[Locked]`, and supports dotted paths that reach into hydrated Eloquent models.\nThis was a piece of dead code and has been removed\n\n### Impact\nAn unauthenticated attacker could invoke arbitrary public methods exposed by any client-facing Livewire component through the `executeConfirmedAction` action.\n\nDepending on the properties and methods exposed by an individual component, this could allow an attacker to bypass intended authorization and data-integrity protections and modify server-side state that was intended to be immutable or protected from client-side manipulation.",
-      "publishedAt": "2026-11-20T14:56:03Z",
-      "updatedAt": "2026-11-20T14:56:04Z",
-      "url": "https://github.com/advisories/GHSA-prhx-9q2h-ph2x",
-      "references": [
-        "https://github.com/Paymenter/Paymenter/security/advisories/GHSA-prhx-9q2h-ph2x",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-103026",
-        "https://github.com/Paymenter/Paymenter/commit/e0c04af1707a65d8fb91879883aa7eae3292cedc",
-        "https://github.com/Paymenter/Paymenter/releases/tag/v1.5.7",
-        "https://github.com/advisories/GHSA-prhx-9q2h-ph2x"
-      ],
-      "patchUrls": [
-        "https://github.com/Paymenter/Paymenter/commit/e0c04af1707a65d8fb91879883aa7eae3292cedc"
-      ],
-      "packages": [
-        {
-          "ecosystem": "composer",
-          "name": "paymenter/paymenter",
-          "lt": "1.5.7",
-          "id": "CVE-2026-103026",
-          "ghsaId": "GHSA-prhx-9q2h-ph2x",
-          "cve": "CVE-2026-103026",
-          "cwe": "CWE-470",
-          "sev": "high",
-          "note": "Paymenter: Unauthenticated arbitrary method invocation in Livewire components"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0036
-    },
-    {
       "id": "CVE-2026-115565",
       "ghsaId": "GHSA-vcx7-pfrh-mcfg",
       "cve": "CVE-2026-115565",
@@ -16935,39 +16977,40 @@
       "epss": 0.0036
     },
     {
-      "id": "CVE-2026-102945",
-      "ghsaId": "GHSA-v6w5-38cf-pcv8",
-      "cve": "CVE-2026-102945",
-      "cwe": "CWE-125",
+      "id": "CVE-2026-128136",
+      "ghsaId": "GHSA-c59x-vh6j-3w8v",
+      "cve": "CVE-2026-128136",
+      "cwe": "CWE-502",
       "sev": "medium",
-      "summary": "Aether Project amf: panic on an unrecovered NGAP goroutine",
-      "description": "## Summary\n\nHandlePathSwitchRequest guards the UESecurityCapabilities IE for presence but never for length, and the extensible APER type silently yields an empty bit string, so six unguarded index-zero reads panic on an unrecovered goroutine and terminate the AMF. The AMF is the control-plane entry point for a 5G core, so terminating it drops mobility management for every subscriber. Confirmed at HEAD daed5a2 (present in v3.1.5).\n\n## The defect\n\nngap/handler.go:\n\n```go\nif uESecurityCapabilities != nil {                                                                              // line 3267, PRESENCE only\n    amfUe.UESecurityCapability.SetEA1_128_5G((uESecurityCapabilities.NRencryptionAlgorithms.Value.Bytes[0] & 0x80) >> 7)   // line 3268\n    ... (five more Bytes[0] reads, lines 3269-3273)\n}\n```\n\nSix index-zero reads, all guarded only by a nil check on the containing IE. Why the bit string can be empty: the field is declared `aper:\"sizeExt,sizeLB:16,sizeUB:16\"`. Because the type is EXTENSIBLE, parseBitString DISCARDS the SIZE(16) constraint when the peer sets the extension bit, and then `if rawLength == 0 { return bitString, nil }` returns a bit string with an empty Bytes slice and NO ERROR. So the decoder hands the handler a well-formed, error-free value whose Bytes has length zero, and the handler indexes it. The length guarantee the maintainers rely on comes from an ASN.1 SIZE constraint that the encoder rules legitimately waive on the extension path.\n\n## Verification\n\nProven dynamically, not by reading. Eight crafted bytes (40 00 80 00 80 00 80 00) decode cleanly through the REAL APER decoder, and the handler's exact expression then panics with \"index out of range [0] with length 0\". Panic discipline was checked first: the NGAP receive path has NO recover() (the only recover in the package is on SendToRan, the transmit path), so this is a genuine process kill and the AMF terminates.\n\nAttacker model, stated conservatively: a rogue or compromised gNB on the N2 interface, which additionally needs one registered UE's AMF-UE-NGAP-ID. This is NOT reachable by a bare over-the-air UE; the realistic scenario is a compromised or malicious base station, the threat model N2 security exists to address.\n\n## Suggested fix\n\nCheck the length of Bytes before indexing, in all six places, and treat a short or empty bit string as a malformed IE with a PathSwitchRequestFailure rather than proceeding. More durably: since the SIZE constraint is waived on the extension path b",
-      "publishedAt": "2026-11-20T00:20:38Z",
-      "updatedAt": "2026-11-20T00:20:39Z",
-      "url": "https://github.com/advisories/GHSA-v6w5-38cf-pcv8",
+      "summary": "NLTK: AllowlistUnpickler does not deny numpy submodule-local file-I/O sinks",
+      "description": "### Summary\n\n`nltk.picklesec.allowlisted_pickle_load` keyed its denylist of dangerous globals by export name, so numpy's file-I/O callables that live in submodules and are not re-exported under `__module__ == \"numpy\"` were never matched. Under the broad `allowed_modules=(\"numpy\", \"scipy\", \"sklearn\")` allowance that `TransitionParser.parse(depgraphs, modelFile)` granted for model files, a crafted protocol 4 pickle could name `numpy.lib._npyio_impl.recfromtxt` (arbitrary file read, result returned to the caller of `allowlisted_pickle_load`) or `numpy.lib.format.open_memmap` (attacker-chosen file create), and the REDUCE opcode invoked them during the load.\n\n### Affected\n\nnltk >= 3.10.0 and <= 3.10.3 (the allowlisting unpickler and the `TransitionParser` model path); numpy must be installed.\n\n### Reproduction\n\nA pickle whose REDUCE names `numpy.lib._npyio_impl.recfromtxt` with a target path, loaded through `allowlisted_pickle_load(data, allowed_modules=(\"numpy\",))`, reads that file on v3.10.3; one naming `numpy.lib.format.open_memmap` with mode `w+` creates a file. Both are refused on develop with `UnpicklingError: global '...' is from a denied module`. The maintainer transcript below shows the before and after runs.\n\n### Impact\n\nFile read and file create on the host that loads an untrusted model through NLTK's allowlisting unpickler. No code execution: this sits below the `TransitionParser` code-execution sibling GHSA-m396-3h67-vpfv, which is why the severity was reassessed to Medium (see the reply below).\n\n_Editorial note (2026-10-10): the report body of this advisory had been overwritten with the text of GHSA-rv69-j573-cm47 (the nested gzip decompression bomb). The summary above was reconstructed by the maintainers from the title, the maintainer reply, the CVSS justification and PR #3757; the original reporter text is not recoverable from the record._\n\n---\n\n## Fix status (2026-09-28)\n\nStatus: MERGED on develop (unreleased; v3.10.3 of 2026-08-12 predates the fix).\n\nPR: #3778 \"Bound decompression entry points in nltk (zip/gzip layers + pathsec.ZipFile + weka), CWE-409\", merged 2026-08-25, merge commit 42d99b7a2 on develop. Fix commits: b6e0cedca (the nested gzip layer of a zip .gz member is bounded) and c6fe98211 (the decompression guards stream instead of buffering whole payloads).\n\nProbe: none. The advisory PoC re-run on develop 2fa3f48fe (256 MiB of zeros gzipped into a STORED zip member declared at about 256 KiB, read through nltk.data.find().open().read(",
+      "publishedAt": "2026-11-19T23:58:53Z",
+      "updatedAt": "2026-11-19T23:58:54Z",
+      "url": "https://github.com/advisories/GHSA-c59x-vh6j-3w8v",
       "references": [
-        "https://github.com/omec-project/amf/security/advisories/GHSA-v6w5-38cf-pcv8",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-102945",
-        "https://github.com/omec-project/amf/pull/767",
-        "https://github.com/omec-project/amf/commit/d28042aaaea0221c5ea93c3e069a1dd5e7436f4c",
-        "https://github.com/omec-project/amf/releases/tag/v3.1.6",
-        "https://github.com/advisories/GHSA-v6w5-38cf-pcv8"
+        "https://github.com/nltk/nltk/security/advisories/GHSA-c59x-vh6j-3w8v",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-128136",
+        "https://github.com/nltk/nltk/pull/3757",
+        "https://github.com/nltk/nltk/commit/a44a7af69bca87e92d9c4a701fcbbe4512e8d450",
+        "https://github.com/nltk/nltk/releases/tag/v3.10.4",
+        "https://github.com/advisories/GHSA-c59x-vh6j-3w8v"
       ],
       "patchUrls": [
-        "https://github.com/omec-project/amf/pull/767",
-        "https://github.com/omec-project/amf/commit/d28042aaaea0221c5ea93c3e069a1dd5e7436f4c"
+        "https://github.com/nltk/nltk/pull/3757",
+        "https://github.com/nltk/nltk/commit/a44a7af69bca87e92d9c4a701fcbbe4512e8d450"
       ],
       "packages": [
         {
-          "ecosystem": "go",
-          "name": "github.com/omec-project/amf",
-          "lt": "1.7.1-0.20260725031321-d28042aaaea0",
-          "id": "CVE-2026-102945",
-          "ghsaId": "GHSA-v6w5-38cf-pcv8",
-          "cve": "CVE-2026-102945",
-          "cwe": "CWE-125",
+          "ecosystem": "pip",
+          "name": "nltk",
+          "ge": "3.10.0",
+          "lt": "3.10.4",
+          "id": "CVE-2026-128136",
+          "ghsaId": "GHSA-c59x-vh6j-3w8v",
+          "cve": "CVE-2026-128136",
+          "cwe": "CWE-502",
           "sev": "medium",
-          "note": "Aether Project amf: panic on an unrecovered NGAP goroutine"
+          "note": "NLTK: AllowlistUnpickler does not deny numpy submodule-local file-I/O sinks"
         }
       ],
       "kev": false,
@@ -17901,6 +17944,108 @@
       "epss": 0.0034
     },
     {
+      "id": "CVE-2026-77377",
+      "ghsaId": "GHSA-2535-j2pq-qq4r",
+      "cve": "CVE-2026-77377",
+      "cwe": "CWE-918",
+      "sev": "medium",
+      "summary": "Bolt: Server-Side Request Forgery (SSRF) in URL-upload and embed endpoints",
+      "description": "### Impact\n\nTwo authenticated backend endpoints fetched a user-supplied URL server-side with no protection against internal targets.\n\n### Patches\n\nThis has been patched in Bolt 6.1.4.",
+      "publishedAt": "2026-11-20T00:14:42Z",
+      "updatedAt": "2026-11-20T00:14:43Z",
+      "url": "https://github.com/advisories/GHSA-2535-j2pq-qq4r",
+      "references": [
+        "https://github.com/bolt/core/security/advisories/GHSA-2535-j2pq-qq4r",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-77377",
+        "https://github.com/Vondry/bolt-cms/pull/3",
+        "https://github.com/bolt/core/commit/4be8861fb5dd3706db363598631026d683bbf4b7",
+        "https://github.com/bolt/core/commit/c5686bfacc4461cb141b38cc5ff00d7bd224f5f2",
+        "https://github.com/bolt/core/releases/tag/6.1.4",
+        "https://github.com/advisories/GHSA-2535-j2pq-qq4r"
+      ],
+      "patchUrls": [
+        "https://github.com/Vondry/bolt-cms/pull/3",
+        "https://github.com/bolt/core/commit/4be8861fb5dd3706db363598631026d683bbf4b7",
+        "https://github.com/bolt/core/commit/c5686bfacc4461cb141b38cc5ff00d7bd224f5f2"
+      ],
+      "packages": [
+        {
+          "ecosystem": "composer",
+          "name": "bolt/core",
+          "lt": "6.1.4",
+          "id": "CVE-2026-77377",
+          "ghsaId": "GHSA-2535-j2pq-qq4r",
+          "cve": "CVE-2026-77377",
+          "cwe": "CWE-918",
+          "sev": "medium",
+          "note": "Bolt: Server-Side Request Forgery (SSRF) in URL-upload and embed endpoints"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0033
+    },
+    {
+      "id": "CVE-2026-115563",
+      "ghsaId": "GHSA-qx49-fqc8-xw99",
+      "cve": "CVE-2026-115563",
+      "cwe": "CWE-345",
+      "sev": "high",
+      "summary": "Model Context Protocol Python SDK: OAuth client could send credentials to an authorization server chosen by the MCP server",
+      "description": "### Summary\nIn affected versions, the SDK's OAuth client support (`mcp.client.auth`) let the MCP server a client connected to decide where the client's OAuth credentials were sent:\n\n- the authorization server metadata `issuer` was not validated on every discovery path, and\n- stored or pre-provisioned client credentials were not bound to the authorization server they belong to.\n\nA malicious or compromised MCP server could therefore direct them to a token endpoint of its choosing:\n\n- by naming its own authorization server in its protected resource metadata, or\n- by publishing none and serving metadata that presents the user's real authorization server as the `issuer`.\n\nIt would then receive the `client_secret`, authorization code and PKCE `code_verifier` meant for that real server (or, with `PrivateKeyJWTOAuthProvider`, a signed client assertion).\n\n### Am I affected?\nYes, if both of these hold:\n\n- your application uses the SDK as an MCP client over HTTP with `OAuthClientProvider`, `ClientCredentialsOAuthProvider`, `PrivateKeyJWTOAuthProvider` or the deprecated 1.x `RFC7523OAuthClientProvider` as the transport's `auth` handler;\n- it may connect to an MCP server you do not fully trust while holding credentials for a legitimate authorization server (a pre-provisioned secret or signing key, or a stored client registration).\n\nAffected versions:\n\n- 1.9.1 through 1.29.1: no `issuer` check and no credential binding on any path.\n- 2.0.0 through 2.1.1: both missing whenever the server publishes no protected resource metadata (the legacy fallback) or answers `403 insufficient_scope`.\n- Both lines, on every path: `ClientCredentialsOAuthProvider` and `PrivateKeyJWTOAuthProvider` had no way to name the authorization server their credentials belong to.\n\nNot affected:\n\n- MCP servers built with the SDK\n- stdio clients\n- clients that attach their own tokens or headers\n\nThe rating is scored for the unattended providers. With the interactive `OAuthClientProvider` a person has to start the sign-in; scored that way it is 6.5 (`CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N`).\n\n### Fix\nUpgrade to `mcp` 2.2.0 (2.x) or 1.30.0 (1.x) or later.\n\nIf you use `ClientCredentialsOAuthProvider` or `PrivateKeyJWTOAuthProvider`, upgrading changes nothing until you also pass `issuer=` (for example `issuer=\"https://auth.example.com\"`):\n\n- Without it they still follow whichever authorization server the MCP server advertises.\n- Omitting it now emits a deprecation warning, and it becomes required in ",
+      "publishedAt": "2026-11-19T22:45:40Z",
+      "updatedAt": "2026-11-19T22:45:41Z",
+      "url": "https://github.com/advisories/GHSA-qx49-fqc8-xw99",
+      "references": [
+        "https://github.com/modelcontextprotocol/python-sdk/security/advisories/GHSA-qx49-fqc8-xw99",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-115563",
+        "https://github.com/modelcontextprotocol/python-sdk/pull/3398",
+        "https://github.com/modelcontextprotocol/python-sdk/pull/3431",
+        "https://github.com/modelcontextprotocol/python-sdk/pull/3435",
+        "https://github.com/modelcontextprotocol/python-sdk/commit/3eed7ce0a6aba76e8d94c4cfb9b266f41935392c",
+        "https://github.com/modelcontextprotocol/python-sdk/commit/979208c1157661eac0151f90974a1f96528003fa",
+        "https://github.com/modelcontextprotocol/python-sdk/commit/d060b36e1d095ef6e93e07ba5d59bb69b2ad449a",
+        "https://github.com/modelcontextprotocol/python-sdk/releases/tag/v1.30.0",
+        "https://github.com/modelcontextprotocol/python-sdk/releases/tag/v2.2.0",
+        "https://github.com/advisories/GHSA-qx49-fqc8-xw99"
+      ],
+      "patchUrls": [
+        "https://github.com/modelcontextprotocol/python-sdk/pull/3398",
+        "https://github.com/modelcontextprotocol/python-sdk/pull/3431",
+        "https://github.com/modelcontextprotocol/python-sdk/pull/3435",
+        "https://github.com/modelcontextprotocol/python-sdk/commit/3eed7ce0a6aba76e8d94c4cfb9b266f41935392c",
+        "https://github.com/modelcontextprotocol/python-sdk/commit/979208c1157661eac0151f90974a1f96528003fa",
+        "https://github.com/modelcontextprotocol/python-sdk/commit/d060b36e1d095ef6e93e07ba5d59bb69b2ad449a"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "mcp",
+          "ge": "2.0.0a1",
+          "lt": "2.2.0",
+          "id": "CVE-2026-115563",
+          "ghsaId": "GHSA-qx49-fqc8-xw99",
+          "cve": "CVE-2026-115563",
+          "cwe": "CWE-345",
+          "sev": "high",
+          "note": "Model Context Protocol Python SDK: OAuth client could send credentials to an authorization server chosen by the MCP server"
+        },
+        {
+          "ecosystem": "pip",
+          "name": "mcp",
+          "ge": "1.9.1",
+          "lt": "1.30.0",
+          "id": "CVE-2026-115563",
+          "ghsaId": "GHSA-qx49-fqc8-xw99",
+          "cve": "CVE-2026-115563",
+          "cwe": "CWE-345",
+          "sev": "high",
+          "note": "Model Context Protocol Python SDK: OAuth client could send credentials to an authorization server chosen by the MCP server"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0033
+    },
+    {
       "id": "CVE-2026-119347",
       "ghsaId": "GHSA-7qx7-33qx-rqx2",
       "cve": "CVE-2026-119347",
@@ -17991,6 +18136,80 @@
       ],
       "kev": false,
       "epss": 0.0033
+    },
+    {
+      "id": "CVE-2026-45325",
+      "ghsaId": "GHSA-cmxg-94mg-jq94",
+      "cve": "CVE-2026-45325",
+      "cwe": "CWE-1321",
+      "sev": "high",
+      "summary": "@tmlmobilidade/utils has prototype pollution in its setValueAtPath",
+      "description": "### Impact\nPrototype pollution vulnerability in @tmlmobilidade/utils for setValueAtPath().\n\n### Patches\nA fix is available in versions 20260509.340.15 and up.",
+      "publishedAt": "2026-05-18T17:07:04Z",
+      "updatedAt": "2026-11-21T05:15:45Z",
+      "url": "https://github.com/advisories/GHSA-cmxg-94mg-jq94",
+      "references": [
+        "https://github.com/tmlmobilidade/go/security/advisories/GHSA-cmxg-94mg-jq94",
+        "https://github.com/tmlmobilidade/go/commit/b10505baa7ba0701f830a05f3007c0a6bdd00eb7",
+        "https://github.com/tmlmobilidade/go/blob/prd/packages/utils/src/generic/value-at-path.ts",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-45325",
+        "https://github.com/advisories/GHSA-cmxg-94mg-jq94"
+      ],
+      "patchUrls": [
+        "https://github.com/tmlmobilidade/go/commit/b10505baa7ba0701f830a05f3007c0a6bdd00eb7"
+      ],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "@tmlmobilidade/utils",
+          "lt": "20260509.340.15",
+          "id": "CVE-2026-45325",
+          "ghsaId": "GHSA-cmxg-94mg-jq94",
+          "cve": "CVE-2026-45325",
+          "cwe": "CWE-1321",
+          "sev": "high",
+          "note": "@tmlmobilidade/utils has prototype pollution in its setValueAtPath"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0032
+    },
+    {
+      "id": "CVE-2026-77376",
+      "ghsaId": "GHSA-xr6g-7g83-j865",
+      "cve": "CVE-2026-77376",
+      "cwe": "CWE-601",
+      "sev": "medium",
+      "summary": "Bolt: Open redirect enables post-authentication redirection to arbitrary domains",
+      "description": "### Impact\n\nOpen redirect vulnerabilities in LoginFormAuthenticator allow attackers to redirect users to attacker-controlled domains after login success or login failure, enabling phishing attacks and potential token theft.\n\n### Patches\n\nThis has been patched in Bolt 6.1.4.",
+      "publishedAt": "2026-11-20T00:14:31Z",
+      "updatedAt": "2026-11-20T00:14:32Z",
+      "url": "https://github.com/advisories/GHSA-xr6g-7g83-j865",
+      "references": [
+        "https://github.com/bolt/core/security/advisories/GHSA-xr6g-7g83-j865",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-77376",
+        "https://github.com/bolt/core/commit/db37ed5d7563f19e57597671598e284c9b34456c",
+        "https://github.com/bolt/core/releases/tag/6.1.4",
+        "https://github.com/advisories/GHSA-xr6g-7g83-j865"
+      ],
+      "patchUrls": [
+        "https://github.com/bolt/core/commit/db37ed5d7563f19e57597671598e284c9b34456c"
+      ],
+      "packages": [
+        {
+          "ecosystem": "composer",
+          "name": "bolt/core",
+          "lt": "6.1.4",
+          "id": "CVE-2026-77376",
+          "ghsaId": "GHSA-xr6g-7g83-j865",
+          "cve": "CVE-2026-77376",
+          "cwe": "CWE-601",
+          "sev": "medium",
+          "note": "Bolt: Open redirect enables post-authentication redirection to arbitrary domains"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0032
     },
     {
       "id": "CVE-2026-58209",
@@ -19108,145 +19327,6 @@
       ],
       "kev": false,
       "epss": 0.0029
-    },
-    {
-      "id": "CVE-2026-77377",
-      "ghsaId": "GHSA-2535-j2pq-qq4r",
-      "cve": "CVE-2026-77377",
-      "cwe": "CWE-918",
-      "sev": "medium",
-      "summary": "Bolt: Server-Side Request Forgery (SSRF) in URL-upload and embed endpoints",
-      "description": "### Impact\n\nTwo authenticated backend endpoints fetched a user-supplied URL server-side with no protection against internal targets.\n\n### Patches\n\nThis has been patched in Bolt 6.1.4.",
-      "publishedAt": "2026-11-20T00:14:42Z",
-      "updatedAt": "2026-11-20T00:14:43Z",
-      "url": "https://github.com/advisories/GHSA-2535-j2pq-qq4r",
-      "references": [
-        "https://github.com/bolt/core/security/advisories/GHSA-2535-j2pq-qq4r",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-77377",
-        "https://github.com/Vondry/bolt-cms/pull/3",
-        "https://github.com/bolt/core/commit/4be8861fb5dd3706db363598631026d683bbf4b7",
-        "https://github.com/bolt/core/commit/c5686bfacc4461cb141b38cc5ff00d7bd224f5f2",
-        "https://github.com/bolt/core/releases/tag/6.1.4",
-        "https://github.com/advisories/GHSA-2535-j2pq-qq4r"
-      ],
-      "patchUrls": [
-        "https://github.com/Vondry/bolt-cms/pull/3",
-        "https://github.com/bolt/core/commit/4be8861fb5dd3706db363598631026d683bbf4b7",
-        "https://github.com/bolt/core/commit/c5686bfacc4461cb141b38cc5ff00d7bd224f5f2"
-      ],
-      "packages": [
-        {
-          "ecosystem": "composer",
-          "name": "bolt/core",
-          "lt": "6.1.4",
-          "id": "CVE-2026-77377",
-          "ghsaId": "GHSA-2535-j2pq-qq4r",
-          "cve": "CVE-2026-77377",
-          "cwe": "CWE-918",
-          "sev": "medium",
-          "note": "Bolt: Server-Side Request Forgery (SSRF) in URL-upload and embed endpoints"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0028
-    },
-    {
-      "id": "CVE-2026-77376",
-      "ghsaId": "GHSA-xr6g-7g83-j865",
-      "cve": "CVE-2026-77376",
-      "cwe": "CWE-601",
-      "sev": "medium",
-      "summary": "Bolt: Open redirect enables post-authentication redirection to arbitrary domains",
-      "description": "### Impact\n\nOpen redirect vulnerabilities in LoginFormAuthenticator allow attackers to redirect users to attacker-controlled domains after login success or login failure, enabling phishing attacks and potential token theft.\n\n### Patches\n\nThis has been patched in Bolt 6.1.4.",
-      "publishedAt": "2026-11-20T00:14:31Z",
-      "updatedAt": "2026-11-20T00:14:32Z",
-      "url": "https://github.com/advisories/GHSA-xr6g-7g83-j865",
-      "references": [
-        "https://github.com/bolt/core/security/advisories/GHSA-xr6g-7g83-j865",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-77376",
-        "https://github.com/bolt/core/commit/db37ed5d7563f19e57597671598e284c9b34456c",
-        "https://github.com/bolt/core/releases/tag/6.1.4",
-        "https://github.com/advisories/GHSA-xr6g-7g83-j865"
-      ],
-      "patchUrls": [
-        "https://github.com/bolt/core/commit/db37ed5d7563f19e57597671598e284c9b34456c"
-      ],
-      "packages": [
-        {
-          "ecosystem": "composer",
-          "name": "bolt/core",
-          "lt": "6.1.4",
-          "id": "CVE-2026-77376",
-          "ghsaId": "GHSA-xr6g-7g83-j865",
-          "cve": "CVE-2026-77376",
-          "cwe": "CWE-601",
-          "sev": "medium",
-          "note": "Bolt: Open redirect enables post-authentication redirection to arbitrary domains"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0028
-    },
-    {
-      "id": "CVE-2026-115563",
-      "ghsaId": "GHSA-qx49-fqc8-xw99",
-      "cve": "CVE-2026-115563",
-      "cwe": "CWE-345",
-      "sev": "high",
-      "summary": "Model Context Protocol Python SDK: OAuth client could send credentials to an authorization server chosen by the MCP server",
-      "description": "### Summary\nIn affected versions, the SDK's OAuth client support (`mcp.client.auth`) let the MCP server a client connected to decide where the client's OAuth credentials were sent:\n\n- the authorization server metadata `issuer` was not validated on every discovery path, and\n- stored or pre-provisioned client credentials were not bound to the authorization server they belong to.\n\nA malicious or compromised MCP server could therefore direct them to a token endpoint of its choosing:\n\n- by naming its own authorization server in its protected resource metadata, or\n- by publishing none and serving metadata that presents the user's real authorization server as the `issuer`.\n\nIt would then receive the `client_secret`, authorization code and PKCE `code_verifier` meant for that real server (or, with `PrivateKeyJWTOAuthProvider`, a signed client assertion).\n\n### Am I affected?\nYes, if both of these hold:\n\n- your application uses the SDK as an MCP client over HTTP with `OAuthClientProvider`, `ClientCredentialsOAuthProvider`, `PrivateKeyJWTOAuthProvider` or the deprecated 1.x `RFC7523OAuthClientProvider` as the transport's `auth` handler;\n- it may connect to an MCP server you do not fully trust while holding credentials for a legitimate authorization server (a pre-provisioned secret or signing key, or a stored client registration).\n\nAffected versions:\n\n- 1.9.1 through 1.29.1: no `issuer` check and no credential binding on any path.\n- 2.0.0 through 2.1.1: both missing whenever the server publishes no protected resource metadata (the legacy fallback) or answers `403 insufficient_scope`.\n- Both lines, on every path: `ClientCredentialsOAuthProvider` and `PrivateKeyJWTOAuthProvider` had no way to name the authorization server their credentials belong to.\n\nNot affected:\n\n- MCP servers built with the SDK\n- stdio clients\n- clients that attach their own tokens or headers\n\nThe rating is scored for the unattended providers. With the interactive `OAuthClientProvider` a person has to start the sign-in; scored that way it is 6.5 (`CVSS:3.1/AV:N/AC:L/PR:N/UI:R/S:U/C:H/I:N/A:N`).\n\n### Fix\nUpgrade to `mcp` 2.2.0 (2.x) or 1.30.0 (1.x) or later.\n\nIf you use `ClientCredentialsOAuthProvider` or `PrivateKeyJWTOAuthProvider`, upgrading changes nothing until you also pass `issuer=` (for example `issuer=\"https://auth.example.com\"`):\n\n- Without it they still follow whichever authorization server the MCP server advertises.\n- Omitting it now emits a deprecation warning, and it becomes required in ",
-      "publishedAt": "2026-11-19T22:45:40Z",
-      "updatedAt": "2026-11-19T22:45:41Z",
-      "url": "https://github.com/advisories/GHSA-qx49-fqc8-xw99",
-      "references": [
-        "https://github.com/modelcontextprotocol/python-sdk/security/advisories/GHSA-qx49-fqc8-xw99",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-115563",
-        "https://github.com/modelcontextprotocol/python-sdk/pull/3398",
-        "https://github.com/modelcontextprotocol/python-sdk/pull/3431",
-        "https://github.com/modelcontextprotocol/python-sdk/pull/3435",
-        "https://github.com/modelcontextprotocol/python-sdk/commit/3eed7ce0a6aba76e8d94c4cfb9b266f41935392c",
-        "https://github.com/modelcontextprotocol/python-sdk/commit/979208c1157661eac0151f90974a1f96528003fa",
-        "https://github.com/modelcontextprotocol/python-sdk/commit/d060b36e1d095ef6e93e07ba5d59bb69b2ad449a",
-        "https://github.com/modelcontextprotocol/python-sdk/releases/tag/v1.30.0",
-        "https://github.com/modelcontextprotocol/python-sdk/releases/tag/v2.2.0",
-        "https://github.com/advisories/GHSA-qx49-fqc8-xw99"
-      ],
-      "patchUrls": [
-        "https://github.com/modelcontextprotocol/python-sdk/pull/3398",
-        "https://github.com/modelcontextprotocol/python-sdk/pull/3431",
-        "https://github.com/modelcontextprotocol/python-sdk/pull/3435",
-        "https://github.com/modelcontextprotocol/python-sdk/commit/3eed7ce0a6aba76e8d94c4cfb9b266f41935392c",
-        "https://github.com/modelcontextprotocol/python-sdk/commit/979208c1157661eac0151f90974a1f96528003fa",
-        "https://github.com/modelcontextprotocol/python-sdk/commit/d060b36e1d095ef6e93e07ba5d59bb69b2ad449a"
-      ],
-      "packages": [
-        {
-          "ecosystem": "pip",
-          "name": "mcp",
-          "ge": "2.0.0a1",
-          "lt": "2.2.0",
-          "id": "CVE-2026-115563",
-          "ghsaId": "GHSA-qx49-fqc8-xw99",
-          "cve": "CVE-2026-115563",
-          "cwe": "CWE-345",
-          "sev": "high",
-          "note": "Model Context Protocol Python SDK: OAuth client could send credentials to an authorization server chosen by the MCP server"
-        },
-        {
-          "ecosystem": "pip",
-          "name": "mcp",
-          "ge": "1.9.1",
-          "lt": "1.30.0",
-          "id": "CVE-2026-115563",
-          "ghsaId": "GHSA-qx49-fqc8-xw99",
-          "cve": "CVE-2026-115563",
-          "cwe": "CWE-345",
-          "sev": "high",
-          "note": "Model Context Protocol Python SDK: OAuth client could send credentials to an authorization server chosen by the MCP server"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0028
     },
     {
       "id": "CVE-2026-62964",
@@ -20675,46 +20755,6 @@
       "epss": 0.0024
     },
     {
-      "id": "CVE-2026-128136",
-      "ghsaId": "GHSA-c59x-vh6j-3w8v",
-      "cve": "CVE-2026-128136",
-      "cwe": "CWE-502",
-      "sev": "medium",
-      "summary": "NLTK: AllowlistUnpickler does not deny numpy submodule-local file-I/O sinks",
-      "description": "### Summary\n\n`nltk.picklesec.allowlisted_pickle_load` keyed its denylist of dangerous globals by export name, so numpy's file-I/O callables that live in submodules and are not re-exported under `__module__ == \"numpy\"` were never matched. Under the broad `allowed_modules=(\"numpy\", \"scipy\", \"sklearn\")` allowance that `TransitionParser.parse(depgraphs, modelFile)` granted for model files, a crafted protocol 4 pickle could name `numpy.lib._npyio_impl.recfromtxt` (arbitrary file read, result returned to the caller of `allowlisted_pickle_load`) or `numpy.lib.format.open_memmap` (attacker-chosen file create), and the REDUCE opcode invoked them during the load.\n\n### Affected\n\nnltk >= 3.10.0 and <= 3.10.3 (the allowlisting unpickler and the `TransitionParser` model path); numpy must be installed.\n\n### Reproduction\n\nA pickle whose REDUCE names `numpy.lib._npyio_impl.recfromtxt` with a target path, loaded through `allowlisted_pickle_load(data, allowed_modules=(\"numpy\",))`, reads that file on v3.10.3; one naming `numpy.lib.format.open_memmap` with mode `w+` creates a file. Both are refused on develop with `UnpicklingError: global '...' is from a denied module`. The maintainer transcript below shows the before and after runs.\n\n### Impact\n\nFile read and file create on the host that loads an untrusted model through NLTK's allowlisting unpickler. No code execution: this sits below the `TransitionParser` code-execution sibling GHSA-m396-3h67-vpfv, which is why the severity was reassessed to Medium (see the reply below).\n\n_Editorial note (2026-10-10): the report body of this advisory had been overwritten with the text of GHSA-rv69-j573-cm47 (the nested gzip decompression bomb). The summary above was reconstructed by the maintainers from the title, the maintainer reply, the CVSS justification and PR #3757; the original reporter text is not recoverable from the record._\n\n---\n\n## Fix status (2026-09-28)\n\nStatus: MERGED on develop (unreleased; v3.10.3 of 2026-08-12 predates the fix).\n\nPR: #3778 \"Bound decompression entry points in nltk (zip/gzip layers + pathsec.ZipFile + weka), CWE-409\", merged 2026-08-25, merge commit 42d99b7a2 on develop. Fix commits: b6e0cedca (the nested gzip layer of a zip .gz member is bounded) and c6fe98211 (the decompression guards stream instead of buffering whole payloads).\n\nProbe: none. The advisory PoC re-run on develop 2fa3f48fe (256 MiB of zeros gzipped into a STORED zip member declared at about 256 KiB, read through nltk.data.find().open().read(",
-      "publishedAt": "2026-11-19T23:58:53Z",
-      "updatedAt": "2026-11-19T23:58:54Z",
-      "url": "https://github.com/advisories/GHSA-c59x-vh6j-3w8v",
-      "references": [
-        "https://github.com/nltk/nltk/security/advisories/GHSA-c59x-vh6j-3w8v",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-128136",
-        "https://github.com/nltk/nltk/pull/3757",
-        "https://github.com/nltk/nltk/commit/a44a7af69bca87e92d9c4a701fcbbe4512e8d450",
-        "https://github.com/nltk/nltk/releases/tag/v3.10.4",
-        "https://github.com/advisories/GHSA-c59x-vh6j-3w8v"
-      ],
-      "patchUrls": [
-        "https://github.com/nltk/nltk/pull/3757",
-        "https://github.com/nltk/nltk/commit/a44a7af69bca87e92d9c4a701fcbbe4512e8d450"
-      ],
-      "packages": [
-        {
-          "ecosystem": "pip",
-          "name": "nltk",
-          "ge": "3.10.0",
-          "lt": "3.10.4",
-          "id": "CVE-2026-128136",
-          "ghsaId": "GHSA-c59x-vh6j-3w8v",
-          "cve": "CVE-2026-128136",
-          "cwe": "CWE-502",
-          "sev": "medium",
-          "note": "NLTK: AllowlistUnpickler does not deny numpy submodule-local file-I/O sinks"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0024
-    },
-    {
       "id": "CVE-2026-129230",
       "ghsaId": "GHSA-53pg-5qp8-mhvr",
       "cve": "CVE-2026-129230",
@@ -20748,46 +20788,6 @@
           "cwe": "CWE-400",
           "sev": "medium",
           "note": "NLTK: Uncontrolled recursion in WordNet Synset hypernym walkers (max_depth/min_depth/hypernym_paths/hypernym_distances) causes DoS"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0024
-    },
-    {
-      "id": "CVE-2026-129304",
-      "ghsaId": "GHSA-gm9r-hvc9-96gv",
-      "cve": "CVE-2026-129304",
-      "cwe": "CWE-20",
-      "sev": "medium",
-      "summary": "Guard Core: Unvalidated X-Forwarded-For-derived string used as a Redis key component and interpolated into a KEYS glob pattern",
-      "description": "### Summary\n\n`_extract_from_forwarded_header()` (`guard_core/utils.py:172-181` in 3.12.0; `:179` on master `08780f1`) returns the selected `X-Forwarded-For` entry **without any `ipaddress` validation**. When that entry is attacker-controlled, an arbitrary string becomes `client_ip` and flows into `BehaviorTracker` (`guard_core/handlers/behavior_handler.py:83-102`), which interpolates it verbatim into both a Redis key name and a `KEYS` glob pattern:\n\n```python\nkey = f\"behavior:usage:{endpoint_id}:{client_ip}\"\nawait self.redis_handler.set_key(\"behavior_usage\", f\"{key}:{current_time}\", \"1\", ttl=rule.window)\npattern = f\"behavior_usage:{key}:*\"\nkeys = await self.redis_handler.keys(pattern)      # blocking KEYS, O(N) over keyspace\n```\n\nSame shape in `track_return_pattern()` (`behavior_handler.py:135-142`). `redis_handler.keys()` maps to the blocking Redis `KEYS` command (`guard_core/handlers/redis_handler.py:265-275`).\n\n### Details\n\nThree consequences, in increasing severity:\n\n1. **Cross-client counter contamination.** `X-Forwarded-For: *` makes the glob match *every* client's behavior-usage keys for the endpoint. Verified with a fake-Redis harness: a client `9.9.9.9` hit an endpoint 3 times (threshold=3 rule), then a single attacker request carrying `XFF: *` issued the pattern `behavior_usage:behavior:usage:app.login:*:*`, counted the victim's events, and tripped the rule on its **first** request. An embedded `:` also shifts which key segment is parsed as the timestamp (`behavior_handler.py:94-100`).\n2. **Unbounded key-space growth + blocking scans.** Each request creates a **new unique key** (`f\"{key}:{current_time}\"`) and then issues a blocking `KEYS` scan whose cost grows with total keys — on the shared Redis instance, degrading every guard-core instance using it. Rotating arbitrary XFF strings multiplies distinct keys without bound.\n3. **Error path.** A tripped `ban` action passes the non-IP string to `ip_ban_manager.ban_ip()`, whose `ipaddress` validation raises `ValueError` uncaught in the behavioral processor — the request 500s.\n\n### PoC\n\n```python\nimport asyncio\nfrom types import SimpleNamespace\nfrom guard_core.models import SecurityConfig\nfrom guard_core.utils import extract_client_ip\n\nclass CIHeaders(dict):\n    def get(self, key, default=None):\n        for k, v in self.items():\n            if k.lower() == key.lower():\n                return v\n        return default\n\nclass FakeRequest:\n    def __init__(self, xff):\n        self.state = SimpleNamespace()",
-      "publishedAt": "2026-11-19T22:50:33Z",
-      "updatedAt": "2026-11-19T22:50:34Z",
-      "url": "https://github.com/advisories/GHSA-gm9r-hvc9-96gv",
-      "references": [
-        "https://github.com/Guard-Core/guard-core/security/advisories/GHSA-gm9r-hvc9-96gv",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-129304",
-        "https://github.com/Guard-Core/guard-core/pull/68",
-        "https://github.com/Guard-Core/guard-core/commit/c07239fa1c5aa93e3f179440e79dad652977d3e4",
-        "https://github.com/Guard-Core/guard-core/releases/tag/3.13.0",
-        "https://github.com/advisories/GHSA-gm9r-hvc9-96gv"
-      ],
-      "patchUrls": [
-        "https://github.com/Guard-Core/guard-core/pull/68",
-        "https://github.com/Guard-Core/guard-core/commit/c07239fa1c5aa93e3f179440e79dad652977d3e4"
-      ],
-      "packages": [
-        {
-          "ecosystem": "pip",
-          "name": "guard-core",
-          "ge": "1.0.0",
-          "lt": "3.13.0",
-          "id": "CVE-2026-129304",
-          "ghsaId": "GHSA-gm9r-hvc9-96gv",
-          "cve": "CVE-2026-129304",
-          "cwe": "CWE-20",
-          "sev": "medium",
-          "note": "Guard Core: Unvalidated X-Forwarded-For-derived string used as a Redis key component and interpolated into a KEYS glob pattern"
         }
       ],
       "kev": false,
@@ -22631,6 +22631,60 @@
       "epss": 0.0018
     },
     {
+      "id": "CVE-2026-22816",
+      "ghsaId": "GHSA-w78c-w6vf-rw82",
+      "cve": "CVE-2026-22816",
+      "cwe": "CWE-494",
+      "sev": "high",
+      "summary": "Gradle causes Failure to disable repositories can expose builds to malicious artifacts",
+      "description": "### Impact\n\nWhen resolving dependencies, Gradle searches repositories in declaration order. If it encounters connection errors, Gradle will disable the repository and fail dependency resolution. This is necessary for both reproducibility and security reasons to prevent dependencies from being resolved from other repositories without warning. \n\nIn previous versions of Gradle, some exceptions were not treated as fatal errors and would not cause a repository to be disabled. If a build encountered one of these exceptions, Gradle would continue to the next repository in the list and potentially resolve dependencies from a different repository. \n\n#### Vulnerability caused by unresolvable host names\n\n[`UnknownHostException`](https://docs.oracle.com/en/java/javase/21/docs/api/java.base/java/net/UnknownHostException.html) are caused when a host name cannot be resolved to an IP address. This can be caused by DNS misconfiguration, host name typos or any problem that prevents host name resolution. \n\nIf a Gradle build used an unresolvable host name, Gradle would continue to work as long as all dependencies could be resolved from another repository. An unresolvable host name could be caused by allowing a repository's domain name registration to lapse or typo-ing the real domain name. \n\nThis behavior could allow an attacker to register a service under the host name used by the build and serve malicious artifacts. The attack requires the repository to be listed before others in the build configuration. \n\n### Patches\n\nGradle has introduced a change in behavior in Gradle 9.3.0 and 8.14.4 to stop searching other repositories when encountering these errors. \n\nUpgrading to either version will protect you against the vulnerabilities described here.\n\n### Workarounds\n\nIf you are using strict [repository content filtering](https://docs.gradle.org/9.3.0/userguide/filtering_repository_content.html#header) and / or [dependency verification](https://docs.gradle.org/9.3.0/userguide/dependency_verification.html), your build is safe from the potential vulnerabilities described above.\n\nIf you cannot update to a newer Gradle version, configuring [dependency verification](https://docs.gradle.org/9.3.0/userguide/dependency_verification.html) is the best way to make sure your build resolves the dependencies you expect and nothing else.\n\nYou should also review which repositories your builds use to check for unused or outdated repository declarations. \n\n### Related\n* [Security feature of failin",
+      "publishedAt": "2026-11-23T15:33:34Z",
+      "updatedAt": "2026-11-23T15:39:17Z",
+      "url": "https://github.com/advisories/GHSA-w78c-w6vf-rw82",
+      "references": [
+        "https://github.com/gradle/gradle/security/advisories/GHSA-w78c-w6vf-rw82",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-22816",
+        "https://github.com/gradle/gradle/commit/4f2e3bbee4d0cee307dd97b684f11cfbe711b6f3",
+        "https://github.com/gradle/gradle/commit/e5707d0d8fce3d768c9c489004700d78eab1773a",
+        "https://docs.gradle.org/8.14.4/release-notes.html",
+        "https://docs.gradle.org/9.3.0/release-notes.html",
+        "https://github.com/gradle/gradle/releases/tag/v8.14.4",
+        "https://github.com/gradle/gradle/releases/tag/v9.3.0",
+        "https://github.com/advisories/GHSA-w78c-w6vf-rw82"
+      ],
+      "patchUrls": [
+        "https://github.com/gradle/gradle/commit/4f2e3bbee4d0cee307dd97b684f11cfbe711b6f3",
+        "https://github.com/gradle/gradle/commit/e5707d0d8fce3d768c9c489004700d78eab1773a"
+      ],
+      "packages": [
+        {
+          "ecosystem": "maven",
+          "name": "org.gradle:gradle-core",
+          "lt": "8.14.4",
+          "id": "CVE-2026-22816",
+          "ghsaId": "GHSA-w78c-w6vf-rw82",
+          "cve": "CVE-2026-22816",
+          "cwe": "CWE-494",
+          "sev": "high",
+          "note": "Gradle causes Failure to disable repositories can expose builds to malicious artifacts"
+        },
+        {
+          "ecosystem": "maven",
+          "name": "org.gradle:gradle-core",
+          "ge": "9.0.0",
+          "lt": "9.3.0",
+          "id": "CVE-2026-22816",
+          "ghsaId": "GHSA-w78c-w6vf-rw82",
+          "cve": "CVE-2026-22816",
+          "cwe": "CWE-494",
+          "sev": "high",
+          "note": "Gradle causes Failure to disable repositories can expose builds to malicious artifacts"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0017
+    },
+    {
       "id": "CVE-2026-35377",
       "ghsaId": "GHSA-xhrc-7f76-vh96",
       "cve": "CVE-2026-35377",
@@ -22816,6 +22870,119 @@
       ],
       "kev": false,
       "epss": 0.0017
+    },
+    {
+      "id": "CVE-2026-22865",
+      "ghsaId": "GHSA-mqwm-5m85-gmcv",
+      "cve": "CVE-2026-22865",
+      "cwe": "CWE-494",
+      "sev": "high",
+      "summary": "Gradle causes failure to disable repositories exposing builds to malicious artifacts",
+      "description": "### Impact\n\nWhen resolving dependencies, Gradle searches repositories in declaration order. If it encounters connection errors, Gradle will disable the repository and fail dependency resolution. This is necessary for both reproducibility and security reasons to prevent dependencies from being resolved from other repositories without warning. \n\nIn previous versions of Gradle, some exceptions were not treated as fatal errors and would not cause a repository to be disabled. If a build encountered one of these exceptions, Gradle would continue to the next repository in the list and potentially resolve dependencies from a different repository. \n\n#### Vulnerability caused by continuing after max retries on transient errors\n\nAn exception like [`NoHttpResponseException`](https://hc.apache.org/httpclient-legacy/exception-handling.html#org_apache_commons_httpclient_NoHttpResponseException) can indicate transient errors. If the errors persist after a maximum number of retries, Gradle would continue to the next repository. \n\nThis behavior could allow an attacker to disrupt the service of a repository and leverage another repository to serve malicious artifacts. This attack requires the attacker to have control over a repository after the disrupted repository.\n\n### Patches\n\nGradle has introduced a change in behavior in Gradle 9.3.0 and 8.14.4 to stop searching other repositories when encountering these errors. \n\nUpgrading to either version will protect you against the vulnerabilities described here.\n\n### Workarounds\n\nIf you are using strict [repository content filtering](https://docs.gradle.org/9.3.0/userguide/filtering_repository_content.html#header) and / or [dependency verification](https://docs.gradle.org/9.3.0/userguide/dependency_verification.html), your build is safe from the potential vulnerabilities described above.\n\nIf you cannot update to a newer Gradle version, configuring [dependency verification](https://docs.gradle.org/9.3.0/userguide/dependency_verification.html) is the best way to make sure your build resolves the dependencies you expect and nothing else.\n\nYou should also review which repositories your builds use to check for unused or outdated repository declarations. \n\n### Related\n* [Security feature of failing fast on bad repos does not seem to be implemented](https://github.com/gradle/gradle/issues/35927)\n* [Repository disabling](https://docs.gradle.org/current/userguide/graph_resolution.html#sec:repository-disabling)\n* [Advisory about repositories",
+      "publishedAt": "2026-11-23T15:41:57Z",
+      "updatedAt": "2026-11-23T15:41:58Z",
+      "url": "https://github.com/advisories/GHSA-mqwm-5m85-gmcv",
+      "references": [
+        "https://github.com/gradle/gradle/security/advisories/GHSA-mqwm-5m85-gmcv",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-22865",
+        "https://github.com/gradle/gradle/commit/d38bfc0f1d4dabd38b305a67489bb8a6645138a1",
+        "https://github.com/gradle/gradle/commit/fa96c8bc7f7741e5dfa1da002c559afca3fa1fc1",
+        "https://docs.gradle.org/8.14.4/release-notes.html",
+        "https://docs.gradle.org/9.3.0/release-notes.html",
+        "https://github.com/gradle/gradle/releases/tag/v8.14.4",
+        "https://github.com/gradle/gradle/releases/tag/v9.3.0",
+        "https://github.com/advisories/GHSA-mqwm-5m85-gmcv"
+      ],
+      "patchUrls": [
+        "https://github.com/gradle/gradle/commit/d38bfc0f1d4dabd38b305a67489bb8a6645138a1",
+        "https://github.com/gradle/gradle/commit/fa96c8bc7f7741e5dfa1da002c559afca3fa1fc1"
+      ],
+      "packages": [
+        {
+          "ecosystem": "maven",
+          "name": "org.gradle:gradle-core",
+          "lt": "8.14.4",
+          "id": "CVE-2026-22865",
+          "ghsaId": "GHSA-mqwm-5m85-gmcv",
+          "cve": "CVE-2026-22865",
+          "cwe": "CWE-494",
+          "sev": "high",
+          "note": "Gradle causes failure to disable repositories exposing builds to malicious artifacts"
+        },
+        {
+          "ecosystem": "maven",
+          "name": "org.gradle:gradle-core",
+          "ge": "9.0.0",
+          "lt": "9.3.0",
+          "id": "CVE-2026-22865",
+          "ghsaId": "GHSA-mqwm-5m85-gmcv",
+          "cve": "CVE-2026-22865",
+          "cwe": "CWE-494",
+          "sev": "high",
+          "note": "Gradle causes failure to disable repositories exposing builds to malicious artifacts"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0016
+    },
+    {
+      "id": "CVE-2026-62268",
+      "ghsaId": "GHSA-gfp8-w835-v44j",
+      "cve": "CVE-2026-62268",
+      "cwe": "CWE-59",
+      "sev": "medium",
+      "summary": "borg extract might modify out-of-tree files when extracting maliciously crafted archives",
+      "description": "### Impact\n\nA maliciously crafted archive could contain a symlink (e.g. \"evil\" -> \"/etc\") followed by an item below it (\"evil/passwd\"), or an item whose path embeds \"..\" (e.g. \"a/../../etc/passwd\").\n\nWhen extracting such items, borg followed the symlink / resolved the \"..\", so it could delete or overwrite files outside the extraction directory.\n\nIn a quite similar scenario, a crafted archive could contain a slave hardlink item with the hardlink source pointing outside the extraction directory.\n\nWhen extracting such an item, borg would hard-link the outside and the inside item.\n    \nNote: that sounds bad, but it is no big issue in practice: to create such a malicious archive, the attacker would need repository access and (for encrypted or authenticated repos) also the borg key and passphrase.\n\nAffected: likely all borg releases before 1.4.5 (and also all borg 2.0.0 betas before b22).\n\n### Patches\n- 1.4.x release series: fix released with 1.4.5. commits 3e9ed6d1ad6d3531b39c07b8ef3ecf41fce4437f and 141888f2fabcd57a300547c2aa63212cb213924d.\n- 1.2.x release series: no new releases any more, fix commits available on 1.2-maint branch: 0ac568e290518c3bbe781459978720dde7fab224 and d907f2cb57337041c4fa55ca4682895535e5076b\n- 2.0.0 betas: fix will be in 2.0.0b22, fix commits on master branch: 2d632531028b09da8ab5d1450f89bebcc205d640 and 4f37fdfed10b50559a0dd333b0d5581c642af329\n\n### Workarounds\nFor encrypted or authenticated repositories, do not share borg key and passphrase with potential attackers.\n\nFor all kinds of repositories, do not share repository access with potential attackers. Usually, the repository access is protected by means outside of borg; e.g. a ssh key for remote repositories or physical access to local storage media.\n\n### References\nThis issue was first discovered by AI in a private code security review initiated by @ThomasWaldmann.\n\nA few days later, it was also independently reported to @ThomasWaldmann by:\n- Michael Head (machin0r)\n- Chinnapak Charoensiri [Github: Ziim-eiei].",
+      "publishedAt": "2026-10-15T20:09:23Z",
+      "updatedAt": "2026-11-23T10:10:08Z",
+      "url": "https://github.com/advisories/GHSA-gfp8-w835-v44j",
+      "references": [
+        "https://github.com/borgbackup/borg/security/advisories/GHSA-gfp8-w835-v44j",
+        "https://github.com/borgbackup/borg/commit/0ac568e290518c3bbe781459978720dde7fab224",
+        "https://github.com/borgbackup/borg/commit/141888f2fabcd57a300547c2aa63212cb213924d",
+        "https://github.com/borgbackup/borg/commit/2d632531028b09da8ab5d1450f89bebcc205d640",
+        "https://github.com/borgbackup/borg/commit/3e9ed6d1ad6d3531b39c07b8ef3ecf41fce4437f",
+        "https://github.com/borgbackup/borg/commit/4f37fdfed10b50559a0dd333b0d5581c642af329",
+        "https://github.com/borgbackup/borg/commit/d907f2cb57337041c4fa55ca4682895535e5076b",
+        "https://github.com/borgbackup/borg/releases/tag/1.4.5",
+        "https://github.com/borgbackup/borg/releases/tag/2.0.0b22",
+        "https://github.com/advisories/GHSA-gfp8-w835-v44j"
+      ],
+      "patchUrls": [
+        "https://github.com/borgbackup/borg/commit/0ac568e290518c3bbe781459978720dde7fab224",
+        "https://github.com/borgbackup/borg/commit/141888f2fabcd57a300547c2aa63212cb213924d",
+        "https://github.com/borgbackup/borg/commit/2d632531028b09da8ab5d1450f89bebcc205d640",
+        "https://github.com/borgbackup/borg/commit/3e9ed6d1ad6d3531b39c07b8ef3ecf41fce4437f",
+        "https://github.com/borgbackup/borg/commit/4f37fdfed10b50559a0dd333b0d5581c642af329",
+        "https://github.com/borgbackup/borg/commit/d907f2cb57337041c4fa55ca4682895535e5076b"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "borgbackup",
+          "lt": "1.4.5",
+          "id": "CVE-2026-62268",
+          "ghsaId": "GHSA-gfp8-w835-v44j",
+          "cve": "CVE-2026-62268",
+          "cwe": "CWE-59",
+          "sev": "medium",
+          "note": "borg extract might modify out-of-tree files when extracting maliciously crafted archives"
+        },
+        {
+          "ecosystem": "pip",
+          "name": "borgbackup",
+          "ge": "2.0.0b1",
+          "lt": "2.0.0b22",
+          "id": "CVE-2026-62268",
+          "ghsaId": "GHSA-gfp8-w835-v44j",
+          "cve": "CVE-2026-62268",
+          "cwe": "CWE-59",
+          "sev": "medium",
+          "note": "borg extract might modify out-of-tree files when extracting maliciously crafted archives"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0016
     },
     {
       "id": "CVE-2026-128137",
@@ -24899,6 +25066,78 @@
       "epss": 0.016
     },
     {
+      "id": "CVE-2022-24905",
+      "ghsaId": "GHSA-xmg8-99r8-jc2j",
+      "cve": "CVE-2022-24905",
+      "cwe": "CWE-20",
+      "sev": "medium",
+      "summary": "Argo CD: Login screen allows message spoofing if SSO is enabled",
+      "description": "### Impact\n\nA vulnerability was found in Argo CD that allows an attacker to spoof error messages on the login screen when SSO is enabled.\n\nIn order to exploit this vulnerability, an attacker would have to trick the victim to visit a specially crafted URL which contains the message to be displayed.\n\nAs far as the research of the Argo CD team concluded, it is not possible to specify any active content (e.g. Javascript) or other HTML fragments (e.g. clickable links) in the spoofed message.\n\n### Patched versions\n\nA patch for this vulnerability has been released in the following Argo CD versions:\n\n* v2.3.4\n* v2.2.9\n* v2.1.15\n\n### Workarounds\n\nNo workaround available.\n\n#### Mitigations\n\nIt is advised to update to an Argo CD version containing a fix for this issue (see *Patched versions* above).\n\n### Credits\n\nThis vulnerability was discovered by Naufal Septiadi (<naufal@horangi.com>) and reported to us in a responsible way. \n\n### For more information\n\n<!-- Use only one of the paragraphs below. Remove all others. -->\n\n<!-- For Argo CD -->\n\n* Open an issue in [the Argo CD issue tracker](https://github.com/argoproj/argo-cd/issues) or [discussions](https://github.com/argoproj/argo-cd/discussions)\n* Join us on [Slack](https://argoproj.github.io/community/join-slack) in channel #argo-cd",
+      "publishedAt": "2022-05-24T12:26:59Z",
+      "updatedAt": "2026-11-20T23:55:10Z",
+      "url": "https://github.com/advisories/GHSA-xmg8-99r8-jc2j",
+      "references": [
+        "https://github.com/argoproj/argo-cd/security/advisories/GHSA-xmg8-99r8-jc2j",
+        "https://nvd.nist.gov/vuln/detail/CVE-2022-24905",
+        "https://github.com/argoproj/argo-cd/releases/tag/v2.1.15",
+        "https://github.com/argoproj/argo-cd/releases/tag/v2.2.9",
+        "https://github.com/argoproj/argo-cd/releases/tag/v2.3.4",
+        "https://github.com/advisories/GHSA-xmg8-99r8-jc2j"
+      ],
+      "patchUrls": [],
+      "packages": [
+        {
+          "ecosystem": "go",
+          "name": "github.com/argoproj/argo-cd/v2",
+          "ge": "2.3.0",
+          "lt": "2.3.4",
+          "id": "CVE-2022-24905",
+          "ghsaId": "GHSA-xmg8-99r8-jc2j",
+          "cve": "CVE-2022-24905",
+          "cwe": "CWE-20",
+          "sev": "medium",
+          "note": "Argo CD: Login screen allows message spoofing if SSO is enabled"
+        },
+        {
+          "ecosystem": "go",
+          "name": "github.com/argoproj/argo-cd/v2",
+          "ge": "2.2.0",
+          "lt": "2.2.9",
+          "id": "CVE-2022-24905",
+          "ghsaId": "GHSA-xmg8-99r8-jc2j",
+          "cve": "CVE-2022-24905",
+          "cwe": "CWE-20",
+          "sev": "medium",
+          "note": "Argo CD: Login screen allows message spoofing if SSO is enabled"
+        },
+        {
+          "ecosystem": "go",
+          "name": "github.com/argoproj/argo-cd/v2",
+          "ge": "2.0.0",
+          "lt": "2.1.15",
+          "id": "CVE-2022-24905",
+          "ghsaId": "GHSA-xmg8-99r8-jc2j",
+          "cve": "CVE-2022-24905",
+          "cwe": "CWE-20",
+          "sev": "medium",
+          "note": "Argo CD: Login screen allows message spoofing if SSO is enabled"
+        },
+        {
+          "ecosystem": "go",
+          "name": "github.com/argoproj/argo-cd",
+          "lt": "2.1.15",
+          "id": "CVE-2022-24905",
+          "ghsaId": "GHSA-xmg8-99r8-jc2j",
+          "cve": "CVE-2022-24905",
+          "cwe": "CWE-20",
+          "sev": "medium",
+          "note": "Argo CD: Login screen allows message spoofing if SSO is enabled"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0149
+    },
+    {
       "id": "CVE-2023-39661",
       "ghsaId": "GHSA-8fp9-43pw-56vw",
       "cve": "CVE-2023-39661",
@@ -25006,78 +25245,6 @@
       ],
       "kev": false,
       "epss": 0.0135
-    },
-    {
-      "id": "CVE-2022-24905",
-      "ghsaId": "GHSA-xmg8-99r8-jc2j",
-      "cve": "CVE-2022-24905",
-      "cwe": "CWE-20",
-      "sev": "medium",
-      "summary": "Argo CD: Login screen allows message spoofing if SSO is enabled",
-      "description": "### Impact\n\nA vulnerability was found in Argo CD that allows an attacker to spoof error messages on the login screen when SSO is enabled.\n\nIn order to exploit this vulnerability, an attacker would have to trick the victim to visit a specially crafted URL which contains the message to be displayed.\n\nAs far as the research of the Argo CD team concluded, it is not possible to specify any active content (e.g. Javascript) or other HTML fragments (e.g. clickable links) in the spoofed message.\n\n### Patched versions\n\nA patch for this vulnerability has been released in the following Argo CD versions:\n\n* v2.3.4\n* v2.2.9\n* v2.1.15\n\n### Workarounds\n\nNo workaround available.\n\n#### Mitigations\n\nIt is advised to update to an Argo CD version containing a fix for this issue (see *Patched versions* above).\n\n### Credits\n\nThis vulnerability was discovered by Naufal Septiadi (<naufal@horangi.com>) and reported to us in a responsible way. \n\n### For more information\n\n<!-- Use only one of the paragraphs below. Remove all others. -->\n\n<!-- For Argo CD -->\n\n* Open an issue in [the Argo CD issue tracker](https://github.com/argoproj/argo-cd/issues) or [discussions](https://github.com/argoproj/argo-cd/discussions)\n* Join us on [Slack](https://argoproj.github.io/community/join-slack) in channel #argo-cd",
-      "publishedAt": "2022-05-24T12:26:59Z",
-      "updatedAt": "2026-11-20T23:55:10Z",
-      "url": "https://github.com/advisories/GHSA-xmg8-99r8-jc2j",
-      "references": [
-        "https://github.com/argoproj/argo-cd/security/advisories/GHSA-xmg8-99r8-jc2j",
-        "https://nvd.nist.gov/vuln/detail/CVE-2022-24905",
-        "https://github.com/argoproj/argo-cd/releases/tag/v2.1.15",
-        "https://github.com/argoproj/argo-cd/releases/tag/v2.2.9",
-        "https://github.com/argoproj/argo-cd/releases/tag/v2.3.4",
-        "https://github.com/advisories/GHSA-xmg8-99r8-jc2j"
-      ],
-      "patchUrls": [],
-      "packages": [
-        {
-          "ecosystem": "go",
-          "name": "github.com/argoproj/argo-cd/v2",
-          "ge": "2.3.0",
-          "lt": "2.3.4",
-          "id": "CVE-2022-24905",
-          "ghsaId": "GHSA-xmg8-99r8-jc2j",
-          "cve": "CVE-2022-24905",
-          "cwe": "CWE-20",
-          "sev": "medium",
-          "note": "Argo CD: Login screen allows message spoofing if SSO is enabled"
-        },
-        {
-          "ecosystem": "go",
-          "name": "github.com/argoproj/argo-cd/v2",
-          "ge": "2.2.0",
-          "lt": "2.2.9",
-          "id": "CVE-2022-24905",
-          "ghsaId": "GHSA-xmg8-99r8-jc2j",
-          "cve": "CVE-2022-24905",
-          "cwe": "CWE-20",
-          "sev": "medium",
-          "note": "Argo CD: Login screen allows message spoofing if SSO is enabled"
-        },
-        {
-          "ecosystem": "go",
-          "name": "github.com/argoproj/argo-cd/v2",
-          "ge": "2.0.0",
-          "lt": "2.1.15",
-          "id": "CVE-2022-24905",
-          "ghsaId": "GHSA-xmg8-99r8-jc2j",
-          "cve": "CVE-2022-24905",
-          "cwe": "CWE-20",
-          "sev": "medium",
-          "note": "Argo CD: Login screen allows message spoofing if SSO is enabled"
-        },
-        {
-          "ecosystem": "go",
-          "name": "github.com/argoproj/argo-cd",
-          "lt": "2.1.15",
-          "id": "CVE-2022-24905",
-          "ghsaId": "GHSA-xmg8-99r8-jc2j",
-          "cve": "CVE-2022-24905",
-          "cwe": "CWE-20",
-          "sev": "medium",
-          "note": "Argo CD: Login screen allows message spoofing if SSO is enabled"
-        }
-      ],
-      "kev": false,
-      "epss": 0.013
     },
     {
       "id": "CVE-2025-62515",
@@ -26092,6 +26259,39 @@
       "epss": 0.0035
     },
     {
+      "id": "CVE-2026-35442",
+      "ghsaId": "GHSA-38hg-ww64-rrwc",
+      "cve": "CVE-2026-35442",
+      "cwe": "CWE-200",
+      "sev": "high",
+      "summary": "Directus: Authenticated Users Can Extract Concealed Fields via Aggregate Queries",
+      "description": "### Summary\n\nAggregate functions (`min`, `max`) applied to fields with the `conceal` special type incorrectly return raw database values instead of the masked placeholder. When combined with `groupBy`, any authenticated user with read access to the affected collection can extract concealed field values, including static API tokens and two-factor authentication secrets from `directus_users`.\n\n### Details\n\nFields marked with `conceal` are protected by payload processing logic that replaces real values with a masked placeholder on read. This protection works correctly for standard item queries, but aggregate query results are structured differently, operations are nested under their function name rather than appearing as flat field keys. The masking logic does not account for this nested structure, causing it to silently skip concealed fields in aggregate responses and return their raw values to the client.\n\n### Impact\n\n- **Account Takeover** An authenticated attacker can harvest static API tokens for all users, including administrators, enabling immediate authentication as any account without credentials.\n\n- **2FA Bypass** TOTP seeds stored in directus_users can similarly be extracted, allowing an attacker to bypass two-factor authentication for any account.",
+      "publishedAt": "2026-04-04T06:13:57Z",
+      "updatedAt": "2026-11-09T01:41:55Z",
+      "url": "https://github.com/advisories/GHSA-38hg-ww64-rrwc",
+      "references": [
+        "https://github.com/directus/directus/security/advisories/GHSA-38hg-ww64-rrwc",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-35442",
+        "https://github.com/advisories/GHSA-38hg-ww64-rrwc"
+      ],
+      "patchUrls": [],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "directus",
+          "lt": "11.17.0",
+          "id": "CVE-2026-35442",
+          "ghsaId": "GHSA-38hg-ww64-rrwc",
+          "cve": "CVE-2026-35442",
+          "cwe": "CWE-200",
+          "sev": "high",
+          "note": "Directus: Authenticated Users Can Extract Concealed Fields via Aggregate Queries"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0035
+    },
+    {
       "id": "CVE-2026-40177",
       "ghsaId": "GHSA-3mcx-6wxm-qr8v",
       "cve": "CVE-2026-40177",
@@ -26121,39 +26321,6 @@
           "cwe": "CWE-287",
           "sev": "critical",
           "note": "ajenti.plugin.core has password bypass when 2FA is activated"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0034
-    },
-    {
-      "id": "CVE-2026-35442",
-      "ghsaId": "GHSA-38hg-ww64-rrwc",
-      "cve": "CVE-2026-35442",
-      "cwe": "CWE-200",
-      "sev": "high",
-      "summary": "Directus: Authenticated Users Can Extract Concealed Fields via Aggregate Queries",
-      "description": "### Summary\n\nAggregate functions (`min`, `max`) applied to fields with the `conceal` special type incorrectly return raw database values instead of the masked placeholder. When combined with `groupBy`, any authenticated user with read access to the affected collection can extract concealed field values, including static API tokens and two-factor authentication secrets from `directus_users`.\n\n### Details\n\nFields marked with `conceal` are protected by payload processing logic that replaces real values with a masked placeholder on read. This protection works correctly for standard item queries, but aggregate query results are structured differently, operations are nested under their function name rather than appearing as flat field keys. The masking logic does not account for this nested structure, causing it to silently skip concealed fields in aggregate responses and return their raw values to the client.\n\n### Impact\n\n- **Account Takeover** An authenticated attacker can harvest static API tokens for all users, including administrators, enabling immediate authentication as any account without credentials.\n\n- **2FA Bypass** TOTP seeds stored in directus_users can similarly be extracted, allowing an attacker to bypass two-factor authentication for any account.",
-      "publishedAt": "2026-04-04T06:13:57Z",
-      "updatedAt": "2026-11-09T01:41:55Z",
-      "url": "https://github.com/advisories/GHSA-38hg-ww64-rrwc",
-      "references": [
-        "https://github.com/directus/directus/security/advisories/GHSA-38hg-ww64-rrwc",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-35442",
-        "https://github.com/advisories/GHSA-38hg-ww64-rrwc"
-      ],
-      "patchUrls": [],
-      "packages": [
-        {
-          "ecosystem": "npm",
-          "name": "directus",
-          "lt": "11.17.0",
-          "id": "CVE-2026-35442",
-          "ghsaId": "GHSA-38hg-ww64-rrwc",
-          "cve": "CVE-2026-35442",
-          "cwe": "CWE-200",
-          "sev": "high",
-          "note": "Directus: Authenticated Users Can Extract Concealed Fields via Aggregate Queries"
         }
       ],
       "kev": false,
@@ -26487,6 +26654,41 @@
       "epss": 0.0027
     },
     {
+      "id": "CVE-2026-27119",
+      "ghsaId": "GHSA-h7h7-mm68-gmrc",
+      "cve": "CVE-2026-27119",
+      "cwe": "CWE-79",
+      "sev": "medium",
+      "summary": "Svelte affected by XSS in SSR `<option>` element",
+      "description": "In certain circumstances, the server-side rendering output of an `<option>` element does not properly escape its content, potentially allowing HTML injection in the SSR output. Client-side rendering is not affected.",
+      "publishedAt": "2026-02-19T15:18:19Z",
+      "updatedAt": "2026-11-20T23:52:22Z",
+      "url": "https://github.com/advisories/GHSA-h7h7-mm68-gmrc",
+      "references": [
+        "https://github.com/sveltejs/svelte/security/advisories/GHSA-h7h7-mm68-gmrc",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-27119",
+        "https://github.com/sveltejs/svelte/releases/tag/svelte@5.51.5",
+        "https://github.com/advisories/GHSA-h7h7-mm68-gmrc"
+      ],
+      "patchUrls": [],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "svelte",
+          "ge": "5.39.3",
+          "lt": "5.51.5",
+          "id": "CVE-2026-27119",
+          "ghsaId": "GHSA-h7h7-mm68-gmrc",
+          "cve": "CVE-2026-27119",
+          "cwe": "CWE-79",
+          "sev": "medium",
+          "note": "Svelte affected by XSS in SSR `<option>` element"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0024
+    },
+    {
       "id": "CVE-2026-40111",
       "ghsaId": "GHSA-v7px-3835-7gjx",
       "cve": "CVE-2026-40111",
@@ -26520,41 +26722,6 @@
       ],
       "kev": false,
       "epss": 0.0024
-    },
-    {
-      "id": "CVE-2026-27119",
-      "ghsaId": "GHSA-h7h7-mm68-gmrc",
-      "cve": "CVE-2026-27119",
-      "cwe": "CWE-79",
-      "sev": "medium",
-      "summary": "Svelte affected by XSS in SSR `<option>` element",
-      "description": "In certain circumstances, the server-side rendering output of an `<option>` element does not properly escape its content, potentially allowing HTML injection in the SSR output. Client-side rendering is not affected.",
-      "publishedAt": "2026-02-19T15:18:19Z",
-      "updatedAt": "2026-11-20T23:52:22Z",
-      "url": "https://github.com/advisories/GHSA-h7h7-mm68-gmrc",
-      "references": [
-        "https://github.com/sveltejs/svelte/security/advisories/GHSA-h7h7-mm68-gmrc",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-27119",
-        "https://github.com/sveltejs/svelte/releases/tag/svelte@5.51.5",
-        "https://github.com/advisories/GHSA-h7h7-mm68-gmrc"
-      ],
-      "patchUrls": [],
-      "packages": [
-        {
-          "ecosystem": "npm",
-          "name": "svelte",
-          "ge": "5.39.3",
-          "lt": "5.51.5",
-          "id": "CVE-2026-27119",
-          "ghsaId": "GHSA-h7h7-mm68-gmrc",
-          "cve": "CVE-2026-27119",
-          "cwe": "CWE-79",
-          "sev": "medium",
-          "note": "Svelte affected by XSS in SSR `<option>` element"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0021
     },
     {
       "id": "CVE-2026-22696",
