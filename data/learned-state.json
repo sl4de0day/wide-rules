@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-19T11:03:22.622Z",
+  "updatedAt": "2026-11-24T13:13:21.462Z",
   "processed": {
     "CVE-2025-3248": {
       "status": "learned",
@@ -66,6 +66,31 @@
       "status": "skipped",
       "reason": "No retrievable GitHub patch diff",
       "at": "2026-11-19T11:03:22.622Z"
+    },
+    "CVE-2024-58136": {
+      "status": "skipped",
+      "reason": "The patch modifies an internal framework method (`Component::__set`) for handling behavior attachment. This is an internal implementation detail of the `yiisoft/yii2` framework, not a pattern developers would typically write in their application code. Detection is best handled by OSV SCA based on package version.",
+      "at": "2026-11-24T13:12:30.528Z"
+    },
+    "CVE-2021-23758": {
+      "status": "skipped",
+      "reason": "The vulnerability lies in the internal deserialization logic of the AjaxPro framework when processing AJAX requests, not in a specific API call or pattern that application developers would write. The fix involves adding configuration options to restrict deserialization types within the framework itself. This is a version-only advisory handled by OSV SCA.",
+      "at": "2026-11-24T13:12:45.641Z"
+    },
+    "CVE-2025-62593": {
+      "status": "skipped",
+      "reason": "internal vendor implementation detail handled by OSV SCA",
+      "at": "2026-11-24T13:12:53.029Z"
+    },
+    "CVE-2026-34486": {
+      "status": "skipped",
+      "reason": "internal vendor implementation detail handled by OSV SCA",
+      "at": "2026-11-24T13:12:59.442Z"
+    },
+    "CVE-2021-21311": {
+      "status": "rejected",
+      "reason": "AI FP review rejected (high): The pattern `\\$this->error\\s*=\\s*\\$file;` is too generic. While it correctly identifies the specific vulnerable line in the patch, assigning a variable named `$file` to an error property is a common programming construct. Without data flow analysis to confirm `$file` originates from an untrusted network source (which is the core of the SSRF vulnerability), this pattern will likely trigger many false positives on safe code where `$file` might contain local, trusted, or already sanitized data.",
+      "at": "2026-11-24T13:13:21.462Z"
     }
   }
 }
