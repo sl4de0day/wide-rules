@@ -1,18 +1,18 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-24T03:47:10.050Z",
+  "generatedAt": "2026-11-24T13:12:11.068Z",
   "sources": [
     "github-advisories",
     "cisa-kev",
     "first-epss"
   ],
   "stats": {
-    "total": 1027,
+    "total": 1028,
     "kevCount": 155,
     "highEpssCount": 103,
     "byEcosystem": {
       "npm": 324,
-      "pip": 188,
+      "pip": 189,
       "maven": 198,
       "go": 115,
       "cargo": 61,
@@ -4399,6 +4399,18 @@
       "note": "LiteLLM: MCP Authentication Bypass via OAuth2 Passthrough Fallback",
       "kev": true,
       "epss": 0.0084
+    },
+    {
+      "name": "lmcache",
+      "ge": "0.3.9",
+      "lt": "0.5.6",
+      "id": "CVE-2026-105192",
+      "ghsaId": "GHSA-w5f2-9q9c-ff4h",
+      "cve": "CVE-2026-105192",
+      "cwe": "CWE-306",
+      "sev": "critical",
+      "note": "LMCache: Remote code execution via unsafe deserialization in multiprocess mode transport",
+      "epss": 0.0102
     },
     {
       "name": "mail-parser",

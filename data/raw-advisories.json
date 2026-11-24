@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-24T03:47:10.050Z",
-  "count": 561,
+  "generatedAt": "2026-11-24T13:12:11.068Z",
+  "count": 562,
   "advisories": [
     {
       "id": "CVE-2025-3248",
@@ -5332,6 +5332,56 @@
       ],
       "kev": false,
       "epss": 0.0105
+    },
+    {
+      "id": "CVE-2026-105192",
+      "ghsaId": "GHSA-w5f2-9q9c-ff4h",
+      "cve": "CVE-2026-105192",
+      "cwe": "CWE-306",
+      "sev": "critical",
+      "summary": "LMCache: Remote code execution via unsafe deserialization in multiprocess mode transport",
+      "description": "### Summary\n\nLMCache is vulnerable to Unauthenticated Remote Code Execution via Pickle Deserialization on the Multiprocess ZMQ Transport\n\n\n\n### Details\n\nLMCache multiprocess mode, also called distributed mode, opens an unauthenticated ZeroMQ ROUTER so worker processes can register and share KV cache blocks. The intended clients are sibling LMCache processes. There is no CURVE, ZAP, password, or message authentication on that socket. LMCache used only inside a vLLM process does not open this port. The transport binds to localhost unless the operator sets a routable address with --host, which is how multi-node deployments let peers connect. The 9.8 score is for that routable configuration. A stock single-host install that leaves the default bind is not reachable from other machines.\n\nMessages on the socket are msgpack. Extension code 1 is registered for DeviceIPCWrapper and is passed to DeviceIPCWrapper.Deserialize in lmcache/v1/platform/base/ipc_wrapper.py, which calls pickle.loads. That hook runs from ext_hook in lmcache/v1/multiprocess/custom_types.py while the server is still decoding REGISTER_KV_CACHE arguments, before the handler runs. A single unauthenticated ZMQ DEALER message to the transport port (default 5555) therefore executes code as the user the LMCache process runs as. Official container images run that process as root.\n\nThe decode path shipped in v0.3.9. It is still present in the latest PyPI release, v0.5.5, in the v0.5.6 release candidates through v0.5.6rc3, and on the dev branch as of 2026-10-07. No fixed version has been published.\n\n\n\n### Proof of concept\n\nStep 1 - Start multiprocess mode bound to a routable address\n\n\nThis is the documented multi-node setting. The ZMQ transport listens on port 5555.\n\n```\n   python -m lmcache.v1.multiprocess.http_server \\\n    --http-host 127.0.0.1 --http-port 8080 \\\n    --host 0.0.0.0 --port 5555 \\\n    --l1-size-gb 0.25 --eviction-policy LRU \\\n    --hash-algorithm blake3 --instance-id mp-node-01\n```\nStep 2 - Build a REGISTER_KV_CACHE frame whose cache slot is a pickle\n\n\nPayload slot 1 is a msgpack extension with code 1. The server unpickles that body while it is still decoding arguments. The command writes id to /tmp/zmq_pwn.\n\n```\nimport os\nimport pickle\nimport msgspec\nimport zmq\n\nclass EvilPayload:\n    def __init__(self, cmd):\n        self.cmd = cmd\n    def __reduce__(self):\n        return (os.system, (self.cmd,))\n\nevil_pickle = pickle.dumps(EvilPayload(\"id > /tmp/zmq_pwn 2>&1\"))\n\nREGISTER_KV_CACHE = 1\nE",
+      "publishedAt": "2026-10-16T20:08:44Z",
+      "updatedAt": "2026-11-24T09:58:59Z",
+      "url": "https://github.com/advisories/GHSA-w5f2-9q9c-ff4h",
+      "references": [
+        "https://github.com/LMCache/LMCache/security/advisories/GHSA-w5f2-9q9c-ff4h",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-105192",
+        "https://github.com/LMCache/LMCache/pull/5644",
+        "https://github.com/LMCache/LMCache/pull/5684",
+        "https://github.com/LMCache/LMCache/pull/5685",
+        "https://github.com/LMCache/LMCache/commit/160b6dec469edb765efd1fad42aca5a438b08bb5",
+        "https://github.com/LMCache/LMCache/commit/62f74c417dfe1ba56761733fd25dc8209a192f20",
+        "https://github.com/LMCache/LMCache/commit/767c7e367bbdc357c445cf7bd2ed259cff8d5865",
+        "https://blog.lmcache.ai/en/2026/10/13/an-update-on-cve-2026-105192",
+        "https://github.com/LMCache/LMCache/blob/v0.3.9/lmcache/v1/multiprocess/custom_types.py",
+        "https://github.com/LMCache/LMCache/blob/v0.5.5/lmcache/v1/platform/base/ipc_wrapper.py",
+        "https://research.jfrog.com/vulnerabilities/lmcache-is-vulnerable-to-unauthenticated-remote-code-execution-via-pickle-deserialization-on-the-multiprocess-zmq-transport-cve-2026-105192-jfsa-2026-001694382"
+      ],
+      "patchUrls": [
+        "https://github.com/LMCache/LMCache/pull/5644",
+        "https://github.com/LMCache/LMCache/pull/5684",
+        "https://github.com/LMCache/LMCache/pull/5685",
+        "https://github.com/LMCache/LMCache/commit/160b6dec469edb765efd1fad42aca5a438b08bb5",
+        "https://github.com/LMCache/LMCache/commit/62f74c417dfe1ba56761733fd25dc8209a192f20",
+        "https://github.com/LMCache/LMCache/commit/767c7e367bbdc357c445cf7bd2ed259cff8d5865"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "lmcache",
+          "ge": "0.3.9",
+          "lt": "0.5.6",
+          "id": "CVE-2026-105192",
+          "ghsaId": "GHSA-w5f2-9q9c-ff4h",
+          "cve": "CVE-2026-105192",
+          "cwe": "CWE-306",
+          "sev": "critical",
+          "note": "LMCache: Remote code execution via unsafe deserialization in multiprocess mode transport"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0102
     },
     {
       "id": "CVE-2026-44009",

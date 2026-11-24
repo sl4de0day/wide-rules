@@ -1,6 +1,6 @@
 {
   "version": "0.6211126",
-  "generatedAt": "2026-11-20T23:03:00.968Z",
+  "generatedAt": "2026-11-24T13:13:21.938Z",
   "totalRules": 753,
   "categories": {
     "AI_SECURITY": 13,
@@ -15766,12 +15766,13 @@
       ],
       "metadata": {
         "source": "wide-rules-auto-learn",
-        "status": "experimental",
+        "status": "verified",
         "quarantineUntil": "2026-11-23T13:28:49.600Z",
         "kev": true,
         "epss": 0.9997,
         "learnedAt": "2026-11-16T13:28:49.600Z",
-        "advisoryUrl": "https://github.com/advisories/GHSA-rr6p-3pfg-562j"
+        "advisoryUrl": "https://github.com/advisories/GHSA-rr6p-3pfg-562j",
+        "promotedAt": "2026-11-24T13:12:11.179Z"
       },
       "tests": {
         "positive": [
@@ -15807,12 +15808,13 @@
       ],
       "metadata": {
         "source": "wide-rules-auto-learn",
-        "status": "experimental",
+        "status": "verified",
         "quarantineUntil": "2026-11-23T13:28:58.827Z",
         "kev": true,
         "epss": 0.9979,
         "learnedAt": "2026-11-16T13:28:58.827Z",
-        "advisoryUrl": "https://github.com/advisories/GHSA-f3gw-9ww9-jmc3"
+        "advisoryUrl": "https://github.com/advisories/GHSA-f3gw-9ww9-jmc3",
+        "promotedAt": "2026-11-24T13:12:11.179Z"
       },
       "tests": {
         "positive": [
@@ -15848,12 +15850,13 @@
       ],
       "metadata": {
         "source": "wide-rules-auto-learn",
-        "status": "experimental",
+        "status": "verified",
         "quarantineUntil": "2026-11-23T13:27:50.918Z",
         "kev": true,
         "epss": 0.9999,
         "learnedAt": "2026-11-16T13:27:50.918Z",
-        "advisoryUrl": "https://github.com/advisories/GHSA-rvqx-wpfh-mfx7"
+        "advisoryUrl": "https://github.com/advisories/GHSA-rvqx-wpfh-mfx7",
+        "promotedAt": "2026-11-24T13:12:11.179Z"
       },
       "tests": {
         "positive": [
