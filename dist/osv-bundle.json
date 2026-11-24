@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-24T13:12:11.068Z",
+  "generatedAt": "2026-11-24T16:56:15.039Z",
   "sources": [
     "github-advisories",
     "cisa-kev",
@@ -2105,7 +2105,7 @@
       "cwe": "CWE-22",
       "sev": "critical",
       "note": "Etherpad: Pre-auth arbitrary file read",
-      "epss": 0.0116
+      "epss": 0.0384
     },
     {
       "name": "eslint-config-prettier",
@@ -3848,7 +3848,8 @@
       "cve": "CVE-2026-133469",
       "cwe": "CWE-287",
       "sev": "critical",
-      "note": "Xen Orchestra: Empty-object login token"
+      "note": "Xen Orchestra: Empty-object login token",
+      "epss": 0.0078
     }
   ],
   "pip": [
@@ -3945,7 +3946,7 @@
       "sev": "critical",
       "note": "Brotli: Out-of-bounds write in the Brotli decoder (\"Node2Shell\") also affects the PyPI Brotli package",
       "kev": true,
-      "epss": 0.9993
+      "epss": 0.9999
     },
     {
       "name": "brotlicffi",
@@ -3958,7 +3959,7 @@
       "sev": "critical",
       "note": "Brotli: Out-of-bounds write in the Brotli decoder (\"Node2Shell\") also affects the PyPI Brotli package",
       "kev": true,
-      "epss": 0.9993
+      "epss": 0.9999
     },
     {
       "name": "chainlit",
@@ -4230,7 +4231,7 @@
       "cwe": "CWE-306",
       "sev": "high",
       "note": "Jupyter MCP Server: Unauthenticated management routes can hijack the Jupyter backend in standalone HTTP mode",
-      "epss": 0.005
+      "epss": 0.0109
     },
     {
       "name": "jupyter-mcp-server",
@@ -4313,7 +4314,7 @@
       "cwe": "CWE-94",
       "sev": "high",
       "note": "Langflow: Prompt injection in Langflow Smart Transform can lead to code execution",
-      "epss": 0.0031
+      "epss": 0.0038
     },
     {
       "name": "langflow-base",
@@ -6075,7 +6076,7 @@
       "cwe": "CWE-79",
       "sev": "medium",
       "note": "Emissary has Stored XSS via Navigation Template Link Injection",
-      "epss": 0.0018
+      "epss": 0.0019
     },
     {
       "name": "gov.nsa.emissary:emissary",
@@ -6086,7 +6087,7 @@
       "cwe": "CWE-78",
       "sev": "high",
       "note": "Emissary has a Command Injection via PLACE_NAME Configuration in Executrix",
-      "epss": 0.0059
+      "epss": 0.006
     },
     {
       "name": "gov.nsa.emissary:emissary",
