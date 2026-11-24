@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-23T17:19:24.084Z",
-  "count": 553,
+  "generatedAt": "2026-11-24T03:47:10.050Z",
+  "count": 561,
   "advisories": [
     {
       "id": "CVE-2025-3248",
@@ -13046,6 +13046,62 @@
       "epss": 0.0047
     },
     {
+      "id": "CVE-2026-77423",
+      "ghsaId": "GHSA-2v9w-34q6-wpqx",
+      "cve": "CVE-2026-77423",
+      "cwe": "CWE-1333",
+      "sev": "high",
+      "summary": "jline3 leads to ReDoS in Built-in Less Viewer Search",
+      "description": "### Summary\n\nThe JLine3 built-in `less` pager compiles user-supplied search patterns directly as\nJava regular expressions with no sanitization, timeout, or backtracking bound. A\nmalicious pattern such as `(a+)+b` can trigger catastrophic backtracking and hang the\nsession thread at 100% CPU. In deployments that expose `less` over Telnet or SSH,\nthis becomes a denial-of-service issue for the affected session and can be used to\nexhaust a bounded session pool.\n\n### Details\n\n`Less.getPattern()` in `builtins/src/main/java/org/jline/builtins/Less.java` compiles\nthe user-controlled search string directly with `Pattern.compile()`:\n\n```java\nprivate Pattern getPattern(boolean doDisplayPattern) {\n    Pattern compiled = null;\n    String _pattern = doDisplayPattern ? displayPattern : pattern;\n    if (_pattern != null) {\n        boolean insensitive =\n                ignoreCaseAlways || ignoreCaseCond && _pattern.toLowerCase().equals(_pattern);\n        compiled = Pattern.compile(\n                \"(\" + _pattern + \")\", insensitive ? Pattern.CASE_INSENSITIVE | Pattern.UNICODE_CASE : 0);\n    }\n    return compiled;\n}\n```\n\nThe resulting pattern is then applied repeatedly against file content with\n`compiled.matcher(line).find()` in the `less` search path. Because Java's\n`java.util.regex` engine is backtracking-based and has no built-in timeout, patterns\nwith nested quantifiers can take exponential time on non-matching input.\n\nAffected source locations:\n- `builtins/src/main/java/org/jline/builtins/Less.java`\n- `getPattern(boolean doDisplayPattern)`\n- search callers using `compiled.matcher(line).find()`\n\n### PoC\n\n1. Create a file with a long run of `a` characters:\n\n```sh\nprintf 'aaaaaaaaaaaaaaaaaaaaaaaaa\\n' > /tmp/testfile.txt\n```\n\n2. Open the file with the JLine3 `less` viewer.\n3. Press `/` to enter search mode.\n4. Enter the pattern `(a+)+b` and press Enter.\n\nExpected result:\n- The `less` session stops responding.\n- The session thread consumes high CPU.\n\nVariation:\n- The same behavior can be triggered through the display-filter path using `&` because\n  that path also compiles user input as a raw Java regex.\n\nReproduction environment:\n- JLine3 on x86_64 Linux\n- OpenJDK 25.0.2\n\n### Impact\n\nThis is a denial-of-service vulnerability caused by catastrophic regex backtracking.\nAny application embedding `org.jline:jline-builtins` and exposing the `less` viewer\nis impacted. In local use, the affected user can hang their own session. In multi-user\nTelnet or SSH deployments, one attacker c",
+      "publishedAt": "2026-11-23T21:02:03Z",
+      "updatedAt": "2026-11-23T21:02:06Z",
+      "url": "https://github.com/advisories/GHSA-2v9w-34q6-wpqx",
+      "references": [
+        "https://github.com/jline/jline3/security/advisories/GHSA-2v9w-34q6-wpqx",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-77423",
+        "https://github.com/jline/jline3/pull/2012",
+        "https://github.com/jline/jline3/pull/2018",
+        "https://github.com/jline/jline3/commit/1d5fc3099e77938b971e197211cad2d4fbb17541",
+        "https://github.com/jline/jline3/commit/341ee69ccc57b7733c1b40d6993219b64b3206ae",
+        "https://github.com/jline/jline3/releases/tag/4.3.1",
+        "https://github.com/jline/jline3/releases/tag/jline-3.30.15",
+        "https://github.com/advisories/GHSA-2v9w-34q6-wpqx"
+      ],
+      "patchUrls": [
+        "https://github.com/jline/jline3/pull/2012",
+        "https://github.com/jline/jline3/pull/2018",
+        "https://github.com/jline/jline3/commit/1d5fc3099e77938b971e197211cad2d4fbb17541",
+        "https://github.com/jline/jline3/commit/341ee69ccc57b7733c1b40d6993219b64b3206ae"
+      ],
+      "packages": [
+        {
+          "ecosystem": "maven",
+          "name": "org.jline:jline-builtins",
+          "lt": "3.30.15",
+          "id": "CVE-2026-77423",
+          "ghsaId": "GHSA-2v9w-34q6-wpqx",
+          "cve": "CVE-2026-77423",
+          "cwe": "CWE-1333",
+          "sev": "high",
+          "note": "jline3 leads to ReDoS in Built-in Less Viewer Search"
+        },
+        {
+          "ecosystem": "maven",
+          "name": "org.jline:jline-builtins",
+          "ge": "4.0.0",
+          "lt": "4.3.1",
+          "id": "CVE-2026-77423",
+          "ghsaId": "GHSA-2v9w-34q6-wpqx",
+          "cve": "CVE-2026-77423",
+          "cwe": "CWE-1333",
+          "sev": "high",
+          "note": "jline3 leads to ReDoS in Built-in Less Viewer Search"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0046
+    },
+    {
       "id": "CVE-2026-103026",
       "ghsaId": "GHSA-prhx-9q2h-ph2x",
       "cve": "CVE-2026-103026",
@@ -15604,6 +15660,49 @@
       ],
       "kev": false,
       "epss": 0.0041
+    },
+    {
+      "id": "CVE-2026-63476",
+      "ghsaId": "GHSA-9x82-4j54-863h",
+      "cve": "CVE-2026-63476",
+      "cwe": "CWE-400",
+      "sev": "medium",
+      "summary": "isomorphic-git allows unbounded memory allocation from attacker-controlled delta target size (DoS)",
+      "description": "### Summary\nWhen applying a delta object from a packfile, isomorphic-git reads a **server-controlled** `targetSize` and calls `Buffer.alloc(targetSize)` with no upper bound. A single malicious HTTP response to `git.clone()`/`git.fetch()` can force a ~2 GB allocation → memory exhaustion / DoS (process killed on memory-constrained hosts).\n\n### Details\n`src/utils/applyDelta.js`:\n\n```js\nconst sourceSize = readVarIntLE(reader)\nconst targetSize = readVarIntLE(reader)   // attacker-controlled\n…\ntarget = Buffer.alloc(targetSize)\n```\n\nA pack with one `OBJ_REF_DELTA` whose header declares `targetSize = 0x7FFFFFFF` (~2 GB) and a 1-byte op causes the full allocation up front. The subsequent size-mismatch error is swallowed in `GitPackIndex.fromPack`, so on a host with spare RAM it silently wastes ~2 GB; on a small host the OS `SIGKILL`s the process.\n\n#### Canonical git behavior (divergence)\ngit rejects the same 78-byte pack in ~96 ms — `error: delta replay has gone wild` / `fatal: … failed to apply delta` — with no large allocation and no hang (it bounds delta replay against the declared size rather than trusting it).\n\n### PoC\n`https://github.com/spiceoverflow/av4-oom` — open in a Codespace; a single clone/fetch against the bundled server, run under `--max-old-space-size=256`:\n\n```\n[AV-4] *** OOM ALLOCATION CONFIRMED — Buffer.alloc(targetSize) RAN ***\n[AV-4] External (Buffer) memory rose by 2048 MB during clone.\n```\n\n(The allocation is off-heap, so a Node heap cap does not mitigate it.)\n\n### Impact\nA denial of service via unbounded memory allocation: a single response from a malicious or MitM'd server to `git.clone()`/`git.fetch()` forces a multi-gigabyte allocation, crashing the process on memory-constrained hosts.\n\nAny application or service that clones or fetches from untrusted/compromised remotes with isomorphic-git — most acutely containers, serverless functions, and small VMs, where the OS OOM-kills the process.\n\n### Suggested fix\nDon't pre-allocate the untrusted `targetSize`: build the result from the actual delta ops and validate the total against `targetSize` before concatenating (and/or cap it against the advertised pack size).",
+      "publishedAt": "2026-11-23T21:07:02Z",
+      "updatedAt": "2026-11-23T21:07:03Z",
+      "url": "https://github.com/advisories/GHSA-9x82-4j54-863h",
+      "references": [
+        "https://github.com/isomorphic-git/isomorphic-git/security/advisories/GHSA-9x82-4j54-863h",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-63476",
+        "https://github.com/isomorphic-git/isomorphic-git/pull/2370",
+        "https://github.com/isomorphic-git/isomorphic-git/pull/2373",
+        "https://github.com/isomorphic-git/isomorphic-git/commit/5c37ea69e9691183fc52d41ba7b6361263e9fedd",
+        "https://github.com/isomorphic-git/isomorphic-git/commit/823843d1cd19182df79bc907c767f5bcecb39a0b",
+        "https://github.com/isomorphic-git/isomorphic-git/releases/tag/v1.38.6",
+        "https://github.com/advisories/GHSA-9x82-4j54-863h"
+      ],
+      "patchUrls": [
+        "https://github.com/isomorphic-git/isomorphic-git/pull/2370",
+        "https://github.com/isomorphic-git/isomorphic-git/pull/2373",
+        "https://github.com/isomorphic-git/isomorphic-git/commit/5c37ea69e9691183fc52d41ba7b6361263e9fedd",
+        "https://github.com/isomorphic-git/isomorphic-git/commit/823843d1cd19182df79bc907c767f5bcecb39a0b"
+      ],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "isomorphic-git",
+          "lt": "1.38.6",
+          "id": "CVE-2026-63476",
+          "ghsaId": "GHSA-9x82-4j54-863h",
+          "cve": "CVE-2026-63476",
+          "cwe": "CWE-400",
+          "sev": "medium",
+          "note": "isomorphic-git allows unbounded memory allocation from attacker-controlled delta target size (DoS)"
+        }
+      ],
+      "kev": false,
+      "epss": 0.004
     },
     {
       "id": "CVE-2026-77369",
@@ -18454,6 +18553,51 @@
       "epss": 0.0032
     },
     {
+      "id": "CVE-2026-7700",
+      "ghsaId": "GHSA-9fpm-3445-2vx4",
+      "cve": "CVE-2026-7700",
+      "cwe": "CWE-94",
+      "sev": "high",
+      "summary": "Langflow: Prompt injection in Langflow Smart Transform can lead to code execution",
+      "description": "## Summary\n\nLangflow versions 1.3.0 through 1.10.2 contain a code-injection vulnerability in the Smart Transform (`LambdaFilterComponent`) component.\n\nSmart Transform places flow-author instructions and a preview of its input data into a prompt asking an LLM to generate a Python lambda. It then extracts a one-line lambda from the model response, applies only syntactic format checks, evaluates it with Python's full builtins, and invokes the resulting function inside the Langflow process.\n\nA malicious flow author can exploit this directly through the Instructions field. In deployments where an exposed flow passes attacker-controlled content into Smart Transform, an attacker may also exploit it indirectly through prompt injection, subject to the configured model following the injected instruction.\n\n## Vulnerability details\n\n**Vulnerable Code Location**: `src/lfx/src/lfx/components/llm_operations/lambda_filter.py` (line 242 in v1.10.2)\n\n```python\ndef _validate_lambda(self, lambda_text: str) -> bool:\n    \"\"\"Validate the provided lambda function text.\"\"\"\n    return lambda_text.strip().startswith(\"lambda\") and \":\" in lambda_text\n\n# ...\nreturn eval(lambda_text)  # noqa: S307\n```\n\nFor example, an attacker can attempt to make the model return:\n\n`lambda x: __import__(\"os\").system(\"id\")`\n\nThis expression satisfies the vulnerable format checks. `eval()` creates the lambda with access to Python's default builtins, and the subsequent `fn(data)` invocation (in `_execute_lambda`) executes the command.\n\nSuccessful exploitation allows code execution with the privileges of the Langflow service process. This can expose or modify credentials, files, application data, and network resources accessible to that process, and may affect other tenants in shared deployments.\n\n## PoC\n\nhttps://github.com/user-attachments/assets/13c48fe1-7225-4e0d-9687-2d2df1e87f0e\n\n## Fix\n\nThe reported path was addressed by validating the generated code's AST and evaluating it with a restricted builtins mapping.\n\nThe mainline fix is in PR #13530 (`1641b28f`) and shipped in Langflow 1.11.0. The 1.10.3 backport is in PR #14071 (`94859df3`). Users should upgrade to Langflow 1.10.3 or later.\n\n## Workarounds\n\nUntil an upgrade is possible:\n- Remove Smart Transform from runnable flows.\n- Restrict flow creation, editing, and execution to trusted users.\n- Do not route untrusted or externally controlled data through Smart Transform.\n- Limit the Langflow process's filesystem, network, and credential access.\n\n## Cre",
+      "publishedAt": "2026-10-05T22:30:41Z",
+      "updatedAt": "2026-11-24T01:23:39Z",
+      "url": "https://github.com/advisories/GHSA-9fpm-3445-2vx4",
+      "references": [
+        "https://github.com/langflow-ai/langflow/security/advisories/GHSA-9fpm-3445-2vx4",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-7700",
+        "https://github.com/langflow-ai/langflow/pull/13530",
+        "https://github.com/langflow-ai/langflow/commit/1641b28f33e2c47b9a0c6855922d44d1b8418b9d",
+        "https://github.com/langflow-ai/langflow/commit/94859df33acd70b2a1f816e26d68f5e89a7e5639",
+        "https://github.com/langflow-ai/langflow/releases/tag/v1.10.3",
+        "https://vuldb.com/submit/804305",
+        "https://vuldb.com/vuln/360869",
+        "https://www.yuque.com/mengnanbulalei/ognlsk/hte2a98ro5gf8tp9?singleDoc#%20%E3%80%8AFirst%20release%20of%20Langflow%201.8.3%20Smart%20Transform%20eval()/Lambda%20injection%20RCE%20vulnerability%20analysis+POC%E3%80%8B",
+        "https://github.com/advisories/GHSA-9fpm-3445-2vx4"
+      ],
+      "patchUrls": [
+        "https://github.com/langflow-ai/langflow/pull/13530",
+        "https://github.com/langflow-ai/langflow/commit/1641b28f33e2c47b9a0c6855922d44d1b8418b9d",
+        "https://github.com/langflow-ai/langflow/commit/94859df33acd70b2a1f816e26d68f5e89a7e5639"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "langflow",
+          "ge": "1.3.0",
+          "lt": "1.10.3",
+          "id": "CVE-2026-7700",
+          "ghsaId": "GHSA-9fpm-3445-2vx4",
+          "cve": "CVE-2026-7700",
+          "cwe": "CWE-94",
+          "sev": "high",
+          "note": "Langflow: Prompt injection in Langflow Smart Transform can lead to code execution"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0031
+    },
+    {
       "id": "CVE-2026-128075",
       "ghsaId": "GHSA-96x6-fvhx-49hg",
       "cve": "CVE-2026-128075",
@@ -19329,6 +19473,46 @@
       "epss": 0.0029
     },
     {
+      "id": "CVE-2026-63410",
+      "ghsaId": "GHSA-vp2j-gqfm-r3cf",
+      "cve": "CVE-2026-63410",
+      "cwe": "CWE-208",
+      "sev": "medium",
+      "summary": "secp256k1-native has a compiler-induced timing side channel in scalar multiplication",
+      "description": "## Summary\n\n`Point#mul` — the default, constant-time scalar multiplication and the library's headline secret-scalar operation — could leak timing information about the secret scalar (a private key or ECDSA-style nonce in a downstream consumer) **not because of a source-level bug, but because the compiler reconstructed a branch from branchless source.**\n\nThe Montgomery ladder selects between point candidates with `uint256_select`, written deliberately branchlessly as `r = (a & ~mask) | (b & mask)` with a mask that is all-ones or all-zeros. GCC 15.2 at `-O2` recognises this select idiom, reconstructs the original boolean condition, and emits a secret-dependent conditional jump (`je`/`jne`). The branch's taken/not-taken timing correlates with the secret scalar bits flowing through the ladder.\n\nThis silently undid the 0.17.0 fix for the historical |t|=875 infinity-branch leak, which had relied on `uint256_select` compiling to branchless code.\n\n## Impact\n\nA timing side-channel on the secret scalar in constant-time scalar multiplication. For a consumer that calls `Point#mul` (or the native `scalar_multiply_ct`) on a secret key or nonce and exposes timing to an attacker (e.g. an online signing oracle), repeated measurements can statistically recover scalar bits — the classic ECC private-key/nonce timing-attack setting (cf. Brumley–Boneh). The leak is in the *compiled binary*; the source is correct, so source review and the deterministic ctgrind check on a *non-reconstructing* toolchain do not reveal it.\n\nPre-1.0 with no published RubyGems dependents, so this is handled as fix-publish-and-document: full GHSA + CVE record without a coordinated downstream-notification timeline. The CVE is filed for citability so the empirical record (paper → review → compiler regression → fix) is permanent and searchable.\n\n## Affected configurations\n\nThe defect is a property of the (source, compiler, flags) triple, not the source alone:\n\n- **Source:** any pre-`0.18.0` build. The branchless `uint256_select` was introduced with the 0.17.0 `jp_add_internal` |t|=875 fix; the pre-0.17 versions on RubyGems (0.15, 0.16) had different CT issues which the 0.17.0 fix addressed, so the safest user guidance is \"upgrade to 0.18.0 from any earlier version\".\n- **Compiler:** one that reconstructs the all-0s/all-1s select into a branch. Confirmed: **GCC 15.2.0, `-O2`**. The extension ships with `-O2` (`extconf.rb` appends it), so the shipped binary on this compiler is affected.\n- **Not affected:** t",
+      "publishedAt": "2026-11-23T20:59:48Z",
+      "updatedAt": "2026-11-23T20:59:50Z",
+      "url": "https://github.com/advisories/GHSA-vp2j-gqfm-r3cf",
+      "references": [
+        "https://github.com/sgbett/secp256k1-native/security/advisories/GHSA-vp2j-gqfm-r3cf",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-63410",
+        "https://github.com/sgbett/secp256k1-native/pull/32",
+        "https://github.com/sgbett/secp256k1-native/commit/a89bea1617a2d063c6545ad44565dc22098c880e",
+        "https://github.com/sgbett/secp256k1-native/blob/master/docs/advisories/0001-compiler-reconstructed-ct-branch.md",
+        "https://github.com/sgbett/secp256k1-native/releases/tag/v0.18.0",
+        "https://github.com/advisories/GHSA-vp2j-gqfm-r3cf"
+      ],
+      "patchUrls": [
+        "https://github.com/sgbett/secp256k1-native/pull/32",
+        "https://github.com/sgbett/secp256k1-native/commit/a89bea1617a2d063c6545ad44565dc22098c880e"
+      ],
+      "packages": [
+        {
+          "ecosystem": "rubygems",
+          "name": "secp256k1-native",
+          "lt": "0.18.0",
+          "id": "CVE-2026-63410",
+          "ghsaId": "GHSA-vp2j-gqfm-r3cf",
+          "cve": "CVE-2026-63410",
+          "cwe": "CWE-208",
+          "sev": "medium",
+          "note": "secp256k1-native has a compiler-induced timing side channel in scalar multiplication"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0028
+    },
+    {
       "id": "CVE-2026-62964",
       "ghsaId": "GHSA-w42c-h7hr-f67p",
       "cve": "CVE-2026-62964",
@@ -20118,6 +20302,43 @@
       ],
       "kev": false,
       "epss": 0.0027
+    },
+    {
+      "id": "CVE-2026-63402",
+      "ghsaId": "GHSA-6jcc-5g8w-32mx",
+      "cve": "CVE-2026-63402",
+      "cwe": "CWE-471",
+      "sev": "medium",
+      "summary": "i18next deepExtend recurses into inherited built-ins, allowing corruption of shared built-in objects (DoS)",
+      "description": "### Summary\n\n`deepExtend` in `src/utils.js` (reached via the public `addResourceBundle(lng, ns, data, deep, overwrite)` API) checked key existence with the `in` operator, which walks the prototype chain. A source key matching an inherited built-in (e.g. `hasOwnProperty`, `toString`, `valueOf`) therefore caused the function to recurse into the shared object on `Object.prototype`. With `overwrite: true`, a nested value could overwrite a property of that shared built-in — for example setting `Object.prototype.hasOwnProperty.call` to a non-callable value — corrupting it process-wide and causing an unrecoverable denial of service.\n\nThis is distinct from CVE-2026-48713 (i18next-fs-backend) and CVE-2026-48714 (i18next-http-middleware), which are prototype pollution via `setPath`/key-walking in different packages. This issue is in i18next core, via a different mechanism (the `in` operator in `deepExtend`), and is gated behind a non-default call configuration.\n\n### Details\n\n`src/utils.js` (&le; 26.3.3):\n\n```js\nexport const deepExtend = (target, source, overwrite) => {\n  for (const prop in source) {\n    if (prop !== '__proto__' && prop !== 'constructor') {\n      if (prop in target) {            // <-- walks the prototype chain\n        if (isString(target[prop]) || target[prop] instanceof String ||\n            isString(source[prop]) || source[prop] instanceof String) {\n          if (overwrite) target[prop] = source[prop];\n        } else {\n          deepExtend(target[prop], source[prop], overwrite);\n        }\n      } else {\n        target[prop] = source[prop];\n      }\n    }\n  }\n  return target;\n};\n```\n\nFor `source = { hasOwnProperty: { call: \"corrupted\" } }` and `target = {}`: `\"hasOwnProperty\" in target` is `true` (inherited from `Object.prototype`), so the code recurses with `target = Object.prototype.hasOwnProperty`. In that call, `\"call\" in target` is `true` (inherited from `Function.prototype`), `source.call` is a string, and with `overwrite: true` the assignment sets an own `call` property on `Object.prototype.hasOwnProperty` to the string `\"corrupted\"`. Every subsequent `Object.prototype.hasOwnProperty.call(...)` then throws `TypeError`, including i18next's own internals.\n\nThe existing `__proto__`/`constructor` guard does not cover this, because the corruption target is an inherited built-in *function*, not the prototype object itself.\n\n### Proof of Concept\n\n```js\nimport i18next from 'i18next';\n\nawait i18next.init({ lng: 'en', resources: { en: { translation: {}",
+      "publishedAt": "2026-11-23T20:53:00Z",
+      "updatedAt": "2026-11-23T20:53:01Z",
+      "url": "https://github.com/advisories/GHSA-6jcc-5g8w-32mx",
+      "references": [
+        "https://github.com/i18next/i18next/security/advisories/GHSA-6jcc-5g8w-32mx",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-63402",
+        "https://github.com/i18next/i18next/commit/642137b7786d83661ec3ee53027798dc4b81d30a",
+        "https://github.com/i18next/i18next/releases/tag/v26.3.4",
+        "https://github.com/advisories/GHSA-6jcc-5g8w-32mx"
+      ],
+      "patchUrls": [
+        "https://github.com/i18next/i18next/commit/642137b7786d83661ec3ee53027798dc4b81d30a"
+      ],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "i18next",
+          "lt": "26.3.4",
+          "id": "CVE-2026-63402",
+          "ghsaId": "GHSA-6jcc-5g8w-32mx",
+          "cve": "CVE-2026-63402",
+          "cwe": "CWE-471",
+          "sev": "medium",
+          "note": "i18next deepExtend recurses into inherited built-ins, allowing corruption of shared built-in objects (DoS)"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0026
     },
     {
       "id": "CVE-2026-121716",
@@ -22872,6 +23093,42 @@
       "epss": 0.0017
     },
     {
+      "id": "CVE-2026-58262",
+      "ghsaId": "GHSA-f9h7-4mmq-vgcq",
+      "cve": "CVE-2026-58262",
+      "cwe": "CWE-345",
+      "sev": "high",
+      "summary": "Klever Go counts bitmap padding bits toward BLS quorum, allowing blocks with insufficient signatures",
+      "description": "## Summary\n\nWhen validating an incoming block header, `HeaderSigVerifier.verifyConsensusSize` counts *every* set bit in `PubKeysBitmap` — including bits that correspond to no validator (the padding bits of the final byte, which exist whenever the consensus group size is not a multiple of 8). The subsequent BLS aggregate-signature verification (`blsMultiSigner.Verify`) only checks signature validity for real validator indices and silently ignores those padding bits. As a result, a malicious or compromised block producer can set the padding bits to make the on-bits reach the PBFT quorum while only gathering a smaller number of real validator signature shares, causing a block to be accepted as correctly signed without a genuine two-thirds validator quorum.\n\n## Details\n\nQuorum counter counts padding bits — `core/process/headerCheck/headerSignatureVerify.go:145-183`:\n\n```go\nfunc (hsv *HeaderSigVerifier) verifyConsensusSize(consensusPubKeys []string, header data.HeaderHandler) error {\n\tconsensusSize := len(consensusPubKeys)\n\tbitmap := header.GetPubKeysBitmap()\n\n\texpectedBitmapSize := consensusSize / 8\n\tif consensusSize%8 != 0 {\n\t\texpectedBitmapSize++\n\t}\n\tif len(bitmap) != expectedBitmapSize {\n\t\t...\n\t\treturn ErrWrongSizeBitmap\n\t}\n\n\tnumOfOnesInBitmap := 0\n\tfor index := range bitmap {\n\t\tnumOfOnesInBitmap += bits.OnesCount8(bitmap[index])   // <-- counts ALL bits incl. padding\n\t}\n\n\tminNumRequiredSignatures := consensus.GetPBFTThreshold(consensusSize)\n\t...\n\tif numOfOnesInBitmap >= minNumRequiredSignatures {\n\t\treturn nil\n\t}\n\t...\n\treturn ErrNotEnoughSignatures\n}\n```\n\nThe bitmap-byte-length check above only ensures the byte array is the right *size*; it never requires the padding bits (bits `[consensusSize … expectedBitmapSize*8)`) to be zero. So any combination of padding bits is accepted toward the quorum.\n\n`VerifySignature` (`:92-143`) then builds the verifier from the *real* public keys, sets the aggregate signature, and calls `verifier.Verify(hash, bitmap)`.\n\nThe BLS verifier ignores padding bits — `crypto/signing/multisig/blsMultisig.go:272-297`:\n\n```go\nfunc (bms *blsMultiSigner) Verify(message []byte, bitmap []byte) error {\n\t...\n\tmaxFlags := len(bitmap) * 8\n\tflagsMismatch := maxFlags < len(bms.data.pubKeys)   // only rejects *too few* bytes\n\tif flagsMismatch {\n\t\treturn crypto.ErrBitmapMismatch\n\t}\n\n\tpubKeys := make([]crypto.PublicKey, 0)\n\tfor i := range bms.data.pubKeys {                    // <-- only real validator indices\n\t\terr := bms.isIndexInBitmap(uint16(i),",
+      "publishedAt": "2026-11-23T20:55:35Z",
+      "updatedAt": "2026-11-23T20:55:36Z",
+      "url": "https://github.com/advisories/GHSA-f9h7-4mmq-vgcq",
+      "references": [
+        "https://github.com/klever-io/klever-go/security/advisories/GHSA-f9h7-4mmq-vgcq",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-58262",
+        "https://github.com/klever-io/klever-go/commit/a11cb28e495e608d8034dbe83a91e89d0c68e0f7",
+        "https://github.com/advisories/GHSA-f9h7-4mmq-vgcq"
+      ],
+      "patchUrls": [
+        "https://github.com/klever-io/klever-go/commit/a11cb28e495e608d8034dbe83a91e89d0c68e0f7"
+      ],
+      "packages": [
+        {
+          "ecosystem": "go",
+          "name": "github.com/klever-io/klever-go",
+          "lt": "1.7.20",
+          "id": "CVE-2026-58262",
+          "ghsaId": "GHSA-f9h7-4mmq-vgcq",
+          "cve": "CVE-2026-58262",
+          "cwe": "CWE-345",
+          "sev": "high",
+          "note": "Klever Go counts bitmap padding bits toward BLS quorum, allowing blocks with insufficient signatures"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0016
+    },
+    {
       "id": "CVE-2026-22865",
       "ghsaId": "GHSA-mqwm-5m85-gmcv",
       "cve": "CVE-2026-22865",
@@ -23899,6 +24156,81 @@
       ],
       "kev": false,
       "epss": 0.0009
+    },
+    {
+      "id": "CVE-2026-63492",
+      "ghsaId": "GHSA-j44m-77cc-p3cc",
+      "cve": "CVE-2026-63492",
+      "cwe": "CWE-78",
+      "sev": "high",
+      "summary": "AVideo API vulnerable to OS command injection through an unescaped FFmpeg process keyword",
+      "description": "### Summary\n\nThe helper `listFFmpegProcesses($keyword)` in `plugin/API/standAlone/functions.php` builds a shell pipeline by interpolating `$keyword` inside single quotes and running it with `exec()`:\n\n```php\n$command .= \" | grep '$keyword'\";\nexec($command, $output, $status);\n```\n\nThe two callers in `plugin/API/standAlone/ffmpeg.json.php` (the `list` mode and the `isKeywordRunning` mode) pass the RAW decrypted `codeToExec` field, not the sanitized `$keyword` variable that the endpoint allowlists elsewhere. Because the value is placed inside a single-quoted shell context with no escaping, a payload that closes the quote (for example `x'; touch /tmp/marker #`) breaks out and injects an arbitrary command that runs via `exec()`'s `/bin/sh -c`. An attacker who can craft a valid encrypted payload achieves OS command execution as the web-server user.\n\n### Vulnerable code\n\nSink — `plugin/API/standAlone/functions.php`, `listFFmpegProcesses()` (around lines 139-147):\n\n```php\nfunction listFFmpegProcesses($keyword = '')\n{\n    $command = \"ps -eo pid,etime,%cpu,%mem,cmd | grep '[f]fmpeg'\";\n\n    if (!empty($keyword)) {\n        $command .= \" | grep '$keyword'\";   // $keyword interpolated inside single quotes, unescaped\n    }\n\n    exec($command, $output, $status);       // runs via /bin/sh -c\n```\n\nCallers — `plugin/API/standAlone/ffmpeg.json.php` pass the RAW decrypted field, bypassing the allowlisting applied to the local `$keyword` variable. That local variable is built at line ~136 as `$keyword = preg_replace('/[^a-zA-Z0-9_-]/', '', $codeToExec->keyword)`, but the two callers below never use it:\n\n```php\n// list mode (line ~221)\n$list = listFFmpegProcesses($codeToExec->keyword);\n\n// isKeywordRunning mode (line ~341)\n$list = listFFmpegProcesses($codeToExec->isKeywordRunning);\n```\n\nNeither mode is gated by the `$isStandAlone` check that guards the `deleteFolder` / `deleteFile` modes, so both run on any AVideo instance.\n\n### Reachability\n\nReached by sending a `codeToExec` payload with either `list = 1` and a malicious `keyword`, or with a malicious `isKeywordRunning` value. Both modes call `listFFmpegProcesses()` with the raw field before any allowlist is applied to it.\n\n### Privilege required\n\nSame trust boundary as the parent command-injection fix in this endpoint: an attacker who can craft a valid encrypted `codeToExec` payload with a valid `APISecret`. `_decryptString()` calls the platform `decryptString` API (AES-256-CBC; key = `hash('sha256', $global['saltV2'])`, iv = ",
+      "publishedAt": "2026-11-23T22:06:28Z",
+      "updatedAt": "2026-11-23T22:06:29Z",
+      "url": "https://github.com/advisories/GHSA-j44m-77cc-p3cc",
+      "references": [
+        "https://github.com/WWBN/AVideo/security/advisories/GHSA-j44m-77cc-p3cc",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-63492",
+        "https://github.com/WWBN/AVideo/commit/7559ddf72f48684cc40ae78be9cebcaa07f5fa06",
+        "https://github.com/WWBN/AVideo/releases/tag/v29.1.0",
+        "https://github.com/advisories/GHSA-j44m-77cc-p3cc"
+      ],
+      "patchUrls": [
+        "https://github.com/WWBN/AVideo/commit/7559ddf72f48684cc40ae78be9cebcaa07f5fa06"
+      ],
+      "packages": [
+        {
+          "ecosystem": "composer",
+          "name": "wwbn/avideo",
+          "lt": "29.1.0",
+          "id": "CVE-2026-63492",
+          "ghsaId": "GHSA-j44m-77cc-p3cc",
+          "cve": "CVE-2026-63492",
+          "cwe": "CWE-78",
+          "sev": "high",
+          "note": "AVideo API vulnerable to OS command injection through an unescaped FFmpeg process keyword"
+        }
+      ],
+      "kev": false,
+      "epss": 0
+    },
+    {
+      "id": "CVE-2026-133469",
+      "ghsaId": "GHSA-2r3w-c2vx-fv5g",
+      "cve": "CVE-2026-133469",
+      "cwe": "CWE-287",
+      "sev": "critical",
+      "summary": "Xen Orchestra: Empty-object login token",
+      "description": "### Summary\n\nREST cookie parsing turns `authenticationToken=j:%7B%7D` into `{}`. REST authentication passes that object to the XO token provider without requiring a string. The token collection treats `{}` as an unfiltered lookup and returns its first token; the provider authenticates as that token's owner if it is unexpired. The authenticated `/rest/v0/users/me/authentication_tokens` route then returns reusable login token IDs.\n\n\n### Details\n\n1. In `packages/xo-server/src/api/session.mjs`, function  `signIn(credentials)` has **no `params` schema** (unlike the deprecated `signInWithToken`, which declares `token: { type: 'string' }`), so `credentials.token` can be any JSON value.\n2. `packages/xo-server/src/xo-mixins/authentication.mjs`, token provider:\n   ```js\n   this.registerAuthenticationProvider(async ({ token: tokenId }, { ip } = {}) => {\n     if (!tokenId) return          // {} is truthy → passes\n     const token = await app.getAuthenticationToken(tokenId)\n     ...\n     return { bypassOtp: true, expiration: token.expiration, userId: token.user_id }\n   ```\n3. `getAuthenticationToken(properties)` explicitly accepts an object, and `_getAuthenticationToken(id, properties)` does `this._tokens.first(properties ?? id)`.\n4. `Collection#first(properties)` -> `_get(properties)`; in `collection/redis.mjs`, `if (isEmpty(properties)) return redis.sMembers(prefix + '_ids')…` → **all tokens**. Non-empty objects on indexed fields (`user_id`, `client_id`) do an index lookup → token of the chosen user.\n5. HTTP paths: `index.mjs` (`req.cookies.token` → `isValidAuthenticationToken`), `xo-mixins/rest-api.mjs` and `@xen-orchestra/rest-api` middleware (`cookies.authenticationToken ?? cookies.token` → `authenticateUser({ token })`). `cookie-parser` turns `j:`-prefixed cookie values into parsed JSON, so `authenticationToken=j:{}` yields `{}`.\n\n\n### Proof of concept\n\nThe object cookie returned 200 with unexpired token IDs, and one ID worked on a fresh request as an admin account. The attacker does not choose which token the empty-object lookup returns. Authentication succeeds only if the token returned first is unexpired and belongs to an existing user; if it is expired or its user was deleted, the request fails without trying another token.\n\n```bash\ncurl -b 'authenticationToken=j:{}' https://<ip>/rest/v0/users\n```\n\n### Impact\n\nAn adversary can bypass authentication and perform actions with 'Admin' privilege. Xen Orchestra compromise can lead to arbitrary code execution on man",
+      "publishedAt": "2026-11-23T17:29:29Z",
+      "updatedAt": "2026-11-23T17:29:30Z",
+      "url": "https://github.com/advisories/GHSA-2r3w-c2vx-fv5g",
+      "references": [
+        "https://github.com/vatesfr/xen-orchestra/security/advisories/GHSA-2r3w-c2vx-fv5g",
+        "https://github.com/vatesfr/xen-orchestra/pull/10748",
+        "https://github.com/vatesfr/xen-orchestra/commit/50166fe3a49c02069d35ba9046ca4a1f77f4e11d",
+        "https://docs.vates.tech/security-advisories/advisories/2026/vates-sa-2026-062",
+        "https://github.com/advisories/GHSA-2r3w-c2vx-fv5g"
+      ],
+      "patchUrls": [
+        "https://github.com/vatesfr/xen-orchestra/pull/10748",
+        "https://github.com/vatesfr/xen-orchestra/commit/50166fe3a49c02069d35ba9046ca4a1f77f4e11d"
+      ],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "xo-server",
+          "le": "5.7.4",
+          "id": "CVE-2026-133469",
+          "ghsaId": "GHSA-2r3w-c2vx-fv5g",
+          "cve": "CVE-2026-133469",
+          "cwe": "CWE-287",
+          "sev": "critical",
+          "note": "Xen Orchestra: Empty-object login token"
+        }
+      ],
+      "kev": false,
+      "epss": 0
     },
     {
       "id": "CVE-2026-104884",
