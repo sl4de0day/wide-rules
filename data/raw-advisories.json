@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-24T13:12:11.068Z",
+  "generatedAt": "2026-11-24T16:56:15.039Z",
   "count": 562,
   "advisories": [
     {
@@ -4002,6 +4002,44 @@
       "epss": 0.0409
     },
     {
+      "id": "CVE-2026-114516",
+      "ghsaId": "GHSA-mc8w-wjhw-45x5",
+      "cve": "CVE-2026-114516",
+      "cwe": "CWE-22",
+      "sev": "critical",
+      "summary": "Etherpad: Pre-auth arbitrary file read",
+      "description": "### Summary\n\nAn unauthenticated path‑traversal / arbitrary file read vulnerability in Etherpad's /static/* handler allows any remote, unauthenticated user to read any file on the server's filesystem (e.g. GET /static/plugins/ep_etherpad-lite/static/..%5C..%5C..%5C..%5C..%5C..%5C..%5Cetc/passwd returns /etc/passwd) available to the user running the etherpad software. Because the endpoint is mounted before the authentication middleware, no credentials, session, or configuration change are required. The read primitive could escalate to a full server compromise: on a typical deployment by disclosing settings.json / credentials.json / /proc/self/environ, which contain the admin password, giving an attacker an admin session and, through the admin plugin installer, remote code execution.\n\n### Details\n\nEtherpad serves plugin static assets through src/node/utils/Minify.ts. The request path is first passed through the canonical sanitizer src/node/utils/sanitizePathname.ts, which is careful to convert backslashes to forward slashes only on Windows:\n\n```\n// src/node/utils/sanitizePathname.ts:11-20\np = pathApi.normalize(p);\nif (pathApi.isAbsolute(p)) throw new Error(`absolute paths are forbidden: ${p}`);\nif (p.split(pathApi.sep)[0] === '..') throw new Error(`directory traversal: ${p}`);\n// THIS CONVERSION MUST ONLY BE DONE ON WINDOWS, otherwise on POSIXish systems '..\\\\' in the input\n// pathname would not be normalized away before being converted to '../'.\nif (pathApi.sep === '\\\\') p = p.replace(/\\\\/g, '/');\n```\n\nOn Linux a backslash is an ordinary filename byte, so an input segment like ..\\..\\..\\test contains no ./.. path components and passes every check in sanitizePathname unchanged. The project's own test suite confirms this: src/tests/backend-new/specs/sanitizePathname.ts:62 lists ['posix', '..\\\\foo'] among the accepted paths (returned unchanged).\n\nThe vulnerability is that Minify.ts then performs that Windows‑only conversion unconditionally, after the sanitizer has run, justified by a comment asserting the opposite of the invariant above:\n\n```\n// src/node/utils/Minify.ts:171-186\nconst match = filename.match(/^plugins\\/([^/]+)(\\/(?:(static\\/.*)|.*))?$/);\nif (match) {\nconst library = match[1];\nconst libraryPath = match[2] || '';\nif (plugins.plugins[library] && match[3]) {\nconst plugin = plugins.plugins[library];\nconst pluginPath = plugin.package.realPath;      // for 'ep_etherpad-lite' == <root>/src\nfilename = path.join(pluginPath, libraryPath);   // -> absolute pa",
+      "publishedAt": "2026-11-20T00:23:45Z",
+      "updatedAt": "2026-11-20T00:23:46Z",
+      "url": "https://github.com/advisories/GHSA-mc8w-wjhw-45x5",
+      "references": [
+        "https://github.com/ether/etherpad/security/advisories/GHSA-mc8w-wjhw-45x5",
+        "https://github.com/ether/etherpad/pull/8081",
+        "https://github.com/ether/etherpad/commit/9c8d16d50e2fdfd9693ab35c43280410cb4db2fc",
+        "https://github.com/advisories/GHSA-mc8w-wjhw-45x5"
+      ],
+      "patchUrls": [
+        "https://github.com/ether/etherpad/pull/8081",
+        "https://github.com/ether/etherpad/commit/9c8d16d50e2fdfd9693ab35c43280410cb4db2fc"
+      ],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "ep_etherpad-lite",
+          "ge": "1.8.14",
+          "lt": "3.3.3",
+          "id": "CVE-2026-114516",
+          "ghsaId": "GHSA-mc8w-wjhw-45x5",
+          "cve": "CVE-2026-114516",
+          "cwe": "CWE-22",
+          "sev": "critical",
+          "note": "Etherpad: Pre-auth arbitrary file read"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0384
+    },
+    {
       "id": "CVE-2023-45853",
       "ghsaId": "GHSA-mq29-j5xf-cjwr",
       "cve": "CVE-2023-45853",
@@ -4994,44 +5032,6 @@
       "epss": 0.0119
     },
     {
-      "id": "CVE-2026-114516",
-      "ghsaId": "GHSA-mc8w-wjhw-45x5",
-      "cve": "CVE-2026-114516",
-      "cwe": "CWE-22",
-      "sev": "critical",
-      "summary": "Etherpad: Pre-auth arbitrary file read",
-      "description": "### Summary\n\nAn unauthenticated path‑traversal / arbitrary file read vulnerability in Etherpad's /static/* handler allows any remote, unauthenticated user to read any file on the server's filesystem (e.g. GET /static/plugins/ep_etherpad-lite/static/..%5C..%5C..%5C..%5C..%5C..%5C..%5Cetc/passwd returns /etc/passwd) available to the user running the etherpad software. Because the endpoint is mounted before the authentication middleware, no credentials, session, or configuration change are required. The read primitive could escalate to a full server compromise: on a typical deployment by disclosing settings.json / credentials.json / /proc/self/environ, which contain the admin password, giving an attacker an admin session and, through the admin plugin installer, remote code execution.\n\n### Details\n\nEtherpad serves plugin static assets through src/node/utils/Minify.ts. The request path is first passed through the canonical sanitizer src/node/utils/sanitizePathname.ts, which is careful to convert backslashes to forward slashes only on Windows:\n\n```\n// src/node/utils/sanitizePathname.ts:11-20\np = pathApi.normalize(p);\nif (pathApi.isAbsolute(p)) throw new Error(`absolute paths are forbidden: ${p}`);\nif (p.split(pathApi.sep)[0] === '..') throw new Error(`directory traversal: ${p}`);\n// THIS CONVERSION MUST ONLY BE DONE ON WINDOWS, otherwise on POSIXish systems '..\\\\' in the input\n// pathname would not be normalized away before being converted to '../'.\nif (pathApi.sep === '\\\\') p = p.replace(/\\\\/g, '/');\n```\n\nOn Linux a backslash is an ordinary filename byte, so an input segment like ..\\..\\..\\test contains no ./.. path components and passes every check in sanitizePathname unchanged. The project's own test suite confirms this: src/tests/backend-new/specs/sanitizePathname.ts:62 lists ['posix', '..\\\\foo'] among the accepted paths (returned unchanged).\n\nThe vulnerability is that Minify.ts then performs that Windows‑only conversion unconditionally, after the sanitizer has run, justified by a comment asserting the opposite of the invariant above:\n\n```\n// src/node/utils/Minify.ts:171-186\nconst match = filename.match(/^plugins\\/([^/]+)(\\/(?:(static\\/.*)|.*))?$/);\nif (match) {\nconst library = match[1];\nconst libraryPath = match[2] || '';\nif (plugins.plugins[library] && match[3]) {\nconst plugin = plugins.plugins[library];\nconst pluginPath = plugin.package.realPath;      // for 'ep_etherpad-lite' == <root>/src\nfilename = path.join(pluginPath, libraryPath);   // -> absolute pa",
-      "publishedAt": "2026-11-20T00:23:45Z",
-      "updatedAt": "2026-11-20T00:23:46Z",
-      "url": "https://github.com/advisories/GHSA-mc8w-wjhw-45x5",
-      "references": [
-        "https://github.com/ether/etherpad/security/advisories/GHSA-mc8w-wjhw-45x5",
-        "https://github.com/ether/etherpad/pull/8081",
-        "https://github.com/ether/etherpad/commit/9c8d16d50e2fdfd9693ab35c43280410cb4db2fc",
-        "https://github.com/advisories/GHSA-mc8w-wjhw-45x5"
-      ],
-      "patchUrls": [
-        "https://github.com/ether/etherpad/pull/8081",
-        "https://github.com/ether/etherpad/commit/9c8d16d50e2fdfd9693ab35c43280410cb4db2fc"
-      ],
-      "packages": [
-        {
-          "ecosystem": "npm",
-          "name": "ep_etherpad-lite",
-          "ge": "1.8.14",
-          "lt": "3.3.3",
-          "id": "CVE-2026-114516",
-          "ghsaId": "GHSA-mc8w-wjhw-45x5",
-          "cve": "CVE-2026-114516",
-          "cwe": "CWE-22",
-          "sev": "critical",
-          "note": "Etherpad: Pre-auth arbitrary file read"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0116
-    },
-    {
       "id": "CVE-2026-41316",
       "ghsaId": "GHSA-q339-8rmv-2mhv",
       "cve": "CVE-2026-41316",
@@ -5163,6 +5163,45 @@
       ],
       "kev": false,
       "epss": 0.0112
+    },
+    {
+      "id": "CVE-2026-77318",
+      "ghsaId": "GHSA-24pw-rf5p-mgp7",
+      "cve": "CVE-2026-77318",
+      "cwe": "CWE-306",
+      "sev": "high",
+      "summary": "Jupyter MCP Server: Unauthenticated management routes can hijack the Jupyter backend in standalone HTTP mode",
+      "description": "Standalone `streamable-http` mode in `datalayer/jupyter-mcp-server` requires `MCP_TOKEN` for `/mcp`, but the custom management routes mounted on the same application do not enforce that token. An unauthenticated network caller can invoke `PUT /api/connect`, choose the Jupyter backend URL and token fields, reset the server context, and make the MCP server start a kernel client against attacker-controlled infrastructure. The same missing authentication affects the state-changing `DELETE /api/stop` route.\n\nThe intended authentication boundary is documented in the security guide and enforced during startup:\n\n```text\ndocs/docs/reference/security/index.mdx:15\nAll MCP endpoints require Bearer token authentication.\n\ndocs/docs/reference/security/index.mdx:25\nStarting with version 1.0.0, MCP client authentication is required for the streamable-http transport.\n```\n\nThe CLI enforces that boundary for the MCP endpoint:\n\n```python\n# jupyter_mcp_server/CLI.py:203-209\nif transport == \"streamable-http\" and not mcp_token and not insecure_mcp_noauth:\n    raise click.UsageError(\n        \"streamable-http transport requires MCP client authentication. \"\n        \"Set --mcp-token / MCP_TOKEN, or pass --insecure-mcp-noauth to \"\n        \"explicitly allow unauthenticated access.\"\n    )\n```\n\n```python\n# jupyter_mcp_server/CLI.py:285-290\nif transport == \"streamable-http\":\n    if mcp_token:\n        from jupyter_mcp_server.server import RuntimeTokenVerifier\n        mcp._token_verifier = RuntimeTokenVerifier(mcp_token)\n        logger.info(\"MCP endpoint token authentication enabled (using MCP_TOKEN)\")\n```\n\nThe vulnerable route is `jupyter_mcp_server/server.py:143-187`:\n\n```python\n@mcp.custom_route(\"/api/connect\", [\"PUT\"])\nasync def connect(request: Request):\n    data = await request.json()\n\n    document_runtime = DocumentRuntime(**data)\n\n    set_config(\n        provider=document_runtime.provider,\n        runtime_url=document_runtime.runtime_url,\n        runtime_id=document_runtime.runtime_id,\n        runtime_token=document_runtime.runtime_token,\n        document_url=document_runtime.document_url,\n        document_id=document_runtime.document_id,\n        document_token=document_runtime.document_token,\n        allowed_jupyter_tools=document_runtime.allowed_jupyter_tools or \"notebook_run-all-cells,notebook_get-selected-cell\"\n    )\n\n    ServerContext.reset()\n\n    try:\n        __start_kernel()\n        return JSONResponse({\"success\": True})\n```\n\n`/api/stop` is also unauthenticated and state-chan",
+      "publishedAt": "2026-11-20T00:12:14Z",
+      "updatedAt": "2026-11-20T00:12:16Z",
+      "url": "https://github.com/advisories/GHSA-24pw-rf5p-mgp7",
+      "references": [
+        "https://github.com/datalayer/jupyter-mcp-server/security/advisories/GHSA-24pw-rf5p-mgp7",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-77318",
+        "https://github.com/datalayer/jupyter-mcp-server/pull/262",
+        "https://github.com/datalayer/jupyter-mcp-server/commit/c2e98fca2df1bbd608451ec416aaa38a4d246fc5",
+        "https://github.com/datalayer/jupyter-mcp-server/releases/tag/v1.0.3",
+        "https://github.com/advisories/GHSA-24pw-rf5p-mgp7"
+      ],
+      "patchUrls": [
+        "https://github.com/datalayer/jupyter-mcp-server/pull/262",
+        "https://github.com/datalayer/jupyter-mcp-server/commit/c2e98fca2df1bbd608451ec416aaa38a4d246fc5"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "jupyter-mcp-server",
+          "lt": "1.0.3",
+          "id": "CVE-2026-77318",
+          "ghsaId": "GHSA-24pw-rf5p-mgp7",
+          "cve": "CVE-2026-77318",
+          "cwe": "CWE-306",
+          "sev": "high",
+          "note": "Jupyter MCP Server: Unauthenticated management routes can hijack the Jupyter backend in standalone HTTP mode"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0109
     },
     {
       "id": "CVE-2026-132275",
@@ -6538,6 +6577,44 @@
       ],
       "kev": false,
       "epss": 0.0079
+    },
+    {
+      "id": "CVE-2026-133469",
+      "ghsaId": "GHSA-2r3w-c2vx-fv5g",
+      "cve": "CVE-2026-133469",
+      "cwe": "CWE-287",
+      "sev": "critical",
+      "summary": "Xen Orchestra: Empty-object login token",
+      "description": "### Summary\n\nREST cookie parsing turns `authenticationToken=j:%7B%7D` into `{}`. REST authentication passes that object to the XO token provider without requiring a string. The token collection treats `{}` as an unfiltered lookup and returns its first token; the provider authenticates as that token's owner if it is unexpired. The authenticated `/rest/v0/users/me/authentication_tokens` route then returns reusable login token IDs.\n\n\n### Details\n\n1. In `packages/xo-server/src/api/session.mjs`, function  `signIn(credentials)` has **no `params` schema** (unlike the deprecated `signInWithToken`, which declares `token: { type: 'string' }`), so `credentials.token` can be any JSON value.\n2. `packages/xo-server/src/xo-mixins/authentication.mjs`, token provider:\n   ```js\n   this.registerAuthenticationProvider(async ({ token: tokenId }, { ip } = {}) => {\n     if (!tokenId) return          // {} is truthy → passes\n     const token = await app.getAuthenticationToken(tokenId)\n     ...\n     return { bypassOtp: true, expiration: token.expiration, userId: token.user_id }\n   ```\n3. `getAuthenticationToken(properties)` explicitly accepts an object, and `_getAuthenticationToken(id, properties)` does `this._tokens.first(properties ?? id)`.\n4. `Collection#first(properties)` -> `_get(properties)`; in `collection/redis.mjs`, `if (isEmpty(properties)) return redis.sMembers(prefix + '_ids')…` → **all tokens**. Non-empty objects on indexed fields (`user_id`, `client_id`) do an index lookup → token of the chosen user.\n5. HTTP paths: `index.mjs` (`req.cookies.token` → `isValidAuthenticationToken`), `xo-mixins/rest-api.mjs` and `@xen-orchestra/rest-api` middleware (`cookies.authenticationToken ?? cookies.token` → `authenticateUser({ token })`). `cookie-parser` turns `j:`-prefixed cookie values into parsed JSON, so `authenticationToken=j:{}` yields `{}`.\n\n\n### Proof of concept\n\nThe object cookie returned 200 with unexpired token IDs, and one ID worked on a fresh request as an admin account. The attacker does not choose which token the empty-object lookup returns. Authentication succeeds only if the token returned first is unexpired and belongs to an existing user; if it is expired or its user was deleted, the request fails without trying another token.\n\n```bash\ncurl -b 'authenticationToken=j:{}' https://<ip>/rest/v0/users\n```\n\n### Impact\n\nAn adversary can bypass authentication and perform actions with 'Admin' privilege. Xen Orchestra compromise can lead to arbitrary code execution on man",
+      "publishedAt": "2026-11-23T17:29:29Z",
+      "updatedAt": "2026-11-23T17:29:30Z",
+      "url": "https://github.com/advisories/GHSA-2r3w-c2vx-fv5g",
+      "references": [
+        "https://github.com/vatesfr/xen-orchestra/security/advisories/GHSA-2r3w-c2vx-fv5g",
+        "https://github.com/vatesfr/xen-orchestra/pull/10748",
+        "https://github.com/vatesfr/xen-orchestra/commit/50166fe3a49c02069d35ba9046ca4a1f77f4e11d",
+        "https://docs.vates.tech/security-advisories/advisories/2026/vates-sa-2026-062",
+        "https://github.com/advisories/GHSA-2r3w-c2vx-fv5g"
+      ],
+      "patchUrls": [
+        "https://github.com/vatesfr/xen-orchestra/pull/10748",
+        "https://github.com/vatesfr/xen-orchestra/commit/50166fe3a49c02069d35ba9046ca4a1f77f4e11d"
+      ],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "xo-server",
+          "le": "5.7.4",
+          "id": "CVE-2026-133469",
+          "ghsaId": "GHSA-2r3w-c2vx-fv5g",
+          "cve": "CVE-2026-133469",
+          "cwe": "CWE-287",
+          "sev": "critical",
+          "note": "Xen Orchestra: Empty-object login token"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0078
     },
     {
       "id": "CVE-2026-49432",
@@ -9384,7 +9461,7 @@
         }
       ],
       "kev": false,
-      "epss": 0.0059
+      "epss": 0.006
     },
     {
       "id": "CVE-2026-69156",
@@ -12076,45 +12153,6 @@
           "cwe": "CWE-350",
           "sev": "critical",
           "note": "Jupyter MCP Server: Browser DNS rebinding can hijack the Jupyter backend through management routes"
-        }
-      ],
-      "kev": false,
-      "epss": 0.005
-    },
-    {
-      "id": "CVE-2026-77318",
-      "ghsaId": "GHSA-24pw-rf5p-mgp7",
-      "cve": "CVE-2026-77318",
-      "cwe": "CWE-306",
-      "sev": "high",
-      "summary": "Jupyter MCP Server: Unauthenticated management routes can hijack the Jupyter backend in standalone HTTP mode",
-      "description": "Standalone `streamable-http` mode in `datalayer/jupyter-mcp-server` requires `MCP_TOKEN` for `/mcp`, but the custom management routes mounted on the same application do not enforce that token. An unauthenticated network caller can invoke `PUT /api/connect`, choose the Jupyter backend URL and token fields, reset the server context, and make the MCP server start a kernel client against attacker-controlled infrastructure. The same missing authentication affects the state-changing `DELETE /api/stop` route.\n\nThe intended authentication boundary is documented in the security guide and enforced during startup:\n\n```text\ndocs/docs/reference/security/index.mdx:15\nAll MCP endpoints require Bearer token authentication.\n\ndocs/docs/reference/security/index.mdx:25\nStarting with version 1.0.0, MCP client authentication is required for the streamable-http transport.\n```\n\nThe CLI enforces that boundary for the MCP endpoint:\n\n```python\n# jupyter_mcp_server/CLI.py:203-209\nif transport == \"streamable-http\" and not mcp_token and not insecure_mcp_noauth:\n    raise click.UsageError(\n        \"streamable-http transport requires MCP client authentication. \"\n        \"Set --mcp-token / MCP_TOKEN, or pass --insecure-mcp-noauth to \"\n        \"explicitly allow unauthenticated access.\"\n    )\n```\n\n```python\n# jupyter_mcp_server/CLI.py:285-290\nif transport == \"streamable-http\":\n    if mcp_token:\n        from jupyter_mcp_server.server import RuntimeTokenVerifier\n        mcp._token_verifier = RuntimeTokenVerifier(mcp_token)\n        logger.info(\"MCP endpoint token authentication enabled (using MCP_TOKEN)\")\n```\n\nThe vulnerable route is `jupyter_mcp_server/server.py:143-187`:\n\n```python\n@mcp.custom_route(\"/api/connect\", [\"PUT\"])\nasync def connect(request: Request):\n    data = await request.json()\n\n    document_runtime = DocumentRuntime(**data)\n\n    set_config(\n        provider=document_runtime.provider,\n        runtime_url=document_runtime.runtime_url,\n        runtime_id=document_runtime.runtime_id,\n        runtime_token=document_runtime.runtime_token,\n        document_url=document_runtime.document_url,\n        document_id=document_runtime.document_id,\n        document_token=document_runtime.document_token,\n        allowed_jupyter_tools=document_runtime.allowed_jupyter_tools or \"notebook_run-all-cells,notebook_get-selected-cell\"\n    )\n\n    ServerContext.reset()\n\n    try:\n        __start_kernel()\n        return JSONResponse({\"success\": True})\n```\n\n`/api/stop` is also unauthenticated and state-chan",
-      "publishedAt": "2026-11-20T00:12:14Z",
-      "updatedAt": "2026-11-20T00:12:16Z",
-      "url": "https://github.com/advisories/GHSA-24pw-rf5p-mgp7",
-      "references": [
-        "https://github.com/datalayer/jupyter-mcp-server/security/advisories/GHSA-24pw-rf5p-mgp7",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-77318",
-        "https://github.com/datalayer/jupyter-mcp-server/pull/262",
-        "https://github.com/datalayer/jupyter-mcp-server/commit/c2e98fca2df1bbd608451ec416aaa38a4d246fc5",
-        "https://github.com/datalayer/jupyter-mcp-server/releases/tag/v1.0.3",
-        "https://github.com/advisories/GHSA-24pw-rf5p-mgp7"
-      ],
-      "patchUrls": [
-        "https://github.com/datalayer/jupyter-mcp-server/pull/262",
-        "https://github.com/datalayer/jupyter-mcp-server/commit/c2e98fca2df1bbd608451ec416aaa38a4d246fc5"
-      ],
-      "packages": [
-        {
-          "ecosystem": "pip",
-          "name": "jupyter-mcp-server",
-          "lt": "1.0.3",
-          "id": "CVE-2026-77318",
-          "ghsaId": "GHSA-24pw-rf5p-mgp7",
-          "cve": "CVE-2026-77318",
-          "cwe": "CWE-306",
-          "sev": "high",
-          "note": "Jupyter MCP Server: Unauthenticated management routes can hijack the Jupyter backend in standalone HTTP mode"
         }
       ],
       "kev": false,
@@ -16369,6 +16407,51 @@
       "epss": 0.0039
     },
     {
+      "id": "CVE-2026-7700",
+      "ghsaId": "GHSA-9fpm-3445-2vx4",
+      "cve": "CVE-2026-7700",
+      "cwe": "CWE-94",
+      "sev": "high",
+      "summary": "Langflow: Prompt injection in Langflow Smart Transform can lead to code execution",
+      "description": "## Summary\n\nLangflow versions 1.3.0 through 1.10.2 contain a code-injection vulnerability in the Smart Transform (`LambdaFilterComponent`) component.\n\nSmart Transform places flow-author instructions and a preview of its input data into a prompt asking an LLM to generate a Python lambda. It then extracts a one-line lambda from the model response, applies only syntactic format checks, evaluates it with Python's full builtins, and invokes the resulting function inside the Langflow process.\n\nA malicious flow author can exploit this directly through the Instructions field. In deployments where an exposed flow passes attacker-controlled content into Smart Transform, an attacker may also exploit it indirectly through prompt injection, subject to the configured model following the injected instruction.\n\n## Vulnerability details\n\n**Vulnerable Code Location**: `src/lfx/src/lfx/components/llm_operations/lambda_filter.py` (line 242 in v1.10.2)\n\n```python\ndef _validate_lambda(self, lambda_text: str) -> bool:\n    \"\"\"Validate the provided lambda function text.\"\"\"\n    return lambda_text.strip().startswith(\"lambda\") and \":\" in lambda_text\n\n# ...\nreturn eval(lambda_text)  # noqa: S307\n```\n\nFor example, an attacker can attempt to make the model return:\n\n`lambda x: __import__(\"os\").system(\"id\")`\n\nThis expression satisfies the vulnerable format checks. `eval()` creates the lambda with access to Python's default builtins, and the subsequent `fn(data)` invocation (in `_execute_lambda`) executes the command.\n\nSuccessful exploitation allows code execution with the privileges of the Langflow service process. This can expose or modify credentials, files, application data, and network resources accessible to that process, and may affect other tenants in shared deployments.\n\n## PoC\n\nhttps://github.com/user-attachments/assets/13c48fe1-7225-4e0d-9687-2d2df1e87f0e\n\n## Fix\n\nThe reported path was addressed by validating the generated code's AST and evaluating it with a restricted builtins mapping.\n\nThe mainline fix is in PR #13530 (`1641b28f`) and shipped in Langflow 1.11.0. The 1.10.3 backport is in PR #14071 (`94859df3`). Users should upgrade to Langflow 1.10.3 or later.\n\n## Workarounds\n\nUntil an upgrade is possible:\n- Remove Smart Transform from runnable flows.\n- Restrict flow creation, editing, and execution to trusted users.\n- Do not route untrusted or externally controlled data through Smart Transform.\n- Limit the Langflow process's filesystem, network, and credential access.\n\n## Cre",
+      "publishedAt": "2026-10-05T22:30:41Z",
+      "updatedAt": "2026-11-24T01:23:39Z",
+      "url": "https://github.com/advisories/GHSA-9fpm-3445-2vx4",
+      "references": [
+        "https://github.com/langflow-ai/langflow/security/advisories/GHSA-9fpm-3445-2vx4",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-7700",
+        "https://github.com/langflow-ai/langflow/pull/13530",
+        "https://github.com/langflow-ai/langflow/commit/1641b28f33e2c47b9a0c6855922d44d1b8418b9d",
+        "https://github.com/langflow-ai/langflow/commit/94859df33acd70b2a1f816e26d68f5e89a7e5639",
+        "https://github.com/langflow-ai/langflow/releases/tag/v1.10.3",
+        "https://vuldb.com/submit/804305",
+        "https://vuldb.com/vuln/360869",
+        "https://www.yuque.com/mengnanbulalei/ognlsk/hte2a98ro5gf8tp9?singleDoc#%20%E3%80%8AFirst%20release%20of%20Langflow%201.8.3%20Smart%20Transform%20eval()/Lambda%20injection%20RCE%20vulnerability%20analysis+POC%E3%80%8B",
+        "https://github.com/advisories/GHSA-9fpm-3445-2vx4"
+      ],
+      "patchUrls": [
+        "https://github.com/langflow-ai/langflow/pull/13530",
+        "https://github.com/langflow-ai/langflow/commit/1641b28f33e2c47b9a0c6855922d44d1b8418b9d",
+        "https://github.com/langflow-ai/langflow/commit/94859df33acd70b2a1f816e26d68f5e89a7e5639"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "langflow",
+          "ge": "1.3.0",
+          "lt": "1.10.3",
+          "id": "CVE-2026-7700",
+          "ghsaId": "GHSA-9fpm-3445-2vx4",
+          "cve": "CVE-2026-7700",
+          "cwe": "CWE-94",
+          "sev": "high",
+          "note": "Langflow: Prompt injection in Langflow Smart Transform can lead to code execution"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0038
+    },
+    {
       "id": "CVE-2026-126364",
       "ghsaId": "GHSA-r3h5-4585-7x3w",
       "cve": "CVE-2026-126364",
@@ -18601,51 +18684,6 @@
       ],
       "kev": false,
       "epss": 0.0032
-    },
-    {
-      "id": "CVE-2026-7700",
-      "ghsaId": "GHSA-9fpm-3445-2vx4",
-      "cve": "CVE-2026-7700",
-      "cwe": "CWE-94",
-      "sev": "high",
-      "summary": "Langflow: Prompt injection in Langflow Smart Transform can lead to code execution",
-      "description": "## Summary\n\nLangflow versions 1.3.0 through 1.10.2 contain a code-injection vulnerability in the Smart Transform (`LambdaFilterComponent`) component.\n\nSmart Transform places flow-author instructions and a preview of its input data into a prompt asking an LLM to generate a Python lambda. It then extracts a one-line lambda from the model response, applies only syntactic format checks, evaluates it with Python's full builtins, and invokes the resulting function inside the Langflow process.\n\nA malicious flow author can exploit this directly through the Instructions field. In deployments where an exposed flow passes attacker-controlled content into Smart Transform, an attacker may also exploit it indirectly through prompt injection, subject to the configured model following the injected instruction.\n\n## Vulnerability details\n\n**Vulnerable Code Location**: `src/lfx/src/lfx/components/llm_operations/lambda_filter.py` (line 242 in v1.10.2)\n\n```python\ndef _validate_lambda(self, lambda_text: str) -> bool:\n    \"\"\"Validate the provided lambda function text.\"\"\"\n    return lambda_text.strip().startswith(\"lambda\") and \":\" in lambda_text\n\n# ...\nreturn eval(lambda_text)  # noqa: S307\n```\n\nFor example, an attacker can attempt to make the model return:\n\n`lambda x: __import__(\"os\").system(\"id\")`\n\nThis expression satisfies the vulnerable format checks. `eval()` creates the lambda with access to Python's default builtins, and the subsequent `fn(data)` invocation (in `_execute_lambda`) executes the command.\n\nSuccessful exploitation allows code execution with the privileges of the Langflow service process. This can expose or modify credentials, files, application data, and network resources accessible to that process, and may affect other tenants in shared deployments.\n\n## PoC\n\nhttps://github.com/user-attachments/assets/13c48fe1-7225-4e0d-9687-2d2df1e87f0e\n\n## Fix\n\nThe reported path was addressed by validating the generated code's AST and evaluating it with a restricted builtins mapping.\n\nThe mainline fix is in PR #13530 (`1641b28f`) and shipped in Langflow 1.11.0. The 1.10.3 backport is in PR #14071 (`94859df3`). Users should upgrade to Langflow 1.10.3 or later.\n\n## Workarounds\n\nUntil an upgrade is possible:\n- Remove Smart Transform from runnable flows.\n- Restrict flow creation, editing, and execution to trusted users.\n- Do not route untrusted or externally controlled data through Smart Transform.\n- Limit the Langflow process's filesystem, network, and credential access.\n\n## Cre",
-      "publishedAt": "2026-10-05T22:30:41Z",
-      "updatedAt": "2026-11-24T01:23:39Z",
-      "url": "https://github.com/advisories/GHSA-9fpm-3445-2vx4",
-      "references": [
-        "https://github.com/langflow-ai/langflow/security/advisories/GHSA-9fpm-3445-2vx4",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-7700",
-        "https://github.com/langflow-ai/langflow/pull/13530",
-        "https://github.com/langflow-ai/langflow/commit/1641b28f33e2c47b9a0c6855922d44d1b8418b9d",
-        "https://github.com/langflow-ai/langflow/commit/94859df33acd70b2a1f816e26d68f5e89a7e5639",
-        "https://github.com/langflow-ai/langflow/releases/tag/v1.10.3",
-        "https://vuldb.com/submit/804305",
-        "https://vuldb.com/vuln/360869",
-        "https://www.yuque.com/mengnanbulalei/ognlsk/hte2a98ro5gf8tp9?singleDoc#%20%E3%80%8AFirst%20release%20of%20Langflow%201.8.3%20Smart%20Transform%20eval()/Lambda%20injection%20RCE%20vulnerability%20analysis+POC%E3%80%8B",
-        "https://github.com/advisories/GHSA-9fpm-3445-2vx4"
-      ],
-      "patchUrls": [
-        "https://github.com/langflow-ai/langflow/pull/13530",
-        "https://github.com/langflow-ai/langflow/commit/1641b28f33e2c47b9a0c6855922d44d1b8418b9d",
-        "https://github.com/langflow-ai/langflow/commit/94859df33acd70b2a1f816e26d68f5e89a7e5639"
-      ],
-      "packages": [
-        {
-          "ecosystem": "pip",
-          "name": "langflow",
-          "ge": "1.3.0",
-          "lt": "1.10.3",
-          "id": "CVE-2026-7700",
-          "ghsaId": "GHSA-9fpm-3445-2vx4",
-          "cve": "CVE-2026-7700",
-          "cwe": "CWE-94",
-          "sev": "high",
-          "note": "Langflow: Prompt injection in Langflow Smart Transform can lead to code execution"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0031
     },
     {
       "id": "CVE-2026-128075",
@@ -22587,6 +22625,45 @@
       "epss": 0.0019
     },
     {
+      "id": "CVE-2026-35571",
+      "ghsaId": "GHSA-cpm7-cfpx-3hvp",
+      "cve": "CVE-2026-35571",
+      "cwe": "CWE-79",
+      "sev": "medium",
+      "summary": "Emissary has Stored XSS via Navigation Template Link Injection",
+      "description": "## Summary\n\nMustache navigation templates interpolated configuration-controlled link values\ndirectly into `href` attributes without URL scheme validation. An administrator\nwho could modify the `navItems` configuration could inject `javascript:` URIs,\nenabling stored cross-site scripting (XSS) against other authenticated users\nviewing the Emissary web interface.\n\n## Details\n\n### Vulnerable code — `nav.mustache` (line 10)\n\n```html\n{{#navItems}}\n<li class=\"nav-item\">\n  <a class=\"nav-link\" href=\"{{link}}\">{{display}}</a>\n</li>\n{{/navItems}}\n```\n\nThe `{{link}}` value was rendered without any scheme validation. Mustache's\ndefault HTML escaping protects against injection of new HTML tags but does\n**not** prevent `javascript:` URIs in `href` attributes, since `javascript:`\ncontains no characters that HTML-escaping would alter.\n\n### Attack vector\n\nAn administrator sets a navigation item's link to:\n```\njavascript:alert(document.cookie)\n```\n\nAny authenticated user who clicks the navigation link executes the script in\ntheir browser context.\n\n### Impact\n\n- Session hijacking via cookie theft\n- Actions performed on behalf of the victim user\n- Requires administrative access to modify navigation configuration\n- Requires user interaction (clicking the malicious link)\n\n### Mitigating factors\n\n- Exploitation requires administrative access to modify the `navItems`\n  configuration\n- User interaction (clicking the link) is required\n- The Emissary web interface is typically accessed only by authenticated\n  operators within a trusted network\n\n## Remediation\n\nFixed in [PR #1293](https://github.com/NationalSecurityAgency/emissary/pull/1293),\nmerged into release 8.39.0.\n\n### Server-side link validation — `NavAction.java`\n\nAn allowlist regex was added that only permits `http://`, `https://`, or\nsite-relative (`/`) URLs:\n\n```java\nprivate static final Pattern VALID_LINK = Pattern.compile(\"^(https?:/)?/.*\");\n\nprivate static boolean isValidLink(String link) {\n    if (!VALID_LINK.matcher(link).matches()) {\n        logger.warn(\"Skipping invalid navigation link '{}'\", link);\n        return false;\n    }\n    return true;\n}\n```\n\nInvalid links are logged and silently dropped from the rendered navigation.\n\n### Template hardening — `nav.mustache`\n\nAdded `rel=\"noopener noreferrer\"` to all navigation link anchor tags as a\ndefense-in-depth measure:\n\n```html\n<a class=\"nav-link\" href=\"{{link}}\" rel=\"noopener noreferrer\">{{display}}</a>\n```\n\nTests were added to verify that `javascript:` and `ftp://` URI",
+      "publishedAt": "2026-04-07T20:17:14Z",
+      "updatedAt": "2026-11-04T22:07:22Z",
+      "url": "https://github.com/advisories/GHSA-cpm7-cfpx-3hvp",
+      "references": [
+        "https://github.com/NationalSecurityAgency/emissary/security/advisories/GHSA-cpm7-cfpx-3hvp",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-35571",
+        "https://github.com/NationalSecurityAgency/emissary/pull/1293",
+        "https://github.com/NationalSecurityAgency/emissary/commit/e2078417464b9004620dde28dcbca2f73ea06c13",
+        "https://github.com/NationalSecurityAgency/emissary/releases/tag/8.39.0",
+        "https://github.com/advisories/GHSA-cpm7-cfpx-3hvp"
+      ],
+      "patchUrls": [
+        "https://github.com/NationalSecurityAgency/emissary/pull/1293",
+        "https://github.com/NationalSecurityAgency/emissary/commit/e2078417464b9004620dde28dcbca2f73ea06c13"
+      ],
+      "packages": [
+        {
+          "ecosystem": "maven",
+          "name": "gov.nsa.emissary:emissary",
+          "lt": "8.39.0",
+          "id": "CVE-2026-35571",
+          "ghsaId": "GHSA-cpm7-cfpx-3hvp",
+          "cve": "CVE-2026-35571",
+          "cwe": "CWE-79",
+          "sev": "medium",
+          "note": "Emissary has Stored XSS via Navigation Template Link Injection"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0019
+    },
+    {
       "id": "CVE-2026-128134",
       "ghsaId": "GHSA-7mxv-7h3q-9324",
       "cve": "CVE-2026-128134",
@@ -22806,45 +22883,6 @@
           "cwe": "CWE-1336",
           "sev": "medium",
           "note": "@dynatrace-oss/dynatrace-mcp-server has a workflow template injection via create_workflow_for_notification"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0018
-    },
-    {
-      "id": "CVE-2026-35571",
-      "ghsaId": "GHSA-cpm7-cfpx-3hvp",
-      "cve": "CVE-2026-35571",
-      "cwe": "CWE-79",
-      "sev": "medium",
-      "summary": "Emissary has Stored XSS via Navigation Template Link Injection",
-      "description": "## Summary\n\nMustache navigation templates interpolated configuration-controlled link values\ndirectly into `href` attributes without URL scheme validation. An administrator\nwho could modify the `navItems` configuration could inject `javascript:` URIs,\nenabling stored cross-site scripting (XSS) against other authenticated users\nviewing the Emissary web interface.\n\n## Details\n\n### Vulnerable code — `nav.mustache` (line 10)\n\n```html\n{{#navItems}}\n<li class=\"nav-item\">\n  <a class=\"nav-link\" href=\"{{link}}\">{{display}}</a>\n</li>\n{{/navItems}}\n```\n\nThe `{{link}}` value was rendered without any scheme validation. Mustache's\ndefault HTML escaping protects against injection of new HTML tags but does\n**not** prevent `javascript:` URIs in `href` attributes, since `javascript:`\ncontains no characters that HTML-escaping would alter.\n\n### Attack vector\n\nAn administrator sets a navigation item's link to:\n```\njavascript:alert(document.cookie)\n```\n\nAny authenticated user who clicks the navigation link executes the script in\ntheir browser context.\n\n### Impact\n\n- Session hijacking via cookie theft\n- Actions performed on behalf of the victim user\n- Requires administrative access to modify navigation configuration\n- Requires user interaction (clicking the malicious link)\n\n### Mitigating factors\n\n- Exploitation requires administrative access to modify the `navItems`\n  configuration\n- User interaction (clicking the link) is required\n- The Emissary web interface is typically accessed only by authenticated\n  operators within a trusted network\n\n## Remediation\n\nFixed in [PR #1293](https://github.com/NationalSecurityAgency/emissary/pull/1293),\nmerged into release 8.39.0.\n\n### Server-side link validation — `NavAction.java`\n\nAn allowlist regex was added that only permits `http://`, `https://`, or\nsite-relative (`/`) URLs:\n\n```java\nprivate static final Pattern VALID_LINK = Pattern.compile(\"^(https?:/)?/.*\");\n\nprivate static boolean isValidLink(String link) {\n    if (!VALID_LINK.matcher(link).matches()) {\n        logger.warn(\"Skipping invalid navigation link '{}'\", link);\n        return false;\n    }\n    return true;\n}\n```\n\nInvalid links are logged and silently dropped from the rendered navigation.\n\n### Template hardening — `nav.mustache`\n\nAdded `rel=\"noopener noreferrer\"` to all navigation link anchor tags as a\ndefense-in-depth measure:\n\n```html\n<a class=\"nav-link\" href=\"{{link}}\" rel=\"noopener noreferrer\">{{display}}</a>\n```\n\nTests were added to verify that `javascript:` and `ftp://` URI",
-      "publishedAt": "2026-04-07T20:17:14Z",
-      "updatedAt": "2026-11-04T22:07:22Z",
-      "url": "https://github.com/advisories/GHSA-cpm7-cfpx-3hvp",
-      "references": [
-        "https://github.com/NationalSecurityAgency/emissary/security/advisories/GHSA-cpm7-cfpx-3hvp",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-35571",
-        "https://github.com/NationalSecurityAgency/emissary/pull/1293",
-        "https://github.com/NationalSecurityAgency/emissary/commit/e2078417464b9004620dde28dcbca2f73ea06c13",
-        "https://github.com/NationalSecurityAgency/emissary/releases/tag/8.39.0",
-        "https://github.com/advisories/GHSA-cpm7-cfpx-3hvp"
-      ],
-      "patchUrls": [
-        "https://github.com/NationalSecurityAgency/emissary/pull/1293",
-        "https://github.com/NationalSecurityAgency/emissary/commit/e2078417464b9004620dde28dcbca2f73ea06c13"
-      ],
-      "packages": [
-        {
-          "ecosystem": "maven",
-          "name": "gov.nsa.emissary:emissary",
-          "lt": "8.39.0",
-          "id": "CVE-2026-35571",
-          "ghsaId": "GHSA-cpm7-cfpx-3hvp",
-          "cve": "CVE-2026-35571",
-          "cwe": "CWE-79",
-          "sev": "medium",
-          "note": "Emissary has Stored XSS via Navigation Template Link Injection"
         }
       ],
       "kev": false,
@@ -24239,44 +24277,6 @@
           "cwe": "CWE-78",
           "sev": "high",
           "note": "AVideo API vulnerable to OS command injection through an unescaped FFmpeg process keyword"
-        }
-      ],
-      "kev": false,
-      "epss": 0
-    },
-    {
-      "id": "CVE-2026-133469",
-      "ghsaId": "GHSA-2r3w-c2vx-fv5g",
-      "cve": "CVE-2026-133469",
-      "cwe": "CWE-287",
-      "sev": "critical",
-      "summary": "Xen Orchestra: Empty-object login token",
-      "description": "### Summary\n\nREST cookie parsing turns `authenticationToken=j:%7B%7D` into `{}`. REST authentication passes that object to the XO token provider without requiring a string. The token collection treats `{}` as an unfiltered lookup and returns its first token; the provider authenticates as that token's owner if it is unexpired. The authenticated `/rest/v0/users/me/authentication_tokens` route then returns reusable login token IDs.\n\n\n### Details\n\n1. In `packages/xo-server/src/api/session.mjs`, function  `signIn(credentials)` has **no `params` schema** (unlike the deprecated `signInWithToken`, which declares `token: { type: 'string' }`), so `credentials.token` can be any JSON value.\n2. `packages/xo-server/src/xo-mixins/authentication.mjs`, token provider:\n   ```js\n   this.registerAuthenticationProvider(async ({ token: tokenId }, { ip } = {}) => {\n     if (!tokenId) return          // {} is truthy → passes\n     const token = await app.getAuthenticationToken(tokenId)\n     ...\n     return { bypassOtp: true, expiration: token.expiration, userId: token.user_id }\n   ```\n3. `getAuthenticationToken(properties)` explicitly accepts an object, and `_getAuthenticationToken(id, properties)` does `this._tokens.first(properties ?? id)`.\n4. `Collection#first(properties)` -> `_get(properties)`; in `collection/redis.mjs`, `if (isEmpty(properties)) return redis.sMembers(prefix + '_ids')…` → **all tokens**. Non-empty objects on indexed fields (`user_id`, `client_id`) do an index lookup → token of the chosen user.\n5. HTTP paths: `index.mjs` (`req.cookies.token` → `isValidAuthenticationToken`), `xo-mixins/rest-api.mjs` and `@xen-orchestra/rest-api` middleware (`cookies.authenticationToken ?? cookies.token` → `authenticateUser({ token })`). `cookie-parser` turns `j:`-prefixed cookie values into parsed JSON, so `authenticationToken=j:{}` yields `{}`.\n\n\n### Proof of concept\n\nThe object cookie returned 200 with unexpired token IDs, and one ID worked on a fresh request as an admin account. The attacker does not choose which token the empty-object lookup returns. Authentication succeeds only if the token returned first is unexpired and belongs to an existing user; if it is expired or its user was deleted, the request fails without trying another token.\n\n```bash\ncurl -b 'authenticationToken=j:{}' https://<ip>/rest/v0/users\n```\n\n### Impact\n\nAn adversary can bypass authentication and perform actions with 'Admin' privilege. Xen Orchestra compromise can lead to arbitrary code execution on man",
-      "publishedAt": "2026-11-23T17:29:29Z",
-      "updatedAt": "2026-11-23T17:29:30Z",
-      "url": "https://github.com/advisories/GHSA-2r3w-c2vx-fv5g",
-      "references": [
-        "https://github.com/vatesfr/xen-orchestra/security/advisories/GHSA-2r3w-c2vx-fv5g",
-        "https://github.com/vatesfr/xen-orchestra/pull/10748",
-        "https://github.com/vatesfr/xen-orchestra/commit/50166fe3a49c02069d35ba9046ca4a1f77f4e11d",
-        "https://docs.vates.tech/security-advisories/advisories/2026/vates-sa-2026-062",
-        "https://github.com/advisories/GHSA-2r3w-c2vx-fv5g"
-      ],
-      "patchUrls": [
-        "https://github.com/vatesfr/xen-orchestra/pull/10748",
-        "https://github.com/vatesfr/xen-orchestra/commit/50166fe3a49c02069d35ba9046ca4a1f77f4e11d"
-      ],
-      "packages": [
-        {
-          "ecosystem": "npm",
-          "name": "xo-server",
-          "le": "5.7.4",
-          "id": "CVE-2026-133469",
-          "ghsaId": "GHSA-2r3w-c2vx-fv5g",
-          "cve": "CVE-2026-133469",
-          "cwe": "CWE-287",
-          "sev": "critical",
-          "note": "Xen Orchestra: Empty-object login token"
         }
       ],
       "kev": false,
