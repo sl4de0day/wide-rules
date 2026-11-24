@@ -1,6 +1,6 @@
 {
   "name": "wide-rules",
-  "version": "0.6211126",
+  "version": "0.7241126",
   "description": "The shared security rule and advisory database behind every Wide product",
   "type": "module",
   "main": "./src/index.js",

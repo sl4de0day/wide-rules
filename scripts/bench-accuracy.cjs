@@ -50,10 +50,11 @@ function scanCorpusWithRules(files, rules) {
       const fileHead = lines.slice(0, Math.min(lines.length, 15)).join("\n");
       for (const r of applicable) {
         if (!r.pattern) continue;
-        const re = new RegExp(r.pattern, r.flags || "");
+        const ruleFlags = r.flags !== undefined ? r.flags : "i";
+        const re = new RegExp(r.pattern, ruleFlags);
         if (!re.test(line)) continue;
         if (r["not-match"]) {
-          const nm = new RegExp(r["not-match"], r.flags || "");
+          const nm = new RegExp(r["not-match"], ruleFlags);
           if (nm.test(line)) continue;
           if ((r.id.startsWith("wide/xxe-") || r.id.startsWith("wide/client-crypto-")) && (nm.test(windowSlice) || nm.test(fileHead))) {
             continue;

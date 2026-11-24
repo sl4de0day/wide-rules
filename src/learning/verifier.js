@@ -128,8 +128,9 @@ export function verifyRuleCandidate(doc, options = {}) {
     return { ok: false, errors, warnings };
   }
 
-  const patternRe = new RegExp(doc.pattern, doc.flags || "");
-  const notMatchRe = doc["not-match"] ? new RegExp(doc["not-match"], doc.flags || "") : null;
+  const ruleFlags = doc.flags !== undefined ? doc.flags : "i";
+  const patternRe = new RegExp(doc.pattern, ruleFlags);
+  const notMatchRe = doc["not-match"] ? new RegExp(doc["not-match"], ruleFlags) : null;
   const matchesRule = (line) => patternRe.test(line) && !(notMatchRe && notMatchRe.test(line));
 
   const requireTests = options.requireTests !== false;

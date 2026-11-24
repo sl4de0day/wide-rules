@@ -35,6 +35,7 @@
       "files": [
         { "file": "app.py", "lang": "py", "content": "name = request.args.get(\"name\")\ncursor.execute(f\"SELECT * FROM users WHERE name = '{name}'\")\n" },
         { "file": "shell_true.py", "lang": "py", "content": "cmd = request.args.get(\"cmd\")\nsubprocess.run(cmd, shell=True)\n" },
+        { "file": "shell_true_space.py", "lang": "py", "content": "cmd = request.args.get(\"cmd\")\nsubprocess.run([cmd], shell= True)\n" },
         { "file": "shell_list.py", "lang": "py", "content": "cmd = request.args.get(\"cmd\")\nsubprocess.run([\"ls\", cmd])\n" },
         { "file": "pycomment.py", "lang": "py", "content": "# os.system(request.args.get(\"x\"))\n" },
         { "file": "main.go", "lang": "go", "content": "id := r.URL.Query().Get(\"id\")\nrows, _ := db.Query(\"SELECT * FROM t WHERE id = \" + id)\n" },
@@ -75,6 +76,7 @@
     { "file": "app/test_config.py", "line": "secret = \"aabbccddeeffgghh\"" },
     { "file": "app/test_data/config.py", "line": "secret = \"aabbccddeeffgghh\"" },
     { "file": "config.js", "line": "const key = \"-----BEGIN RSA PRIVATE KEY-----\";" },
+    { "file": "config.py", "line": "  -----BEGIN PRIVATE KEY-----" },
     { "file": "config.js", "line": "" },
     { "file": "config.js", "line": "const token = \"<API_TOKEN>\";" },
     { "file": "config.js", "line": "const token = \"dummy-ghp_9xK2mP7qR4tV8wZ1aB3cD5eF6gH8jL0nM2q\";" }

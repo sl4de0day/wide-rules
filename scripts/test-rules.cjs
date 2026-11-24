@@ -113,13 +113,22 @@ async function main() {
   assert.ok(aiNoEmojisRule);
   assert.ok(aiNoEmojisRule.instruction.includes('Do not use emojis'));
   const aiNoEmojisRegex = new RegExp(aiNoEmojisRule.pattern);
-  for (const sample of ['Hello 😀 World', 'Star ⭐', 'Info ℹ️', 'Keycap 1️⃣', 'Alarm ⏰']) {
+  for (const sample of [
+    'Hello \u{1F600} World',
+    'Star \u2B50',
+    'Info \u2139\uFE0F',
+    'Keycap 1\uFE0F\u20E3',
+    'Alarm \u23F0',
+  ]) {
     assert.ok(aiNoEmojisRegex.test(sample), `Regex missed emoji sample: ${sample}`);
   }
   assert.ok(!aiNoEmojisRegex.test('Hello World 1 + 2 -> 3'));
 
   const mod = await import(pathToFileURL(path.join(rootDir, 'src', 'index.js')).href);
-  assert.equal(mod.sanitizeAgentOutput('Hello 😀⭐ℹ️1️⃣👨‍💻🇷🇺 World'), 'Hello  World');
+  assert.equal(
+    mod.sanitizeAgentOutput('Hello \u{1F600}\u2B50\u2139\uFE0F1\uFE0F\u20E3\u{1F468}\u200D\u{1F4BB}\u{1F1F7}\u{1F1FA} World'),
+    'Hello  World',
+  );
   assert.equal(mod.sanitizeAgentOutput('Clean prose 1 + 2 -> 3'), 'Clean prose 1 + 2 -> 3');
 
   const aiNoLeakRule = bundle.rules.find(r => r.id === 'wide/ai-no-system-prompt-leak');
@@ -270,7 +279,7 @@ async function main() {
     assert.ok(fs.existsSync(learnRes.learned[0].filePath));
 
     const cacheDir = path.join(tmpDir, 'cache');
-    const mockRulesBody = JSON.stringify({ version: '0.6211126', rules: [goodCandidate] });
+    const mockRulesBody = JSON.stringify({ version: '0.7241126', rules: [goodCandidate] });
     const mockOsvBody = JSON.stringify(syncRes.db);
     const rulesSha = crypto.createHash('sha256').update(mockRulesBody).digest('hex');
     const osvSha = crypto.createHash('sha256').update(mockOsvBody).digest('hex');
