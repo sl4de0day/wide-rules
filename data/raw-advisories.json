@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-24T16:56:15.039Z",
-  "count": 562,
+  "generatedAt": "2026-11-25T01:53:26.305Z",
+  "count": 574,
   "advisories": [
     {
       "id": "CVE-2025-3248",
@@ -3910,6 +3910,46 @@
       "epss": 0.0741
     },
     {
+      "id": "CVE-2026-59726",
+      "ghsaId": "GHSA-c4hm-4h84-2cf3",
+      "cve": "CVE-2026-59726",
+      "cwe": "CWE-78",
+      "sev": "critical",
+      "summary": "ruflo MCP bridge allows unauthenticated remote code execution in default Docker Compose deployments",
+      "description": "The MCP bridge shipping in ruflo/docker-compose.yml exposed POST /mcp with no authentication. The docker-compose defaults bound the bridge and MongoDB to all interfaces. Combined, an unauthenticated network attacker could invoke tools/call → terminal_execute inside the bridge container, obtain a shell as node (uid 1000), read every provider API key from the container env, spawn attacker-controlled swarms on the victim's keys, and persist a poisoned pattern into the AgentDB learning store that steers future AI outputs for all users of the instance.\n\nThe tool blocklist that mentions terminal_execute was enforced only in the autopilot flow. POST /mcp and POST /mcp/:group bypassed it.\n\nFixed in ADR-166 Phase 1-3 (branch security/adr-166-mcp-bridge-rce, PR #2521):\n- Bind loopback by default; fail-closed on public-bind opt-in without MCP_AUTH_TOKEN\n- Bearer auth middleware (timingSafeEqual constant-time compare)\n- Server-side executeTool gate for terminal_execute (MCP_ENABLE_TERMINAL=true opt-in)\n- MongoDB --auth on by default; MONGO_INITDB_ROOT_PASSWORD required to boot\n- read_only container + tmpfs\n- CORS allowlist wiring\n- CI regression locks (static + runtime + compose defaults)\n\nOperators of any exposed instance MUST:\n1. Firewall :3001 and :27017 immediately\n2. Rotate OPENAI / GOOGLE / OPENROUTER / ANTHROPIC keys\n3. Audit the AgentDB pattern store for injected agentdb_pattern-store entries; purge poisoned patterns. A patched redeploy alone does NOT undo poisoning.\n4. Audit MongoDB for tampering\n\nCredit: [Eli Ainhorn](https://www.linkedin.com/in/eli-ainhorn), Senior AI Vulnerability Researcher @ [Noma Security](https://noma.security) \n\nReviewed by Dragan Spiridonov (ADR-166 co-author).",
+      "publishedAt": "2026-11-24T21:01:10Z",
+      "updatedAt": "2026-11-24T21:01:11Z",
+      "url": "https://github.com/advisories/GHSA-c4hm-4h84-2cf3",
+      "references": [
+        "https://github.com/ruvnet/ruflo/security/advisories/GHSA-c4hm-4h84-2cf3",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-59726",
+        "https://github.com/ruvnet/ruflo/pull/2521",
+        "https://github.com/ruvnet/ruflo/commit/d00a0a40cd8bdbca877ac7f675f416bdc69accd1",
+        "https://github.com/ruvnet/ruflo/blob/main/v3/docs/adr/ADR-166-mcp-bridge-unauthenticated-rce-remediation.md",
+        "https://github.com/ruvnet/ruflo/releases/tag/v3.16.3",
+        "https://github.com/advisories/GHSA-c4hm-4h84-2cf3"
+      ],
+      "patchUrls": [
+        "https://github.com/ruvnet/ruflo/pull/2521",
+        "https://github.com/ruvnet/ruflo/commit/d00a0a40cd8bdbca877ac7f675f416bdc69accd1"
+      ],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "ruflo",
+          "lt": "3.16.3",
+          "id": "CVE-2026-59726",
+          "ghsaId": "GHSA-c4hm-4h84-2cf3",
+          "cve": "CVE-2026-59726",
+          "cwe": "CWE-78",
+          "sev": "critical",
+          "note": "ruflo MCP bridge allows unauthenticated remote code execution in default Docker Compose deployments"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0624
+    },
+    {
       "id": "CVE-2026-50229",
       "ghsaId": "GHSA-pg42-rg8c-j886",
       "cve": "CVE-2026-50229",
@@ -4701,6 +4741,82 @@
       ],
       "kev": false,
       "epss": 0.0182
+    },
+    {
+      "id": "CVE-2026-63305",
+      "ghsaId": "GHSA-g9x9-q7qj-6mv5",
+      "cve": "CVE-2026-63305",
+      "cwe": "CWE-78",
+      "sev": "high",
+      "summary": "AVideo API FFmpeg process permits OS command injection via notifyCode/callback",
+      "description": "### Summary\n\nThe standalone FFmpeg execution endpoint `plugin/API/standAlone/ffmpeg.json.php` builds a shell command string that is passed to `execAsync()` and run via `nohup sh -c \"<command>\"`. When the decrypted `codeToExec` payload produces a non-empty `avideoPath`, the endpoint appends a completion hook of the form:\n\n```\n && php <script> notify=<escaped-json> notifyCode=<codeToExec->notifyCode> callback=<codeToExec->callback>\n```\n\nThe `notify` value on this line is wrapped with `escapeshellarg()`, but the two adjacent fields `notifyCode` and `callback` are concatenated raw. Both fields originate from the same decrypted, attacker-controlled `codeToExec` object as `ffmpegCommand`, but neither passes through the `sanitizeFFmpegCommand()` denylist (only `ffmpegCommand` does) and neither is shell-escaped. An attacker who can craft a valid encrypted payload can therefore inject arbitrary shell commands into the `sh -c` context by placing shell metacharacters in `callback` or `notifyCode`, achieving OS command execution as the web-server user.\n\nThis is a residual sibling of the recently hardened `sanitizeFFmpegCommand()` denylist: the denylist now strips `; | ` < > & $ ( ) \\n \\r { }` from `ffmpegCommand`, but the two sibling fields on the same completion-hook line were never routed through it nor escaped, even though the `notify` value beside them on the very same line already is escaped.\n\n### Vulnerable code\n\n`plugin/API/standAlone/ffmpeg.json.php` (master HEAD, around lines 406-412):\n\n```php\nif (!empty($output['avideoPath'])) {\n    if (file_exists($output['avideoPath'])) {\n        unlink($output['avideoPath']);\n    }\n    $outputJson = escapeshellarg(json_encode($output));\n    $ffmpegCommand .= \" && php \" . escapeshellarg(__DIR__ . \"/ffmpeg.json.php\") . \" notify={$outputJson} notifyCode={$codeToExec->notifyCode} callback={$codeToExec->callback}\";\n}\n```\n\n`$outputJson` is escaped; `$codeToExec->notifyCode` and `$codeToExec->callback` are interpolated raw.\n\nThe only field that is sanitized earlier is `ffmpegCommand` (line ~129):\n\n```php\n$ffmpegCommand = !empty($codeToExec->ffmpegCommand) ? sanitizeFFmpegCommand($codeToExec->ffmpegCommand) : '';\n```\n\n`sanitizeFFmpegCommand()` (`plugin/API/standAlone/functions.php`, line ~105) strips shell metacharacters:\n\n```php\n$command = preg_replace('/[;|`<>&$()\\n\\r{}]/', '', $command);\n```\n\n`notifyCode` / `callback` never touch this function.\n\nThe composed string flows to `execAsync()` in `objects/functionsExec.php` (around ",
+      "publishedAt": "2026-11-24T20:53:28Z",
+      "updatedAt": "2026-11-24T20:53:29Z",
+      "url": "https://github.com/advisories/GHSA-g9x9-q7qj-6mv5",
+      "references": [
+        "https://github.com/WWBN/AVideo/security/advisories/GHSA-g9x9-q7qj-6mv5",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-63305",
+        "https://github.com/WWBN/AVideo/commit/56cd4e90983bbd8f800f42be29718f7ee2ca3a5a",
+        "https://github.com/WWBN/AVideo/releases/tag/v29.1.0",
+        "https://www.vulncheck.com/advisories/avideo-through-os-command-injection-via-ffmpeg-json-php",
+        "https://github.com/advisories/GHSA-g9x9-q7qj-6mv5"
+      ],
+      "patchUrls": [
+        "https://github.com/WWBN/AVideo/commit/56cd4e90983bbd8f800f42be29718f7ee2ca3a5a"
+      ],
+      "packages": [
+        {
+          "ecosystem": "composer",
+          "name": "wwbn/avideo",
+          "lt": "29.1.0",
+          "id": "CVE-2026-63305",
+          "ghsaId": "GHSA-g9x9-q7qj-6mv5",
+          "cve": "CVE-2026-63305",
+          "cwe": "CWE-78",
+          "sev": "high",
+          "note": "AVideo API FFmpeg process permits OS command injection via notifyCode/callback"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0177
+    },
+    {
+      "id": "CVE-2026-63304",
+      "ghsaId": "GHSA-j44m-77cc-p3cc",
+      "cve": "CVE-2026-63304",
+      "cwe": "CWE-78",
+      "sev": "high",
+      "summary": "AVideo API vulnerable to OS command injection through an unescaped FFmpeg process keyword",
+      "description": "### Summary\n\nThe helper `listFFmpegProcesses($keyword)` in `plugin/API/standAlone/functions.php` builds a shell pipeline by interpolating `$keyword` inside single quotes and running it with `exec()`:\n\n```php\n$command .= \" | grep '$keyword'\";\nexec($command, $output, $status);\n```\n\nThe two callers in `plugin/API/standAlone/ffmpeg.json.php` (the `list` mode and the `isKeywordRunning` mode) pass the RAW decrypted `codeToExec` field, not the sanitized `$keyword` variable that the endpoint allowlists elsewhere. Because the value is placed inside a single-quoted shell context with no escaping, a payload that closes the quote (for example `x'; touch /tmp/marker #`) breaks out and injects an arbitrary command that runs via `exec()`'s `/bin/sh -c`. An attacker who can craft a valid encrypted payload achieves OS command execution as the web-server user.\n\n### Vulnerable code\n\nSink — `plugin/API/standAlone/functions.php`, `listFFmpegProcesses()` (around lines 139-147):\n\n```php\nfunction listFFmpegProcesses($keyword = '')\n{\n    $command = \"ps -eo pid,etime,%cpu,%mem,cmd | grep '[f]fmpeg'\";\n\n    if (!empty($keyword)) {\n        $command .= \" | grep '$keyword'\";   // $keyword interpolated inside single quotes, unescaped\n    }\n\n    exec($command, $output, $status);       // runs via /bin/sh -c\n```\n\nCallers — `plugin/API/standAlone/ffmpeg.json.php` pass the RAW decrypted field, bypassing the allowlisting applied to the local `$keyword` variable. That local variable is built at line ~136 as `$keyword = preg_replace('/[^a-zA-Z0-9_-]/', '', $codeToExec->keyword)`, but the two callers below never use it:\n\n```php\n// list mode (line ~221)\n$list = listFFmpegProcesses($codeToExec->keyword);\n\n// isKeywordRunning mode (line ~341)\n$list = listFFmpegProcesses($codeToExec->isKeywordRunning);\n```\n\nNeither mode is gated by the `$isStandAlone` check that guards the `deleteFolder` / `deleteFile` modes, so both run on any AVideo instance.\n\n### Reachability\n\nReached by sending a `codeToExec` payload with either `list = 1` and a malicious `keyword`, or with a malicious `isKeywordRunning` value. Both modes call `listFFmpegProcesses()` with the raw field before any allowlist is applied to it.\n\n### Privilege required\n\nSame trust boundary as the parent command-injection fix in this endpoint: an attacker who can craft a valid encrypted `codeToExec` payload with a valid `APISecret`. `_decryptString()` calls the platform `decryptString` API (AES-256-CBC; key = `hash('sha256', $global['saltV2'])`, iv = ",
+      "publishedAt": "2026-11-23T22:06:28Z",
+      "updatedAt": "2026-11-24T20:54:45Z",
+      "url": "https://github.com/advisories/GHSA-j44m-77cc-p3cc",
+      "references": [
+        "https://github.com/WWBN/AVideo/security/advisories/GHSA-j44m-77cc-p3cc",
+        "https://github.com/WWBN/AVideo/commit/7559ddf72f48684cc40ae78be9cebcaa07f5fa06",
+        "https://github.com/WWBN/AVideo/releases/tag/v29.1.0",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-63304",
+        "https://www.vulncheck.com/advisories/avideo-through-os-command-injection-via-listffmpegprocesses",
+        "https://github.com/advisories/GHSA-j44m-77cc-p3cc"
+      ],
+      "patchUrls": [
+        "https://github.com/WWBN/AVideo/commit/7559ddf72f48684cc40ae78be9cebcaa07f5fa06"
+      ],
+      "packages": [
+        {
+          "ecosystem": "composer",
+          "name": "wwbn/avideo",
+          "lt": "29.1.0",
+          "id": "CVE-2026-63304",
+          "ghsaId": "GHSA-j44m-77cc-p3cc",
+          "cve": "CVE-2026-63304",
+          "cwe": "CWE-78",
+          "sev": "high",
+          "note": "AVideo API vulnerable to OS command injection through an unescaped FFmpeg process keyword"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0173
     },
     {
       "id": "CVE-2023-50447",
@@ -9004,6 +9120,62 @@
       "epss": 0.0062
     },
     {
+      "id": "CVE-2026-59192",
+      "ghsaId": "GHSA-48qj-5wxh-m8hc",
+      "cve": "CVE-2026-59192",
+      "cwe": "CWE-502",
+      "sev": "medium",
+      "summary": "Cakephp twig-view unserialize Twig filter allows arbitrary object deserialization",
+      "description": "### Impact\nThe `unserialize` filter has no restriction on which classes are allowed. This can be used as a deserialization remote-code-execution gadget.\n\n### Patches\n1.3.3 and 2.1.2 contain a fix for this issue. The fix may impact backwards compatibility if you are relying on deserializing PHP objects in your templates.\n\n### Workarounds\nDon't use the `unserialize` filter.",
+      "publishedAt": "2026-11-24T17:42:51Z",
+      "updatedAt": "2026-11-24T17:42:52Z",
+      "url": "https://github.com/advisories/GHSA-48qj-5wxh-m8hc",
+      "references": [
+        "https://github.com/cakephp/twig-view/security/advisories/GHSA-48qj-5wxh-m8hc",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-59192",
+        "https://github.com/cakephp/twig-view/pull/119",
+        "https://github.com/cakephp/twig-view/pull/120",
+        "https://github.com/cakephp/twig-view/commit/65f5035ee65e76925242fdca2dc2bb0d732b6c1d",
+        "https://github.com/cakephp/twig-view/commit/99a59407b138a0efff0ce3896cbf67e71a9c9cd3",
+        "https://github.com/cakephp/twig-view/releases/tag/1.3.3",
+        "https://github.com/cakephp/twig-view/releases/tag/2.1.2",
+        "https://github.com/advisories/GHSA-48qj-5wxh-m8hc"
+      ],
+      "patchUrls": [
+        "https://github.com/cakephp/twig-view/pull/119",
+        "https://github.com/cakephp/twig-view/pull/120",
+        "https://github.com/cakephp/twig-view/commit/65f5035ee65e76925242fdca2dc2bb0d732b6c1d",
+        "https://github.com/cakephp/twig-view/commit/99a59407b138a0efff0ce3896cbf67e71a9c9cd3"
+      ],
+      "packages": [
+        {
+          "ecosystem": "composer",
+          "name": "cakephp/twig-view",
+          "lt": "1.3.3",
+          "id": "CVE-2026-59192",
+          "ghsaId": "GHSA-48qj-5wxh-m8hc",
+          "cve": "CVE-2026-59192",
+          "cwe": "CWE-502",
+          "sev": "medium",
+          "note": "Cakephp twig-view unserialize Twig filter allows arbitrary object deserialization"
+        },
+        {
+          "ecosystem": "composer",
+          "name": "cakephp/twig-view",
+          "ge": "2.0.0",
+          "lt": "2.1.2",
+          "id": "CVE-2026-59192",
+          "ghsaId": "GHSA-48qj-5wxh-m8hc",
+          "cve": "CVE-2026-59192",
+          "cwe": "CWE-502",
+          "sev": "medium",
+          "note": "Cakephp twig-view unserialize Twig filter allows arbitrary object deserialization"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0061
+    },
+    {
       "id": "CVE-2026-83816",
       "ghsaId": "GHSA-3mgh-93r5-r7jf",
       "cve": "CVE-2026-83816",
@@ -12358,6 +12530,58 @@
       "epss": 0.0049
     },
     {
+      "id": "CVE-2026-59191",
+      "ghsaId": "GHSA-hq9r-72jq-2pxp",
+      "cve": "CVE-2026-59191",
+      "cwe": "CWE-22",
+      "sev": "medium",
+      "summary": "TwigView FileLoader may allow arbitrary file reads through user-controlled template paths",
+      "description": "### Impact\nIf `FileLoader::findTemplate()` is supplied un-validated user controlled data, arbitrary files can be read.\n\n### Patches\n1.3.3 and 2.1.2 contain a fix for this issue.\n\n### Workarounds\nDon't supply user controlled data to `include` and `extends` tags.",
+      "publishedAt": "2026-11-24T22:39:23Z",
+      "updatedAt": "2026-11-24T22:39:23Z",
+      "url": "https://github.com/advisories/GHSA-hq9r-72jq-2pxp",
+      "references": [
+        "https://github.com/cakephp/twig-view/security/advisories/GHSA-hq9r-72jq-2pxp",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-59191",
+        "https://github.com/cakephp/twig-view/commit/1c5107c9f562ab285273ceafd1c28bf314faa6d5",
+        "https://github.com/cakephp/twig-view/commit/65f5035ee65e76925242fdca2dc2bb0d732b6c1d",
+        "https://github.com/cakephp/twig-view/releases/tag/1.3.3",
+        "https://github.com/cakephp/twig-view/releases/tag/2.1.2",
+        "https://github.com/advisories/GHSA-hq9r-72jq-2pxp"
+      ],
+      "patchUrls": [
+        "https://github.com/cakephp/twig-view/commit/1c5107c9f562ab285273ceafd1c28bf314faa6d5",
+        "https://github.com/cakephp/twig-view/commit/65f5035ee65e76925242fdca2dc2bb0d732b6c1d"
+      ],
+      "packages": [
+        {
+          "ecosystem": "composer",
+          "name": "cakephp/twig-view",
+          "lt": "1.3.3",
+          "id": "CVE-2026-59191",
+          "ghsaId": "GHSA-hq9r-72jq-2pxp",
+          "cve": "CVE-2026-59191",
+          "cwe": "CWE-22",
+          "sev": "medium",
+          "note": "TwigView FileLoader may allow arbitrary file reads through user-controlled template paths"
+        },
+        {
+          "ecosystem": "composer",
+          "name": "cakephp/twig-view",
+          "ge": "2.0.0",
+          "lt": "2.1.2",
+          "id": "CVE-2026-59191",
+          "ghsaId": "GHSA-hq9r-72jq-2pxp",
+          "cve": "CVE-2026-59191",
+          "cwe": "CWE-22",
+          "sev": "medium",
+          "note": "TwigView FileLoader may allow arbitrary file reads through user-controlled template paths"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0048
+    },
+    {
       "id": "CVE-2026-69133",
       "ghsaId": "GHSA-cg26-4c6j-2x8h",
       "cve": "CVE-2026-69133",
@@ -13132,6 +13356,58 @@
       ],
       "kev": false,
       "epss": 0.0047
+    },
+    {
+      "id": "CVE-2026-84307",
+      "ghsaId": "GHSA-xwpv-pqxp-5v36",
+      "cve": "CVE-2026-84307",
+      "cwe": "CWE-204",
+      "sev": "low",
+      "summary": "Filament: Password validity disclosure for accounts denied panel access on login page",
+      "description": "When multi-factor authentication is enabled, the login page presents the multi-factor challenge before evaluating `canAccessPanel()`. For an account that `canAccessPanel()` denies, submitting the correct password renders the challenge while an incorrect password returns the generic failure message, allowing an unauthenticated attacker to confirm that a password is valid for that account. When email-based multi-factor authentication is used, a login code is also sent to the account holder.\n\nThis issue **only** applies to accounts that both have multi-factor authentication enabled and are denied by `canAccessPanel()`. Authentication is not bypassed as the check still runs after the challenge, and no session is created.",
+      "publishedAt": "2026-09-01T21:29:00Z",
+      "updatedAt": "2026-11-24T17:58:08Z",
+      "url": "https://github.com/advisories/GHSA-xwpv-pqxp-5v36",
+      "references": [
+        "https://github.com/filamentphp/filament/security/advisories/GHSA-xwpv-pqxp-5v36",
+        "https://github.com/filamentphp/filament/pull/20308",
+        "https://github.com/filamentphp/filament/commit/ad5aacbc6d089b3dd7243ec1c1f8ab19dff7c3a1",
+        "https://github.com/filamentphp/filament/releases/tag/v4.12.5",
+        "https://github.com/filamentphp/filament/releases/tag/v5.7.5",
+        "https://github.com/advisories/GHSA-xwpv-pqxp-5v36"
+      ],
+      "patchUrls": [
+        "https://github.com/filamentphp/filament/pull/20308",
+        "https://github.com/filamentphp/filament/commit/ad5aacbc6d089b3dd7243ec1c1f8ab19dff7c3a1"
+      ],
+      "packages": [
+        {
+          "ecosystem": "composer",
+          "name": "filament/filament",
+          "ge": "4.0.0",
+          "lt": "4.12.5",
+          "id": "CVE-2026-84307",
+          "ghsaId": "GHSA-xwpv-pqxp-5v36",
+          "cve": "CVE-2026-84307",
+          "cwe": "CWE-204",
+          "sev": "low",
+          "note": "Filament: Password validity disclosure for accounts denied panel access on login page"
+        },
+        {
+          "ecosystem": "composer",
+          "name": "filament/filament",
+          "ge": "5.0.0",
+          "lt": "5.7.5",
+          "id": "CVE-2026-84307",
+          "ghsaId": "GHSA-xwpv-pqxp-5v36",
+          "cve": "CVE-2026-84307",
+          "cwe": "CWE-204",
+          "sev": "low",
+          "note": "Filament: Password validity disclosure for accounts denied panel access on login page"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0046
     },
     {
       "id": "CVE-2026-77423",
@@ -14595,6 +14871,67 @@
       ],
       "kev": false,
       "epss": 0.0044
+    },
+    {
+      "id": "CVE-2026-59818",
+      "ghsaId": "GHSA-3wh4-j44w-pg92",
+      "cve": "CVE-2026-59818",
+      "cwe": "CWE-295",
+      "sev": "medium",
+      "summary": "etcd: CRL enforcement bypass on gRPC listener when `--listen-client-http-urls` is configured",
+      "description": "### Impact\n_What kind of vulnerability is it? Who is impacted?_\n\nWhen etcd is configured with `--listen-client-http-urls` to split the HTTP and gRPC client endpoints onto separate listeners, the `--client-crl-file` Certificate Revocation List is not enforced on the gRPC listener. A client presenting a revoked certificate is correctly rejected by the HTTP endpoint but continues to authenticate successfully over gRPC.\n\n### Patches\n_Has the problem been patched? What versions should users upgrade to?_\n\nThis vulnerability is patched in the following versions:\n\n- etcd 3.6.13\n- etcd 3.5.32\n\n### Workarounds\n_Is there a way for users to fix or remediate the vulnerability without upgrading?_\n\nIf upgrading is not immediately possible, reduce exposure by restricting network access to etcd client ports using firewall rules or network policy so that only trusted components can reach the server. This limits the pool of clients that could exploit a revoked certificate but does not enforce CRL revocation.\n\n### Reporter\n\nLuis Toro ([@lobuhi](https://github.com/lobuhi) on Github)",
+      "publishedAt": "2026-11-24T21:09:38Z",
+      "updatedAt": "2026-11-24T21:09:39Z",
+      "url": "https://github.com/advisories/GHSA-3wh4-j44w-pg92",
+      "references": [
+        "https://github.com/etcd-io/etcd/security/advisories/GHSA-3wh4-j44w-pg92",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-59818",
+        "https://github.com/etcd-io/etcd/pull/22007",
+        "https://github.com/etcd-io/etcd/pull/22021",
+        "https://github.com/etcd-io/etcd/pull/22025",
+        "https://github.com/etcd-io/etcd/commit/2308ce1578064641d4d67c40f0487309267d1bef",
+        "https://github.com/etcd-io/etcd/commit/24838af5a53dd0245adced920e42a9bf0e7a267f",
+        "https://github.com/etcd-io/etcd/commit/8221ae82bc25d4d55ca64382207b69be71038cbb",
+        "https://github.com/etcd-io/etcd/blob/main/CHANGELOG/CHANGELOG-3.5.md#v3532-2026-07-01",
+        "https://github.com/etcd-io/etcd/blob/main/CHANGELOG/CHANGELOG-3.6.md#v3613-2026-07-01",
+        "https://github.com/etcd-io/etcd/releases/tag/v3.5.32",
+        "https://github.com/etcd-io/etcd/releases/tag/v3.6.13"
+      ],
+      "patchUrls": [
+        "https://github.com/etcd-io/etcd/pull/22007",
+        "https://github.com/etcd-io/etcd/pull/22021",
+        "https://github.com/etcd-io/etcd/pull/22025",
+        "https://github.com/etcd-io/etcd/commit/2308ce1578064641d4d67c40f0487309267d1bef",
+        "https://github.com/etcd-io/etcd/commit/24838af5a53dd0245adced920e42a9bf0e7a267f",
+        "https://github.com/etcd-io/etcd/commit/8221ae82bc25d4d55ca64382207b69be71038cbb"
+      ],
+      "packages": [
+        {
+          "ecosystem": "go",
+          "name": "go.etcd.io/etcd/v3",
+          "lt": "3.5.32",
+          "id": "CVE-2026-59818",
+          "ghsaId": "GHSA-3wh4-j44w-pg92",
+          "cve": "CVE-2026-59818",
+          "cwe": "CWE-295",
+          "sev": "medium",
+          "note": "etcd: CRL enforcement bypass on gRPC listener when `--listen-client-http-urls` is configured"
+        },
+        {
+          "ecosystem": "go",
+          "name": "go.etcd.io/etcd/v3",
+          "ge": "3.6.0-alpha.0",
+          "lt": "3.6.13",
+          "id": "CVE-2026-59818",
+          "ghsaId": "GHSA-3wh4-j44w-pg92",
+          "cve": "CVE-2026-59818",
+          "cwe": "CWE-295",
+          "sev": "medium",
+          "note": "etcd: CRL enforcement bypass on gRPC listener when `--listen-client-http-urls` is configured"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0043
     },
     {
       "id": "CVE-2026-104129",
@@ -18174,6 +18511,44 @@
       ],
       "kev": false,
       "epss": 0.0034
+    },
+    {
+      "id": "CVE-2026-59831",
+      "ghsaId": "GHSA-8cg3-r6g9-fpg2",
+      "cve": "CVE-2026-59831",
+      "cwe": "CWE-20",
+      "sev": "medium",
+      "summary": "GitHub CLI gh codespace jupyter may allow code execution via unvalidated URLs from malicious Codespaces",
+      "description": "### Summary\n\nA security vulnerability has been identified in GitHub CLI that could allow remote code execution when users connect to a malicious Codespace using the `gh codespace jupyter` command. The command opens JupyterLab by launching a URL in the user's browser, but that URL is supplied by a process running inside the Codespace and the CLI opens it without validating it.\n\nThe browser launcher accepts `vscode://` and `vscode-insiders://` links, so a malicious Codespace can return a crafted `vscode://` URL. The CLI opens the link, the operating system hands it to VS Code, and VS Code acts on it, which can lead to code execution on the user's workstation.\n\nThis is a variant of [CVE-2024-52308](https://github.com/advisories/GHSA-p2h2-3vg9-4p87). That remediation validated the SSH connection details for `gh codespace ssh` and `gh codespace logs`, but did not cover the equivalent Jupyter code path.\n\n### Details\n\nThe vulnerability stems from the way GitHub CLI handles the server URL returned when starting a remote JupyterLab server:\n\n1. A user runs `gh codespace jupyter -c <name>`, expecting a normal `https://` JupyterLab page.\n2. The CLI retrieves a server URL from a process inside the Codespace and opens it in the user's browser without confirming that it is a web address.\n3. A malicious Codespace returns a `vscode://` link in place of the expected JupyterLab address. The operating system passes the link to VS Code.\n4. VS Code acts on the link. With a single trust prompt, this can result in code execution on the user's workstation.\n\nThe CLI trusts the URL provided by the Codespace and opens it as-is, without confirming that it is a loopback JupyterLab web address. The equivalent SSH commands received this validation in the CVE-2024-52308 fix, but the Jupyter command was not covered.\n\nIn `v2.96.0`, the GitHub CLI validates the Jupyter server URL before opening it, accepting only loopback `http` and `https` addresses.\n\n### Impact\n\nAny user who runs `gh codespace jupyter` against an untrusted Codespace.\n\nSuccessful exploitation requires the victim to accept one VS Code \"open URL\" or Workspace Trust prompt.\n\n## Remediation and Mitigation\n\n1. Upgrade `gh` to `v2.96.0`.\n2. Exercise caution when using `gh codespace jupyter` with untrusted Codespaces. Prefer Codespaces created from trusted sources, and prefer default or pre-built devcontainers.",
+      "publishedAt": "2026-11-24T22:26:25Z",
+      "updatedAt": "2026-11-24T22:26:26Z",
+      "url": "https://github.com/advisories/GHSA-8cg3-r6g9-fpg2",
+      "references": [
+        "https://github.com/cli/cli/security/advisories/GHSA-8cg3-r6g9-fpg2",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-59831",
+        "https://github.com/cli/cli/commit/b300f2ec7ec9dc9addc39b2ad88c54097ded7ca0",
+        "https://github.com/cli/cli/releases/tag/v2.96.0",
+        "https://github.com/advisories/GHSA-8cg3-r6g9-fpg2"
+      ],
+      "patchUrls": [
+        "https://github.com/cli/cli/commit/b300f2ec7ec9dc9addc39b2ad88c54097ded7ca0"
+      ],
+      "packages": [
+        {
+          "ecosystem": "go",
+          "name": "github.com/cli/cli/v2",
+          "ge": "2.10.0",
+          "lt": "2.96.0",
+          "id": "CVE-2026-59831",
+          "ghsaId": "GHSA-8cg3-r6g9-fpg2",
+          "cve": "CVE-2026-59831",
+          "cwe": "CWE-20",
+          "sev": "medium",
+          "note": "GitHub CLI gh codespace jupyter may allow code execution via unvalidated URLs from malicious Codespaces"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0033
     },
     {
       "id": "CVE-2026-77377",
@@ -22358,6 +22733,45 @@
       "epss": 0.002
     },
     {
+      "id": "CVE-2026-64855",
+      "ghsaId": "GHSA-859w-52fx-hcm6",
+      "cve": "CVE-2026-64855",
+      "cwe": "CWE-295",
+      "sev": "high",
+      "summary": "soapbar: verify_envelope_bsp accepts an unauthenticated embedded certificate (signature forgery / authentication bypass)",
+      "description": "### Impact\n\n`verify_envelope_bsp()` derived its trust anchor from the message it was\nverifying. It read the X.509 certificate out of the caller-untrusted\n`wsse:BinarySecurityToken`, validated **only** that certificate's not-before /\nnot-after dates, and then verified the signature against that same certificate.\nThere was no CA-chain validation, no issuer/subject allowlist, and no pinning.\n\nA successful `verify_envelope_bsp()` therefore proved only that the envelope was\nsigned by *whoever supplied the embedded certificate* — never that it was signed\nby a *trusted* party. An attacker who mints their own certificate, signs a\nforged envelope, and embeds that certificate in the token passes verification.\nAny consumer that treats a successful BSP verification as authentication can be\nimpersonated (signature forgery / authentication bypass).\n\n`verify_envelope()` (which pins a caller-supplied `x509_cert`) was **not**\naffected — the flaw was specific to the BSP variant whose trust anchor came\nfrom the message.\n\n### Affected versions\n\nsoapbar `< 0.13.0` (all published versions exposing `verify_envelope_bsp`).\n\n### Patches\n\nFixed in **0.13.0**. `verify_envelope_bsp` now fails closed unless the caller\nanchors trust:\n\n- `trusted_certs=[...]` — pin the expected signer certificate(s); the embedded\n  certificate must equal one of them.\n- `ca_certs=[...]` — accept certificates directly issued by trusted CA(s).\n\nWith neither supplied, verification raises instead of trusting the message's own\ncertificate. The trust anchor is checked before the signature is relied upon.\n`verify_cert_trust=False` restores the old (insecure) behaviour explicitly.\n\n### Workarounds\n\nBefore upgrading:\n\n- Do not treat a successful `verify_envelope_bsp()` as authentication.\n- Prefer `verify_envelope(..., x509_cert=<pinned cert>)`, which pins the\n  expected certificate.\n- If BSP is required, validate the embedded certificate against your own trust\n  store before acting on the verification result.",
+      "publishedAt": "2026-11-24T22:41:44Z",
+      "updatedAt": "2026-11-24T22:41:47Z",
+      "url": "https://github.com/advisories/GHSA-859w-52fx-hcm6",
+      "references": [
+        "https://github.com/hitoshyamamoto/soapbar/security/advisories/GHSA-859w-52fx-hcm6",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-64855",
+        "https://github.com/hitoshyamamoto/soapbar/pull/71",
+        "https://github.com/hitoshyamamoto/soapbar/commit/8daaf221c1a681e6656a580b01f89f155ad97200",
+        "https://github.com/hitoshyamamoto/soapbar/releases/tag/v0.13.0",
+        "https://github.com/advisories/GHSA-859w-52fx-hcm6"
+      ],
+      "patchUrls": [
+        "https://github.com/hitoshyamamoto/soapbar/pull/71",
+        "https://github.com/hitoshyamamoto/soapbar/commit/8daaf221c1a681e6656a580b01f89f155ad97200"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "soapbar",
+          "lt": "0.13.0",
+          "id": "CVE-2026-64855",
+          "ghsaId": "GHSA-859w-52fx-hcm6",
+          "cve": "CVE-2026-64855",
+          "cwe": "CWE-295",
+          "sev": "high",
+          "note": "soapbar: verify_envelope_bsp accepts an unauthenticated embedded certificate (signature forgery / authentication bypass)"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0019
+    },
+    {
       "id": "CVE-2026-77331",
       "ghsaId": "GHSA-72jh-722p-rqr3",
       "cve": "CVE-2026-77331",
@@ -24244,6 +24658,80 @@
       ],
       "kev": false,
       "epss": 0.0009
+    },
+    {
+      "id": "GHSA-jp3c-6v3g-mpxv",
+      "ghsaId": "GHSA-jp3c-6v3g-mpxv",
+      "cve": null,
+      "cwe": "CWE-1284",
+      "sev": "high",
+      "summary": "github.com/insomniacslk/dhcp permits denial of service through a malformed IPv4 payload length",
+      "description": "In github.com/insomniacslk/dhcp/dhcpv4/nclient4, BroadcastRawUDPConn.ReadFrom does not validate that the IPv4 payload length is sufficient to hold a UDP header before calculating the DHCP payload length. A frame with an IPv4 total-length field specifying fewer than eight payload bytes results in a negative DHCP length, causing a panic in buf.Consume due to a negative slice bound.",
+      "publishedAt": "2026-11-24T21:13:37Z",
+      "updatedAt": "2026-11-24T21:13:37Z",
+      "url": "https://github.com/advisories/GHSA-jp3c-6v3g-mpxv",
+      "references": [
+        "https://github.com/insomniacslk/dhcp/pull/583",
+        "https://github.com/insomniacslk/dhcp/commit/c76316d4aa825673b208730779843d0711021e81",
+        "https://pkg.go.dev/vuln/GO-2026-6237",
+        "https://github.com/advisories/GHSA-jp3c-6v3g-mpxv"
+      ],
+      "patchUrls": [
+        "https://github.com/insomniacslk/dhcp/pull/583",
+        "https://github.com/insomniacslk/dhcp/commit/c76316d4aa825673b208730779843d0711021e81"
+      ],
+      "packages": [
+        {
+          "ecosystem": "go",
+          "name": "github.com/insomniacslk/dhcp",
+          "ge": "0.0.0-20190522091526-5dce45b2b680",
+          "lt": "0.0.0-20260719225207-c76316d4aa82",
+          "id": "GHSA-jp3c-6v3g-mpxv",
+          "ghsaId": "GHSA-jp3c-6v3g-mpxv",
+          "cwe": "CWE-1284",
+          "sev": "high",
+          "note": "github.com/insomniacslk/dhcp permits denial of service through a malformed IPv4 payload length"
+        }
+      ],
+      "kev": false,
+      "epss": 0
+    },
+    {
+      "id": "GHSA-jrxj-9mhw-55wc",
+      "ghsaId": "GHSA-jrxj-9mhw-55wc",
+      "cve": null,
+      "cwe": "CWE-78",
+      "sev": "critical",
+      "summary": "Duplicate Advisory: AVideo API FFmpeg process permits OS command injection via notifyCode/callback",
+      "description": "### Duplicate Advisory\nThis advisory has been withdrawn because it is a duplicate of GHSA-g9x9-q7qj-6mv5. This link is maintained to preserve external references.\n\n### Original Description\n\nAVideo through 29.0 contains an OS command injection vulnerability in the ffmpeg.json.php endpoint where notifyCode and callback parameters are concatenated into a shell command without escaping. Attackers who can craft a valid encrypted payload can inject arbitrary shell metacharacters into these fields to execute OS commands as the web-server user.",
+      "publishedAt": "2026-07-16T15:33:10Z",
+      "updatedAt": "2026-11-24T20:52:51Z",
+      "url": "https://github.com/advisories/GHSA-jrxj-9mhw-55wc",
+      "references": [
+        "https://github.com/WWBN/AVideo/security/advisories/GHSA-g9x9-q7qj-6mv5",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-63305",
+        "https://www.vulncheck.com/advisories/avideo-through-os-command-injection-via-ffmpeg-json-php",
+        "https://github.com/WWBN/AVideo/commit/56cd4e90983bbd8f800f42be29718f7ee2ca3a5a",
+        "https://github.com/WWBN/AVideo/releases/tag/v29.1.0",
+        "https://github.com/advisories/GHSA-jrxj-9mhw-55wc"
+      ],
+      "patchUrls": [
+        "https://github.com/WWBN/AVideo/commit/56cd4e90983bbd8f800f42be29718f7ee2ca3a5a"
+      ],
+      "packages": [
+        {
+          "ecosystem": "composer",
+          "name": "wwbn/avideo",
+          "lt": "29.1.0",
+          "id": "GHSA-jrxj-9mhw-55wc",
+          "ghsaId": "GHSA-jrxj-9mhw-55wc",
+          "cwe": "CWE-78",
+          "sev": "critical",
+          "note": "Duplicate Advisory: AVideo API FFmpeg process permits OS command injection via notifyCode/callback"
+        }
+      ],
+      "kev": false,
+      "epss": 0
     },
     {
       "id": "CVE-2026-63492",
@@ -27217,6 +27705,39 @@
       ],
       "kev": false,
       "epss": 0.002
+    },
+    {
+      "id": "GHSA-jjpq-qx77-qjwj",
+      "ghsaId": "GHSA-jjpq-qx77-qjwj",
+      "cve": null,
+      "cwe": "CWE-78",
+      "sev": "critical",
+      "summary": "Duplicate Advisory: AVideo API vulnerable to OS command injection through an unescaped FFmpeg process keyword",
+      "description": "### Duplicate Advisory\nThis advisory has been withdrawn because it is a duplicate of GHSA-j44m-77cc-p3cc. This link is maintained to preserve external references.\n\n### Original Description\nAVideo through 29.0 contains an OS command injection vulnerability in plugin/API/standAlone/functions.php where the listFFmpegProcesses() function interpolates unsanitized keyword parameters inside single quotes without escaping. Attackers who can craft a valid encrypted codeToExec payload can break out of the single-quoted grep context and execute arbitrary OS commands as the web-server user.",
+      "publishedAt": "2026-07-16T15:33:10Z",
+      "updatedAt": "2026-11-24T20:54:02Z",
+      "url": "https://github.com/advisories/GHSA-jjpq-qx77-qjwj",
+      "references": [
+        "https://github.com/WWBN/AVideo/security/advisories/GHSA-j44m-77cc-p3cc",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-63304",
+        "https://www.vulncheck.com/advisories/avideo-through-os-command-injection-via-listffmpegprocesses",
+        "https://github.com/advisories/GHSA-jjpq-qx77-qjwj"
+      ],
+      "patchUrls": [],
+      "packages": [
+        {
+          "ecosystem": "composer",
+          "name": "wwbn/avideo",
+          "lt": "29.1.0",
+          "id": "GHSA-jjpq-qx77-qjwj",
+          "ghsaId": "GHSA-jjpq-qx77-qjwj",
+          "cwe": "CWE-78",
+          "sev": "critical",
+          "note": "Duplicate Advisory: AVideo API vulnerable to OS command injection through an unescaped FFmpeg process keyword"
+        }
+      ],
+      "kev": false,
+      "epss": 0
     },
     {
       "id": "CVE-2026-93753",
