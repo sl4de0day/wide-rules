@@ -1,18 +1,18 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-25T01:53:26.305Z",
+  "generatedAt": "2026-11-25T16:45:14.314Z",
   "sources": [
     "github-advisories",
     "cisa-kev",
     "first-epss"
   ],
   "stats": {
-    "total": 1044,
+    "total": 1046,
     "kevCount": 155,
-    "highEpssCount": 103,
+    "highEpssCount": 86,
     "byEcosystem": {
-      "npm": 325,
-      "pip": 190,
+      "npm": 326,
+      "pip": 191,
       "maven": 198,
       "go": 119,
       "cargo": 61,
@@ -31,7 +31,7 @@
       "cwe": "CWE-201",
       "sev": "medium",
       "note": "@angular/common: XSRF Token Leakage via URL Parsing Discrepancy in Angular HTTP Client (Incomplete fix for CVE-2025-66035)",
-      "epss": 0.0054
+      "epss": 0.0061
     },
     {
       "name": "@angular/common",
@@ -43,7 +43,7 @@
       "cwe": "CWE-201",
       "sev": "medium",
       "note": "@angular/common: XSRF Token Leakage via URL Parsing Discrepancy in Angular HTTP Client (Incomplete fix for CVE-2025-66035)",
-      "epss": 0.0054
+      "epss": 0.0061
     },
     {
       "name": "@angular/common",
@@ -55,7 +55,7 @@
       "cwe": "CWE-201",
       "sev": "medium",
       "note": "@angular/common: XSRF Token Leakage via URL Parsing Discrepancy in Angular HTTP Client (Incomplete fix for CVE-2025-66035)",
-      "epss": 0.0054
+      "epss": 0.0061
     },
     {
       "name": "@anthropic-ai/claude-code",
@@ -66,7 +66,7 @@
       "cwe": "CWE-59",
       "sev": "high",
       "note": "Claude Code: TOCTOU Race in Edit Tool Allows File Writes Outside the Workspace",
-      "epss": 0.0032
+      "epss": 0.004
     },
     {
       "name": "@apireno/domshell",
@@ -77,7 +77,7 @@
       "cwe": "CWE-266",
       "sev": "medium",
       "note": "DOMShell: domshell_eval classified as read-tier can execute side-effecting JavaScript without --allow-write",
-      "epss": 0.0011
+      "epss": 0.0015
     },
     {
       "name": "@appium/storage-plugin",
@@ -88,7 +88,7 @@
       "cwe": "CWE-22",
       "sev": "high",
       "note": "appium allows unauthenticated arbitrary file/directory deletion in @appium/storage-plugin",
-      "epss": 0.0052
+      "epss": 0.0064
     },
     {
       "name": "@astrojs/node",
@@ -99,7 +99,7 @@
       "cwe": "CWE-22",
       "sev": "medium",
       "note": "Astro: Image endpoint in @astrojs/node can read files from a case-variant sibling of the output directory on case-sensitive filesystems",
-      "epss": 0.0038
+      "epss": 0.0043
     },
     {
       "name": "@astrojs/node",
@@ -110,7 +110,7 @@
       "cwe": "CWE-22",
       "sev": "medium",
       "note": "Astro: Image endpoint in @astrojs/node can read files from a case-variant sibling of the output directory on case-sensitive filesystems",
-      "epss": 0.0038
+      "epss": 0.0043
     },
     {
       "name": "@astrojs/solid-js",
@@ -122,7 +122,7 @@
       "cwe": "CWE-79",
       "sev": "low",
       "note": "Astro: Reflected XSS via unescaped slot names in @astrojs/solid-js",
-      "epss": 0.0038
+      "epss": 0.0053
     },
     {
       "name": "@astrojs/svelte",
@@ -134,7 +134,7 @@
       "cwe": "CWE-79",
       "sev": "low",
       "note": "Astro: Reflected XSS via unescaped slot names in @astrojs/svelte",
-      "epss": 0.004
+      "epss": 0.0053
     },
     {
       "name": "@augment-vir/node",
@@ -145,7 +145,7 @@
       "cwe": "CWE-78",
       "sev": "high",
       "note": "augment-virShell allows Command Injection in `grep()` via Unsanitized `searchPattern`",
-      "epss": 0.0037
+      "epss": 0.0028
     },
     {
       "name": "@bitcoin-js/tiny-secp256k1-asmjs",
@@ -157,7 +157,7 @@
       "cwe": "CWE-252",
       "sev": "medium",
       "note": "tiny-secp256k1: Stale buffer after ignored wasm failure accepts invalid infinity tweak",
-      "epss": 0.0044
+      "epss": 0.0051
     },
     {
       "name": "@budibase/server",
@@ -168,7 +168,7 @@
       "cwe": "CWE-79",
       "sev": "high",
       "note": "Budibase: Cross-privilege Stored XSS in the Budibase Builder via broken HTML-escaping in `jsonFormatter.format()` rendered through `{@html}` in the CSP-less Builder origin",
-      "epss": 0.0068
+      "epss": 0.004
     },
     {
       "name": "@budibase/server",
@@ -179,7 +179,7 @@
       "cwe": "CWE-284",
       "sev": "high",
       "note": "Budibase: Unauthenticated global-admin & database creation via tenant-confusion bypass of the one-time init guard (`POST /api/global/users/init`)",
-      "epss": 0.0084
+      "epss": 0.0057
     },
     {
       "name": "@cedar-policy/cedar-wasm",
@@ -210,7 +210,7 @@
       "cwe": "CWE-89",
       "sev": "high",
       "note": "mssql-mcp-core: SQL injection in mssql-mcp write tools via unparameterized table names and WHERE clauses",
-      "epss": 0.0055
+      "epss": 0.0068
     },
     {
       "name": "@connorbritain/mssql-mcp-reader",
@@ -221,7 +221,7 @@
       "cwe": "CWE-89",
       "sev": "high",
       "note": "mssql-mcp-core: SQL injection in mssql-mcp write tools via unparameterized table names and WHERE clauses",
-      "epss": 0.0055
+      "epss": 0.0068
     },
     {
       "name": "@connorbritain/mssql-mcp-server",
@@ -232,7 +232,7 @@
       "cwe": "CWE-89",
       "sev": "high",
       "note": "mssql-mcp-core: SQL injection in mssql-mcp write tools via unparameterized table names and WHERE clauses",
-      "epss": 0.0055
+      "epss": 0.0068
     },
     {
       "name": "@connorbritain/mssql-mcp-writer",
@@ -243,7 +243,7 @@
       "cwe": "CWE-89",
       "sev": "high",
       "note": "mssql-mcp-core: SQL injection in mssql-mcp write tools via unparameterized table names and WHERE clauses",
-      "epss": 0.0055
+      "epss": 0.0068
     },
     {
       "name": "@doist/todoist-mcp",
@@ -254,7 +254,7 @@
       "cwe": "CWE-346",
       "sev": "critical",
       "note": "Todoist MCP Server: Browser DNS rebinding lets websites write and delete Todoist data through local MCP server",
-      "epss": 0.0022
+      "epss": 0.0023
     },
     {
       "name": "@dynatrace-oss/dynatrace-mcp-server",
@@ -265,7 +265,7 @@
       "cwe": "CWE-1336",
       "sev": "medium",
       "note": "@dynatrace-oss/dynatrace-mcp-server has a workflow template injection via create_workflow_for_notification",
-      "epss": 0.0018
+      "epss": 0.0029
     },
     {
       "name": "@dynatrace-oss/dynatrace-mcp-server",
@@ -276,7 +276,7 @@
       "cwe": "CWE-89",
       "sev": "medium",
       "note": "@dynatrace-oss/dynatrace-mcp-server has a DQL injection via parameters not documented as DQL",
-      "epss": 0.0036
+      "epss": 0.004
     },
     {
       "name": "@dynatrace-oss/dynatrace-mcp-server",
@@ -287,7 +287,7 @@
       "cwe": "CWE-306",
       "sev": "high",
       "note": "`@dynatrace-oss/dynatrace-mcp-server` has Unauthenticated HTTP MCP Tool Invocation",
-      "epss": 0.0034
+      "epss": 0.0039
     },
     {
       "name": "@effect/platform",
@@ -299,7 +299,7 @@
       "cwe": "CWE-20",
       "sev": "medium",
       "note": "Effect: Cookie attribute injection via domain, path, and name fields in @effect/platform makeCookie()",
-      "epss": 0.0063
+      "epss": 0.0061
     },
     {
       "name": "@enspirit/elo",
@@ -310,7 +310,7 @@
       "cwe": "CWE-94",
       "sev": "critical",
       "note": "Elo Ruby backend has Remote Code Execution via unescaped `#{...}` interpolation in emitted string literals and subtype-constraint labels",
-      "epss": 0.01
+      "epss": 0.0105
     },
     {
       "name": "@enspirit/elo",
@@ -321,7 +321,7 @@
       "cwe": "CWE-79",
       "sev": "critical",
       "note": "Elo JavaScript emitter has sandbox escape to arbitrary Node.js / browser code execution via unfiltered `.constructor` member access",
-      "epss": 0.0083
+      "epss": 0.0084
     },
     {
       "name": "@grpc/grpc-js-xds",
@@ -332,7 +332,7 @@
       "cwe": "CWE-625",
       "sev": "medium",
       "note": "@grpc/grpc-js: safe_regex incorrectly applies partial string matching for patterns with alternation",
-      "epss": 0.0019
+      "epss": 0.002
     },
     {
       "name": "@grpc/grpc-js-xds",
@@ -344,7 +344,7 @@
       "cwe": "CWE-625",
       "sev": "medium",
       "note": "@grpc/grpc-js: safe_regex incorrectly applies partial string matching for patterns with alternation",
-      "epss": 0.0019
+      "epss": 0.002
     },
     {
       "name": "@grpc/grpc-js-xds",
@@ -356,7 +356,7 @@
       "cwe": "CWE-863",
       "sev": "medium",
       "note": "@grpc/grpc-js: RBAC override configs in VirtualHost and Route resources are not applied",
-      "epss": 0.0045
+      "epss": 0.0048
     },
     {
       "name": "@hono/node-server",
@@ -367,7 +367,7 @@
       "cwe": "CWE-436",
       "sev": "medium",
       "note": "@hono/node-server: Backslash in the request path is parsed as a path separator, bypassing path-based access control at a reverse proxy",
-      "epss": 0.0037
+      "epss": 0.0042
     },
     {
       "name": "@hono/node-server",
@@ -379,7 +379,7 @@
       "cwe": "CWE-436",
       "sev": "medium",
       "note": "@hono/node-server: Backslash in the request path is parsed as a path separator, bypassing path-based access control at a reverse proxy",
-      "epss": 0.0037
+      "epss": 0.0042
     },
     {
       "name": "@hono/node-server",
@@ -391,7 +391,7 @@
       "cwe": "CWE-248",
       "sev": "medium",
       "note": "@hono/node-server: Unhandled `ECONNRESET` on the socket during an asynchronous WebSocket upgrade crashes the process",
-      "epss": 0.0045
+      "epss": 0.0051
     },
     {
       "name": "@libp2p/crypto",
@@ -402,7 +402,7 @@
       "cwe": "CWE-130",
       "sev": "high",
       "note": "libp2p: ASN.1 DER decoder drives an unbounded synchronous loop on attacker-controlled length fields, stalling the Node event loop pre-auth",
-      "epss": 0.0062
+      "epss": 0.0063
     },
     {
       "name": "@libp2p/gossipsub",
@@ -413,7 +413,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "libp2p: gossipsub creates a permanent topics-map entry per distinct subscription with no cap in the default config",
-      "epss": 0.0062
+      "epss": 0.0063
     },
     {
       "name": "@logto/tunnel",
@@ -580,7 +580,7 @@
       "cwe": "CWE-200",
       "sev": "medium",
       "note": "MCP TypeScript client SDK: HTTP client transports and OAuth requests followed cross-origin redirects and re-sent custom headers and request bodies",
-      "epss": 0.004
+      "epss": 0.0042
     },
     {
       "name": "@modelcontextprotocol/sdk",
@@ -591,7 +591,7 @@
       "cwe": "CWE-200",
       "sev": "medium",
       "note": "MCP TypeScript client SDK: HTTP client transports and OAuth requests followed cross-origin redirects and re-sent custom headers and request bodies",
-      "epss": 0.004
+      "epss": 0.0042
     },
     {
       "name": "@nocobase/plugin-action-custom-request",
@@ -603,7 +603,7 @@
       "cwe": "CWE-918",
       "sev": "medium",
       "note": "NocoBase: @nocobase/plugin-action-custom-request allows server-side request forgery through runtime URL overrides",
-      "epss": 0.0029
+      "epss": 0.0028
     },
     {
       "name": "@nocobase/plugin-action-custom-request",
@@ -615,7 +615,7 @@
       "cwe": "CWE-918",
       "sev": "medium",
       "note": "NocoBase: @nocobase/plugin-action-custom-request allows server-side request forgery through runtime URL overrides",
-      "epss": 0.0029
+      "epss": 0.0028
     },
     {
       "name": "@novu/api",
@@ -626,7 +626,7 @@
       "cwe": "CWE-918",
       "sev": "high",
       "note": "Novu has SSRF via conditions filter webhook bypasses validateUrlSsrf() protection",
-      "epss": 0.0048
+      "epss": 0.0056
     },
     {
       "name": "@novu/application-generic",
@@ -637,7 +637,7 @@
       "cwe": "CWE-918",
       "sev": "medium",
       "note": "@novu/application-generic: `validateUrlSsrf` permits CGNAT (100.64.0.0/10) destinations — affects Workflow HTTP request step + Webhook filter condition",
-      "epss": 0.0027
+      "epss": 0.0039
     },
     {
       "name": "@nuxt/content",
@@ -649,7 +649,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "Nuxt Content: Unauthenticated SQLite Function DoS via Content Query API",
-      "epss": 0.0056
+      "epss": 0.0063
     },
     {
       "name": "@nuxt/nitro-server",
@@ -661,7 +661,7 @@
       "cwe": "CWE-436",
       "sev": "medium",
       "note": "Nuxt: Incomplete fix for GHSA-6gq8-jgmh-3ffp: an encoded slash (`%2F`) in the request path bypasses route rules on catch-all page routes",
-      "epss": 0.0027
+      "epss": 0.0037
     },
     {
       "name": "@nuxt/nitro-server",
@@ -673,7 +673,7 @@
       "cwe": "CWE-436",
       "sev": "medium",
       "note": "Nuxt: Incomplete fix for GHSA-6gq8-jgmh-3ffp: an encoded slash (`%2F`) in the request path bypasses route rules on catch-all page routes",
-      "epss": 0.0027
+      "epss": 0.0037
     },
     {
       "name": "@nuxt/nitro-server",
@@ -685,7 +685,7 @@
       "cwe": "CWE-116",
       "sev": "low",
       "note": "Nuxt: Colliding island props can share one `/__nuxt_island` path (incomplete fix for CVE-2026-46342)",
-      "epss": 0.0012
+      "epss": 0.0016
     },
     {
       "name": "@nuxt/nitro-server",
@@ -697,7 +697,7 @@
       "cwe": "CWE-116",
       "sev": "low",
       "note": "Nuxt: Colliding island props can share one `/__nuxt_island` path (incomplete fix for CVE-2026-46342)",
-      "epss": 0.0012
+      "epss": 0.0016
     },
     {
       "name": "@nuxt/nitro-server",
@@ -709,7 +709,7 @@
       "cwe": "CWE-436",
       "sev": "medium",
       "note": "Nuxt: Incomplete fix for GHSA-9v7c-q64q-vv33: a leading `//` in the request path bypasses `server/middleware` path checks and server route rules on page routes",
-      "epss": 0.0027
+      "epss": 0.0037
     },
     {
       "name": "@nuxt/rspack-builder",
@@ -721,7 +721,7 @@
       "cwe": "CWE-346",
       "sev": "low",
       "note": "@nuxt/webpack-builder and @nuxt/rspack-builder dev server serves built source to DNS rebinding pages",
-      "epss": 0.0014
+      "epss": 0.0019
     },
     {
       "name": "@nuxt/rspack-builder",
@@ -733,7 +733,7 @@
       "cwe": "CWE-346",
       "sev": "low",
       "note": "@nuxt/webpack-builder and @nuxt/rspack-builder dev server serves built source to DNS rebinding pages",
-      "epss": 0.0014
+      "epss": 0.0019
     },
     {
       "name": "@nuxt/schema",
@@ -745,7 +745,7 @@
       "cwe": "CWE-552",
       "sev": "medium",
       "note": "Nuxt dev server serves files from a parent directory with a stray lockfile or workspace file",
-      "epss": 0.0042
+      "epss": 0.0043
     },
     {
       "name": "@nuxt/vite-server",
@@ -757,7 +757,7 @@
       "cwe": "CWE-436",
       "sev": "medium",
       "note": "Nuxt: Incomplete fix for GHSA-6gq8-jgmh-3ffp: an encoded slash (`%2F`) in the request path bypasses route rules on catch-all page routes",
-      "epss": 0.0027
+      "epss": 0.0037
     },
     {
       "name": "@nuxt/webpack-builder",
@@ -769,7 +769,7 @@
       "cwe": "CWE-346",
       "sev": "low",
       "note": "@nuxt/webpack-builder and @nuxt/rspack-builder dev server serves built source to DNS rebinding pages",
-      "epss": 0.0014
+      "epss": 0.0019
     },
     {
       "name": "@nuxt/webpack-builder",
@@ -781,7 +781,7 @@
       "cwe": "CWE-346",
       "sev": "low",
       "note": "@nuxt/webpack-builder and @nuxt/rspack-builder dev server serves built source to DNS rebinding pages",
-      "epss": 0.0014
+      "epss": 0.0019
     },
     {
       "name": "@ohif/extension-dicom-pdf",
@@ -793,7 +793,7 @@
       "cwe": "CWE-79",
       "sev": "high",
       "note": "OHIF Viewers: DOM-Based Cross Site Scripting (XSS) through MIME type of document",
-      "epss": 0.0042
+      "epss": 0.0051
     },
     {
       "name": "@ohif/extension-dicom-pdf",
@@ -805,7 +805,7 @@
       "cwe": "CWE-79",
       "sev": "high",
       "note": "OHIF Viewers: DOM-Based Cross Site Scripting (XSS) through MIME type of document",
-      "epss": 0.0042
+      "epss": 0.0051
     },
     {
       "name": "@ohif/extension-dicom-pdf",
@@ -817,7 +817,7 @@
       "cwe": "CWE-79",
       "sev": "high",
       "note": "OHIF Viewers: DOM-Based Cross Site Scripting (XSS) through MIME type of document",
-      "epss": 0.0042
+      "epss": 0.0051
     },
     {
       "name": "@openeudi/openid4vp",
@@ -828,7 +828,7 @@
       "cwe": "CWE-295",
       "sev": "high",
       "note": "OpenID4VP: X.509 chain validation accepts a forged certificate that reuses a trusted anchor's Subject DN without verifying its signature",
-      "epss": 0.0024
+      "epss": 0.0023
     },
     {
       "name": "@opentelemetry/instrumentation-http",
@@ -840,7 +840,7 @@
       "cwe": "CWE-200",
       "sev": "medium",
       "note": "OpenTelemetry JavaScript: Insertion of Sensitive Information into Log File and Exposure of Sensitive Information to an Unauthorized Actor in @opentelemetry/instrumentation-http",
-      "epss": 0.0036
+      "epss": 0.004
     },
     {
       "name": "@payloadcms/storage-vercel-blob",
@@ -852,7 +852,7 @@
       "cwe": "CWE-862",
       "sev": "medium",
       "note": "@payloadcms/storage-vercel-blob has access control bypass of uploads in Vercel Storage adapter",
-      "epss": 0.0018
+      "epss": 0.0029
     },
     {
       "name": "@payloadcms/storage-vercel-blob",
@@ -864,7 +864,7 @@
       "cwe": "CWE-862",
       "sev": "medium",
       "note": "@payloadcms/storage-vercel-blob has access control bypass of uploads in Vercel Storage adapter",
-      "epss": 0.0018
+      "epss": 0.0029
     },
     {
       "name": "@phala/dcap-qvl",
@@ -875,7 +875,7 @@
       "cwe": "CWE-295",
       "sev": "critical",
       "note": "dcap-qvl has Missing Verification for QE Identity",
-      "epss": 0.0021
+      "epss": 0.0024
     },
     {
       "name": "@phala/dcap-qvl-node",
@@ -886,7 +886,7 @@
       "cwe": "CWE-295",
       "sev": "critical",
       "note": "dcap-qvl has Missing Verification for QE Identity",
-      "epss": 0.0021
+      "epss": 0.0024
     },
     {
       "name": "@phala/dcap-qvl-node",
@@ -897,7 +897,7 @@
       "cwe": "CWE-295",
       "sev": "critical",
       "note": "dcap-qvl has Missing Verification for QE Identity",
-      "epss": 0.0021
+      "epss": 0.0024
     },
     {
       "name": "@phala/dcap-qvl-web",
@@ -908,7 +908,7 @@
       "cwe": "CWE-295",
       "sev": "critical",
       "note": "dcap-qvl has Missing Verification for QE Identity",
-      "epss": 0.0021
+      "epss": 0.0024
     },
     {
       "name": "@phala/dcap-qvl-web",
@@ -919,7 +919,7 @@
       "cwe": "CWE-295",
       "sev": "critical",
       "note": "dcap-qvl has Missing Verification for QE Identity",
-      "epss": 0.0021
+      "epss": 0.0024
     },
     {
       "name": "@pkgr/core",
@@ -932,7 +932,7 @@
       "sev": "high",
       "note": "eslint-config-prettier, eslint-plugin-prettier, synckit, @pkgr/core, napi-postinstall have embedded malicious code",
       "kev": true,
-      "epss": 0.0512
+      "epss": 0.0176
     },
     {
       "name": "@react-native-community/cli",
@@ -945,7 +945,7 @@
       "sev": "critical",
       "note": "@react-native-community/cli has arbitrary OS command injection",
       "kev": true,
-      "epss": 0.9398
+      "epss": 0.7294
     },
     {
       "name": "@react-native-community/cli",
@@ -958,7 +958,7 @@
       "sev": "critical",
       "note": "@react-native-community/cli has arbitrary OS command injection",
       "kev": true,
-      "epss": 0.9398
+      "epss": 0.7294
     },
     {
       "name": "@react-native-community/cli",
@@ -971,7 +971,7 @@
       "sev": "critical",
       "note": "@react-native-community/cli has arbitrary OS command injection",
       "kev": true,
-      "epss": 0.9398
+      "epss": 0.7294
     },
     {
       "name": "@react-native-community/cli-server-api",
@@ -984,7 +984,7 @@
       "sev": "critical",
       "note": "@react-native-community/cli has arbitrary OS command injection",
       "kev": true,
-      "epss": 0.9398
+      "epss": 0.7294
     },
     {
       "name": "@react-native-community/cli-server-api",
@@ -997,7 +997,7 @@
       "sev": "critical",
       "note": "@react-native-community/cli has arbitrary OS command injection",
       "kev": true,
-      "epss": 0.9398
+      "epss": 0.7294
     },
     {
       "name": "@react-native-community/cli-server-api",
@@ -1010,7 +1010,7 @@
       "sev": "critical",
       "note": "@react-native-community/cli has arbitrary OS command injection",
       "kev": true,
-      "epss": 0.9398
+      "epss": 0.7294
     },
     {
       "name": "@signalk/resources-provider",
@@ -1022,7 +1022,7 @@
       "cwe": "CWE-22",
       "sev": "critical",
       "note": "Signal K resources API path traversal can disclose the JWT signing secret and enable remote code execution",
-      "epss": 0.0197
+      "epss": 0.0243
     },
     {
       "name": "@siteboon/claude-code-ui",
@@ -1033,7 +1033,7 @@
       "cwe": "CWE-77",
       "sev": "critical",
       "note": "@siteboon/claude-code-ui is Vulnerable to Command Injection via Multiple Parameters",
-      "epss": 0.005
+      "epss": 0.0066
     },
     {
       "name": "@strapi/strapi",
@@ -1046,7 +1046,7 @@
       "sev": "high",
       "note": "Strapi leaking sensitive user information by filtering on private fields",
       "kev": true,
-      "epss": 0.0411
+      "epss": 0.0385
     },
     {
       "name": "@sveltejs/adapter-cloudflare",
@@ -1058,7 +1058,7 @@
       "cwe": "CWE-79",
       "sev": "medium",
       "note": "SvelteKit: Prerendered redirect paths can inject arbitrary rules into the `_redirects` file generated by `@sveltejs/adapter-cloudflare`",
-      "epss": 0.004
+      "epss": 0.0048
     },
     {
       "name": "@sveltejs/adapter-cloudflare",
@@ -1070,7 +1070,7 @@
       "cwe": "CWE-79",
       "sev": "medium",
       "note": "SvelteKit: Prerendered redirect paths can inject arbitrary rules into the `_redirects` file generated by `@sveltejs/adapter-cloudflare`",
-      "epss": 0.004
+      "epss": 0.0048
     },
     {
       "name": "@sveltejs/adapter-node",
@@ -1082,7 +1082,7 @@
       "cwe": "CWE-248",
       "sev": "medium",
       "note": "SvelteKit: `@sveltejs/adapter-node` crashes when proxying certain requests via `fetch`",
-      "epss": 0.0046
+      "epss": 0.0058
     },
     {
       "name": "@sveltejs/adapter-node",
@@ -1094,7 +1094,7 @@
       "cwe": "CWE-248",
       "sev": "medium",
       "note": "SvelteKit: `@sveltejs/adapter-node` crashes when proxying certain requests via `fetch`",
-      "epss": 0.0046
+      "epss": 0.0058
     },
     {
       "name": "@sveltejs/adapter-static",
@@ -1105,7 +1105,7 @@
       "cwe": "CWE-116",
       "sev": "medium",
       "note": "SvelteKit: Prerendered paths are interpreted as regular expressions in Vercel route config generated by @sveltejs/adapter-vercel and @sveltejs/adapter-static",
-      "epss": 0.0044
+      "epss": 0.0051
     },
     {
       "name": "@sveltejs/adapter-static",
@@ -1117,7 +1117,7 @@
       "cwe": "CWE-116",
       "sev": "medium",
       "note": "SvelteKit: Prerendered paths are interpreted as regular expressions in Vercel route config generated by @sveltejs/adapter-vercel and @sveltejs/adapter-static",
-      "epss": 0.0044
+      "epss": 0.0051
     },
     {
       "name": "@sveltejs/adapter-vercel",
@@ -1128,7 +1128,7 @@
       "cwe": "CWE-116",
       "sev": "medium",
       "note": "SvelteKit: Prerendered paths are interpreted as regular expressions in Vercel route config generated by @sveltejs/adapter-vercel and @sveltejs/adapter-static",
-      "epss": 0.0044
+      "epss": 0.0051
     },
     {
       "name": "@sveltejs/adapter-vercel",
@@ -1140,41 +1140,41 @@
       "cwe": "CWE-116",
       "sev": "medium",
       "note": "SvelteKit: Prerendered paths are interpreted as regular expressions in Vercel route config generated by @sveltejs/adapter-vercel and @sveltejs/adapter-static",
+      "epss": 0.0051
+    },
+    {
+      "name": "@sveltejs/kit",
+      "lt": "2.70.4",
+      "id": "CVE-2026-128116",
+      "ghsaId": "GHSA-rqp5-r3wg-vg35",
+      "cve": "CVE-2026-128116",
+      "cwe": "CWE-79",
+      "sev": "medium",
+      "note": "SvelteKit: Protocol-relative module import during server-side route resolution allows cross-origin script execution",
+      "epss": 0.0044
+    },
+    {
+      "name": "@sveltejs/kit",
+      "ge": "3.0.0",
+      "lt": "3.1.1",
+      "id": "CVE-2026-128116",
+      "ghsaId": "GHSA-rqp5-r3wg-vg35",
+      "cve": "CVE-2026-128116",
+      "cwe": "CWE-79",
+      "sev": "medium",
+      "note": "SvelteKit: Protocol-relative module import during server-side route resolution allows cross-origin script execution",
       "epss": 0.0044
     },
     {
       "name": "@sveltejs/kit",
       "lt": "2.70.4",
-      "id": "CVE-2026-128116",
-      "ghsaId": "GHSA-rqp5-r3wg-vg35",
-      "cve": "CVE-2026-128116",
-      "cwe": "CWE-79",
-      "sev": "medium",
-      "note": "SvelteKit: Protocol-relative module import during server-side route resolution allows cross-origin script execution",
-      "epss": 0.0026
-    },
-    {
-      "name": "@sveltejs/kit",
-      "ge": "3.0.0",
-      "lt": "3.1.1",
-      "id": "CVE-2026-128116",
-      "ghsaId": "GHSA-rqp5-r3wg-vg35",
-      "cve": "CVE-2026-128116",
-      "cwe": "CWE-79",
-      "sev": "medium",
-      "note": "SvelteKit: Protocol-relative module import during server-side route resolution allows cross-origin script execution",
-      "epss": 0.0026
-    },
-    {
-      "name": "@sveltejs/kit",
-      "lt": "2.70.4",
       "id": "CVE-2026-128117",
       "ghsaId": "GHSA-mw6w-2fmv-pvw3",
       "cve": "CVE-2026-128117",
       "cwe": "CWE-248",
       "sev": "medium",
       "note": "SvelteKit: adapter-node crashes with an unhandled URIError when `reroute` rewrites malformed pathnames",
-      "epss": 0.0048
+      "epss": 0.0058
     },
     {
       "name": "@sveltejs/kit",
@@ -1186,7 +1186,7 @@
       "cwe": "CWE-248",
       "sev": "medium",
       "note": "SvelteKit: adapter-node crashes with an unhandled URIError when `reroute` rewrites malformed pathnames",
-      "epss": 0.0048
+      "epss": 0.0058
     },
     {
       "name": "@sveltejs/kit",
@@ -1198,7 +1198,7 @@
       "cwe": "CWE-200",
       "sev": "high",
       "note": "SvelteKit: Build-time server-only module import guard could fail, resulting in server secrets being statically replaced in client bundle",
-      "epss": 0.0028
+      "epss": 0.0049
     },
     {
       "name": "@sveltejs/kit",
@@ -1210,7 +1210,7 @@
       "cwe": "CWE-863",
       "sev": "medium",
       "note": "SvelteKit: Private `query.batch` functions could collide, producing unexpected parameter / function combinations",
-      "epss": 0.0029
+      "epss": 0.0045
     },
     {
       "name": "@sveltejs/kit",
@@ -1222,7 +1222,7 @@
       "cwe": "CWE-407",
       "sev": "high",
       "note": "SvelteKit: DoS while parsing form data from a remote functions `form`",
-      "epss": 0.0035
+      "epss": 0.0061
     },
     {
       "name": "@tanstack/arktype-adapter",
@@ -1235,7 +1235,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/eslint-plugin-router",
@@ -1248,7 +1248,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/eslint-plugin-start",
@@ -1261,7 +1261,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/history",
@@ -1274,7 +1274,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/nitro-v2-vite-plugin",
@@ -1287,7 +1287,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/react-router",
@@ -1300,7 +1300,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/react-router-devtools",
@@ -1313,7 +1313,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/react-router-ssr-query",
@@ -1326,7 +1326,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/react-start",
@@ -1339,7 +1339,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/react-start-client",
@@ -1352,7 +1352,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/react-start-rsc",
@@ -1365,7 +1365,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/react-start-server",
@@ -1378,7 +1378,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/router-cli",
@@ -1391,7 +1391,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/router-core",
@@ -1404,7 +1404,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/router-devtools",
@@ -1417,7 +1417,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/router-devtools-core",
@@ -1430,7 +1430,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/router-generator",
@@ -1443,7 +1443,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/router-plugin",
@@ -1456,7 +1456,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/router-ssr-query-core",
@@ -1469,7 +1469,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/router-utils",
@@ -1482,7 +1482,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/router-vite-plugin",
@@ -1495,7 +1495,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/solid-router",
@@ -1508,7 +1508,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/solid-router-devtools",
@@ -1521,7 +1521,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/solid-router-ssr-query",
@@ -1534,7 +1534,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/solid-start",
@@ -1547,7 +1547,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/solid-start-client",
@@ -1560,7 +1560,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/solid-start-server",
@@ -1573,7 +1573,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/start-client-core",
@@ -1586,7 +1586,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/start-fn-stubs",
@@ -1599,7 +1599,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/start-plugin-core",
@@ -1612,7 +1612,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/start-server-core",
@@ -1625,7 +1625,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/start-static-server-functions",
@@ -1638,7 +1638,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/start-storage-context",
@@ -1651,7 +1651,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/valibot-adapter",
@@ -1664,7 +1664,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/virtual-file-routes",
@@ -1677,7 +1677,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/vue-router",
@@ -1690,7 +1690,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/vue-router-devtools",
@@ -1703,7 +1703,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/vue-router-ssr-query",
@@ -1716,7 +1716,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/vue-start",
@@ -1729,7 +1729,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/vue-start-client",
@@ -1742,7 +1742,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/vue-start-server",
@@ -1755,7 +1755,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tanstack/zod-adapter",
@@ -1768,7 +1768,7 @@
       "sev": "critical",
       "note": "Malware in @tanstack/* packages exfiltrates cloud credentials, GitHub tokens, and SSH keys",
       "kev": true,
-      "epss": 0.0328
+      "epss": 0.0105
     },
     {
       "name": "@tmlmobilidade/utils",
@@ -1779,7 +1779,7 @@
       "cwe": "CWE-1321",
       "sev": "high",
       "note": "@tmlmobilidade/utils has prototype pollution in its setValueAtPath",
-      "epss": 0.0032
+      "epss": 0.0046
     },
     {
       "name": "@tsparticles/mcp-server",
@@ -1790,7 +1790,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "tsParticles: Unbounded HTTP Request Body Buffering in @tsparticles/mcp-server Leads to Remote DoS",
-      "epss": 0.0064
+      "epss": 0.0076
     },
     {
       "name": "@tsparticles/mcp-server",
@@ -1801,7 +1801,7 @@
       "cwe": "CWE-248",
       "sev": "high",
       "note": "tsParticles: Malformed JSON requests can terminate the @tsparticles/mcp-server HTTP process",
-      "epss": 0.0044
+      "epss": 0.0051
     },
     {
       "name": "@tsparticles/mcp-server",
@@ -1812,7 +1812,18 @@
       "cwe": "CWE-400",
       "sev": "medium",
       "note": "tsParticles: A single anonymous MCP session can monopolize HTTP mode and deny new clients",
-      "epss": 0.0044
+      "epss": 0.0051
+    },
+    {
+      "name": "@waline/client",
+      "le": "3.16.2",
+      "id": "CVE-2026-64670",
+      "ghsaId": "GHSA-crj3-q72p-ggqm",
+      "cve": "CVE-2026-64670",
+      "cwe": "CWE-79",
+      "sev": "critical",
+      "note": "@waline/client vulnerable to stored XSS through unsanitized comment edit previews",
+      "epss": 0.0038
     },
     {
       "name": "aedes",
@@ -1823,7 +1834,7 @@
       "cwe": "CWE-248",
       "sev": "high",
       "note": "Aedes has Uncaught Exception and Uncontrolled Resource Consumption",
-      "epss": 0.0055
+      "epss": 0.0066
     },
     {
       "name": "ag-psd",
@@ -1834,7 +1845,7 @@
       "cwe": "CWE-789",
       "sev": "high",
       "note": "ag-psd can exhaust memory when parsing crafted PSD dimensions",
-      "epss": 0.0052
+      "epss": 0.0061
     },
     {
       "name": "ag-psd",
@@ -1845,7 +1856,7 @@
       "cwe": "CWE-770",
       "sev": "high",
       "note": "ag-psd: Uncontrolled Memory Allocation in PSD Layer Decoding (totalMemoryLimit bypass)",
-      "epss": 0.0051
+      "epss": 0.0061
     },
     {
       "name": "altair-express-middleware",
@@ -1857,7 +1868,7 @@
       "cwe": "CWE-79",
       "sev": "medium",
       "note": "Altair: DOM-based XSS via attacker-controlled script URLs in the iframe sandbox",
-      "epss": 0.0032
+      "epss": 0.0039
     },
     {
       "name": "altair-fastify-plugin",
@@ -1869,7 +1880,7 @@
       "cwe": "CWE-79",
       "sev": "medium",
       "note": "Altair: DOM-based XSS via attacker-controlled script URLs in the iframe sandbox",
-      "epss": 0.0032
+      "epss": 0.0039
     },
     {
       "name": "altair-koa-middleware",
@@ -1881,7 +1892,7 @@
       "cwe": "CWE-79",
       "sev": "medium",
       "note": "Altair: DOM-based XSS via attacker-controlled script URLs in the iframe sandbox",
-      "epss": 0.0032
+      "epss": 0.0039
     },
     {
       "name": "altair-static",
@@ -1893,7 +1904,7 @@
       "cwe": "CWE-79",
       "sev": "medium",
       "note": "Altair: DOM-based XSS via attacker-controlled script URLs in the iframe sandbox",
-      "epss": 0.0032
+      "epss": 0.0039
     },
     {
       "name": "astro",
@@ -1904,7 +1915,7 @@
       "cwe": "CWE-79",
       "sev": "low",
       "note": "Astro: XSS via attribute injection in dynamic tag names",
-      "epss": 0.0039
+      "epss": 0.0055
     },
     {
       "name": "astro",
@@ -1916,7 +1927,7 @@
       "cwe": "CWE-22",
       "sev": "medium",
       "note": "Astro: Image endpoint in @astrojs/node can read files from a case-variant sibling of the output directory on case-sensitive filesystems",
-      "epss": 0.0038
+      "epss": 0.0043
     },
     {
       "name": "basic-ftp",
@@ -1927,7 +1938,7 @@
       "cwe": "CWE-248",
       "sev": "medium",
       "note": "basic-ftp: Uncaught TypeError in MLSD directory-listing parser via __proto__ fact name causes DoS in Client.list()",
-      "epss": 0.0057
+      "epss": 0.0055
     },
     {
       "name": "basic-ftp",
@@ -1938,7 +1949,7 @@
       "cwe": "CWE-248",
       "sev": "medium",
       "note": "basic-ftp: Uncaught exception crashes the Node.js process when a password (or resumed-download path) contains CR/LF",
-      "epss": 0.0167
+      "epss": 0.0293
     },
     {
       "name": "bitcoinjs-lib",
@@ -1950,7 +1961,7 @@
       "cwe": "CWE-354",
       "sev": "critical",
       "note": "bitcoinjs-lib: Undetected merkle node duplication in block root computation validates a forged transaction list",
-      "epss": 0.0025
+      "epss": 0.0026
     },
     {
       "name": "bitcoinjs-lib",
@@ -1962,7 +1973,7 @@
       "cwe": "CWE-354",
       "sev": "critical",
       "note": "bitcoinjs-lib: Undetected merkle node duplication in block root computation validates a forged transaction list",
-      "epss": 0.0025
+      "epss": 0.0026
     },
     {
       "name": "bitcoinjs-lib",
@@ -1974,7 +1985,7 @@
       "cwe": "CWE-354",
       "sev": "critical",
       "note": "bitcoinjs-lib: Undetected merkle node duplication in block root computation validates a forged transaction list",
-      "epss": 0.0025
+      "epss": 0.0026
     },
     {
       "name": "budibase",
@@ -1985,7 +1996,7 @@
       "cwe": "CWE-918",
       "sev": "high",
       "note": "Budibase vulnerable to SSRF via trivial `.tar.gz` substring bypass in Plugin URL upload (`/api/plugin`)",
-      "epss": 0.0026
+      "epss": 0.0036
     },
     {
       "name": "code-review-mcp-server",
@@ -1996,7 +2007,7 @@
       "cwe": "CWE-78",
       "sev": "high",
       "note": "code-review-mcp-server: Command injection via unsanitized folderPath/baseBranch parameters",
-      "epss": 0.0043
+      "epss": 0.006
     },
     {
       "name": "codewhale",
@@ -2007,7 +2018,7 @@
       "cwe": "CWE-78",
       "sev": "high",
       "note": "CodeWhale: exec_shell parallel-readonly classifier auto-approves fd/rg/git grep exec flags enabling silent RCE",
-      "epss": 0.0061
+      "epss": 0.0063
     },
     {
       "name": "codewhale",
@@ -2018,7 +2029,7 @@
       "cwe": "CWE-862",
       "sev": "high",
       "note": "CodeWhale: Automation auto_approve defaults to true, bypassing the task-path hardening fix for silent recurring agent execution",
-      "epss": 0.0051
+      "epss": 0.006
     },
     {
       "name": "deepmerge",
@@ -2040,7 +2051,7 @@
       "cwe": "CWE-269",
       "sev": "medium",
       "note": "Directus: Share update allows reassigning user_created and role",
-      "epss": 0.004
+      "epss": 0.0051
     },
     {
       "name": "directus",
@@ -2051,7 +2062,7 @@
       "cwe": "CWE-200",
       "sev": "high",
       "note": "Directus: Authenticated Users Can Extract Concealed Fields via Aggregate Queries",
-      "epss": 0.0035
+      "epss": 0.0046
     },
     {
       "name": "dompurify",
@@ -2082,7 +2093,7 @@
       "cwe": "CWE-20",
       "sev": "medium",
       "note": "Effect: Cookie attribute injection via domain, path, and name fields in @effect/platform makeCookie()",
-      "epss": 0.0063
+      "epss": 0.0061
     },
     {
       "name": "effect",
@@ -2093,7 +2104,7 @@
       "cwe": "CWE-1333",
       "sev": "high",
       "note": "Effect: ReDoS in Schema.TemplateLiteral compiled regex",
-      "epss": 0.0049
+      "epss": 0.0052
     },
     {
       "name": "ep_etherpad-lite",
@@ -2105,7 +2116,7 @@
       "cwe": "CWE-22",
       "sev": "critical",
       "note": "Etherpad: Pre-auth arbitrary file read",
-      "epss": 0.0384
+      "epss": 0.0414
     },
     {
       "name": "eslint-config-prettier",
@@ -2118,7 +2129,7 @@
       "sev": "high",
       "note": "eslint-config-prettier, eslint-plugin-prettier, synckit, @pkgr/core, napi-postinstall have embedded malicious code",
       "kev": true,
-      "epss": 0.0512
+      "epss": 0.0176
     },
     {
       "name": "eslint-config-prettier",
@@ -2131,7 +2142,7 @@
       "sev": "high",
       "note": "eslint-config-prettier, eslint-plugin-prettier, synckit, @pkgr/core, napi-postinstall have embedded malicious code",
       "kev": true,
-      "epss": 0.0512
+      "epss": 0.0176
     },
     {
       "name": "eslint-config-prettier",
@@ -2144,7 +2155,7 @@
       "sev": "high",
       "note": "eslint-config-prettier, eslint-plugin-prettier, synckit, @pkgr/core, napi-postinstall have embedded malicious code",
       "kev": true,
-      "epss": 0.0512
+      "epss": 0.0176
     },
     {
       "name": "eslint-plugin-prettier",
@@ -2157,7 +2168,7 @@
       "sev": "high",
       "note": "eslint-config-prettier, eslint-plugin-prettier, synckit, @pkgr/core, napi-postinstall have embedded malicious code",
       "kev": true,
-      "epss": 0.0512
+      "epss": 0.0176
     },
     {
       "name": "fast-xml-parser",
@@ -2168,7 +2179,7 @@
       "cwe": "CWE-407",
       "sev": "low",
       "note": "fast-xml-parser: Quadratic CPU consumption scanning unterminated stop-node tags",
-      "epss": 0.0044
+      "epss": 0.0043
     },
     {
       "name": "fast-xml-parser",
@@ -2179,7 +2190,7 @@
       "cwe": "CWE-91",
       "sev": "medium",
       "note": "fast-xml-parser XMLBuilder: XML Comment and CDATA Injection via Unescaped Delimiters",
-      "epss": 0.0024
+      "epss": 0.0027
     },
     {
       "name": "fast-xml-parser",
@@ -2191,7 +2202,7 @@
       "cwe": "CWE-91",
       "sev": "medium",
       "note": "fast-xml-parser XMLBuilder: XML Comment and CDATA Injection via Unescaped Delimiters",
-      "epss": 0.0024
+      "epss": 0.0027
     },
     {
       "name": "filecoin-pin",
@@ -2202,7 +2213,7 @@
       "cwe": "CWE-400",
       "sev": "medium",
       "note": "filecoin-pin: Unbounded DAG pinning can exhaust server resources",
-      "epss": 0.0037
+      "epss": 0.0044
     },
     {
       "name": "flowise",
@@ -2235,7 +2246,7 @@
       "sev": "high",
       "note": "eslint-config-prettier, eslint-plugin-prettier, synckit, @pkgr/core, napi-postinstall have embedded malicious code",
       "kev": true,
-      "epss": 0.0512
+      "epss": 0.0176
     },
     {
       "name": "hono",
@@ -2246,7 +2257,7 @@
       "cwe": "CWE-352",
       "sev": "medium",
       "note": "Hono: `csrf()` does not check requests sent by hyperlink auditing (`text/ping`)",
-      "epss": 0.0018
+      "epss": 0.0019
     },
     {
       "name": "hono",
@@ -2258,7 +2269,7 @@
       "cwe": "CWE-20",
       "sev": "medium",
       "note": "Hono: `validator('form')` skips validation for `multipart/form-data` requests with extra parameters",
-      "epss": 0.0039
+      "epss": 0.0044
     },
     {
       "name": "hono",
@@ -2269,7 +2280,7 @@
       "cwe": "CWE-288",
       "sev": "medium",
       "note": "Hono: `mount()` and `app.mount()` can forward a path that bypasses middleware scoped inside the mount prefix",
-      "epss": 0.004
+      "epss": 0.0048
     },
     {
       "name": "hono",
@@ -2281,7 +2292,7 @@
       "cwe": "CWE-863",
       "sev": "medium",
       "note": "Hono: RegExpRouter skips wildcard middleware for some route sets and for paths with an encoded line terminator",
-      "epss": 0.0037
+      "epss": 0.0048
     },
     {
       "name": "hono",
@@ -2293,7 +2304,7 @@
       "cwe": "CWE-79",
       "sev": "low",
       "note": "Hono: `css` helper does not escape a closing tag split between the template and an interpolated value, allowing HTML injection",
-      "epss": 0.0026
+      "epss": 0.0032
     },
     {
       "name": "i18next",
@@ -2304,7 +2315,7 @@
       "cwe": "CWE-471",
       "sev": "medium",
       "note": "i18next deepExtend recurses into inherited built-ins, allowing corruption of shared built-in objects (DoS)",
-      "epss": 0.0026
+      "epss": 0.0041
     },
     {
       "name": "install-artifact-from-github",
@@ -2315,7 +2326,7 @@
       "cwe": "CWE-494",
       "sev": "high",
       "note": "install-artifact-from-github loads downloaded native artifacts without integrity verification",
-      "epss": 0.002
+      "epss": 0.0021
     },
     {
       "name": "isomorphic-git",
@@ -2326,7 +2337,7 @@
       "cwe": "CWE-22",
       "sev": "high",
       "note": "isomorphic-git: Arbitrary file write outside of working tree via directory symlink during checkout (potential RCE)",
-      "epss": 0.0072
+      "epss": 0.0065
     },
     {
       "name": "isomorphic-git",
@@ -2359,7 +2370,7 @@
       "cwe": "CWE-22",
       "sev": "medium",
       "note": "isomorphic-git: Path traversal via a \"..\" tree-entry name writes files outside the working directory on clone/checkout",
-      "epss": 0.0041
+      "epss": 0.0042
     },
     {
       "name": "js-toml",
@@ -2381,7 +2392,7 @@
       "cwe": "CWE-400",
       "sev": "medium",
       "note": "js-toml allows uncontrolled recursion in `load()` leading `RangeError` (stack exhaustion) on deeply nested input",
-      "epss": 0.0036
+      "epss": 0.0051
     },
     {
       "name": "lodash",
@@ -2393,7 +2404,7 @@
       "cwe": "CWE-1321",
       "sev": "medium",
       "note": "Lodash has Prototype Pollution Vulnerability in `_.unset`, `_.omit`, and `_.pullAt` functions",
-      "epss": 0.0182
+      "epss": 0.0345
     },
     {
       "name": "lodash-amd",
@@ -2405,7 +2416,7 @@
       "cwe": "CWE-1321",
       "sev": "medium",
       "note": "Lodash has Prototype Pollution Vulnerability in `_.unset`, `_.omit`, and `_.pullAt` functions",
-      "epss": 0.0182
+      "epss": 0.0345
     },
     {
       "name": "lodash-es",
@@ -2417,7 +2428,7 @@
       "cwe": "CWE-1321",
       "sev": "medium",
       "note": "Lodash has Prototype Pollution Vulnerability in `_.unset`, `_.omit`, and `_.pullAt` functions",
-      "epss": 0.0182
+      "epss": 0.0345
     },
     {
       "name": "lodash.omit",
@@ -2429,7 +2440,7 @@
       "cwe": "CWE-1321",
       "sev": "medium",
       "note": "Lodash has Prototype Pollution Vulnerability in `_.unset`, `_.omit`, and `_.pullAt` functions",
-      "epss": 0.0182
+      "epss": 0.0345
     },
     {
       "name": "lodash.unset",
@@ -2441,7 +2452,7 @@
       "cwe": "CWE-1321",
       "sev": "medium",
       "note": "Lodash has Prototype Pollution Vulnerability in `_.unset`, `_.omit`, and `_.pullAt` functions",
-      "epss": 0.0182
+      "epss": 0.0345
     },
     {
       "name": "minimatch",
@@ -2453,7 +2464,7 @@
       "cwe": "CWE-405",
       "sev": "medium",
       "note": "minimatch has potential denial of service via globparts amplification",
-      "epss": 0.0041
+      "epss": 0.0052
     },
     {
       "name": "moleculer",
@@ -2464,7 +2475,7 @@
       "cwe": "CWE-835",
       "sev": "high",
       "note": "Moleculer: Unauthenticated Denial of Service via negative length field in the TCP transporter packet parser",
-      "epss": 0.0035
+      "epss": 0.0063
     },
     {
       "name": "moleculer",
@@ -2476,7 +2487,7 @@
       "cwe": "CWE-835",
       "sev": "high",
       "note": "Moleculer: Unauthenticated Denial of Service via negative length field in the TCP transporter packet parser",
-      "epss": 0.0035
+      "epss": 0.0063
     },
     {
       "name": "mongoose",
@@ -2487,7 +2498,7 @@
       "cwe": "CWE-843",
       "sev": "medium",
       "note": "Mongoose: Discriminator key values matching inherited properties (e.g. __t: 'constructor') bypass schema casting and can poison collections",
-      "epss": 0.0052
+      "epss": 0.0051
     },
     {
       "name": "mongoose",
@@ -2499,7 +2510,7 @@
       "cwe": "CWE-843",
       "sev": "medium",
       "note": "Mongoose: Discriminator key values matching inherited properties (e.g. __t: 'constructor') bypass schema casting and can poison collections",
-      "epss": 0.0052
+      "epss": 0.0051
     },
     {
       "name": "mongoose",
@@ -2511,7 +2522,7 @@
       "cwe": "CWE-843",
       "sev": "medium",
       "note": "Mongoose: Discriminator key values matching inherited properties (e.g. __t: 'constructor') bypass schema casting and can poison collections",
-      "epss": 0.0052
+      "epss": 0.0051
     },
     {
       "name": "mongoose",
@@ -2523,7 +2534,7 @@
       "cwe": "CWE-843",
       "sev": "medium",
       "note": "Mongoose: Discriminator key values matching inherited properties (e.g. __t: 'constructor') bypass schema casting and can poison collections",
-      "epss": 0.0052
+      "epss": 0.0051
     },
     {
       "name": "mongoose",
@@ -2534,7 +2545,7 @@
       "cwe": "CWE-1321",
       "sev": "high",
       "note": "Mongoose walks into inherited properties when hydrating, setting, and merging, allowing overwrites of built-in functions (denial of service) and shared schema state",
-      "epss": 0.0058
+      "epss": 0.0078
     },
     {
       "name": "mongoose",
@@ -2546,7 +2557,7 @@
       "cwe": "CWE-1321",
       "sev": "high",
       "note": "Mongoose walks into inherited properties when hydrating, setting, and merging, allowing overwrites of built-in functions (denial of service) and shared schema state",
-      "epss": 0.0058
+      "epss": 0.0078
     },
     {
       "name": "mongoose",
@@ -2558,7 +2569,7 @@
       "cwe": "CWE-1321",
       "sev": "high",
       "note": "Mongoose walks into inherited properties when hydrating, setting, and merging, allowing overwrites of built-in functions (denial of service) and shared schema state",
-      "epss": 0.0058
+      "epss": 0.0078
     },
     {
       "name": "mongoose",
@@ -2570,7 +2581,7 @@
       "cwe": "CWE-1321",
       "sev": "high",
       "note": "Mongoose walks into inherited properties when hydrating, setting, and merging, allowing overwrites of built-in functions (denial of service) and shared schema state",
-      "epss": 0.0058
+      "epss": 0.0078
     },
     {
       "name": "mongoose",
@@ -2581,7 +2592,7 @@
       "cwe": "CWE-1321",
       "sev": "medium",
       "note": "Mongoose: Prototype pollution via Schema.prototype.virtual()",
-      "epss": 0.006
+      "epss": 0.0064
     },
     {
       "name": "mongoose",
@@ -2593,7 +2604,7 @@
       "cwe": "CWE-1321",
       "sev": "medium",
       "note": "Mongoose: Prototype pollution via Schema.prototype.virtual()",
-      "epss": 0.006
+      "epss": 0.0064
     },
     {
       "name": "mongoose",
@@ -2605,7 +2616,7 @@
       "cwe": "CWE-1321",
       "sev": "medium",
       "note": "Mongoose: Prototype pollution via Schema.prototype.virtual()",
-      "epss": 0.006
+      "epss": 0.0064
     },
     {
       "name": "mongoose",
@@ -2617,7 +2628,7 @@
       "cwe": "CWE-1321",
       "sev": "medium",
       "note": "Mongoose: Prototype pollution via Schema.prototype.virtual()",
-      "epss": 0.006
+      "epss": 0.0064
     },
     {
       "name": "mongoose",
@@ -2629,7 +2640,7 @@
       "cwe": "CWE-943",
       "sev": "high",
       "note": "Mongoose: Connection-level sanitizeFilter not applied",
-      "epss": 0.0054
+      "epss": 0.0066
     },
     {
       "name": "mongoose",
@@ -2641,7 +2652,7 @@
       "cwe": "CWE-943",
       "sev": "high",
       "note": "Mongoose: Connection-level sanitizeFilter not applied",
-      "epss": 0.0054
+      "epss": 0.0066
     },
     {
       "name": "mongoose",
@@ -2653,7 +2664,7 @@
       "cwe": "CWE-943",
       "sev": "high",
       "note": "Mongoose: Connection-level sanitizeFilter not applied",
-      "epss": 0.0054
+      "epss": 0.0066
     },
     {
       "name": "mongoose",
@@ -2665,7 +2676,7 @@
       "cwe": "CWE-943",
       "sev": "high",
       "note": "Mongoose: Connection-level sanitizeFilter not applied",
-      "epss": 0.0054
+      "epss": 0.0066
     },
     {
       "name": "mongoose",
@@ -2676,7 +2687,7 @@
       "cwe": "CWE-943",
       "sev": "critical",
       "note": "Mongoose: sanitizeFilter not applied on countDocuments",
-      "epss": 0.0057
+      "epss": 0.0094
     },
     {
       "name": "mongoose",
@@ -2688,7 +2699,7 @@
       "cwe": "CWE-943",
       "sev": "critical",
       "note": "Mongoose: sanitizeFilter not applied on countDocuments",
-      "epss": 0.0057
+      "epss": 0.0094
     },
     {
       "name": "mongoose",
@@ -2700,7 +2711,7 @@
       "cwe": "CWE-943",
       "sev": "critical",
       "note": "Mongoose: sanitizeFilter not applied on countDocuments",
-      "epss": 0.0057
+      "epss": 0.0094
     },
     {
       "name": "mongoose",
@@ -2712,7 +2723,7 @@
       "cwe": "CWE-943",
       "sev": "critical",
       "note": "Mongoose: sanitizeFilter not applied on countDocuments",
-      "epss": 0.0057
+      "epss": 0.0094
     },
     {
       "name": "muhammara",
@@ -2723,7 +2734,7 @@
       "cwe": "CWE-476",
       "sev": "high",
       "note": "Muhammara has a NULL pointer dereference in LZWDecode filter when DecodeParms omits EarlyChange key",
-      "epss": 0.0051
+      "epss": 0.0061
     },
     {
       "name": "n8n",
@@ -2736,7 +2747,7 @@
       "sev": "critical",
       "note": "n8n Vulnerable to Remote Code Execution via Expression Injection",
       "kev": true,
-      "epss": 0.9755
+      "epss": 0.1394
     },
     {
       "name": "n8n",
@@ -2749,7 +2760,7 @@
       "sev": "critical",
       "note": "n8n Vulnerable to Remote Code Execution via Expression Injection",
       "kev": true,
-      "epss": 0.9755
+      "epss": 0.1394
     },
     {
       "name": "napi-postinstall",
@@ -2762,7 +2773,7 @@
       "sev": "high",
       "note": "eslint-config-prettier, eslint-plugin-prettier, synckit, @pkgr/core, napi-postinstall have embedded malicious code",
       "kev": true,
-      "epss": 0.0512
+      "epss": 0.0176
     },
     {
       "name": "next",
@@ -2774,7 +2785,7 @@
       "cwe": "CWE-200",
       "sev": "medium",
       "note": "Next.js: HttpOnly cookie exposure through internal response header on Next.js Edge runtime routes",
-      "epss": 0.003
+      "epss": 0.0049
     },
     {
       "name": "next",
@@ -2786,7 +2797,7 @@
       "cwe": "CWE-200",
       "sev": "medium",
       "note": "Next.js: HttpOnly cookie exposure through internal response header on Next.js Edge runtime routes",
-      "epss": 0.003
+      "epss": 0.0049
     },
     {
       "name": "next",
@@ -2798,7 +2809,7 @@
       "cwe": "CWE-1287",
       "sev": "medium",
       "note": "Next.js: SVG rejection bypass in the image optimization",
-      "epss": 0.0033
+      "epss": 0.0058
     },
     {
       "name": "next",
@@ -2810,7 +2821,7 @@
       "cwe": "CWE-1287",
       "sev": "medium",
       "note": "Next.js: SVG rejection bypass in the image optimization",
-      "epss": 0.0033
+      "epss": 0.0058
     },
     {
       "name": "next",
@@ -2821,7 +2832,7 @@
       "cwe": "CWE-444",
       "sev": "medium",
       "note": "Next.js: Cross-client response injection and disclosure in self-hosted Next.js applications forwarding fetched responses",
-      "epss": 0.0048
+      "epss": 0.0049
     },
     {
       "name": "next",
@@ -2833,7 +2844,7 @@
       "cwe": "CWE-444",
       "sev": "medium",
       "note": "Next.js: Cross-client response injection and disclosure in self-hosted Next.js applications forwarding fetched responses",
-      "epss": 0.0048
+      "epss": 0.0049
     },
     {
       "name": "next",
@@ -2845,7 +2856,7 @@
       "cwe": "CWE-694",
       "sev": "medium",
       "note": "Next.js: Cross-user cache disclosure and poisoning in Next.js use cache with binary arguments",
-      "epss": 0.0039
+      "epss": 0.0054
     },
     {
       "name": "next",
@@ -2857,7 +2868,7 @@
       "cwe": "CWE-349",
       "sev": "medium",
       "note": "Next.js: Cache poisoning of shared fallback shells in Cache Components via request-supplied placeholder route params",
-      "epss": 0.0022
+      "epss": 0.0026
     },
     {
       "name": "next",
@@ -2869,7 +2880,7 @@
       "cwe": "CWE-362",
       "sev": "medium",
       "note": "Next.js: Cache leak across root param values in nested 'use cache' functions via delayed inner stream metadata",
-      "epss": 0.0024
+      "epss": 0.004
     },
     {
       "name": "next",
@@ -2881,7 +2892,7 @@
       "cwe": "CWE-362",
       "sev": "medium",
       "note": "Next.js: Information disclosure across root params when a 'use cache' function is called through unstable_cache()",
-      "epss": 0.0036
+      "epss": 0.004
     },
     {
       "name": "next",
@@ -2893,7 +2904,7 @@
       "cwe": "CWE-288",
       "sev": "high",
       "note": "Next.js has a Middleware / Proxy bypass in App Router applications via segment-prefetch routes - Incomplete Fix Follow-Up",
-      "epss": 0.0085
+      "epss": 0.0108
     },
     {
       "name": "next",
@@ -2905,7 +2916,7 @@
       "cwe": "CWE-288",
       "sev": "high",
       "note": "Next.js has a Middleware / Proxy bypass in App Router applications via segment-prefetch routes - Incomplete Fix Follow-Up",
-      "epss": 0.0085
+      "epss": 0.0108
     },
     {
       "name": "nocodb",
@@ -2916,7 +2927,7 @@
       "cwe": "CWE-256",
       "sev": "low",
       "note": "NocoDB has Plaintext Storage of Shared View Passwords",
-      "epss": 0.0023
+      "epss": 0.0038
     },
     {
       "name": "nocodb",
@@ -2927,7 +2938,7 @@
       "cwe": "CWE-639",
       "sev": "medium",
       "note": "NocoDB Missing Ownership Validation in MCP Token Operations",
-      "epss": 0.0019
+      "epss": 0.0031
     },
     {
       "name": "nocodb",
@@ -2938,7 +2949,7 @@
       "cwe": "CWE-613",
       "sev": "medium",
       "note": "NocoDB's Refresh Tokens Not Revoked on Password Reset",
-      "epss": 0.0021
+      "epss": 0.0036
     },
     {
       "name": "nocodb",
@@ -2949,7 +2960,7 @@
       "cwe": "CWE-89",
       "sev": "medium",
       "note": "NocoDB Vulnerable to SQL Injection via DATEADD Formula",
-      "epss": 0.0036
+      "epss": 0.0065
     },
     {
       "name": "node-forge",
@@ -2960,7 +2971,7 @@
       "cwe": "CWE-347",
       "sev": "low",
       "note": "Forge: Certificate signature verified with the issuer's RSA signature scheme",
-      "epss": 0.0013
+      "epss": 0.0016
     },
     {
       "name": "node-forge",
@@ -2971,7 +2982,7 @@
       "cwe": "CWE-20",
       "sev": "low",
       "note": "Forge: Incomplete PKCS#7 padding validation in AES/DES CBC and ECB decryption",
-      "epss": 0.0017
+      "epss": 0.002
     },
     {
       "name": "node-forge",
@@ -2982,7 +2993,7 @@
       "cwe": "CWE-295",
       "sev": "medium",
       "note": "Forge: X.509 pathLenConstraint not enforced by verifyCertificateChain() for CA certificates without keyUsage",
-      "epss": 0.0017
+      "epss": 0.0027
     },
     {
       "name": "node-forge",
@@ -2993,7 +3004,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "Forge: ASN.1 resource exhaustion via BIT STRING decoding in asn1.fromDer",
-      "epss": 0.0043
+      "epss": 0.0066
     },
     {
       "name": "node-forge",
@@ -3015,7 +3026,7 @@
       "cwe": "CWE-20",
       "sev": "medium",
       "note": "Forge: TLS client crash on an unsupported ServerHello compression method",
-      "epss": 0.0053
+      "epss": 0.0056
     },
     {
       "name": "node-forge",
@@ -3038,7 +3049,7 @@
       "cwe": "CWE-476",
       "sev": "medium",
       "note": "Forge: TLS client crash on a handshake record received without a session",
-      "epss": 0.0034
+      "epss": 0.0036
     },
     {
       "name": "node-forge",
@@ -3049,7 +3060,7 @@
       "cwe": "CWE-347",
       "sev": "low",
       "note": "Forge: Ed25519 signature verification accepts small-order public keys",
-      "epss": 0.0023
+      "epss": 0.0024
     },
     {
       "name": "node-opcua",
@@ -3061,7 +3072,7 @@
       "cwe": "CWE-285",
       "sev": "critical",
       "note": "node-opcua: Namespace-Level RBAC Fail-Open - Anonymous Write/Call Bypass via Unbound `DefaultRolePermissions",
-      "epss": 0.0045
+      "epss": 0.0052
     },
     {
       "name": "node-opcua-address-space",
@@ -3073,7 +3084,7 @@
       "cwe": "CWE-285",
       "sev": "critical",
       "note": "node-opcua: Namespace-Level RBAC Fail-Open - Anonymous Write/Call Bypass via Unbound `DefaultRolePermissions",
-      "epss": 0.0045
+      "epss": 0.0052
     },
     {
       "name": "node-opcua-server",
@@ -3085,7 +3096,7 @@
       "cwe": "CWE-285",
       "sev": "critical",
       "note": "node-opcua: Namespace-Level RBAC Fail-Open - Anonymous Write/Call Bypass via Unbound `DefaultRolePermissions",
-      "epss": 0.0045
+      "epss": 0.0052
     },
     {
       "name": "nuxt",
@@ -3097,7 +3108,7 @@
       "cwe": "CWE-436",
       "sev": "medium",
       "note": "Nuxt: Incomplete fix for GHSA-6gq8-jgmh-3ffp: an encoded slash (`%2F`) in the request path bypasses route rules on catch-all page routes",
-      "epss": 0.0027
+      "epss": 0.0037
     },
     {
       "name": "nuxt",
@@ -3109,7 +3120,7 @@
       "cwe": "CWE-436",
       "sev": "medium",
       "note": "Nuxt: Incomplete fix for GHSA-6gq8-jgmh-3ffp: an encoded slash (`%2F`) in the request path bypasses route rules on catch-all page routes",
-      "epss": 0.0027
+      "epss": 0.0037
     },
     {
       "name": "nuxt",
@@ -3121,7 +3132,7 @@
       "cwe": "CWE-1333",
       "sev": "medium",
       "note": "Nuxt payload URL generation has quadratic cost for repeated slashes in the request path",
-      "epss": 0.0029
+      "epss": 0.0051
     },
     {
       "name": "nuxt",
@@ -3133,7 +3144,7 @@
       "cwe": "CWE-209",
       "sev": "medium",
       "note": "Nuxt exposes the message and data of unhandled errors thrown during server rendering",
-      "epss": 0.0031
+      "epss": 0.004
     },
     {
       "name": "nuxt",
@@ -3145,7 +3156,7 @@
       "cwe": "CWE-209",
       "sev": "medium",
       "note": "Nuxt exposes the message and data of unhandled errors thrown during server rendering",
-      "epss": 0.0031
+      "epss": 0.004
     },
     {
       "name": "nuxt",
@@ -3157,7 +3168,7 @@
       "cwe": "CWE-116",
       "sev": "low",
       "note": "Nuxt: Colliding island props can share one `/__nuxt_island` path (incomplete fix for CVE-2026-46342)",
-      "epss": 0.0012
+      "epss": 0.0016
     },
     {
       "name": "nuxt",
@@ -3169,7 +3180,7 @@
       "cwe": "CWE-116",
       "sev": "low",
       "note": "Nuxt: Colliding island props can share one `/__nuxt_island` path (incomplete fix for CVE-2026-46342)",
-      "epss": 0.0012
+      "epss": 0.0016
     },
     {
       "name": "obsidian-sync-mcp",
@@ -3180,7 +3191,7 @@
       "cwe": "CWE-350",
       "sev": "high",
       "note": "obsidian-sync-mcp: Missing Host/Origin validation lets a public website drive a victim's Obsidian vault via DNS rebinding (no-auth mode)",
-      "epss": 0.0061
+      "epss": 0.0053
     },
     {
       "name": "odf-kit",
@@ -3192,7 +3203,7 @@
       "cwe": "CWE-79",
       "sev": "medium",
       "note": "odf-kit: HTML injection leading to XSS in odtToHtml() and odsToHtml() via unescaped style attribute values",
-      "epss": 0.0025
+      "epss": 0.0026
     },
     {
       "name": "openclaw",
@@ -3203,7 +3214,7 @@
       "cwe": "CWE-22",
       "sev": "high",
       "note": "OpenClaw is vulnerable to Path Traversal through path validation bypass",
-      "epss": 0.0076
+      "epss": 0.0085
     },
     {
       "name": "outstatic",
@@ -3214,7 +3225,7 @@
       "cwe": "CWE-918",
       "sev": "medium",
       "note": "Outstatic: Authenticated GitHub REST proxy can send OAuth token to non-GitHub origins",
-      "epss": 0.0037
+      "epss": 0.005
     },
     {
       "name": "parse-server",
@@ -3225,7 +3236,7 @@
       "cwe": "CWE-674",
       "sev": "high",
       "note": "Parse Server crash via deeply nested query condition operators",
-      "epss": 0.0055
+      "epss": 0.0071
     },
     {
       "name": "parse-server",
@@ -3237,7 +3248,7 @@
       "cwe": "CWE-674",
       "sev": "high",
       "note": "Parse Server crash via deeply nested query condition operators",
-      "epss": 0.0055
+      "epss": 0.0071
     },
     {
       "name": "picomatch",
@@ -3248,7 +3259,7 @@
       "cwe": "CWE-1333",
       "sev": "high",
       "note": "Withdrawn Advisory: picomatch vulnerable to ReDoS through single-branch repeated extglobs",
-      "epss": 0.0034
+      "epss": 0.0061
     },
     {
       "name": "protobufjs",
@@ -3259,7 +3270,7 @@
       "cwe": "CWE-94",
       "sev": "critical",
       "note": "protobufjs has an arbitrary code execution issue",
-      "epss": 0.014
+      "epss": 0.0182
     },
     {
       "name": "protobufjs",
@@ -3271,7 +3282,7 @@
       "cwe": "CWE-94",
       "sev": "critical",
       "note": "protobufjs has an arbitrary code execution issue",
-      "epss": 0.014
+      "epss": 0.0182
     },
     {
       "name": "protobufjs",
@@ -3283,7 +3294,7 @@
       "cwe": "CWE-94",
       "sev": "critical",
       "note": "protobufjs has an arbitrary code execution issue",
-      "epss": 0.014
+      "epss": 0.0182
     },
     {
       "name": "qwc2",
@@ -3294,7 +3305,7 @@
       "cwe": "CWE-79",
       "sev": "medium",
       "note": "QGIS QWC2 Cross-Site Scripting vulnerability",
-      "epss": 0.0042
+      "epss": 0.0056
     },
     {
       "name": "react-server-dom-parcel",
@@ -3307,7 +3318,7 @@
       "sev": "critical",
       "note": "React Server Components are Vulnerable to RCE",
       "kev": true,
-      "epss": 0.9973
+      "epss": 0.5381
     },
     {
       "name": "react-server-dom-parcel",
@@ -3320,7 +3331,7 @@
       "sev": "critical",
       "note": "React Server Components are Vulnerable to RCE",
       "kev": true,
-      "epss": 0.9973
+      "epss": 0.5381
     },
     {
       "name": "react-server-dom-parcel",
@@ -3333,7 +3344,7 @@
       "sev": "critical",
       "note": "React Server Components are Vulnerable to RCE",
       "kev": true,
-      "epss": 0.9973
+      "epss": 0.5381
     },
     {
       "name": "react-server-dom-parcel",
@@ -3345,7 +3356,7 @@
       "cwe": "CWE-502",
       "sev": "critical",
       "note": "React: Unauthenticated Remote Code Execution in React Server Components",
-      "epss": 0.0315
+      "epss": 0.0149
     },
     {
       "name": "react-server-dom-parcel",
@@ -3357,7 +3368,7 @@
       "cwe": "CWE-502",
       "sev": "critical",
       "note": "React: Unauthenticated Remote Code Execution in React Server Components",
-      "epss": 0.0315
+      "epss": 0.0149
     },
     {
       "name": "react-server-dom-parcel",
@@ -3369,7 +3380,7 @@
       "cwe": "CWE-502",
       "sev": "critical",
       "note": "React: Unauthenticated Remote Code Execution in React Server Components",
-      "epss": 0.0315
+      "epss": 0.0149
     },
     {
       "name": "react-server-dom-parcel",
@@ -3381,7 +3392,7 @@
       "cwe": "CWE-502",
       "sev": "critical",
       "note": "React: Unauthenticated Remote Code Execution in React Server Components",
-      "epss": 0.0315
+      "epss": 0.0149
     },
     {
       "name": "react-server-dom-turbopack",
@@ -3394,7 +3405,7 @@
       "sev": "critical",
       "note": "React Server Components are Vulnerable to RCE",
       "kev": true,
-      "epss": 0.9973
+      "epss": 0.5381
     },
     {
       "name": "react-server-dom-turbopack",
@@ -3407,7 +3418,7 @@
       "sev": "critical",
       "note": "React Server Components are Vulnerable to RCE",
       "kev": true,
-      "epss": 0.9973
+      "epss": 0.5381
     },
     {
       "name": "react-server-dom-turbopack",
@@ -3420,7 +3431,7 @@
       "sev": "critical",
       "note": "React Server Components are Vulnerable to RCE",
       "kev": true,
-      "epss": 0.9973
+      "epss": 0.5381
     },
     {
       "name": "react-server-dom-turbopack",
@@ -3432,7 +3443,7 @@
       "cwe": "CWE-502",
       "sev": "critical",
       "note": "React: Unauthenticated Remote Code Execution in React Server Components",
-      "epss": 0.0315
+      "epss": 0.0149
     },
     {
       "name": "react-server-dom-turbopack",
@@ -3444,7 +3455,7 @@
       "cwe": "CWE-502",
       "sev": "critical",
       "note": "React: Unauthenticated Remote Code Execution in React Server Components",
-      "epss": 0.0315
+      "epss": 0.0149
     },
     {
       "name": "react-server-dom-turbopack",
@@ -3456,7 +3467,7 @@
       "cwe": "CWE-502",
       "sev": "critical",
       "note": "React: Unauthenticated Remote Code Execution in React Server Components",
-      "epss": 0.0315
+      "epss": 0.0149
     },
     {
       "name": "react-server-dom-turbopack",
@@ -3468,7 +3479,7 @@
       "cwe": "CWE-502",
       "sev": "critical",
       "note": "React: Unauthenticated Remote Code Execution in React Server Components",
-      "epss": 0.0315
+      "epss": 0.0149
     },
     {
       "name": "react-server-dom-webpack",
@@ -3481,7 +3492,7 @@
       "sev": "critical",
       "note": "React Server Components are Vulnerable to RCE",
       "kev": true,
-      "epss": 0.9973
+      "epss": 0.5381
     },
     {
       "name": "react-server-dom-webpack",
@@ -3494,7 +3505,7 @@
       "sev": "critical",
       "note": "React Server Components are Vulnerable to RCE",
       "kev": true,
-      "epss": 0.9973
+      "epss": 0.5381
     },
     {
       "name": "react-server-dom-webpack",
@@ -3507,7 +3518,7 @@
       "sev": "critical",
       "note": "React Server Components are Vulnerable to RCE",
       "kev": true,
-      "epss": 0.9973
+      "epss": 0.5381
     },
     {
       "name": "react-server-dom-webpack",
@@ -3519,7 +3530,7 @@
       "cwe": "CWE-502",
       "sev": "critical",
       "note": "React: Unauthenticated Remote Code Execution in React Server Components",
-      "epss": 0.0315
+      "epss": 0.0149
     },
     {
       "name": "react-server-dom-webpack",
@@ -3531,7 +3542,7 @@
       "cwe": "CWE-502",
       "sev": "critical",
       "note": "React: Unauthenticated Remote Code Execution in React Server Components",
-      "epss": 0.0315
+      "epss": 0.0149
     },
     {
       "name": "react-server-dom-webpack",
@@ -3543,7 +3554,7 @@
       "cwe": "CWE-502",
       "sev": "critical",
       "note": "React: Unauthenticated Remote Code Execution in React Server Components",
-      "epss": 0.0315
+      "epss": 0.0149
     },
     {
       "name": "react-server-dom-webpack",
@@ -3555,7 +3566,7 @@
       "cwe": "CWE-502",
       "sev": "critical",
       "note": "React: Unauthenticated Remote Code Execution in React Server Components",
-      "epss": 0.0315
+      "epss": 0.0149
     },
     {
       "name": "ruflo",
@@ -3587,7 +3598,7 @@
       "cwe": "CWE-22",
       "sev": "critical",
       "note": "Signal K resources API path traversal can disclose the JWT signing secret and enable remote code execution",
-      "epss": 0.0197
+      "epss": 0.0243
     },
     {
       "name": "signalk-server",
@@ -3607,7 +3618,7 @@
       "cwe": "CWE-22",
       "sev": "medium",
       "note": "storyblok-backup: Stored path traversal via unsanitized Storyblok component names in backup output",
-      "epss": 0.0036
+      "epss": 0.0039
     },
     {
       "name": "svelte",
@@ -3619,7 +3630,7 @@
       "cwe": "CWE-79",
       "sev": "medium",
       "note": "Svelte affected by XSS in SSR `<option>` element",
-      "epss": 0.0024
+      "epss": 0.0026
     },
     {
       "name": "synckit",
@@ -3632,7 +3643,7 @@
       "sev": "high",
       "note": "eslint-config-prettier, eslint-plugin-prettier, synckit, @pkgr/core, napi-postinstall have embedded malicious code",
       "kev": true,
-      "epss": 0.0512
+      "epss": 0.0176
     },
     {
       "name": "tiny-secp256k1",
@@ -3644,7 +3655,7 @@
       "cwe": "CWE-252",
       "sev": "medium",
       "note": "tiny-secp256k1: Stale buffer after ignored wasm failure accepts invalid infinity tweak",
-      "epss": 0.0044
+      "epss": 0.0051
     },
     {
       "name": "toml",
@@ -3655,7 +3666,7 @@
       "cwe": "CWE-1321",
       "sev": "high",
       "note": "toml-node: Prototype pollution: parsing a TOML document can write to Object.prototype",
-      "epss": 0.0051
+      "epss": 0.0055
     },
     {
       "name": "undici",
@@ -3666,7 +3677,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "undici WebSocket client vulnerable to denial of service via fragment count bypass",
-      "epss": 0.0079
+      "epss": 0.0088
     },
     {
       "name": "undici",
@@ -3678,7 +3689,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "undici WebSocket client vulnerable to denial of service via fragment count bypass",
-      "epss": 0.0079
+      "epss": 0.0088
     },
     {
       "name": "undici",
@@ -3690,7 +3701,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "undici WebSocket client vulnerable to denial of service via fragment count bypass",
-      "epss": 0.0079
+      "epss": 0.0088
     },
     {
       "name": "vite",
@@ -3702,7 +3713,7 @@
       "sev": "high",
       "note": "Vite has a `server.fs.deny` bypassed for `inline` and `raw` with `?import` query",
       "kev": true,
-      "epss": 0.7494
+      "epss": 0.1485
     },
     {
       "name": "vite",
@@ -3715,7 +3726,7 @@
       "sev": "high",
       "note": "Vite has a `server.fs.deny` bypassed for `inline` and `raw` with `?import` query",
       "kev": true,
-      "epss": 0.7494
+      "epss": 0.1485
     },
     {
       "name": "vite",
@@ -3728,7 +3739,7 @@
       "sev": "high",
       "note": "Vite has a `server.fs.deny` bypassed for `inline` and `raw` with `?import` query",
       "kev": true,
-      "epss": 0.7494
+      "epss": 0.1485
     },
     {
       "name": "vite",
@@ -3741,7 +3752,7 @@
       "sev": "high",
       "note": "Vite has a `server.fs.deny` bypassed for `inline` and `raw` with `?import` query",
       "kev": true,
-      "epss": 0.7494
+      "epss": 0.1485
     },
     {
       "name": "vite",
@@ -3754,7 +3765,7 @@
       "sev": "high",
       "note": "Vite has a `server.fs.deny` bypassed for `inline` and `raw` with `?import` query",
       "kev": true,
-      "epss": 0.7494
+      "epss": 0.1485
     },
     {
       "name": "vm2",
@@ -3765,7 +3776,7 @@
       "cwe": "CWE-94",
       "sev": "critical",
       "note": "VM2 Sandbox Breakout Through __lookupGetter__",
-      "epss": 0.0091
+      "epss": 0.0102
     },
     {
       "name": "vm2",
@@ -3787,7 +3798,7 @@
       "cwe": "CWE-94",
       "sev": "critical",
       "note": "VM2 Has a Sandbox Escape Issue via SuppressedError",
-      "epss": 0.0071
+      "epss": 0.0074
     },
     {
       "name": "vm2",
@@ -3798,7 +3809,7 @@
       "cwe": "CWE-693",
       "sev": "medium",
       "note": "vm2's Transformer Fast-Path Bypass Exposes Internal State Variable",
-      "epss": 0.0025
+      "epss": 0.0035
     },
     {
       "name": "vm2",
@@ -3809,7 +3820,7 @@
       "cwe": "CWE-284",
       "sev": "critical",
       "note": "vm2 NodeVM `nesting: true` bypasses `require: false` allowing sandbox escape and arbitrary OS command execution",
-      "epss": 0.01
+      "epss": 0.0064
     },
     {
       "name": "vm2",
@@ -3820,7 +3831,7 @@
       "cwe": "CWE-668",
       "sev": "critical",
       "note": "vm2 has sandbox breakout via `neutralizeArraySpeciesBatch`",
-      "epss": 0.0089
+      "epss": 0.0096
     },
     {
       "name": "vm2",
@@ -3831,7 +3842,7 @@
       "cwe": "CWE-653",
       "sev": "critical",
       "note": "vm2 has Sandbox Breakout Through Null Proto Exception",
-      "epss": 0.0101
+      "epss": 0.0096
     },
     {
       "name": "vm2",
@@ -3860,7 +3871,7 @@
       "cwe": "CWE-287",
       "sev": "critical",
       "note": "Xen Orchestra: Empty-object login token",
-      "epss": 0.0078
+      "epss": 0.011
     }
   ],
   "pip": [
@@ -3874,7 +3885,7 @@
       "cwe": "CWE-22",
       "sev": "high",
       "note": "AIT-GUI route chain allows unauthenticated Python execution in server process",
-      "epss": 0.0105
+      "epss": 0.0039
     },
     {
       "name": "ajenti.plugin.core",
@@ -3885,7 +3896,7 @@
       "cwe": "CWE-287",
       "sev": "critical",
       "note": "ajenti.plugin.core has password bypass when 2FA is activated",
-      "epss": 0.0034
+      "epss": 0.0046
     },
     {
       "name": "amqtt",
@@ -3909,7 +3920,7 @@
       "cwe": "CWE-401",
       "sev": "high",
       "note": "aMQTT: Denial of Service (DoS) via Memory Leak in Unmanaged QoS 2 Session Handshakes",
-      "epss": 0.0062
+      "epss": 0.0063
     },
     {
       "name": "arize-phoenix",
@@ -3921,7 +3932,7 @@
       "cwe": "CWE-134",
       "sev": "critical",
       "note": "Phoenix: Format String Injection in applyChatTemplate",
-      "epss": 0.0055
+      "epss": 0.0066
     },
     {
       "name": "borgbackup",
@@ -3957,7 +3968,7 @@
       "sev": "critical",
       "note": "Brotli: Out-of-bounds write in the Brotli decoder (\"Node2Shell\") also affects the PyPI Brotli package",
       "kev": true,
-      "epss": 0.9999
+      "epss": 0.3298
     },
     {
       "name": "brotlicffi",
@@ -3970,7 +3981,7 @@
       "sev": "critical",
       "note": "Brotli: Out-of-bounds write in the Brotli decoder (\"Node2Shell\") also affects the PyPI Brotli package",
       "kev": true,
-      "epss": 0.9999
+      "epss": 0.3298
     },
     {
       "name": "chainlit",
@@ -3981,7 +3992,7 @@
       "cwe": "CWE-22",
       "sev": "high",
       "note": "chainlit : Chainlit allows authenticated arbitrary file reads through custom element updates",
-      "epss": 0.0972
+      "epss": 0.0074
     },
     {
       "name": "ckan",
@@ -3992,7 +4003,7 @@
       "cwe": "CWE-384",
       "sev": "medium",
       "note": "CKAN: Session Fixation in Registration View",
-      "epss": 0.0052
+      "epss": 0.0056
     },
     {
       "name": "ckan",
@@ -4004,7 +4015,7 @@
       "cwe": "CWE-384",
       "sev": "medium",
       "note": "CKAN: Session Fixation in Registration View",
-      "epss": 0.0052
+      "epss": 0.0056
     },
     {
       "name": "compose-lint",
@@ -4016,7 +4027,7 @@
       "cwe": "CWE-117",
       "sev": "low",
       "note": "compose-lint: File paths embedded in pull requests can inject CI workflow commands through command-line error messages",
-      "epss": 0.004
+      "epss": 0.0053
     },
     {
       "name": "dcap-qvl",
@@ -4027,7 +4038,7 @@
       "cwe": "CWE-295",
       "sev": "critical",
       "note": "dcap-qvl has Missing Verification for QE Identity",
-      "epss": 0.0021
+      "epss": 0.0024
     },
     {
       "name": "django-docutils",
@@ -4038,7 +4049,7 @@
       "cwe": "CWE-22",
       "sev": "high",
       "note": "django-docutils unsafe Docutils defaults allow local file disclosure, SSRF, and stored XSS",
-      "epss": 0.0045
+      "epss": 0.0046
     },
     {
       "name": "dnspython",
@@ -4049,7 +4060,7 @@
       "cwe": "CWE-674",
       "sev": "high",
       "note": "dnspython dns.name.from_wire_parser() excessive CPU use",
-      "epss": 0.0048
+      "epss": 0.0063
     },
     {
       "name": "dnspython",
@@ -4060,7 +4071,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "dnspython has excessive memory and CPU use",
-      "epss": 0.0053
+      "epss": 0.0063
     },
     {
       "name": "electrum",
@@ -4071,7 +4082,7 @@
       "cwe": "CWE-347",
       "sev": "critical",
       "note": "Electrum: Malicious server can replace a just-broadcast tx and try to trick user into RBF-ing it",
-      "epss": 0.0023
+      "epss": 0.0032
     },
     {
       "name": "eml-parser",
@@ -4082,7 +4093,7 @@
       "cwe": "CWE-407",
       "sev": "medium",
       "note": "eml_parser: Algorithmic-complexity DoS (O(n^4) regex backtracking) in Received-header parsing",
-      "epss": 0.0046
+      "epss": 0.0051
     },
     {
       "name": "envd",
@@ -4105,7 +4116,7 @@
       "cwe": "CWE-22",
       "sev": "critical",
       "note": "Flyto2 Core: Arbitrary file write via unguarded data.*/file.* modules (incomplete fix of CVE-2026-67429)",
-      "epss": 0.0075
+      "epss": 0.008
     },
     {
       "name": "flyto-core",
@@ -4127,7 +4138,7 @@
       "cwe": "CWE-918",
       "sev": "high",
       "note": "Flyto2 Core: http.paginate follows server-supplied next-page URLs (Link header / cursor) without SSRF revalidation",
-      "epss": 0.0037
+      "epss": 0.0041
     },
     {
       "name": "flyto-core",
@@ -4138,7 +4149,7 @@
       "cwe": "CWE-918",
       "sev": "high",
       "note": "Flyto2 Core: SSRF guard bypass via DNS rebinding (validate_url_ssrf resolves-then-connects without pinning)",
-      "epss": 0.0035
+      "epss": 0.0038
     },
     {
       "name": "gpustack",
@@ -4150,7 +4161,7 @@
       "sev": "critical",
       "note": "GPUStack: Authentication bypass via trusted loopback source (reverse-proxy TCP peer or X-GPUStack-Real-IP header) grants unauthenticated admin",
       "kev": true,
-      "epss": 0.1879
+      "epss": 0.0855
     },
     {
       "name": "guard-core",
@@ -4162,7 +4173,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "Guard Core: Quadratic ReDoS in built-in detection pattern freezes the event loop with a single request",
-      "epss": 0.0053
+      "epss": 0.0063
     },
     {
       "name": "guard-core",
@@ -4174,7 +4185,7 @@
       "cwe": "CWE-693",
       "sev": "low",
       "note": "Guard Core: Whitespace-collapse preprocessing permanently disables the CRLF-anchored http-splitting and command-injection detectors in the default detection mode",
-      "epss": 0.0032
+      "epss": 0.0036
     },
     {
       "name": "guard-core",
@@ -4186,7 +4197,7 @@
       "cwe": "CWE-20",
       "sev": "medium",
       "note": "Guard Core: Unvalidated X-Forwarded-For-derived string used as a Redis key component and interpolated into a KEYS glob pattern",
-      "epss": 0.0037
+      "epss": 0.0039
     },
     {
       "name": "inscriptis",
@@ -4198,7 +4209,7 @@
       "cwe": "CWE-400",
       "sev": "medium",
       "note": "Inscriptis: Quadratic memory growth from sibling <table> elements in get_text()",
-      "epss": 0.0091
+      "epss": 0.006
     },
     {
       "name": "ironic-inspector",
@@ -4220,7 +4231,7 @@
       "cwe": "CWE-918",
       "sev": "low",
       "note": "iSponsorBlockTV: SSRF via Malicious SSDP Response Spoofing in Local Device Discovery",
-      "epss": 0.0016
+      "epss": 0.0024
     },
     {
       "name": "Jinja2",
@@ -4231,7 +4242,7 @@
       "cwe": "CWE-1336",
       "sev": "medium",
       "note": "Jinja2 vulnerable to sandbox breakout through attr filter selecting format method",
-      "epss": 0.0051
+      "epss": 0.0059
     },
     {
       "name": "jupyter-mcp-server",
@@ -4242,7 +4253,7 @@
       "cwe": "CWE-306",
       "sev": "high",
       "note": "Jupyter MCP Server: Unauthenticated management routes can hijack the Jupyter backend in standalone HTTP mode",
-      "epss": 0.0109
+      "epss": 0.0115
     },
     {
       "name": "jupyter-mcp-server",
@@ -4253,7 +4264,7 @@
       "cwe": "CWE-350",
       "sev": "critical",
       "note": "Jupyter MCP Server: Browser DNS rebinding can hijack the Jupyter backend through management routes",
-      "epss": 0.005
+      "epss": 0.0054
     },
     {
       "name": "langflow",
@@ -4265,7 +4276,7 @@
       "sev": "critical",
       "note": "Langflow Unauth RCE",
       "kev": true,
-      "epss": 0.9999
+      "epss": 0.8063
     },
     {
       "name": "langflow",
@@ -4277,7 +4288,7 @@
       "sev": "critical",
       "note": "Langflow CORS misconfiguration enables Account Takeover and RCE",
       "kev": true,
-      "epss": 0.9322
+      "epss": 0.1454
     },
     {
       "name": "langflow",
@@ -4289,7 +4300,7 @@
       "sev": "high",
       "note": "Langflow affected by Remote Code Execution via validate_code() exec()",
       "kev": true,
-      "epss": 0.6256
+      "epss": 0.4086
     },
     {
       "name": "langflow",
@@ -4301,7 +4312,7 @@
       "sev": "critical",
       "note": "Unauthenticated Remote Code Execution in Langflow via Public Flow Build Endpoint",
       "kev": true,
-      "epss": 0.9681
+      "epss": 0.2756
     },
     {
       "name": "langflow",
@@ -4325,7 +4336,7 @@
       "cwe": "CWE-94",
       "sev": "high",
       "note": "Langflow: Prompt injection in Langflow Smart Transform can lead to code execution",
-      "epss": 0.0038
+      "epss": 0.005
     },
     {
       "name": "langflow-base",
@@ -4337,7 +4348,7 @@
       "sev": "critical",
       "note": "Langflow Unauth RCE",
       "kev": true,
-      "epss": 0.9999
+      "epss": 0.8063
     },
     {
       "name": "lightning",
@@ -4348,7 +4359,7 @@
       "cwe": "CWE-22",
       "sev": "critical",
       "note": "pytorch-lightning vulnerable to Arbitrary File Write via /v1/runs API endpoint",
-      "epss": 0.0132
+      "epss": 0.0189
     },
     {
       "name": "lightning",
@@ -4359,7 +4370,7 @@
       "cwe": "CWE-434",
       "sev": "critical",
       "note": "PyTorch Lightning path traversal vulnerability",
-      "epss": 0.0112
+      "epss": 0.0139
     },
     {
       "name": "litellm",
@@ -4372,7 +4383,7 @@
       "sev": "high",
       "note": "LiteLLM has a sandbox escape in custom-code guardrail",
       "kev": true,
-      "epss": 0.828
+      "epss": 0.2021
     },
     {
       "name": "litellm",
@@ -4385,7 +4396,7 @@
       "sev": "critical",
       "note": "LiteLLM has SQL Injection in Proxy API key verification",
       "kev": true,
-      "epss": 0.8942
+      "epss": 0.0577
     },
     {
       "name": "litellm",
@@ -4398,7 +4409,7 @@
       "sev": "high",
       "note": "LiteLLM: Authenticated command execution via MCP stdio test endpoints",
       "kev": true,
-      "epss": 0.9144
+      "epss": 0.0731
     },
     {
       "name": "litellm",
@@ -4422,7 +4433,7 @@
       "cwe": "CWE-306",
       "sev": "critical",
       "note": "LMCache: Remote code execution via unsafe deserialization in multiprocess mode transport",
-      "epss": 0.0102
+      "epss": 0.0089
     },
     {
       "name": "mail-parser",
@@ -4434,7 +4445,7 @@
       "cwe": "CWE-1333",
       "sev": "high",
       "note": "mail-parser is vulnerable to polynomial ReDoS in email header parsing",
-      "epss": 0.005
+      "epss": 0.0068
     },
     {
       "name": "mail-parser",
@@ -4446,7 +4457,7 @@
       "cwe": "CWE-22",
       "sev": "medium",
       "note": "mail-parser: Path Traversal vulnerability in attachment extraction",
-      "epss": 0.006
+      "epss": 0.0074
     },
     {
       "name": "mail-parser",
@@ -4457,7 +4468,7 @@
       "cwe": "CWE-20",
       "sev": "high",
       "note": "mail-parser: Sender IP address spoofing in get_server_ipaddress()",
-      "epss": 0.002
+      "epss": 0.0024
     },
     {
       "name": "mail-parser",
@@ -4468,7 +4479,7 @@
       "cwe": "CWE-248",
       "sev": "medium",
       "note": "mail-parser: Uncaught exceptions and silent header loss in mail-parser on attacker-controlled input",
-      "epss": 0.0036
+      "epss": 0.0046
     },
     {
       "name": "mail-parser",
@@ -4480,7 +4491,7 @@
       "cwe": "CWE-248",
       "sev": "medium",
       "note": "mail-parser: Uncaught `OverflowError` / `OSError` on an out-of-range `Received` date",
-      "epss": 0.004
+      "epss": 0.0052
     },
     {
       "name": "mail-parser",
@@ -4492,7 +4503,7 @@
       "cwe": "CWE-248",
       "sev": "medium",
       "note": "mail-parser: One hostile attachment aborts `write_attachments()` and silently drops the rest of the batch",
-      "epss": 0.0034
+      "epss": 0.0046
     },
     {
       "name": "marimo",
@@ -4504,7 +4515,7 @@
       "sev": "critical",
       "note": "Marimo: Pre-Auth Remote Code Execution via Terminal WebSocket Authentication Bypass",
       "kev": true,
-      "epss": 0.9974
+      "epss": 0.4426
     },
     {
       "name": "mcp",
@@ -4516,7 +4527,7 @@
       "cwe": "CWE-345",
       "sev": "high",
       "note": "Model Context Protocol Python SDK: OAuth client could send credentials to an authorization server chosen by the MCP server",
-      "epss": 0.0033
+      "epss": 0.0032
     },
     {
       "name": "mcp",
@@ -4528,7 +4539,7 @@
       "cwe": "CWE-345",
       "sev": "high",
       "note": "Model Context Protocol Python SDK: OAuth client could send credentials to an authorization server chosen by the MCP server",
-      "epss": 0.0033
+      "epss": 0.0032
     },
     {
       "name": "memtomem-stm",
@@ -4540,7 +4551,7 @@
       "cwe": "CWE-362",
       "sev": "low",
       "note": "memtomem-stm: Concurrent LTM recovery can duplicate reconnects or reuse a cancelled transport session",
-      "epss": 0.0019
+      "epss": 0.0027
     },
     {
       "name": "memtomem-stm",
@@ -4552,7 +4563,7 @@
       "cwe": "CWE-116",
       "sev": "low",
       "note": "memtomem-stm: Surfaced memory data can escape the Markdown compatibility boundary",
-      "epss": 0.0068
+      "epss": 0.0045
     },
     {
       "name": "mistune",
@@ -4563,7 +4574,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "Mistune: Quadratic-time DoS in parse_link_href via unbounded parenthesis scan on empty-label links",
-      "epss": 0.0055
+      "epss": 0.0066
     },
     {
       "name": "mistune",
@@ -4574,7 +4585,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "Mistune: Quadratic-time DoS in inline image parsing (precedence_scan) bypasses not-is-image guards",
-      "epss": 0.0054
+      "epss": 0.0061
     },
     {
       "name": "mlflow",
@@ -4598,7 +4609,7 @@
       "cwe": "CWE-409",
       "sev": "medium",
       "note": "Mobile Security Framework (MobSF) Allows Web Server Resource Exhaustion via ZIP of Death Attack",
-      "epss": 0.0053
+      "epss": 0.0078
     },
     {
       "name": "nltk",
@@ -4701,7 +4712,7 @@
       "cwe": "CWE-59",
       "sev": "high",
       "note": "NLTK: ZIP package extraction follows in-root hardlinks and overwrites files outside the NLTK data root",
-      "epss": 0.0022
+      "epss": 0.0017
     },
     {
       "name": "nltk",
@@ -4737,7 +4748,7 @@
       "cwe": "CWE-77",
       "sev": "critical",
       "note": "NLTK incomplete fix: additional JVM/JAR sandbox bypass through unvalidated launcher tokens in java() command arguments",
-      "epss": 0.0068
+      "epss": 0.0073
     },
     {
       "name": "nltk",
@@ -4749,7 +4760,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "NLTK: XMLCorpusView comment and CDATA parsing permits quadratic CPU denial of service",
-      "epss": 0.0051
+      "epss": 0.0061
     },
     {
       "name": "nltk",
@@ -4761,7 +4772,7 @@
       "cwe": "CWE-835",
       "sev": "medium",
       "note": "NLTK: Downloader cyclic collection indices cause an infinite closure walk",
-      "epss": 0.0036
+      "epss": 0.0047
     },
     {
       "name": "nltk",
@@ -4772,7 +4783,7 @@
       "cwe": "CWE-74",
       "sev": "medium",
       "note": "NLTK: ARFF_Formatter Injects Weka ARFF Schema Directives via Attacker-Controlled Class Labels",
-      "epss": 0.0044
+      "epss": 0.0043
     },
     {
       "name": "nltk",
@@ -4783,7 +4794,7 @@
       "cwe": "CWE-674",
       "sev": "high",
       "note": "Natural Language Toolkit (NLTK): Uncontrolled recursion (crash DoS) in DependencyGraph.tree()/triples()",
-      "epss": 0.0057
+      "epss": 0.0063
     },
     {
       "name": "nltk",
@@ -4794,7 +4805,7 @@
       "cwe": "CWE-674",
       "sev": "high",
       "note": "Natural Language Toolkit (NLTK): Uncontrolled recursion (crash DoS) in Synset.tree()/acyclic_tree() via WordNet relation traversal",
-      "epss": 0.0051
+      "epss": 0.0061
     },
     {
       "name": "nltk",
@@ -4805,7 +4816,7 @@
       "cwe": "CWE-674",
       "sev": "medium",
       "note": "NLTK: Uncontrolled recursion in CCG lexicon parser causes denial of service via deeply nested category input",
-      "epss": 0.0054
+      "epss": 0.0052
     },
     {
       "name": "nltk",
@@ -4816,7 +4827,7 @@
       "cwe": "CWE-674",
       "sev": "medium",
       "note": "NLTK: Uncontrolled recursion in DependencyGraph traversal causes denial of service via deep dependency chains",
-      "epss": 0.0048
+      "epss": 0.0052
     },
     {
       "name": "nltk",
@@ -4827,7 +4838,7 @@
       "cwe": "CWE-674",
       "sev": "medium",
       "note": "NLTK: Uncontrolled recursion in semantic-logic type parser causes denial of service via nested type strings",
-      "epss": 0.0048
+      "epss": 0.0052
     },
     {
       "name": "nltk",
@@ -4838,7 +4849,7 @@
       "cwe": "CWE-674",
       "sev": "medium",
       "note": "NLTK: Uncontrolled recursion in Tree.fromlist causes denial of service via deeply nested list input",
-      "epss": 0.0048
+      "epss": 0.0052
     },
     {
       "name": "nltk",
@@ -4849,7 +4860,7 @@
       "cwe": "CWE-674",
       "sev": "medium",
       "note": "NLTK: Uncontrolled recursion in Toolbox settings helpers causes denial of service via deeply nested input",
-      "epss": 0.0054
+      "epss": 0.0052
     },
     {
       "name": "nltk",
@@ -4861,7 +4872,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "NLTK: Compile-time regex DoS in NLTK search/tokenizer sinks: quadratic regex-engine compile bypasses the match-only timeout",
-      "epss": 0.0053
+      "epss": 0.0063
     },
     {
       "name": "nltk",
@@ -4872,7 +4883,7 @@
       "cwe": "CWE-400",
       "sev": "medium",
       "note": "NLTK: Uncontrolled recursion in WordNet Synset hypernym walkers (max_depth/min_depth/hypernym_paths/hypernym_distances) causes DoS",
-      "epss": 0.0024
+      "epss": 0.0017
     },
     {
       "name": "nltk",
@@ -4883,7 +4894,7 @@
       "cwe": "CWE-400",
       "sev": "medium",
       "note": "NLTK: Quadratic-time DoS in SeekableUnicodeStreamReader.readline on an unterminated corpus line via per-iteration full-buffer rescan",
-      "epss": 0.0048
+      "epss": 0.0052
     },
     {
       "name": "nltk",
@@ -4894,7 +4905,7 @@
       "cwe": "CWE-400",
       "sev": "medium",
       "note": "NLTK: Quadratic CPU exhaustion in NLTK XMLCorpusView.read_block via deeply nested XML corpus tags",
-      "epss": 0.0054
+      "epss": 0.0052
     },
     {
       "name": "nltk",
@@ -4906,7 +4917,7 @@
       "cwe": "CWE-200",
       "sev": "medium",
       "note": "NLTK: StreamBackedCorpusView constructor os.stat leaks out-of-root file existence, size, and mtime bypassing pathsec ENFORCE",
-      "epss": 0.004
+      "epss": 0.0042
     },
     {
       "name": "nltk",
@@ -4917,7 +4928,7 @@
       "cwe": "CWE-426",
       "sev": "high",
       "note": "NLTK: Untrusted search path in prover9/mace4 config allows local code execution via relative binary_location",
-      "epss": 0.0022
+      "epss": 0.0016
     },
     {
       "name": "nltk",
@@ -5020,7 +5031,7 @@
       "cwe": "CWE-669",
       "sev": "medium",
       "note": "OpenStack Nova: Nova scheduler hint injection bypasses Placement resource claims and scheduling constraints",
-      "epss": 0.0029
+      "epss": 0.0049
     },
     {
       "name": "nova",
@@ -5032,7 +5043,7 @@
       "cwe": "CWE-669",
       "sev": "medium",
       "note": "OpenStack Nova: Nova scheduler hint injection bypasses Placement resource claims and scheduling constraints",
-      "epss": 0.0029
+      "epss": 0.0049
     },
     {
       "name": "nova",
@@ -5044,7 +5055,7 @@
       "cwe": "CWE-669",
       "sev": "medium",
       "note": "OpenStack Nova: Nova scheduler hint injection bypasses Placement resource claims and scheduling constraints",
-      "epss": 0.0029
+      "epss": 0.0049
     },
     {
       "name": "nova",
@@ -5056,7 +5067,7 @@
       "cwe": "CWE-669",
       "sev": "medium",
       "note": "OpenStack Nova: Nova scheduler hint injection bypasses Placement resource claims and scheduling constraints",
-      "epss": 0.0029
+      "epss": 0.0049
     },
     {
       "name": "openstack-magnum",
@@ -5067,7 +5078,7 @@
       "cwe": "CWE-200",
       "sev": "critical",
       "note": "Openstack Magnum Unsafe Credential Handling",
-      "epss": 0.0188
+      "epss": 0.0193
     },
     {
       "name": "opentelemetry-api",
@@ -5078,7 +5089,7 @@
       "cwe": "CWE-1333",
       "sev": "medium",
       "note": "OpenTelemetry Python API: Denial of service through quadratic-time traceparent parsing",
-      "epss": 0.0055
+      "epss": 0.0069
     },
     {
       "name": "paddlepaddle",
@@ -5089,7 +5100,7 @@
       "cwe": "CWE-125",
       "sev": "critical",
       "note": "PaddlePaddle Out-of-bounds Read vulnerability",
-      "epss": 0.0073
+      "epss": 0.0066
     },
     {
       "name": "pandasai",
@@ -5100,7 +5111,7 @@
       "cwe": "CWE-74",
       "sev": "critical",
       "note": "PandasAI vulnerable to arbitrary code execution",
-      "epss": 0.0142
+      "epss": 0.0163
     },
     {
       "name": "pgadmin4",
@@ -5111,7 +5122,7 @@
       "cwe": "CWE-94",
       "sev": "critical",
       "note": "pgAdmin4 vulnerable to Remote Code Execution (RCE) when running in server mode",
-      "epss": 0.127
+      "epss": 0.0105
     },
     {
       "name": "pgadmin4",
@@ -5122,7 +5133,7 @@
       "cwe": "CWE-94",
       "sev": "critical",
       "note": "pgAdmin 4 Vulnerable to Remote Code Execution",
-      "epss": 0.563
+      "epss": 0.0389
     },
     {
       "name": "pgadmin4",
@@ -5133,7 +5144,7 @@
       "cwe": "CWE-79",
       "sev": "critical",
       "note": "pgAdmin 4 Vulnerable to Cross-Site Scripting (XSS) via Query Result Rendering",
-      "epss": 0.0033
+      "epss": 0.0046
     },
     {
       "name": "pgadmin4",
@@ -5144,7 +5155,7 @@
       "cwe": "CWE-284",
       "sev": "critical",
       "note": "pgAdmin 4 server mode has an authorization vulnerability affecting Server Groups, Servers, Shared Servers, Background Processes, and Debugger modules",
-      "epss": 0.0046
+      "epss": 0.0065
     },
     {
       "name": "Pillow",
@@ -5155,7 +5166,7 @@
       "cwe": "CWE-94",
       "sev": "critical",
       "note": "Arbitrary Code Execution in Pillow",
-      "epss": 0.017
+      "epss": 0.0169
     },
     {
       "name": "Pillow",
@@ -5166,7 +5177,7 @@
       "cwe": "CWE-770",
       "sev": "medium",
       "note": "Pillow: Memory DoS in TIFF and EXIF IFD parsing via overlapping tag data",
-      "epss": 0.0049
+      "epss": 0.0052
     },
     {
       "name": "Pillow",
@@ -5177,7 +5188,7 @@
       "cwe": "CWE-787",
       "sev": "high",
       "note": "Pillow: Heap buffer overflow saving TIFF with libtiff when tags override image size",
-      "epss": 0.0048
+      "epss": 0.0052
     },
     {
       "name": "pipecat-ai",
@@ -5189,7 +5200,7 @@
       "cwe": "CWE-502",
       "sev": "critical",
       "note": "Pipecat: Remote Code Execution by Pickle Deserialization Through LivekitFrameSerializer",
-      "epss": 0.0071
+      "epss": 0.0094
     },
     {
       "name": "Plone",
@@ -5223,7 +5234,7 @@
       "cwe": "CWE-89",
       "sev": "critical",
       "note": "PraisonAI Has Second-Order SQL Injection in `get_all_user_threads`",
-      "epss": 0.0056
+      "epss": 0.0063
     },
     {
       "name": "praisonai",
@@ -5235,7 +5246,7 @@
       "cwe": "CWE-78",
       "sev": "critical",
       "note": "PraisonAI: OS Command Injection in MCPHandler.parse_mcp_command()",
-      "epss": 0.0086
+      "epss": 0.0105
     },
     {
       "name": "praisonai",
@@ -5246,7 +5257,7 @@
       "cwe": "CWE-306",
       "sev": "critical",
       "note": "PraisonAI Has Missing Authentication in WebSocket Gateway",
-      "epss": 0.0046
+      "epss": 0.0055
     },
     {
       "name": "praisonai",
@@ -5257,7 +5268,7 @@
       "cwe": "CWE-863",
       "sev": "critical",
       "note": "PraisonAI Has Authentication Bypass via OAuthManager.validate_token()",
-      "epss": 0.004
+      "epss": 0.0044
     },
     {
       "name": "praisonai",
@@ -5268,7 +5279,7 @@
       "cwe": "CWE-77",
       "sev": "critical",
       "note": "PraisonAI has an incomplete fix for CVE-2026-34935 - OS Command Injection",
-      "epss": 0.0054
+      "epss": 0.0077
     },
     {
       "name": "PraisonAI",
@@ -5279,7 +5290,7 @@
       "cwe": "CWE-22",
       "sev": "critical",
       "note": "PraisonAI Vulnerable to Arbitrary File Write / Path Traversal in Action Orchestrator",
-      "epss": 0.0032
+      "epss": 0.0045
     },
     {
       "name": "PraisonAI",
@@ -5290,7 +5301,7 @@
       "cwe": "CWE-829",
       "sev": "critical",
       "note": "PraisonAI Vulnerable Untrusted Remote Template Code Execution",
-      "epss": 0.0031
+      "epss": 0.0047
     },
     {
       "name": "PraisonAI",
@@ -5302,7 +5313,7 @@
       "cwe": "CWE-22",
       "sev": "critical",
       "note": "PraisonAI vulnerable to arbitrary file write via path traversal in `praisonai recipe unpack`",
-      "epss": 0.0039
+      "epss": 0.0055
     },
     {
       "name": "PraisonAI",
@@ -5313,7 +5324,7 @@
       "cwe": "CWE-78",
       "sev": "critical",
       "note": "PraisonAI has critical RCE via `type: job` workflow YAML",
-      "epss": 0.0062
+      "epss": 0.0096
     },
     {
       "name": "PraisonAI",
@@ -5324,7 +5335,7 @@
       "cwe": "CWE-306",
       "sev": "critical",
       "note": "PraisonAI Browser Server allows unauthenticated WebSocket clients to hijack connected extension sessions",
-      "epss": 0.0043
+      "epss": 0.0054
     },
     {
       "name": "PraisonAI",
@@ -5335,7 +5346,7 @@
       "cwe": "CWE-20",
       "sev": "critical",
       "note": "PraisonAI MCP `tools/call` path-traversal => RCE via Python `.pth` injection",
-      "epss": 0.0062
+      "epss": 0.0067
     },
     {
       "name": "praisonaiagents",
@@ -5346,7 +5357,7 @@
       "cwe": "CWE-693",
       "sev": "critical",
       "note": "PraisonAI: Python Sandbox Escape via str Subclass startswith() Override in execute_code",
-      "epss": 0.1368
+      "epss": 0.0089
     },
     {
       "name": "praisonaiagents",
@@ -5357,7 +5368,7 @@
       "cwe": "CWE-657",
       "sev": "critical",
       "note": "PraisonAI has sandbox escape via exception frame traversal in `execute_code` (subprocess mode)",
-      "epss": 0.005
+      "epss": 0.0065
     },
     {
       "name": "praisonaiagents",
@@ -5368,7 +5379,7 @@
       "cwe": "CWE-78",
       "sev": "critical",
       "note": "PraisonAIAgents has an OS Command Injection via shell=True in Memory Hooks Executor (memory/hooks.py)",
-      "epss": 0.0024
+      "epss": 0.0035
     },
     {
       "name": "praisonaiagents",
@@ -5379,7 +5390,7 @@
       "cwe": "CWE-78",
       "sev": "critical",
       "note": "PraisonAI has critical RCE via `type: job` workflow YAML",
-      "epss": 0.0062
+      "epss": 0.0096
     },
     {
       "name": "praisonaiagents",
@@ -5390,7 +5401,7 @@
       "cwe": "CWE-306",
       "sev": "critical",
       "note": "PraisonAI Browser Server allows unauthenticated WebSocket clients to hijack connected extension sessions",
-      "epss": 0.0043
+      "epss": 0.0054
     },
     {
       "name": "Products.SQLAlchemyDA",
@@ -5401,7 +5412,7 @@
       "cwe": "CWE-89",
       "sev": "critical",
       "note": "SQLAlchemyDA unauthenticated arbitrary SQL query execution",
-      "epss": 0.0089
+      "epss": 0.0133
     },
     {
       "name": "pyfory",
@@ -5413,7 +5424,7 @@
       "cwe": "CWE-502",
       "sev": "critical",
       "note": "Apache Pyfory python is vulnerable to deserialization of untrusted data",
-      "epss": 0.4896
+      "epss": 0.017
     },
     {
       "name": "pyfury",
@@ -5425,7 +5436,7 @@
       "cwe": "CWE-502",
       "sev": "critical",
       "note": "Apache Pyfory python is vulnerable to deserialization of untrusted data",
-      "epss": 0.4896
+      "epss": 0.017
     },
     {
       "name": "pyload-ng",
@@ -5436,7 +5447,7 @@
       "cwe": "CWE-94",
       "sev": "critical",
       "note": "Code Injection in pyload-ng",
-      "epss": 0.9591
+      "epss": 0.7496
     },
     {
       "name": "pyload-ng",
@@ -5447,7 +5458,7 @@
       "cwe": "CWE-1125",
       "sev": "critical",
       "note": "Excessive Attack Surface in pyload-ng",
-      "epss": 0.0079
+      "epss": 0.0084
     },
     {
       "name": "pyload-ng",
@@ -5458,7 +5469,7 @@
       "cwe": "CWE-434",
       "sev": "critical",
       "note": "pyLoad allows upload to arbitrary folder lead to RCE",
-      "epss": 0.0135
+      "epss": 0.0149
     },
     {
       "name": "pyload-ng",
@@ -5469,7 +5480,7 @@
       "cwe": "CWE-94",
       "sev": "critical",
       "note": "pyload-ng vulnerable to RCE with js2py sandbox escape",
-      "epss": 0.1857
+      "epss": 0.112
     },
     {
       "name": "pyload-ng",
@@ -5480,7 +5491,7 @@
       "cwe": "CWE-79",
       "sev": "critical",
       "note": "pyLoad vulnerable to XSS through insecure CAPTCHA",
-      "epss": 0.013
+      "epss": 0.0212
     },
     {
       "name": "pyload-ng",
@@ -5491,7 +5502,7 @@
       "cwe": "CWE-22",
       "sev": "critical",
       "note": "pyLoad CNL Blueprint allows Path Traversal through `dlc_path` which leads to Remote Code Execution (RCE)",
-      "epss": 0.0139
+      "epss": 0.0184
     },
     {
       "name": "pyload-ng",
@@ -5502,7 +5513,7 @@
       "cwe": "CWE-918",
       "sev": "critical",
       "note": "pyLoad: Server-Side Request Forgery via Download Link Submission Enables Cloud Metadata Exfiltration",
-      "epss": 0.0044
+      "epss": 0.0052
     },
     {
       "name": "pymetasploit3",
@@ -5513,7 +5524,7 @@
       "cwe": "CWE-77",
       "sev": "critical",
       "note": "pymetasploit3 vulnerable to command injection in console.run_module_with_output()",
-      "epss": 0.022
+      "epss": 0.0356
     },
     {
       "name": "pyminizip",
@@ -5524,7 +5535,7 @@
       "cwe": "CWE-190",
       "sev": "critical",
       "note": "pyminizip affected by zlib's integer overflow/heap based buffer overflow vulnerability due to vulnerable dependency",
-      "epss": 0.0345
+      "epss": 0.0402
     },
     {
       "name": "pympp",
@@ -5535,7 +5546,7 @@
       "cwe": "CWE-20",
       "sev": "medium",
       "note": "pympp allows excessive sponsored transaction fees through padded calldata",
-      "epss": 0.0029
+      "epss": 0.0051
     },
     {
       "name": "pymysql",
@@ -5546,7 +5557,7 @@
       "cwe": "CWE-89",
       "sev": "critical",
       "note": "PyMySQL SQL Injection vulnerability",
-      "epss": 0.0069
+      "epss": 0.0089
     },
     {
       "name": "pyquokka",
@@ -5557,7 +5568,7 @@
       "cwe": "CWE-502",
       "sev": "critical",
       "note": "pyquokka is Vulnerable to Remote Code Execution by Pickle Deserialization via FlightServer",
-      "epss": 0.0089
+      "epss": 0.0128
     },
     {
       "name": "pysha3",
@@ -5568,7 +5579,7 @@
       "cwe": "CWE-190",
       "sev": "critical",
       "note": "Buffer overflow in sponge queue functions",
-      "epss": 0.0741
+      "epss": 0.0607
     },
     {
       "name": "python-ironic-inspector-client",
@@ -5591,7 +5602,7 @@
       "cwe": "CWE-94",
       "sev": "critical",
       "note": "python-statemachine SCXML <data expr> Eval Injection",
-      "epss": 0.0136
+      "epss": 0.0137
     },
     {
       "name": "pytorch-lightning",
@@ -5602,7 +5613,7 @@
       "cwe": "CWE-22",
       "sev": "critical",
       "note": "pytorch-lightning vulnerable to Arbitrary File Write via /v1/runs API endpoint",
-      "epss": 0.0132
+      "epss": 0.0189
     },
     {
       "name": "pytorch-lightning",
@@ -5613,7 +5624,7 @@
       "cwe": "CWE-434",
       "sev": "critical",
       "note": "PyTorch Lightning path traversal vulnerability",
-      "epss": 0.0112
+      "epss": 0.0139
     },
     {
       "name": "pytorch-lightning",
@@ -5625,7 +5636,7 @@
       "cwe": "CWE-506",
       "sev": "critical",
       "note": "Compromise of PyTorch Lightning PyPi Package Versions",
-      "epss": 0.0039
+      "epss": 0.0067
     },
     {
       "name": "pytorch-lightning",
@@ -5637,7 +5648,7 @@
       "cwe": "CWE-506",
       "sev": "critical",
       "note": "Compromise of PyTorch Lightning PyPi Package Versions",
-      "epss": 0.0039
+      "epss": 0.0067
     },
     {
       "name": "qdrant-client",
@@ -5648,7 +5659,7 @@
       "cwe": "CWE-20",
       "sev": "critical",
       "note": "qdrant input validation failure",
-      "epss": 0.0091
+      "epss": 0.0124
     },
     {
       "name": "qiskit",
@@ -5659,7 +5670,7 @@
       "cwe": "CWE-502",
       "sev": "critical",
       "note": "Qiskit allows arbitrary code execution decoding QPY format versions < 13",
-      "epss": 0.0081
+      "epss": 0.0142
     },
     {
       "name": "qiskit",
@@ -5671,7 +5682,7 @@
       "cwe": "CWE-502",
       "sev": "critical",
       "note": "Qiskit allows arbitrary code execution decoding QPY format versions < 13",
-      "epss": 0.0081
+      "epss": 0.0142
     },
     {
       "name": "qiskit-terra",
@@ -5683,7 +5694,7 @@
       "cwe": "CWE-502",
       "sev": "critical",
       "note": "Qiskit allows arbitrary code execution decoding QPY format versions < 13",
-      "epss": 0.0081
+      "epss": 0.0142
     },
     {
       "name": "rasa",
@@ -5694,7 +5705,7 @@
       "cwe": "CWE-94",
       "sev": "critical",
       "note": "Rasa Allows Remote Code Execution via Remote Model Loading",
-      "epss": 0.0094
+      "epss": 0.0165
     },
     {
       "name": "rasa-pro",
@@ -5706,7 +5717,7 @@
       "cwe": "CWE-94",
       "sev": "critical",
       "note": "Rasa Allows Remote Code Execution via Remote Model Loading",
-      "epss": 0.0094
+      "epss": 0.0165
     },
     {
       "name": "rasa-pro",
@@ -5717,7 +5728,7 @@
       "cwe": "CWE-94",
       "sev": "critical",
       "note": "Rasa Allows Remote Code Execution via Remote Model Loading",
-      "epss": 0.0094
+      "epss": 0.0165
     },
     {
       "name": "rasa-pro",
@@ -5729,7 +5740,7 @@
       "cwe": "CWE-94",
       "sev": "critical",
       "note": "Rasa Allows Remote Code Execution via Remote Model Loading",
-      "epss": 0.0094
+      "epss": 0.0165
     },
     {
       "name": "ray",
@@ -5740,7 +5751,7 @@
       "cwe": "CWE-829",
       "sev": "critical",
       "note": "Ray has arbitrary code execution via jobs submission API",
-      "epss": 0.8394
+      "epss": 0.4309
     },
     {
       "name": "ray",
@@ -5751,7 +5762,7 @@
       "cwe": "CWE-22",
       "sev": "critical",
       "note": "Ray Path Traversal vulnerability",
-      "epss": 0.3763
+      "epss": 0.0334
     },
     {
       "name": "ray",
@@ -5763,7 +5774,7 @@
       "sev": "critical",
       "note": "Ray is vulnerable to Critical RCE via Safari & Firefox Browsers through DNS Rebinding Attack",
       "kev": true,
-      "epss": 0.6015
+      "epss": 0.027
     },
     {
       "name": "reportlab",
@@ -5880,7 +5891,7 @@
       "cwe": "CWE-295",
       "sev": "high",
       "note": "soapbar: verify_envelope_bsp accepts an unauthenticated embedded certificate (signature forgery / authentication bypass)",
-      "epss": 0.0019
+      "epss": 0.0023
     },
     {
       "name": "soupsieve",
@@ -5948,7 +5959,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "svglib: Exponential resource consumption via nested <use> references in svg2rlg",
-      "epss": 0.0106
+      "epss": 0.0061
     },
     {
       "name": "termux-sync",
@@ -5971,6 +5982,16 @@
       "sev": "low",
       "note": "Tornado: Open redirect via triple-slash redirect paths",
       "epss": 0.0016
+    },
+    {
+      "name": "vllm",
+      "ge": "0.11.0",
+      "le": "0.23.0",
+      "id": "GHSA-x8xr-mj9x-6h7w",
+      "ghsaId": "GHSA-x8xr-mj9x-6h7w",
+      "cwe": "CWE-115",
+      "sev": "medium",
+      "note": "Duplicate Advisory: image EXIF Rotation & PNG tRNS Transparency Not Normalized, Causing Mismatch Between Model Input and Expectations"
     },
     {
       "name": "wagtail",
@@ -6005,7 +6026,7 @@
       "cwe": "CWE-1333",
       "sev": "medium",
       "note": "wcmatch: Polynomial-time ReDoS when matching untrusted names against multi-star patterns (default flags)",
-      "epss": 0.0088
+      "epss": 0.0052
     },
     {
       "name": "Werkzeug",
@@ -6053,7 +6074,7 @@
       "cwe": "CWE-22",
       "sev": "high",
       "note": "Gradle Shadow: Zip Slip path traversal in ShadowCopyAction — no independent entry-name sanitization",
-      "epss": 0.0025
+      "epss": 0.0018
     },
     {
       "name": "com.ing.data:cassandra-jdbc-wrapper",
@@ -6064,7 +6085,7 @@
       "cwe": "CWE-532",
       "sev": "medium",
       "note": "cassandra-jdbc-wrapper: Authentication Token Exposed in Logs",
-      "epss": 0.0024
+      "epss": 0.0019
     },
     {
       "name": "com.ing.data:cassandra-jdbc-wrapper",
@@ -6076,7 +6097,7 @@
       "cwe": "CWE-532",
       "sev": "medium",
       "note": "cassandra-jdbc-wrapper: Authentication Token Exposed in Logs",
-      "epss": 0.0024
+      "epss": 0.0019
     },
     {
       "name": "com.softwaremill.sttp.tapir:tapir-openapi-codegen-core",
@@ -6087,7 +6108,7 @@
       "cwe": "CWE-94",
       "sev": "high",
       "note": "Tapir: Construction/decode RCE via property name -> raw case-class field (tapir-openapi-codegen)",
-      "epss": 0.0014
+      "epss": 0.002
     },
     {
       "name": "gov.nsa.emissary:emissary",
@@ -6098,7 +6119,7 @@
       "cwe": "CWE-79",
       "sev": "medium",
       "note": "Emissary has Stored XSS via Navigation Template Link Injection",
-      "epss": 0.0019
+      "epss": 0.0028
     },
     {
       "name": "gov.nsa.emissary:emissary",
@@ -6109,7 +6130,7 @@
       "cwe": "CWE-78",
       "sev": "high",
       "note": "Emissary has a Command Injection via PLACE_NAME Configuration in Executrix",
-      "epss": 0.006
+      "epss": 0.0096
     },
     {
       "name": "gov.nsa.emissary:emissary",
@@ -6120,7 +6141,7 @@
       "cwe": "CWE-78",
       "sev": "high",
       "note": "Emissary has an OS Command Injection via Unvalidated IN_FILE_ENDING / OUT_FILE_ENDING in Executrix",
-      "epss": 0.0088
+      "epss": 0.0111
     },
     {
       "name": "gov.nsa.emissary:emissary",
@@ -6212,7 +6233,7 @@
       "cwe": "CWE-772",
       "sev": "medium",
       "note": "netty-incubator-codec-ohttp: OHTTP codecs retain consumed outer cumulation buffers after completed exchanges",
-      "epss": 0.0048
+      "epss": 0.0051
     },
     {
       "name": "io.openremote:openremote-manager",
@@ -6223,7 +6244,7 @@
       "cwe": "CWE-862",
       "sev": "medium",
       "note": "OpenRemote: Cross-realm MQTT session disconnect without authorization",
-      "epss": 0.0047
+      "epss": 0.0041
     },
     {
       "name": "io.undertow:undertow-core",
@@ -6234,7 +6255,7 @@
       "cwe": "CWE-444",
       "sev": "high",
       "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling",
-      "epss": 0.0081
+      "epss": 0.0107
     },
     {
       "name": "io.undertow:undertow-core",
@@ -6246,7 +6267,7 @@
       "cwe": "CWE-444",
       "sev": "high",
       "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling",
-      "epss": 0.0081
+      "epss": 0.0107
     },
     {
       "name": "io.undertow:undertow-core",
@@ -6257,7 +6278,7 @@
       "cwe": "CWE-444",
       "sev": "high",
       "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling",
-      "epss": 0.008
+      "epss": 0.0103
     },
     {
       "name": "io.undertow:undertow-core",
@@ -6269,7 +6290,7 @@
       "cwe": "CWE-444",
       "sev": "high",
       "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling",
-      "epss": 0.008
+      "epss": 0.0103
     },
     {
       "name": "io.undertow:undertow-core",
@@ -6280,7 +6301,7 @@
       "cwe": "CWE-444",
       "sev": "high",
       "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling",
-      "epss": 0.0077
+      "epss": 0.0106
     },
     {
       "name": "io.undertow:undertow-core",
@@ -6292,7 +6313,7 @@
       "cwe": "CWE-444",
       "sev": "high",
       "note": "Undertow is Vulnerable to HTTP Request/Response Smuggling",
-      "epss": 0.0077
+      "epss": 0.0106
     },
     {
       "name": "org.apache.activemq:activemq-all",
@@ -8071,7 +8092,7 @@
       "cwe": "CWE-494",
       "sev": "high",
       "note": "Gradle causes Failure to disable repositories can expose builds to malicious artifacts",
-      "epss": 0.0017
+      "epss": 0.0023
     },
     {
       "name": "org.gradle:gradle-core",
@@ -8083,7 +8104,7 @@
       "cwe": "CWE-494",
       "sev": "high",
       "note": "Gradle causes Failure to disable repositories can expose builds to malicious artifacts",
-      "epss": 0.0017
+      "epss": 0.0023
     },
     {
       "name": "org.gradle:gradle-core",
@@ -8094,7 +8115,7 @@
       "cwe": "CWE-494",
       "sev": "high",
       "note": "Gradle causes failure to disable repositories exposing builds to malicious artifacts",
-      "epss": 0.0016
+      "epss": 0.0021
     },
     {
       "name": "org.gradle:gradle-core",
@@ -8106,7 +8127,7 @@
       "cwe": "CWE-494",
       "sev": "high",
       "note": "Gradle causes failure to disable repositories exposing builds to malicious artifacts",
-      "epss": 0.0016
+      "epss": 0.0021
     },
     {
       "name": "org.jenkins-ci.main:jenkins-core",
@@ -8142,7 +8163,7 @@
       "cwe": "CWE-1333",
       "sev": "high",
       "note": "jline3 leads to ReDoS in Built-in Less Viewer Search",
-      "epss": 0.0046
+      "epss": 0.007
     },
     {
       "name": "org.jline:jline-builtins",
@@ -8154,7 +8175,7 @@
       "cwe": "CWE-1333",
       "sev": "high",
       "note": "jline3 leads to ReDoS in Built-in Less Viewer Search",
-      "epss": 0.0046
+      "epss": 0.007
     },
     {
       "name": "org.json:json",
@@ -8166,7 +8187,7 @@
       "cwe": "CWE-400",
       "sev": "medium",
       "note": "JSON-java: JSONTokener Has Unbounded Numeric String Resource-Exhaustion DoS",
-      "epss": 0.0064
+      "epss": 0.0059
     },
     {
       "name": "org.omnifaces:omnifaces",
@@ -8178,7 +8199,7 @@
       "cwe": "CWE-862",
       "sev": "medium",
       "note": "OmniFaces: SSE push channels are not bound to their owning HTTP session",
-      "epss": 0.0042
+      "epss": 0.0035
     },
     {
       "name": "org.openmrs.web:openmrs-web",
@@ -8189,7 +8210,7 @@
       "cwe": "CWE-22",
       "sev": "critical",
       "note": "OpenMRS Module Upload Vulnerable to Path Traversal (Zip Slip)",
-      "epss": 0.0085
+      "epss": 0.009
     },
     {
       "name": "org.openmrs.web:openmrs-web",
@@ -8200,7 +8221,7 @@
       "cwe": "CWE-22",
       "sev": "critical",
       "note": "OpenMRS Module Upload Vulnerable to Path Traversal (Zip Slip)",
-      "epss": 0.0085
+      "epss": 0.009
     },
     {
       "name": "org.openmrs.web:openmrs-web",
@@ -8212,7 +8233,7 @@
       "cwe": "CWE-22",
       "sev": "critical",
       "note": "OpenMRS Module Upload Vulnerable to Path Traversal (Zip Slip)",
-      "epss": 0.0085
+      "epss": 0.009
     },
     {
       "name": "org.openmrs.web:openmrs-web",
@@ -8224,7 +8245,7 @@
       "cwe": "CWE-22",
       "sev": "critical",
       "note": "OpenMRS Module Upload Vulnerable to Path Traversal (Zip Slip)",
-      "epss": 0.0085
+      "epss": 0.009
     },
     {
       "name": "org.pgpainless:pgpainless-core",
@@ -8235,7 +8256,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "PGPainless: Unbounded Compressed Packet Descent in inline-detach and MessageInspector leads to Denial of Service (DoS)",
-      "epss": 0.0072
+      "epss": 0.0084
     },
     {
       "name": "org.pgpainless:pgpainless-core",
@@ -8247,7 +8268,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "PGPainless: Unbounded Compressed Packet Descent in inline-detach and MessageInspector leads to Denial of Service (DoS)",
-      "epss": 0.0072
+      "epss": 0.0084
     },
     {
       "name": "org.xwiki.platform:xwiki-platform-rest-server",
@@ -8259,7 +8280,7 @@
       "cwe": "CWE-943",
       "sev": "high",
       "note": "XWiki Platform: HQL injection in search allows unauthenticated database extraction including password hashes",
-      "epss": 0.008
+      "epss": 0.0096
     },
     {
       "name": "org.xwiki.platform:xwiki-platform-rest-server",
@@ -8271,7 +8292,7 @@
       "cwe": "CWE-943",
       "sev": "high",
       "note": "XWiki Platform: HQL injection in search allows unauthenticated database extraction including password hashes",
-      "epss": 0.008
+      "epss": 0.0096
     },
     {
       "name": "org.xwiki.platform:xwiki-platform-rest-server",
@@ -8283,7 +8304,7 @@
       "cwe": "CWE-943",
       "sev": "high",
       "note": "XWiki Platform: HQL injection in search allows unauthenticated database extraction including password hashes",
-      "epss": 0.008
+      "epss": 0.0096
     },
     {
       "name": "org.xwiki.platform:xwiki-platform-search-solr-ui",
@@ -8320,7 +8341,7 @@
       "cwe": "CWE-22",
       "sev": "high",
       "note": "zt-zip: Path traversal in fluent API unpack",
-      "epss": 0.0038
+      "epss": 0.0034
     },
     {
       "name": "org.zeroturnaround:zt-zip",
@@ -8331,7 +8352,7 @@
       "cwe": "CWE-23",
       "sev": "medium",
       "note": "zt-zip: ZipUtil.unpack can change file permissions of output directory",
-      "epss": 0.0028
+      "epss": 0.0019
     },
     {
       "name": "software.amazon.jdbc:aws-advanced-jdbc-wrapper",
@@ -8343,7 +8364,7 @@
       "cwe": "CWE-502",
       "sev": "high",
       "note": "AWS-advanced-jdbc-wrapper: Java Deserialization RCE via Cache Poisoning",
-      "epss": 0.0042
+      "epss": 0.0073
     },
     {
       "name": "tools.jackson.core:jackson-databind",
@@ -8393,7 +8414,7 @@
       "cwe": "CWE-248",
       "sev": "medium",
       "note": "ALTCHA: Nil-map panic (pre-verification DoS) in v1 parseServerSignature on malformed VerificationData",
-      "epss": 0.0041
+      "epss": 0.0042
     },
     {
       "name": "github.com/aquasecurity/trivy",
@@ -8417,7 +8438,7 @@
       "cwe": "CWE-20",
       "sev": "medium",
       "note": "Argo CD: Login screen allows message spoofing if SSO is enabled",
-      "epss": 0.0149
+      "epss": 0.0135
     },
     {
       "name": "github.com/argoproj/argo-cd/v2",
@@ -8429,7 +8450,7 @@
       "cwe": "CWE-20",
       "sev": "medium",
       "note": "Argo CD: Login screen allows message spoofing if SSO is enabled",
-      "epss": 0.0149
+      "epss": 0.0135
     },
     {
       "name": "github.com/argoproj/argo-cd/v2",
@@ -8441,7 +8462,7 @@
       "cwe": "CWE-20",
       "sev": "medium",
       "note": "Argo CD: Login screen allows message spoofing if SSO is enabled",
-      "epss": 0.0149
+      "epss": 0.0135
     },
     {
       "name": "github.com/argoproj/argo-cd/v2",
@@ -8453,7 +8474,7 @@
       "cwe": "CWE-20",
       "sev": "medium",
       "note": "Argo CD: Login screen allows message spoofing if SSO is enabled",
-      "epss": 0.0149
+      "epss": 0.0135
     },
     {
       "name": "github.com/bep/imagemeta",
@@ -8464,7 +8485,7 @@
       "cwe": "CWE-409",
       "sev": "high",
       "note": "bep/imagemeta: Unbounded memory allocation decoding PNG `zTXt` \"Raw profile type iptc\" chunks",
-      "epss": 0.0056
+      "epss": 0.0052
     },
     {
       "name": "github.com/cli/cli/v2",
@@ -8488,7 +8509,7 @@
       "cwe": "CWE-248",
       "sev": "high",
       "note": "containerd image-triggered daemon crash via malformed digest in subject-annotated descriptor",
-      "epss": 0.0048
+      "epss": 0.0054
     },
     {
       "name": "github.com/containerd/containerd/v2",
@@ -8500,7 +8521,7 @@
       "cwe": "CWE-248",
       "sev": "high",
       "note": "containerd image-triggered daemon crash via malformed digest in subject-annotated descriptor",
-      "epss": 0.0048
+      "epss": 0.0054
     },
     {
       "name": "github.com/containerd/containerd/v2",
@@ -8512,7 +8533,7 @@
       "cwe": "CWE-248",
       "sev": "high",
       "note": "containerd image-triggered daemon crash via malformed digest in subject-annotated descriptor",
-      "epss": 0.0048
+      "epss": 0.0054
     },
     {
       "name": "github.com/dagu-org/dagu/v2",
@@ -8534,7 +8555,7 @@
       "cwe": "CWE-20",
       "sev": "critical",
       "note": "Daptin: Unauthenticated SQL Injection via the `sort` query parameter on every entity list endpoint",
-      "epss": 0.006
+      "epss": 0.0068
     },
     {
       "name": "github.com/daptin/daptin",
@@ -8546,7 +8567,7 @@
       "cwe": "CWE-639",
       "sev": "critical",
       "note": "Daptin: Broken Access Control (IDOR) in the generic YJS collaboration endpoint",
-      "epss": 0.004
+      "epss": 0.0045
     },
     {
       "name": "github.com/ddev/ddev",
@@ -8590,7 +8611,7 @@
       "cwe": "CWE-41",
       "sev": "critical",
       "note": "Fabio: Access-control bypass through unnormalized request paths",
-      "epss": 0.0057
+      "epss": 0.0053
     },
     {
       "name": "github.com/filebrowser/filebrowser/v2",
@@ -8613,7 +8634,7 @@
       "cwe": "CWE-144",
       "sev": "high",
       "note": "Git LFS may execute arbitrary commands via crafted Git configurations",
-      "epss": 0.0056
+      "epss": 0.0053
     },
     {
       "name": "github.com/git-lfs/git-lfs",
@@ -8625,7 +8646,7 @@
       "cwe": "CWE-777",
       "sev": "high",
       "note": "Git LFS may execute arbitrary commands via crafted Git LFS configurations",
-      "epss": 0.0064
+      "epss": 0.0061
     },
     {
       "name": "github.com/git-lfs/git-lfs",
@@ -8637,7 +8658,7 @@
       "cwe": "CWE-78",
       "sev": "high",
       "note": "Git LFS may attempt arbitrary remote commands via crafted SSH URLs",
-      "epss": 0.0087
+      "epss": 0.011
     },
     {
       "name": "github.com/git-lfs/git-lfs",
@@ -8649,7 +8670,7 @@
       "cwe": "CWE-522",
       "sev": "high",
       "note": "Git LFS may leak HTTP headers after redirections",
-      "epss": 0.0045
+      "epss": 0.0047
     },
     {
       "name": "github.com/git-lfs/git-lfs/v3",
@@ -8661,7 +8682,7 @@
       "cwe": "CWE-144",
       "sev": "high",
       "note": "Git LFS may execute arbitrary commands via crafted Git configurations",
-      "epss": 0.0056
+      "epss": 0.0053
     },
     {
       "name": "github.com/git-lfs/git-lfs/v3",
@@ -8673,7 +8694,7 @@
       "cwe": "CWE-777",
       "sev": "high",
       "note": "Git LFS may execute arbitrary commands via crafted Git LFS configurations",
-      "epss": 0.0064
+      "epss": 0.0061
     },
     {
       "name": "github.com/git-lfs/git-lfs/v3",
@@ -8685,7 +8706,7 @@
       "cwe": "CWE-78",
       "sev": "high",
       "note": "Git LFS may attempt arbitrary remote commands via crafted SSH URLs",
-      "epss": 0.0087
+      "epss": 0.011
     },
     {
       "name": "github.com/git-lfs/git-lfs/v3",
@@ -8697,7 +8718,7 @@
       "cwe": "CWE-522",
       "sev": "high",
       "note": "Git LFS may leak HTTP headers after redirections",
-      "epss": 0.0045
+      "epss": 0.0047
     },
     {
       "name": "github.com/gopacket/gopacket",
@@ -8792,7 +8813,7 @@
       "cwe": "CWE-78",
       "sev": "high",
       "note": "fzf: Arbitrary command execution via bash arithmetic expansion on unvalidated layout size in fzf-tmux (-l/-u attached value)",
-      "epss": 0.0026
+      "epss": 0.0019
     },
     {
       "name": "github.com/junegunn/fzf",
@@ -8803,7 +8824,7 @@
       "cwe": "CWE-59",
       "sev": "medium",
       "note": "fzf: Predictable FIFO path in zsh completion allows local symlink attack / arbitrary file overwrite as the victim user (_fzf_feed_fifo)",
-      "epss": 0.0017
+      "epss": 0.0019
     },
     {
       "name": "github.com/klever-io/klever-go",
@@ -8915,7 +8936,7 @@
       "cwe": "CWE-284",
       "sev": "high",
       "note": "Incus has a project restriction bypass for custom volume copy across projects",
-      "epss": 0.0037
+      "epss": 0.0042
     },
     {
       "name": "github.com/lxc/incus/v6",
@@ -8926,7 +8947,7 @@
       "cwe": "CWE-284",
       "sev": "high",
       "note": "Incus has a project restriction bypass for custom volume copy across projects",
-      "epss": 0.0037
+      "epss": 0.0042
     },
     {
       "name": "github.com/lxc/incus/v7",
@@ -8937,7 +8958,7 @@
       "cwe": "CWE-284",
       "sev": "high",
       "note": "Incus has a project restriction bypass for custom volume copy across projects",
-      "epss": 0.0037
+      "epss": 0.0042
     },
     {
       "name": "github.com/mayswind/ezbookkeeping",
@@ -8960,7 +8981,7 @@
       "cwe": "CWE-248",
       "sev": "medium",
       "note": "NATS Server: MQTT-over-WebSocket Path Can Crash WebSocket-Only JetStream Servers Before MQTT Is Enabled",
-      "epss": 0.0041
+      "epss": 0.006
     },
     {
       "name": "github.com/nats-io/nats-server/v2",
@@ -8972,7 +8993,7 @@
       "cwe": "CWE-248",
       "sev": "medium",
       "note": "NATS Server: MQTT-over-WebSocket Path Can Crash WebSocket-Only JetStream Servers Before MQTT Is Enabled",
-      "epss": 0.0041
+      "epss": 0.006
     },
     {
       "name": "github.com/nats-io/nats-server/v2",
@@ -8983,7 +9004,7 @@
       "cwe": "CWE-863",
       "sev": "medium",
       "note": "NATS Server MQTT retained messages and QoS replay bypass subscription deny rules",
-      "epss": 0.0032
+      "epss": 0.0034
     },
     {
       "name": "github.com/nats-io/nats-server/v2",
@@ -8995,7 +9016,7 @@
       "cwe": "CWE-863",
       "sev": "medium",
       "note": "NATS Server MQTT retained messages and QoS replay bypass subscription deny rules",
-      "epss": 0.0032
+      "epss": 0.0034
     },
     {
       "name": "github.com/nats-io/nats-server/v2",
@@ -9006,7 +9027,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "NATS Server allows unauthenticated memory exhaustion through incomplete MQTT CONNECT packets",
-      "epss": 0.0062
+      "epss": 0.0074
     },
     {
       "name": "github.com/nats-io/nats-server/v2",
@@ -9018,7 +9039,7 @@
       "cwe": "CWE-400",
       "sev": "high",
       "note": "NATS Server allows unauthenticated memory exhaustion through incomplete MQTT CONNECT packets",
-      "epss": 0.0062
+      "epss": 0.0074
     },
     {
       "name": "github.com/nats-io/nats-server/v2",
@@ -9075,7 +9096,7 @@
       "cwe": "CWE-863",
       "sev": "medium",
       "note": "nats-server Leaf node connections bypass Nats-Trace-Dest permission check",
-      "epss": 0.0022
+      "epss": 0.0031
     },
     {
       "name": "github.com/nats-io/nats-server/v2",
@@ -9087,7 +9108,7 @@
       "cwe": "CWE-863",
       "sev": "medium",
       "note": "nats-server Leaf node connections bypass Nats-Trace-Dest permission check",
-      "epss": 0.0022
+      "epss": 0.0031
     },
     {
       "name": "github.com/OliveTin/OliveTin",
@@ -9109,7 +9130,7 @@
       "cwe": "CWE-125",
       "sev": "medium",
       "note": "Aether Project amf: panic on an unrecovered NGAP goroutine",
-      "epss": 0.0041
+      "epss": 0.0044
     },
     {
       "name": "github.com/pavel-v-chernykh/keystore-go",
@@ -9198,7 +9219,7 @@
       "cwe": "CWE-129",
       "sev": "high",
       "note": "go-guerrilla crashes on a bare XCLIENT command (7-byte slice off-by-one panic)",
-      "epss": 0.0062
+      "epss": 0.0063
     },
     {
       "name": "github.com/phires/go-guerrilla",
@@ -9209,7 +9230,7 @@
       "cwe": "CWE-129",
       "sev": "high",
       "note": "go-guerrilla crashes on a bare XCLIENT command (7-byte slice off-by-one panic)",
-      "epss": 0.0062
+      "epss": 0.0063
     },
     {
       "name": "github.com/pocket-id/pocket-id/backend",
@@ -9231,7 +9252,7 @@
       "cwe": "CWE-89",
       "sev": "high",
       "note": "pREST _groupby function-expression SQL injection (incomplete fix of CVE-2025-58450)",
-      "epss": 0.0043
+      "epss": 0.015
     },
     {
       "name": "github.com/prest/prest/v2",
@@ -9242,7 +9263,7 @@
       "cwe": "CWE-89",
       "sev": "high",
       "note": "pREST _groupby function-expression SQL injection (incomplete fix of CVE-2025-58450)",
-      "epss": 0.0043
+      "epss": 0.015
     },
     {
       "name": "github.com/reza-gholizade/k8s-mcp-server",
@@ -9253,7 +9274,7 @@
       "cwe": "CWE-306",
       "sev": "high",
       "note": "k8s-mcp-server: Missing authentication on default SSE/HTTP transport allows unauthenticated Kubernetes tool execution",
-      "epss": 0.0053
+      "epss": 0.0066
     },
     {
       "name": "github.com/russellhaering/gosaml2",
@@ -9264,7 +9285,7 @@
       "cwe": "CWE-20",
       "sev": "high",
       "note": "gosaml2: Unauthenticated panic decrypting an EncryptedAssertion with a short or empty CipherValue",
-      "epss": 0.0036
+      "epss": 0.004
     },
     {
       "name": "github.com/schollz/croc",
@@ -9441,7 +9462,7 @@
       "cwe": "CWE-248",
       "sev": "high",
       "note": "SiYuan has an Unauthenticated WebSocket DoS via Auth Keepalive Bypass",
-      "epss": 0.0056
+      "epss": 0.0067
     },
     {
       "name": "github.com/StacklokLabs/sqlite-mcp",
@@ -9452,7 +9473,7 @@
       "cwe": "CWE-89",
       "sev": "high",
       "note": "sqlite-mcp: Read-only mode bypass via statement chaining and SQL injection in describe_table",
-      "epss": 0.0037
+      "epss": 0.0054
     },
     {
       "name": "github.com/strukturag/libheif",
@@ -9579,7 +9600,7 @@
       "cwe": "CWE-295",
       "sev": "medium",
       "note": "etcd: CRL enforcement bypass on gRPC listener when `--listen-client-http-urls` is configured",
-      "epss": 0.0043
+      "epss": 0.0032
     },
     {
       "name": "go.etcd.io/etcd/v3",
@@ -9591,7 +9612,7 @@
       "cwe": "CWE-295",
       "sev": "medium",
       "note": "etcd: CRL enforcement bypass on gRPC listener when `--listen-client-http-urls` is configured",
-      "epss": 0.0043
+      "epss": 0.0032
     },
     {
       "name": "go.opentelemetry.io/otel/baggage",
@@ -9732,7 +9753,7 @@
       "cwe": "CWE-79",
       "sev": "high",
       "note": "Atomic Server: Stored XSS via uploaded files served inline (same-origin) on `/download` → account takeover",
-      "epss": 0.004
+      "epss": 0.0043
     },
     {
       "name": "atomic-server",
@@ -9744,7 +9765,7 @@
       "cwe": "CWE-22",
       "sev": "high",
       "note": "Atomic Server: Arbitrary file read via user-controlled `internalId` in the `/download` handler (leaks root agent private key)",
-      "epss": 0.0058
+      "epss": 0.0049
     },
     {
       "name": "atomic-server",
@@ -9756,7 +9777,7 @@
       "cwe": "CWE-306",
       "sev": "critical",
       "note": "Atomic Server: Unauthenticated `/setup` invite grants write access to the entire Drive",
-      "epss": 0.0047
+      "epss": 0.0051
     },
     {
       "name": "atomic-server",
@@ -9767,7 +9788,7 @@
       "cwe": "CWE-918",
       "sev": "high",
       "note": "Atomic Server: Unauthenticated full-response SSRF in Atomic-Server /bookmark endpoint",
-      "epss": 0.0047
+      "epss": 0.0048
     },
     {
       "name": "block_buffer",
@@ -9808,7 +9829,7 @@
       "cwe": "CWE-78",
       "sev": "high",
       "note": "CodeWhale: exec_shell parallel-readonly classifier auto-approves fd/rg/git grep exec flags enabling silent RCE",
-      "epss": 0.0061
+      "epss": 0.0063
     },
     {
       "name": "codewhale-tui",
@@ -9819,7 +9840,7 @@
       "cwe": "CWE-862",
       "sev": "high",
       "note": "CodeWhale: Automation auto_approve defaults to true, bypassing the task-path hardening fix for silent recurring agent execution",
-      "epss": 0.0051
+      "epss": 0.006
     },
     {
       "name": "coreutils",
@@ -9857,7 +9878,7 @@
       "cwe": "CWE-295",
       "sev": "critical",
       "note": "dcap-qvl has Missing Verification for QE Identity",
-      "epss": 0.0021
+      "epss": 0.0024
     },
     {
       "name": "falcon-rust",
@@ -9868,7 +9889,7 @@
       "cwe": "CWE-1240",
       "sev": "medium",
       "note": "falcon-rust: Discrete-Gaussian sampler runs at 2^-33 precision, far below Falcon's requirement (reference KAT vectors no longer pass)",
-      "epss": 0.0027
+      "epss": 0.0028
     },
     {
       "name": "mise",
@@ -9960,7 +9981,7 @@
       "cwe": "CWE-696",
       "sev": "low",
       "note": "russh kex_done: Shared-secret callback runs before server host-key verification",
-      "epss": 0.0024
+      "epss": 0.0023
     },
     {
       "name": "russh",
@@ -9972,7 +9993,7 @@
       "cwe": "CWE-367",
       "sev": "low",
       "note": "russh try_sign: asynchronous confirmation can sign after agent lock",
-      "epss": 0.0016
+      "epss": 0.0011
     },
     {
       "name": "russh",
@@ -10015,7 +10036,7 @@
       "cwe": "CWE-693",
       "sev": "high",
       "note": "Servo Sandbox bypass: declarative refresh can auto-navigate a sandboxed iframe",
-      "epss": 0.0067
+      "epss": 0.0059
     },
     {
       "name": "sevenz-rust2",
@@ -10026,7 +10047,7 @@
       "cwe": "CWE-22",
       "sev": "medium",
       "note": "sevenz-rust2: decompress builds each output path as dest.join(entry.name()) with no traversal guard, allowing a crafted .7z to write files outside the destination (Zip-Slip)",
-      "epss": 0.0024
+      "epss": 0.0019
     },
     {
       "name": "snark-verifier",
@@ -10037,7 +10058,7 @@
       "cwe": "CWE-20",
       "sev": "medium",
       "note": "snark-verifier accepts non-canonical KZG accumulator limb encodings",
-      "epss": 0.0045
+      "epss": 0.0051
     },
     {
       "name": "snark-verifier",
@@ -10048,7 +10069,7 @@
       "cwe": "CWE-20",
       "sev": "medium",
       "note": "snark-verifier: Halo 2 aggregation circuit mishandles point-at-infinity proof elements",
-      "epss": 0.003
+      "epss": 0.0049
     },
     {
       "name": "uu_chcon",
@@ -10059,7 +10080,7 @@
       "cwe": "CWE-59",
       "sev": "medium",
       "note": "chcon: recursive relabel not anchored to traversal dirfd (TOCTOU)",
-      "epss": 0.0011
+      "epss": 0.0017
     },
     {
       "name": "uu_env",
@@ -10070,7 +10091,7 @@
       "cwe": "CWE-20",
       "sev": "low",
       "note": "uu_env incorrectly rejects backslashes within single-quoted strings accepted by GNU env",
-      "epss": 0.0017
+      "epss": 0.0013
     },
     {
       "name": "uu_split",
@@ -10092,7 +10113,7 @@
       "cwe": "CWE-1286",
       "sev": "medium",
       "note": "uv has ZIP payload obfuscation through parsing differentials",
-      "epss": 0.0019
+      "epss": 0.0022
     },
     {
       "name": "wasmtime",
@@ -10138,7 +10159,7 @@
       "cwe": "CWE-617",
       "sev": "critical",
       "note": "Zebra has rk Identity Point Panic in Transaction Verification",
-      "epss": 0.0027
+      "epss": 0.0046
     },
     {
       "name": "zebra-consensus",
@@ -10149,7 +10170,7 @@
       "cwe": "CWE-1025",
       "sev": "high",
       "note": "Zebra: Cached Mempool Verification Bypasses Consensus Rules for Ahead-of-Tip Blocks",
-      "epss": 0.0027
+      "epss": 0.0046
     },
     {
       "name": "zebra-network",
@@ -10191,7 +10212,7 @@
       "cwe": "CWE-573",
       "sev": "critical",
       "note": "Zebra Vulnerable to Consensus Divergence in Transparent Sighash Hash-Type Handling",
-      "epss": 0.0028
+      "epss": 0.0047
     },
     {
       "name": "zebra-state",
@@ -10213,7 +10234,7 @@
       "cwe": "CWE-1025",
       "sev": "high",
       "note": "Zebra: Cached Mempool Verification Bypasses Consensus Rules for Ahead-of-Tip Blocks",
-      "epss": 0.0027
+      "epss": 0.0046
     },
     {
       "name": "zebrad",
@@ -10224,7 +10245,7 @@
       "cwe": "CWE-573",
       "sev": "critical",
       "note": "Zebra Vulnerable to Consensus Divergence in Transparent Sighash Hash-Type Handling",
-      "epss": 0.0028
+      "epss": 0.0047
     },
     {
       "name": "zebrad",
@@ -10235,7 +10256,7 @@
       "cwe": "CWE-617",
       "sev": "critical",
       "note": "Zebra has rk Identity Point Panic in Transaction Verification",
-      "epss": 0.0027
+      "epss": 0.0046
     },
     {
       "name": "zebrad",
@@ -10246,7 +10267,7 @@
       "cwe": "CWE-682",
       "sev": "critical",
       "note": "Zebra's Block Validator Undercounts Coinbase and P2SH Sigops",
-      "epss": 0.0028
+      "epss": 0.0038
     },
     {
       "name": "zebrad",
@@ -10257,7 +10278,7 @@
       "cwe": "CWE-770",
       "sev": "high",
       "note": "Zebra has Permanent Block Discovery Halt via Gossip Queue Saturation and Syncer Poisoning",
-      "epss": 0.0035
+      "epss": 0.0054
     },
     {
       "name": "zebrad",
@@ -10604,7 +10625,7 @@
       "cwe": "CWE-829",
       "sev": "high",
       "note": "Refitter: Unrestricted OpenAPI references permit build-host SSRF and file inclusion",
-      "epss": 0.0064
+      "epss": 0.0072
     },
     {
       "name": "Refitter",
@@ -10615,7 +10636,7 @@
       "cwe": "CWE-94",
       "sev": "critical",
       "note": "Refitter allows arbitrary code execution through unescaped OpenAPI content-type values",
-      "epss": 0.0057
+      "epss": 0.0062
     },
     {
       "name": "Refitter",
@@ -10626,7 +10647,7 @@
       "cwe": "CWE-94",
       "sev": "critical",
       "note": "Refitter allows arbitrary code execution through unescaped OpenAPI paths",
-      "epss": 0.0057
+      "epss": 0.0062
     },
     {
       "name": "Refitter",
@@ -10637,7 +10658,7 @@
       "cwe": "CWE-94",
       "sev": "critical",
       "note": "Refitter allows code execution through unescaped OpenAPI header parameter names",
-      "epss": 0.0057
+      "epss": 0.0062
     }
   ],
   "composer": [
@@ -10716,7 +10737,7 @@
       "cwe": "CWE-22",
       "sev": "high",
       "note": "baserCMS: Path Traversal Bypass via realpath() in BcThemeFileService (CVE-2026-30940 Patch Bypass)",
-      "epss": 0.0106
+      "epss": 0.0107
     },
     {
       "name": "baserproject/baser-core",
@@ -10727,7 +10748,7 @@
       "cwe": "CWE-290",
       "sev": "medium",
       "note": "baserCMS administrative API authorization bypass through session fallback",
-      "epss": 0.0047
+      "epss": 0.0051
     },
     {
       "name": "bolt/core",
@@ -10738,7 +10759,7 @@
       "cwe": "CWE-601",
       "sev": "medium",
       "note": "Bolt: Open redirect enables post-authentication redirection to arbitrary domains",
-      "epss": 0.0032
+      "epss": 0.0038
     },
     {
       "name": "bolt/core",
@@ -10749,7 +10770,7 @@
       "cwe": "CWE-918",
       "sev": "medium",
       "note": "Bolt: Server-Side Request Forgery (SSRF) in URL-upload and embed endpoints",
-      "epss": 0.0033
+      "epss": 0.004
     },
     {
       "name": "bolt/core",
@@ -10760,7 +10781,7 @@
       "cwe": "CWE-89",
       "sev": "medium",
       "note": "Bolt ListFormatHelper SQL injection",
-      "epss": 0.0029
+      "epss": 0.0032
     },
     {
       "name": "bolt/core",
@@ -10782,7 +10803,7 @@
       "cwe": "CWE-918",
       "sev": "medium",
       "note": "Bolt: Prevent SSRF due to unchecked followed redirects",
-      "epss": 0.0037
+      "epss": 0.0042
     },
     {
       "name": "cakephp/twig-view",
@@ -10793,7 +10814,7 @@
       "cwe": "CWE-22",
       "sev": "medium",
       "note": "TwigView FileLoader may allow arbitrary file reads through user-controlled template paths",
-      "epss": 0.0048
+      "epss": 0.0062
     },
     {
       "name": "cakephp/twig-view",
@@ -10805,7 +10826,7 @@
       "cwe": "CWE-22",
       "sev": "medium",
       "note": "TwigView FileLoader may allow arbitrary file reads through user-controlled template paths",
-      "epss": 0.0048
+      "epss": 0.0062
     },
     {
       "name": "cakephp/twig-view",
@@ -10816,7 +10837,7 @@
       "cwe": "CWE-502",
       "sev": "medium",
       "note": "Cakephp twig-view unserialize Twig filter allows arbitrary object deserialization",
-      "epss": 0.0061
+      "epss": 0.0075
     },
     {
       "name": "cakephp/twig-view",
@@ -10828,7 +10849,7 @@
       "cwe": "CWE-502",
       "sev": "medium",
       "note": "Cakephp twig-view unserialize Twig filter allows arbitrary object deserialization",
-      "epss": 0.0061
+      "epss": 0.0075
     },
     {
       "name": "contao/core-bundle",
@@ -11155,7 +11176,7 @@
       "cwe": "CWE-22",
       "sev": "high",
       "note": "Jane: $ref resolution performs SSRF + LFI (path traversal) at code-generation time (jane-php)",
-      "epss": 0.0052
+      "epss": 0.0051
     },
     {
       "name": "laravel/framework",
@@ -11367,7 +11388,7 @@
       "cwe": "CWE-639",
       "sev": "high",
       "note": "TeamPass folder re-parenting authorization bypass",
-      "epss": 0.0035
+      "epss": 0.0044
     },
     {
       "name": "paymenter/paymenter",
@@ -11378,7 +11399,7 @@
       "cwe": "CWE-470",
       "sev": "high",
       "note": "Paymenter: Unauthenticated arbitrary method invocation in Livewire components",
-      "epss": 0.0046
+      "epss": 0.0052
     },
     {
       "name": "phpmailer/phpmailer",
@@ -11403,7 +11424,7 @@
       "cwe": "CWE-307",
       "sev": "high",
       "note": "Poweradmin: The email second factor is an mt_rand() six-digit code verified with no attempt limit or lockout, so an attacker holding the password can brute-force it within the validity window",
-      "epss": 0.009
+      "epss": 0.0065
     },
     {
       "name": "poweradmin/poweradmin",
@@ -11415,7 +11436,7 @@
       "cwe": "CWE-307",
       "sev": "high",
       "note": "Poweradmin: The email second factor is an mt_rand() six-digit code verified with no attempt limit or lockout, so an attacker holding the password can brute-force it within the validity window",
-      "epss": 0.009
+      "epss": 0.0065
     },
     {
       "name": "poweradmin/poweradmin",
@@ -11427,7 +11448,7 @@
       "cwe": "CWE-307",
       "sev": "high",
       "note": "Poweradmin: The email second factor is an mt_rand() six-digit code verified with no attempt limit or lockout, so an attacker holding the password can brute-force it within the validity window",
-      "epss": 0.009
+      "epss": 0.0065
     },
     {
       "name": "roundcube/roundcubemail",
@@ -11564,7 +11585,7 @@
       "cwe": "CWE-78",
       "sev": "high",
       "note": "AVideo API vulnerable to OS command injection through an unescaped FFmpeg process keyword",
-      "epss": 0.0173
+      "epss": 0.0245
     },
     {
       "name": "wwbn/avideo",
@@ -11575,7 +11596,7 @@
       "cwe": "CWE-78",
       "sev": "high",
       "note": "AVideo API FFmpeg process permits OS command injection via notifyCode/callback",
-      "epss": 0.0177
+      "epss": 0.0245
     },
     {
       "name": "wwbn/avideo",
@@ -12140,7 +12161,7 @@
       "cwe": "CWE-208",
       "sev": "medium",
       "note": "secp256k1-native has a compiler-induced timing side channel in scalar multiplication",
-      "epss": 0.0028
+      "epss": 0.0048
     },
     {
       "name": "sha3",
@@ -12151,7 +12172,7 @@
       "cwe": "CWE-190",
       "sev": "critical",
       "note": "Buffer overflow in sponge queue functions",
-      "epss": 0.0741
+      "epss": 0.0607
     },
     {
       "name": "sqlite3",
