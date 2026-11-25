@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-24T13:13:21.462Z",
+  "updatedAt": "2026-11-25T12:02:06.362Z",
   "processed": {
     "CVE-2025-3248": {
       "status": "learned",
@@ -91,6 +91,21 @@
       "status": "rejected",
       "reason": "AI FP review rejected (high): The pattern `\\$this->error\\s*=\\s*\\$file;` is too generic. While it correctly identifies the specific vulnerable line in the patch, assigning a variable named `$file` to an error property is a common programming construct. Without data flow analysis to confirm `$file` originates from an untrusted network source (which is the core of the SSRF vulnerability), this pattern will likely trigger many false positives on safe code where `$file` might contain local, trusted, or already sanitized data.",
       "at": "2026-11-24T13:13:21.462Z"
+    },
+    "CVE-2021-43798": {
+      "status": "skipped",
+      "reason": "The vulnerability involves a data flow from user-controlled input (web.Params(c.Req)[\"*\"]) through filepath.Clean to filepath.Join, where filepath.Clean is insufficient for full path traversal prevention. Detecting this precisely requires tracking variable assignments and data flow across multiple lines, which is not feasible with a single-line regular expression for the 'pattern' and 'not-match' fields without introducing significant false positives or negatives. The fix introduces filepath.Rel to properly sanitize the path, which is a change in logic and variable usage rather than a simple string pattern.",
+      "at": "2026-11-25T12:00:09.587Z"
+    },
+    "CVE-2025-31125": {
+      "status": "skipped",
+      "reason": "internal vendor implementation detail handled by OSV SCA",
+      "at": "2026-11-25T12:00:45.907Z"
+    },
+    "CVE-2026-48710": {
+      "status": "skipped",
+      "reason": "internal vendor implementation detail handled by OSV SCA",
+      "at": "2026-11-25T12:01:14.265Z"
     }
   }
 }
