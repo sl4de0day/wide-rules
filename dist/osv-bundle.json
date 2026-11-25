@@ -1,23 +1,23 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-24T16:56:15.039Z",
+  "generatedAt": "2026-11-25T01:53:26.305Z",
   "sources": [
     "github-advisories",
     "cisa-kev",
     "first-epss"
   ],
   "stats": {
-    "total": 1028,
+    "total": 1044,
     "kevCount": 155,
     "highEpssCount": 103,
     "byEcosystem": {
-      "npm": 324,
-      "pip": 189,
+      "npm": 325,
+      "pip": 190,
       "maven": 198,
-      "go": 115,
+      "go": 119,
       "cargo": 61,
       "nuget": 21,
-      "composer": 73,
+      "composer": 83,
       "rubygems": 47
     }
   },
@@ -3558,6 +3558,17 @@
       "epss": 0.0315
     },
     {
+      "name": "ruflo",
+      "lt": "3.16.3",
+      "id": "CVE-2026-59726",
+      "ghsaId": "GHSA-c4hm-4h84-2cf3",
+      "cve": "CVE-2026-59726",
+      "cwe": "CWE-78",
+      "sev": "critical",
+      "note": "ruflo MCP bridge allows unauthenticated remote code execution in default Docker Compose deployments",
+      "epss": 0.0624
+    },
+    {
       "name": "safari-mcp",
       "lt": "2.22.15",
       "id": "GHSA-4rj4-rcrq-gr92",
@@ -5859,6 +5870,17 @@
       "sev": "critical",
       "note": "Sentry's improper authentication on SAML SSO process allows user identity linking",
       "epss": 0.0062
+    },
+    {
+      "name": "soapbar",
+      "lt": "0.13.0",
+      "id": "CVE-2026-64855",
+      "ghsaId": "GHSA-859w-52fx-hcm6",
+      "cve": "CVE-2026-64855",
+      "cwe": "CWE-295",
+      "sev": "high",
+      "note": "soapbar: verify_envelope_bsp accepts an unauthenticated embedded certificate (signature forgery / authentication bypass)",
+      "epss": 0.0019
     },
     {
       "name": "soupsieve",
@@ -8445,6 +8467,18 @@
       "epss": 0.0056
     },
     {
+      "name": "github.com/cli/cli/v2",
+      "ge": "2.10.0",
+      "lt": "2.96.0",
+      "id": "CVE-2026-59831",
+      "ghsaId": "GHSA-8cg3-r6g9-fpg2",
+      "cve": "CVE-2026-59831",
+      "cwe": "CWE-20",
+      "sev": "medium",
+      "note": "GitHub CLI gh codespace jupyter may allow code execution via unvalidated URLs from malicious Codespaces",
+      "epss": 0.0033
+    },
+    {
       "name": "github.com/containerd/containerd/v2",
       "ge": "2.2.0",
       "lt": "2.2.10",
@@ -8738,6 +8772,16 @@
       "sev": "medium",
       "note": "Terragrunt catalog predictable temp symlink clobber",
       "epss": 0.0018
+    },
+    {
+      "name": "github.com/insomniacslk/dhcp",
+      "ge": "0.0.0-20190522091526-5dce45b2b680",
+      "lt": "0.0.0-20260719225207-c76316d4aa82",
+      "id": "GHSA-jp3c-6v3g-mpxv",
+      "ghsaId": "GHSA-jp3c-6v3g-mpxv",
+      "cwe": "CWE-1284",
+      "sev": "high",
+      "note": "github.com/insomniacslk/dhcp permits denial of service through a malformed IPv4 payload length"
     },
     {
       "name": "github.com/junegunn/fzf",
@@ -9525,6 +9569,29 @@
       "sev": "high",
       "note": "Gortex: Arbitrary file write / repo-confinement escape in `write_file` / `edit_file` / `move_inline` MCP tools → code execution",
       "epss": 0.0028
+    },
+    {
+      "name": "go.etcd.io/etcd/v3",
+      "lt": "3.5.32",
+      "id": "CVE-2026-59818",
+      "ghsaId": "GHSA-3wh4-j44w-pg92",
+      "cve": "CVE-2026-59818",
+      "cwe": "CWE-295",
+      "sev": "medium",
+      "note": "etcd: CRL enforcement bypass on gRPC listener when `--listen-client-http-urls` is configured",
+      "epss": 0.0043
+    },
+    {
+      "name": "go.etcd.io/etcd/v3",
+      "ge": "3.6.0-alpha.0",
+      "lt": "3.6.13",
+      "id": "CVE-2026-59818",
+      "ghsaId": "GHSA-3wh4-j44w-pg92",
+      "cve": "CVE-2026-59818",
+      "cwe": "CWE-295",
+      "sev": "medium",
+      "note": "etcd: CRL enforcement bypass on gRPC listener when `--listen-client-http-urls` is configured",
+      "epss": 0.0043
     },
     {
       "name": "go.opentelemetry.io/otel/baggage",
@@ -10718,6 +10785,52 @@
       "epss": 0.0037
     },
     {
+      "name": "cakephp/twig-view",
+      "lt": "1.3.3",
+      "id": "CVE-2026-59191",
+      "ghsaId": "GHSA-hq9r-72jq-2pxp",
+      "cve": "CVE-2026-59191",
+      "cwe": "CWE-22",
+      "sev": "medium",
+      "note": "TwigView FileLoader may allow arbitrary file reads through user-controlled template paths",
+      "epss": 0.0048
+    },
+    {
+      "name": "cakephp/twig-view",
+      "ge": "2.0.0",
+      "lt": "2.1.2",
+      "id": "CVE-2026-59191",
+      "ghsaId": "GHSA-hq9r-72jq-2pxp",
+      "cve": "CVE-2026-59191",
+      "cwe": "CWE-22",
+      "sev": "medium",
+      "note": "TwigView FileLoader may allow arbitrary file reads through user-controlled template paths",
+      "epss": 0.0048
+    },
+    {
+      "name": "cakephp/twig-view",
+      "lt": "1.3.3",
+      "id": "CVE-2026-59192",
+      "ghsaId": "GHSA-48qj-5wxh-m8hc",
+      "cve": "CVE-2026-59192",
+      "cwe": "CWE-502",
+      "sev": "medium",
+      "note": "Cakephp twig-view unserialize Twig filter allows arbitrary object deserialization",
+      "epss": 0.0061
+    },
+    {
+      "name": "cakephp/twig-view",
+      "ge": "2.0.0",
+      "lt": "2.1.2",
+      "id": "CVE-2026-59192",
+      "ghsaId": "GHSA-48qj-5wxh-m8hc",
+      "cve": "CVE-2026-59192",
+      "cwe": "CWE-502",
+      "sev": "medium",
+      "note": "Cakephp twig-view unserialize Twig filter allows arbitrary object deserialization",
+      "epss": 0.0061
+    },
+    {
       "name": "contao/core-bundle",
       "ge": "5.0.0",
       "lt": "5.3.50",
@@ -11008,6 +11121,30 @@
       "sev": "medium",
       "note": "EGroupware: User-Controlled Identity Provider Selection in SAML Authentication",
       "epss": 0.002
+    },
+    {
+      "name": "filament/filament",
+      "ge": "4.0.0",
+      "lt": "4.12.5",
+      "id": "CVE-2026-84307",
+      "ghsaId": "GHSA-xwpv-pqxp-5v36",
+      "cve": "CVE-2026-84307",
+      "cwe": "CWE-204",
+      "sev": "low",
+      "note": "Filament: Password validity disclosure for accounts denied panel access on login page",
+      "epss": 0.0046
+    },
+    {
+      "name": "filament/filament",
+      "ge": "5.0.0",
+      "lt": "5.7.5",
+      "id": "CVE-2026-84307",
+      "ghsaId": "GHSA-xwpv-pqxp-5v36",
+      "cve": "CVE-2026-84307",
+      "cwe": "CWE-204",
+      "sev": "low",
+      "note": "Filament: Password validity disclosure for accounts denied panel access on login page",
+      "epss": 0.0046
     },
     {
       "name": "jane-php/open-api-3",
@@ -11421,12 +11558,52 @@
     {
       "name": "wwbn/avideo",
       "lt": "29.1.0",
+      "id": "CVE-2026-63304",
+      "ghsaId": "GHSA-j44m-77cc-p3cc",
+      "cve": "CVE-2026-63304",
+      "cwe": "CWE-78",
+      "sev": "high",
+      "note": "AVideo API vulnerable to OS command injection through an unescaped FFmpeg process keyword",
+      "epss": 0.0173
+    },
+    {
+      "name": "wwbn/avideo",
+      "lt": "29.1.0",
+      "id": "CVE-2026-63305",
+      "ghsaId": "GHSA-g9x9-q7qj-6mv5",
+      "cve": "CVE-2026-63305",
+      "cwe": "CWE-78",
+      "sev": "high",
+      "note": "AVideo API FFmpeg process permits OS command injection via notifyCode/callback",
+      "epss": 0.0177
+    },
+    {
+      "name": "wwbn/avideo",
+      "lt": "29.1.0",
       "id": "CVE-2026-63492",
       "ghsaId": "GHSA-j44m-77cc-p3cc",
       "cve": "CVE-2026-63492",
       "cwe": "CWE-78",
       "sev": "high",
       "note": "AVideo API vulnerable to OS command injection through an unescaped FFmpeg process keyword"
+    },
+    {
+      "name": "wwbn/avideo",
+      "lt": "29.1.0",
+      "id": "GHSA-jjpq-qx77-qjwj",
+      "ghsaId": "GHSA-jjpq-qx77-qjwj",
+      "cwe": "CWE-78",
+      "sev": "critical",
+      "note": "Duplicate Advisory: AVideo API vulnerable to OS command injection through an unescaped FFmpeg process keyword"
+    },
+    {
+      "name": "wwbn/avideo",
+      "lt": "29.1.0",
+      "id": "GHSA-jrxj-9mhw-55wc",
+      "ghsaId": "GHSA-jrxj-9mhw-55wc",
+      "cwe": "CWE-78",
+      "sev": "critical",
+      "note": "Duplicate Advisory: AVideo API FFmpeg process permits OS command injection via notifyCode/callback"
     },
     {
       "name": "yiisoft/yii2",
