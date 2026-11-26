@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-11-26T01:30:49.998Z",
+  "generatedAt": "2026-11-26T16:20:59.476Z",
   "count": 583,
   "advisories": [
     {
@@ -1084,7 +1084,45 @@
         }
       ],
       "kev": true,
-      "epss": 0.4426
+      "epss": 0.4499
+    },
+    {
+      "id": "CVE-2026-133469",
+      "ghsaId": "GHSA-2r3w-c2vx-fv5g",
+      "cve": "CVE-2026-133469",
+      "cwe": "CWE-287",
+      "sev": "critical",
+      "summary": "Xen Orchestra: Empty-object login token",
+      "description": "### Summary\n\nREST cookie parsing turns `authenticationToken=j:%7B%7D` into `{}`. REST authentication passes that object to the XO token provider without requiring a string. The token collection treats `{}` as an unfiltered lookup and returns its first token; the provider authenticates as that token's owner if it is unexpired. The authenticated `/rest/v0/users/me/authentication_tokens` route then returns reusable login token IDs.\n\n\n### Details\n\n1. In `packages/xo-server/src/api/session.mjs`, function  `signIn(credentials)` has **no `params` schema** (unlike the deprecated `signInWithToken`, which declares `token: { type: 'string' }`), so `credentials.token` can be any JSON value.\n2. `packages/xo-server/src/xo-mixins/authentication.mjs`, token provider:\n   ```js\n   this.registerAuthenticationProvider(async ({ token: tokenId }, { ip } = {}) => {\n     if (!tokenId) return          // {} is truthy → passes\n     const token = await app.getAuthenticationToken(tokenId)\n     ...\n     return { bypassOtp: true, expiration: token.expiration, userId: token.user_id }\n   ```\n3. `getAuthenticationToken(properties)` explicitly accepts an object, and `_getAuthenticationToken(id, properties)` does `this._tokens.first(properties ?? id)`.\n4. `Collection#first(properties)` -> `_get(properties)`; in `collection/redis.mjs`, `if (isEmpty(properties)) return redis.sMembers(prefix + '_ids')…` → **all tokens**. Non-empty objects on indexed fields (`user_id`, `client_id`) do an index lookup → token of the chosen user.\n5. HTTP paths: `index.mjs` (`req.cookies.token` → `isValidAuthenticationToken`), `xo-mixins/rest-api.mjs` and `@xen-orchestra/rest-api` middleware (`cookies.authenticationToken ?? cookies.token` → `authenticateUser({ token })`). `cookie-parser` turns `j:`-prefixed cookie values into parsed JSON, so `authenticationToken=j:{}` yields `{}`.\n\n\n### Proof of concept\n\nThe object cookie returned 200 with unexpired token IDs, and one ID worked on a fresh request as an admin account. The attacker does not choose which token the empty-object lookup returns. Authentication succeeds only if the token returned first is unexpired and belongs to an existing user; if it is expired or its user was deleted, the request fails without trying another token.\n\n```bash\ncurl -b 'authenticationToken=j:{}' https://<ip>/rest/v0/users\n```\n\n### Impact\n\nAn adversary can bypass authentication and perform actions with 'Admin' privilege. Xen Orchestra compromise can lead to arbitrary code execution on man",
+      "publishedAt": "2026-11-23T17:29:29Z",
+      "updatedAt": "2026-11-23T17:29:30Z",
+      "url": "https://github.com/advisories/GHSA-2r3w-c2vx-fv5g",
+      "references": [
+        "https://github.com/vatesfr/xen-orchestra/security/advisories/GHSA-2r3w-c2vx-fv5g",
+        "https://github.com/vatesfr/xen-orchestra/pull/10748",
+        "https://github.com/vatesfr/xen-orchestra/commit/50166fe3a49c02069d35ba9046ca4a1f77f4e11d",
+        "https://docs.vates.tech/security-advisories/advisories/2026/vates-sa-2026-062",
+        "https://github.com/advisories/GHSA-2r3w-c2vx-fv5g"
+      ],
+      "patchUrls": [
+        "https://github.com/vatesfr/xen-orchestra/pull/10748",
+        "https://github.com/vatesfr/xen-orchestra/commit/50166fe3a49c02069d35ba9046ca4a1f77f4e11d"
+      ],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "xo-server",
+          "le": "5.7.4",
+          "id": "CVE-2026-133469",
+          "ghsaId": "GHSA-2r3w-c2vx-fv5g",
+          "cve": "CVE-2026-133469",
+          "cwe": "CWE-287",
+          "sev": "critical",
+          "note": "Xen Orchestra: Empty-object login token"
+        }
+      ],
+      "kev": true,
+      "epss": 0.3177
     },
     {
       "id": "CVE-2026-33017",
@@ -1639,44 +1677,6 @@
       ],
       "kev": true,
       "epss": 0.0137
-    },
-    {
-      "id": "CVE-2026-133469",
-      "ghsaId": "GHSA-2r3w-c2vx-fv5g",
-      "cve": "CVE-2026-133469",
-      "cwe": "CWE-287",
-      "sev": "critical",
-      "summary": "Xen Orchestra: Empty-object login token",
-      "description": "### Summary\n\nREST cookie parsing turns `authenticationToken=j:%7B%7D` into `{}`. REST authentication passes that object to the XO token provider without requiring a string. The token collection treats `{}` as an unfiltered lookup and returns its first token; the provider authenticates as that token's owner if it is unexpired. The authenticated `/rest/v0/users/me/authentication_tokens` route then returns reusable login token IDs.\n\n\n### Details\n\n1. In `packages/xo-server/src/api/session.mjs`, function  `signIn(credentials)` has **no `params` schema** (unlike the deprecated `signInWithToken`, which declares `token: { type: 'string' }`), so `credentials.token` can be any JSON value.\n2. `packages/xo-server/src/xo-mixins/authentication.mjs`, token provider:\n   ```js\n   this.registerAuthenticationProvider(async ({ token: tokenId }, { ip } = {}) => {\n     if (!tokenId) return          // {} is truthy → passes\n     const token = await app.getAuthenticationToken(tokenId)\n     ...\n     return { bypassOtp: true, expiration: token.expiration, userId: token.user_id }\n   ```\n3. `getAuthenticationToken(properties)` explicitly accepts an object, and `_getAuthenticationToken(id, properties)` does `this._tokens.first(properties ?? id)`.\n4. `Collection#first(properties)` -> `_get(properties)`; in `collection/redis.mjs`, `if (isEmpty(properties)) return redis.sMembers(prefix + '_ids')…` → **all tokens**. Non-empty objects on indexed fields (`user_id`, `client_id`) do an index lookup → token of the chosen user.\n5. HTTP paths: `index.mjs` (`req.cookies.token` → `isValidAuthenticationToken`), `xo-mixins/rest-api.mjs` and `@xen-orchestra/rest-api` middleware (`cookies.authenticationToken ?? cookies.token` → `authenticateUser({ token })`). `cookie-parser` turns `j:`-prefixed cookie values into parsed JSON, so `authenticationToken=j:{}` yields `{}`.\n\n\n### Proof of concept\n\nThe object cookie returned 200 with unexpired token IDs, and one ID worked on a fresh request as an admin account. The attacker does not choose which token the empty-object lookup returns. Authentication succeeds only if the token returned first is unexpired and belongs to an existing user; if it is expired or its user was deleted, the request fails without trying another token.\n\n```bash\ncurl -b 'authenticationToken=j:{}' https://<ip>/rest/v0/users\n```\n\n### Impact\n\nAn adversary can bypass authentication and perform actions with 'Admin' privilege. Xen Orchestra compromise can lead to arbitrary code execution on man",
-      "publishedAt": "2026-11-23T17:29:29Z",
-      "updatedAt": "2026-11-23T17:29:30Z",
-      "url": "https://github.com/advisories/GHSA-2r3w-c2vx-fv5g",
-      "references": [
-        "https://github.com/vatesfr/xen-orchestra/security/advisories/GHSA-2r3w-c2vx-fv5g",
-        "https://github.com/vatesfr/xen-orchestra/pull/10748",
-        "https://github.com/vatesfr/xen-orchestra/commit/50166fe3a49c02069d35ba9046ca4a1f77f4e11d",
-        "https://docs.vates.tech/security-advisories/advisories/2026/vates-sa-2026-062",
-        "https://github.com/advisories/GHSA-2r3w-c2vx-fv5g"
-      ],
-      "patchUrls": [
-        "https://github.com/vatesfr/xen-orchestra/pull/10748",
-        "https://github.com/vatesfr/xen-orchestra/commit/50166fe3a49c02069d35ba9046ca4a1f77f4e11d"
-      ],
-      "packages": [
-        {
-          "ecosystem": "npm",
-          "name": "xo-server",
-          "le": "5.7.4",
-          "id": "CVE-2026-133469",
-          "ghsaId": "GHSA-2r3w-c2vx-fv5g",
-          "cve": "CVE-2026-133469",
-          "cwe": "CWE-287",
-          "sev": "critical",
-          "note": "Xen Orchestra: Empty-object login token"
-        }
-      ],
-      "kev": true,
-      "epss": 0.011
     },
     {
       "id": "CVE-2026-55255",
@@ -8124,6 +8124,43 @@
       "epss": 0.0069
     },
     {
+      "id": "CVE-2026-28399",
+      "ghsaId": "GHSA-45rp-9p97-h852",
+      "cve": "CVE-2026-28399",
+      "cwe": "CWE-89",
+      "sev": "medium",
+      "summary": "NocoDB Vulnerable to SQL Injection via DATEADD Formula",
+      "description": "### Summary\nAn authenticated user with Creator role can inject arbitrary SQL via the DATEADD formula's unit parameter.\n\n### Details\nThe third argument (unit) of `DATEADD` was interpolated directly into `knex.raw()` queries after only stripping quote characters. Validation in `formulas.ts` only checked `Literal` AST node types — non-Literal types bypassed validation entirely. Affected MySQL, PostgreSQL, and SQLite function mappings.\n\n### Impact\nSQL injection allowing data exfiltration or modification, scoped to the connected database.\n\n### Credit\nThis issue was reported by [@q1uf3ng](https://github.com/q1uf3ng).",
+      "publishedAt": "2026-03-03T20:58:55Z",
+      "updatedAt": "2026-11-05T22:28:39Z",
+      "url": "https://github.com/advisories/GHSA-45rp-9p97-h852",
+      "references": [
+        "https://github.com/nocodb/nocodb/security/advisories/GHSA-45rp-9p97-h852",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-28399",
+        "https://github.com/nocodb/nocodb/releases/tag/0.301.3",
+        "https://github.com/nocodb/nocodb/commit/8efd6b42a13d7d816c9cbda7b81da1539f9f8590",
+        "https://github.com/advisories/GHSA-45rp-9p97-h852"
+      ],
+      "patchUrls": [
+        "https://github.com/nocodb/nocodb/commit/8efd6b42a13d7d816c9cbda7b81da1539f9f8590"
+      ],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "nocodb",
+          "lt": "0.301.3",
+          "id": "CVE-2026-28399",
+          "ghsaId": "GHSA-45rp-9p97-h852",
+          "cve": "CVE-2026-28399",
+          "cwe": "CWE-89",
+          "sev": "medium",
+          "note": "NocoDB Vulnerable to SQL Injection via DATEADD Formula"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0069
+    },
+    {
       "id": "CVE-2026-55956",
       "ghsaId": "GHSA-5v3h-fjv2-54fg",
       "cve": "CVE-2026-55956",
@@ -9305,43 +9342,6 @@
           "cwe": "CWE-22",
           "sev": "high",
           "note": "isomorphic-git: Arbitrary file write outside of working tree via directory symlink during checkout (potential RCE)"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0065
-    },
-    {
-      "id": "CVE-2026-28399",
-      "ghsaId": "GHSA-45rp-9p97-h852",
-      "cve": "CVE-2026-28399",
-      "cwe": "CWE-89",
-      "sev": "medium",
-      "summary": "NocoDB Vulnerable to SQL Injection via DATEADD Formula",
-      "description": "### Summary\nAn authenticated user with Creator role can inject arbitrary SQL via the DATEADD formula's unit parameter.\n\n### Details\nThe third argument (unit) of `DATEADD` was interpolated directly into `knex.raw()` queries after only stripping quote characters. Validation in `formulas.ts` only checked `Literal` AST node types — non-Literal types bypassed validation entirely. Affected MySQL, PostgreSQL, and SQLite function mappings.\n\n### Impact\nSQL injection allowing data exfiltration or modification, scoped to the connected database.\n\n### Credit\nThis issue was reported by [@q1uf3ng](https://github.com/q1uf3ng).",
-      "publishedAt": "2026-03-03T20:58:55Z",
-      "updatedAt": "2026-11-05T22:28:39Z",
-      "url": "https://github.com/advisories/GHSA-45rp-9p97-h852",
-      "references": [
-        "https://github.com/nocodb/nocodb/security/advisories/GHSA-45rp-9p97-h852",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-28399",
-        "https://github.com/nocodb/nocodb/releases/tag/0.301.3",
-        "https://github.com/nocodb/nocodb/commit/8efd6b42a13d7d816c9cbda7b81da1539f9f8590",
-        "https://github.com/advisories/GHSA-45rp-9p97-h852"
-      ],
-      "patchUrls": [
-        "https://github.com/nocodb/nocodb/commit/8efd6b42a13d7d816c9cbda7b81da1539f9f8590"
-      ],
-      "packages": [
-        {
-          "ecosystem": "npm",
-          "name": "nocodb",
-          "lt": "0.301.3",
-          "id": "CVE-2026-28399",
-          "ghsaId": "GHSA-45rp-9p97-h852",
-          "cve": "CVE-2026-28399",
-          "cwe": "CWE-89",
-          "sev": "medium",
-          "note": "NocoDB Vulnerable to SQL Injection via DATEADD Formula"
         }
       ],
       "kev": false,
@@ -11878,6 +11878,45 @@
       "epss": 0.0056
     },
     {
+      "id": "CVE-2026-103025",
+      "ghsaId": "GHSA-7hvw-3c2q-45qg",
+      "cve": "CVE-2026-103025",
+      "cwe": "CWE-409",
+      "sev": "high",
+      "summary": "bep/imagemeta: Unbounded memory allocation decoding PNG `zTXt` \"Raw profile type iptc\" chunks",
+      "description": "A crafted PNG can make `imagemeta.Decode` allocate memory far in excess of the input file's size, leading to memory exhaustion. Two separate paths in the `zTXt` \"Raw profile type iptc\" branch are affected: the declared chunk length drives an allocation directly, and the embedded zlib stream is decompressed without an output bound. A 42-byte file allocated 256 MB, and a 127 KB file allocated 460 MB.\n\n### Impact\n\nDenial of service by memory exhaustion against any application that decodes untrusted PNG images with this library. The decompression bomb is the more reliable vector, since it produces genuinely resident memory; the effect of the oversized `make` depends on the platform's overcommit behavior and any configured `GOMEMLIMIT` or cgroup limit.\n\n### Patches\n\nFixed in v0.17.3. \n\n### Workarounds\n\nReject or bound PNG input size before calling `Decode`, or clear `IPTC` from `Options.Sources` if IPTC metadata is not required.\n\n### Credits\n\nReported by Arpit Jain ([@arpitjain099](https://github.com/arpitjain099)).",
+      "publishedAt": "2026-11-20T00:20:52Z",
+      "updatedAt": "2026-11-20T00:20:53Z",
+      "url": "https://github.com/advisories/GHSA-7hvw-3c2q-45qg",
+      "references": [
+        "https://github.com/bep/imagemeta/security/advisories/GHSA-7hvw-3c2q-45qg",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-103025",
+        "https://github.com/bep/imagemeta/pull/69",
+        "https://github.com/bep/imagemeta/commit/2289fdf83fcd238d86f72e65c588da687c998437",
+        "https://github.com/bep/imagemeta/releases/tag/v0.17.3",
+        "https://github.com/advisories/GHSA-7hvw-3c2q-45qg"
+      ],
+      "patchUrls": [
+        "https://github.com/bep/imagemeta/pull/69",
+        "https://github.com/bep/imagemeta/commit/2289fdf83fcd238d86f72e65c588da687c998437"
+      ],
+      "packages": [
+        {
+          "ecosystem": "go",
+          "name": "github.com/bep/imagemeta",
+          "lt": "0.17.3",
+          "id": "CVE-2026-103025",
+          "ghsaId": "GHSA-7hvw-3c2q-45qg",
+          "cve": "CVE-2026-103025",
+          "cwe": "CWE-409",
+          "sev": "high",
+          "note": "bep/imagemeta: Unbounded memory allocation decoding PNG `zTXt` \"Raw profile type iptc\" chunks"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0056
+    },
+    {
       "id": "CVE-2026-126303",
       "ghsaId": "GHSA-8fx7-8jr8-84rv",
       "cve": "CVE-2026-126303",
@@ -12950,45 +12989,6 @@
           "cwe": "CWE-470",
           "sev": "high",
           "note": "Paymenter: Unauthenticated arbitrary method invocation in Livewire components"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0052
-    },
-    {
-      "id": "CVE-2026-103025",
-      "ghsaId": "GHSA-7hvw-3c2q-45qg",
-      "cve": "CVE-2026-103025",
-      "cwe": "CWE-409",
-      "sev": "high",
-      "summary": "bep/imagemeta: Unbounded memory allocation decoding PNG `zTXt` \"Raw profile type iptc\" chunks",
-      "description": "A crafted PNG can make `imagemeta.Decode` allocate memory far in excess of the input file's size, leading to memory exhaustion. Two separate paths in the `zTXt` \"Raw profile type iptc\" branch are affected: the declared chunk length drives an allocation directly, and the embedded zlib stream is decompressed without an output bound. A 42-byte file allocated 256 MB, and a 127 KB file allocated 460 MB.\n\n### Impact\n\nDenial of service by memory exhaustion against any application that decodes untrusted PNG images with this library. The decompression bomb is the more reliable vector, since it produces genuinely resident memory; the effect of the oversized `make` depends on the platform's overcommit behavior and any configured `GOMEMLIMIT` or cgroup limit.\n\n### Patches\n\nFixed in v0.17.3. \n\n### Workarounds\n\nReject or bound PNG input size before calling `Decode`, or clear `IPTC` from `Options.Sources` if IPTC metadata is not required.\n\n### Credits\n\nReported by Arpit Jain ([@arpitjain099](https://github.com/arpitjain099)).",
-      "publishedAt": "2026-11-20T00:20:52Z",
-      "updatedAt": "2026-11-20T00:20:53Z",
-      "url": "https://github.com/advisories/GHSA-7hvw-3c2q-45qg",
-      "references": [
-        "https://github.com/bep/imagemeta/security/advisories/GHSA-7hvw-3c2q-45qg",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-103025",
-        "https://github.com/bep/imagemeta/pull/69",
-        "https://github.com/bep/imagemeta/commit/2289fdf83fcd238d86f72e65c588da687c998437",
-        "https://github.com/bep/imagemeta/releases/tag/v0.17.3",
-        "https://github.com/advisories/GHSA-7hvw-3c2q-45qg"
-      ],
-      "patchUrls": [
-        "https://github.com/bep/imagemeta/pull/69",
-        "https://github.com/bep/imagemeta/commit/2289fdf83fcd238d86f72e65c588da687c998437"
-      ],
-      "packages": [
-        {
-          "ecosystem": "go",
-          "name": "github.com/bep/imagemeta",
-          "lt": "0.17.3",
-          "id": "CVE-2026-103025",
-          "ghsaId": "GHSA-7hvw-3c2q-45qg",
-          "cve": "CVE-2026-103025",
-          "cwe": "CWE-409",
-          "sev": "high",
-          "note": "bep/imagemeta: Unbounded memory allocation decoding PNG `zTXt` \"Raw profile type iptc\" chunks"
         }
       ],
       "kev": false,
@@ -18354,6 +18354,43 @@
       "epss": 0.004
     },
     {
+      "id": "CVE-2026-28360",
+      "ghsaId": "GHSA-mpp2-x7wv-38hv",
+      "cve": "CVE-2026-28360",
+      "cwe": "CWE-256",
+      "sev": "low",
+      "summary": "NocoDB has Plaintext Storage of Shared View Passwords",
+      "description": "### Summary\nShared view passwords were stored in plaintext in the database and compared using direct string equality.\n\n### Details\nThe `password` column in `nc_views` stored unhashed passwords. Verification used `!==` comparison across `public-datas.service.ts`, `public-metas.service.ts`, and `calendar-datas.service.ts`.\n\n### Impact\nIf the database is compromised, shared view passwords are immediately readable. Risk is limited to password reuse scenarios.\n\n### Credit\nThis issue was reported by [@Tulgaaaaaaaa](https://github.com/Tulgaaaaaaaa).",
+      "publishedAt": "2026-03-02T19:52:57Z",
+      "updatedAt": "2026-11-05T22:30:10Z",
+      "url": "https://github.com/advisories/GHSA-mpp2-x7wv-38hv",
+      "references": [
+        "https://github.com/nocodb/nocodb/security/advisories/GHSA-mpp2-x7wv-38hv",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-28360",
+        "https://github.com/nocodb/nocodb/releases/tag/0.301.3",
+        "https://github.com/nocodb/nocodb/commit/2476df4aed4ae8f6da61612ffe34177364631760",
+        "https://github.com/advisories/GHSA-mpp2-x7wv-38hv"
+      ],
+      "patchUrls": [
+        "https://github.com/nocodb/nocodb/commit/2476df4aed4ae8f6da61612ffe34177364631760"
+      ],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "nocodb",
+          "lt": "0.301.3",
+          "id": "CVE-2026-28360",
+          "ghsaId": "GHSA-mpp2-x7wv-38hv",
+          "cve": "CVE-2026-28360",
+          "cwe": "CWE-256",
+          "sev": "low",
+          "note": "NocoDB has Plaintext Storage of Shared View Passwords"
+        }
+      ],
+      "kev": false,
+      "epss": 0.004
+    },
+    {
       "id": "CVE-2026-77309",
       "ghsaId": "GHSA-jrjx-9jjw-747m",
       "cve": "CVE-2026-77309",
@@ -18584,6 +18621,43 @@
       "epss": 0.0039
     },
     {
+      "id": "CVE-2026-28396",
+      "ghsaId": "GHSA-x4vh-j75g-268g",
+      "cve": "CVE-2026-28396",
+      "cwe": "CWE-613",
+      "sev": "medium",
+      "summary": "NocoDB's Refresh Tokens Not Revoked on Password Reset",
+      "description": "### Summary\nThe password reset flow did not revoke existing refresh tokens, allowing an attacker with a previously stolen refresh token to continue minting valid JWTs after the victim resets their password.\n\n### Details\n`passwordReset()` in `users.service.ts` updated `token_version` (invalidating JWTs) but did not call `UserRefreshToken.deleteAllUserToken()`. The `refreshToken()` method only checked token existence, not `token_version`. Both `passwordChange()` and `signOut()` correctly deleted all refresh tokens.\n\n### Impact\nAn attacker who previously obtained a refresh token retains access after password reset until the token expires.\n\n### Credit\nThis issue was reported by [@bugbunny-research](https://github.com/bugbunny-research) (bugbunny.ai).",
+      "publishedAt": "2026-03-02T19:53:17Z",
+      "updatedAt": "2026-11-05T22:53:53Z",
+      "url": "https://github.com/advisories/GHSA-x4vh-j75g-268g",
+      "references": [
+        "https://github.com/nocodb/nocodb/security/advisories/GHSA-x4vh-j75g-268g",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-28396",
+        "https://github.com/nocodb/nocodb/releases/tag/0.301.3",
+        "https://github.com/nocodb/nocodb/commit/dfbe836577354ba780563a5cf8cb50bfc61a203e",
+        "https://github.com/advisories/GHSA-x4vh-j75g-268g"
+      ],
+      "patchUrls": [
+        "https://github.com/nocodb/nocodb/commit/dfbe836577354ba780563a5cf8cb50bfc61a203e"
+      ],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "nocodb",
+          "lt": "0.301.3",
+          "id": "CVE-2026-28396",
+          "ghsaId": "GHSA-x4vh-j75g-268g",
+          "cve": "CVE-2026-28396",
+          "cwe": "CWE-613",
+          "sev": "medium",
+          "note": "NocoDB's Refresh Tokens Not Revoked on Password Reset"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0039
+    },
+    {
       "id": "CVE-2026-77376",
       "ghsaId": "GHSA-xr6g-7g83-j865",
       "cve": "CVE-2026-77376",
@@ -18651,43 +18725,6 @@
           "cwe": "CWE-918",
           "sev": "high",
           "note": "Flyto2 Core: SSRF guard bypass via DNS rebinding (validate_url_ssrf resolves-then-connects without pinning)"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0038
-    },
-    {
-      "id": "CVE-2026-28360",
-      "ghsaId": "GHSA-mpp2-x7wv-38hv",
-      "cve": "CVE-2026-28360",
-      "cwe": "CWE-256",
-      "sev": "low",
-      "summary": "NocoDB has Plaintext Storage of Shared View Passwords",
-      "description": "### Summary\nShared view passwords were stored in plaintext in the database and compared using direct string equality.\n\n### Details\nThe `password` column in `nc_views` stored unhashed passwords. Verification used `!==` comparison across `public-datas.service.ts`, `public-metas.service.ts`, and `calendar-datas.service.ts`.\n\n### Impact\nIf the database is compromised, shared view passwords are immediately readable. Risk is limited to password reuse scenarios.\n\n### Credit\nThis issue was reported by [@Tulgaaaaaaaa](https://github.com/Tulgaaaaaaaa).",
-      "publishedAt": "2026-03-02T19:52:57Z",
-      "updatedAt": "2026-11-05T22:30:10Z",
-      "url": "https://github.com/advisories/GHSA-mpp2-x7wv-38hv",
-      "references": [
-        "https://github.com/nocodb/nocodb/security/advisories/GHSA-mpp2-x7wv-38hv",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-28360",
-        "https://github.com/nocodb/nocodb/releases/tag/0.301.3",
-        "https://github.com/nocodb/nocodb/commit/2476df4aed4ae8f6da61612ffe34177364631760",
-        "https://github.com/advisories/GHSA-mpp2-x7wv-38hv"
-      ],
-      "patchUrls": [
-        "https://github.com/nocodb/nocodb/commit/2476df4aed4ae8f6da61612ffe34177364631760"
-      ],
-      "packages": [
-        {
-          "ecosystem": "npm",
-          "name": "nocodb",
-          "lt": "0.301.3",
-          "id": "CVE-2026-28360",
-          "ghsaId": "GHSA-mpp2-x7wv-38hv",
-          "cve": "CVE-2026-28360",
-          "cwe": "CWE-256",
-          "sev": "low",
-          "note": "NocoDB has Plaintext Storage of Shared View Passwords"
         }
       ],
       "kev": false,
@@ -19116,43 +19153,6 @@
           "cwe": "CWE-284",
           "sev": "medium",
           "note": "Eclipse hawkBit DDI has Privilege Escalation that allows Tenant-Isolated Firmware Exfiltration"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0036
-    },
-    {
-      "id": "CVE-2026-28396",
-      "ghsaId": "GHSA-x4vh-j75g-268g",
-      "cve": "CVE-2026-28396",
-      "cwe": "CWE-613",
-      "sev": "medium",
-      "summary": "NocoDB's Refresh Tokens Not Revoked on Password Reset",
-      "description": "### Summary\nThe password reset flow did not revoke existing refresh tokens, allowing an attacker with a previously stolen refresh token to continue minting valid JWTs after the victim resets their password.\n\n### Details\n`passwordReset()` in `users.service.ts` updated `token_version` (invalidating JWTs) but did not call `UserRefreshToken.deleteAllUserToken()`. The `refreshToken()` method only checked token existence, not `token_version`. Both `passwordChange()` and `signOut()` correctly deleted all refresh tokens.\n\n### Impact\nAn attacker who previously obtained a refresh token retains access after password reset until the token expires.\n\n### Credit\nThis issue was reported by [@bugbunny-research](https://github.com/bugbunny-research) (bugbunny.ai).",
-      "publishedAt": "2026-03-02T19:53:17Z",
-      "updatedAt": "2026-11-05T22:53:53Z",
-      "url": "https://github.com/advisories/GHSA-x4vh-j75g-268g",
-      "references": [
-        "https://github.com/nocodb/nocodb/security/advisories/GHSA-x4vh-j75g-268g",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-28396",
-        "https://github.com/nocodb/nocodb/releases/tag/0.301.3",
-        "https://github.com/nocodb/nocodb/commit/dfbe836577354ba780563a5cf8cb50bfc61a203e",
-        "https://github.com/advisories/GHSA-x4vh-j75g-268g"
-      ],
-      "patchUrls": [
-        "https://github.com/nocodb/nocodb/commit/dfbe836577354ba780563a5cf8cb50bfc61a203e"
-      ],
-      "packages": [
-        {
-          "ecosystem": "npm",
-          "name": "nocodb",
-          "lt": "0.301.3",
-          "id": "CVE-2026-28396",
-          "ghsaId": "GHSA-x4vh-j75g-268g",
-          "cve": "CVE-2026-28396",
-          "cwe": "CWE-613",
-          "sev": "medium",
-          "note": "NocoDB's Refresh Tokens Not Revoked on Password Reset"
         }
       ],
       "kev": false,
@@ -19631,6 +19631,43 @@
           "cwe": "CWE-22",
           "sev": "high",
           "note": "zt-zip: Path traversal in fluent API unpack"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0034
+    },
+    {
+      "id": "CVE-2026-28361",
+      "ghsaId": "GHSA-p9x3-w98f-7j3q",
+      "cve": "CVE-2026-28361",
+      "cwe": "CWE-639",
+      "sev": "medium",
+      "summary": "NocoDB Missing Ownership Validation in MCP Token Operations",
+      "description": "### Summary\nThe MCP token service did not validate token ownership, allowing a Creator within the same base to read, regenerate, or delete another user's MCP tokens if the token ID was known.\n\n### Details\n`McpTokenService.get()`, `regenerateToken()`, and `delete()` did not filter by `fk_user_id`. The analogous `ApiTokensService` correctly enforced ownership.\n\n### Impact\nLimited — requires Creator role and knowledge of target token ID. Primary risk is denial of service (invalidating tokens) and scoped token disclosure.\n\n### Credit\nThis issue was reported by [@bugbunny-research](https://github.com/bugbunny-research) (bugbunny.ai).",
+      "publishedAt": "2026-03-02T19:53:41Z",
+      "updatedAt": "2026-11-05T22:42:12Z",
+      "url": "https://github.com/advisories/GHSA-p9x3-w98f-7j3q",
+      "references": [
+        "https://github.com/nocodb/nocodb/security/advisories/GHSA-p9x3-w98f-7j3q",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-28361",
+        "https://github.com/nocodb/nocodb/releases/tag/0.301.3",
+        "https://github.com/nocodb/nocodb/commit/4e736ee40951c7b4f9760f372780e0712c44b9dd",
+        "https://github.com/advisories/GHSA-p9x3-w98f-7j3q"
+      ],
+      "patchUrls": [
+        "https://github.com/nocodb/nocodb/commit/4e736ee40951c7b4f9760f372780e0712c44b9dd"
+      ],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "nocodb",
+          "lt": "0.301.3",
+          "id": "CVE-2026-28361",
+          "ghsaId": "GHSA-p9x3-w98f-7j3q",
+          "cve": "CVE-2026-28361",
+          "cwe": "CWE-639",
+          "sev": "medium",
+          "note": "NocoDB Missing Ownership Validation in MCP Token Operations"
         }
       ],
       "kev": false,
@@ -20205,43 +20242,6 @@
           "cwe": "CWE-22",
           "sev": "high",
           "note": "DDEV incomplete tar symlink traversal fix allows host file overwrite - Incomplete fix of CVE-2026-32885"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0031
-    },
-    {
-      "id": "CVE-2026-28361",
-      "ghsaId": "GHSA-p9x3-w98f-7j3q",
-      "cve": "CVE-2026-28361",
-      "cwe": "CWE-639",
-      "sev": "medium",
-      "summary": "NocoDB Missing Ownership Validation in MCP Token Operations",
-      "description": "### Summary\nThe MCP token service did not validate token ownership, allowing a Creator within the same base to read, regenerate, or delete another user's MCP tokens if the token ID was known.\n\n### Details\n`McpTokenService.get()`, `regenerateToken()`, and `delete()` did not filter by `fk_user_id`. The analogous `ApiTokensService` correctly enforced ownership.\n\n### Impact\nLimited — requires Creator role and knowledge of target token ID. Primary risk is denial of service (invalidating tokens) and scoped token disclosure.\n\n### Credit\nThis issue was reported by [@bugbunny-research](https://github.com/bugbunny-research) (bugbunny.ai).",
-      "publishedAt": "2026-03-02T19:53:41Z",
-      "updatedAt": "2026-11-05T22:42:12Z",
-      "url": "https://github.com/advisories/GHSA-p9x3-w98f-7j3q",
-      "references": [
-        "https://github.com/nocodb/nocodb/security/advisories/GHSA-p9x3-w98f-7j3q",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-28361",
-        "https://github.com/nocodb/nocodb/releases/tag/0.301.3",
-        "https://github.com/nocodb/nocodb/commit/4e736ee40951c7b4f9760f372780e0712c44b9dd",
-        "https://github.com/advisories/GHSA-p9x3-w98f-7j3q"
-      ],
-      "patchUrls": [
-        "https://github.com/nocodb/nocodb/commit/4e736ee40951c7b4f9760f372780e0712c44b9dd"
-      ],
-      "packages": [
-        {
-          "ecosystem": "npm",
-          "name": "nocodb",
-          "lt": "0.301.3",
-          "id": "CVE-2026-28361",
-          "ghsaId": "GHSA-p9x3-w98f-7j3q",
-          "cve": "CVE-2026-28361",
-          "cwe": "CWE-639",
-          "sev": "medium",
-          "note": "NocoDB Missing Ownership Validation in MCP Token Operations"
         }
       ],
       "kev": false,
@@ -27266,73 +27266,6 @@
       "epss": 0.0051
     },
     {
-      "id": "CVE-2026-46448",
-      "ghsaId": "GHSA-mfg3-p6m3-gjgr",
-      "cve": "CVE-2026-46448",
-      "cwe": "CWE-669",
-      "sev": "medium",
-      "summary": "OpenStack Nova: Nova scheduler hint injection bypasses Placement resource claims and scheduling constraints",
-      "description": "## Affects\n\n- Nova: >=18.0.0 <31.3.1, >=32.0.0 <32.2.1, >=33.0.0 <33.0.2\n\n\n## Description\nErichen from the Institute of Computing Technology, Chinese Academy of \nSciences reported that Nova's server create API does not strip internal \nscheduler hints. An authenticated user can bypass Placement resource \nclaims and scheduling constraint enforcement, including availability \nzone, host aggregate, and image trait restrictions. The resulting \ninstance has no Placement allocation, which can lead to compute node \nresource exhaustion and cross-tenant data persistence on NVMe devices \nafter instance deletion. Deployments running Nova 18.0.0 or later are \naffected.\n\n\n\n## Patches\n\n- https://review.opendev.org/993604 (2025.1/epoxy)\n- https://review.opendev.org/993603 (2025.2/flamingo)\n- https://review.opendev.org/993602 (2026.1/gazpacho)\n- https://review.opendev.org/993601 (2026.2/hibiscus)\n\n\n## Credits\n- Erichen from Institute of Computing Technology, Chinese Academy of \nSciences (CVE-2026-46448)",
-      "publishedAt": "2026-06-16T21:32:01Z",
-      "updatedAt": "2026-11-13T00:31:25Z",
-      "url": "https://github.com/advisories/GHSA-mfg3-p6m3-gjgr",
-      "references": [
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-46448",
-        "https://bugs.launchpad.net/nova/+bug/2151252",
-        "https://www.openwall.com/lists/oss-security/2026/06/16/5",
-        "http://www.openwall.com/lists/oss-security/2026/06/16/5",
-        "https://review.opendev.org/993601",
-        "https://review.opendev.org/993602",
-        "https://review.opendev.org/993603",
-        "https://review.opendev.org/993604",
-        "https://github.com/advisories/GHSA-mfg3-p6m3-gjgr",
-        "https://github.com/openstack/nova",
-        "https://github.com/pypa/advisory-database/tree/main/vulns/nova/PYSEC-2026-2686.yaml",
-        "https://pypi.org/project/nova"
-      ],
-      "patchUrls": [],
-      "packages": [
-        {
-          "ecosystem": "pip",
-          "name": "nova",
-          "ge": "18.0.0",
-          "le": "31.3.0",
-          "id": "CVE-2026-46448",
-          "ghsaId": "GHSA-mfg3-p6m3-gjgr",
-          "cve": "CVE-2026-46448",
-          "cwe": "CWE-669",
-          "sev": "medium",
-          "note": "OpenStack Nova: Nova scheduler hint injection bypasses Placement resource claims and scheduling constraints"
-        },
-        {
-          "ecosystem": "pip",
-          "name": "nova",
-          "ge": "32.0.0",
-          "lt": "32.2.1",
-          "id": "CVE-2026-46448",
-          "ghsaId": "GHSA-mfg3-p6m3-gjgr",
-          "cve": "CVE-2026-46448",
-          "cwe": "CWE-669",
-          "sev": "medium",
-          "note": "OpenStack Nova: Nova scheduler hint injection bypasses Placement resource claims and scheduling constraints"
-        },
-        {
-          "ecosystem": "pip",
-          "name": "nova",
-          "ge": "33.0.0",
-          "lt": "33.0.2",
-          "id": "CVE-2026-46448",
-          "ghsaId": "GHSA-mfg3-p6m3-gjgr",
-          "cve": "CVE-2026-46448",
-          "cwe": "CWE-669",
-          "sev": "medium",
-          "note": "OpenStack Nova: Nova scheduler hint injection bypasses Placement resource claims and scheduling constraints"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0049
-    },
-    {
       "id": "CVE-2026-40154",
       "ghsaId": "GHSA-pv9q-275h-rh7x",
       "cve": "CVE-2026-40154",
@@ -27366,7 +27299,7 @@
         }
       ],
       "kev": false,
-      "epss": 0.0047
+      "epss": 0.0049
     },
     {
       "id": "CVE-2026-40880",
@@ -27486,6 +27419,40 @@
           "cwe": "CWE-287",
           "sev": "critical",
           "note": "ajenti.plugin.core has password bypass when 2FA is activated"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0046
+    },
+    {
+      "id": "CVE-2026-88968",
+      "ghsaId": "GHSA-5xjx-9qx6-jcrv",
+      "cve": "CVE-2026-88968",
+      "cwe": "CWE-59",
+      "sev": "high",
+      "summary": "Claude Code: TOCTOU Race in Edit Tool Allows File Writes Outside the Workspace",
+      "description": "Claude Code validated Edit tool targets using point-in-time pathname and symlink resolution that was not bound to the underlying directory inodes or file descriptors. On macOS, a process running inside Claude Code's Bash sandbox could exploit the resulting time-of-check to time-of-use window by atomically swapping an in-workspace parent directory with a symlink after validation completed, causing the unsandboxed Edit implementation to overwrite an attacker-selected user-writable file outside the workspace. Exploiting this required the ability to run attacker-controlled code inside the sandbox, such as through a malicious repository or dependency script.\n\nUsers on standard Claude Code auto-update have received this fix automatically. Users performing manual updates are advised to update to the latest version.\n\nClaude Code thanks hackerone.com/mahoraga007 (Sunder Singh) for reporting this issue.",
+      "publishedAt": "2026-11-09T22:42:03Z",
+      "updatedAt": "2026-11-09T22:42:04Z",
+      "url": "https://github.com/advisories/GHSA-5xjx-9qx6-jcrv",
+      "references": [
+        "https://github.com/anthropics/claude-code/security/advisories/GHSA-5xjx-9qx6-jcrv",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-88968",
+        "https://github.com/anthropics/claude-code/releases/tag/v2.1.251",
+        "https://github.com/advisories/GHSA-5xjx-9qx6-jcrv"
+      ],
+      "patchUrls": [],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "@anthropic-ai/claude-code",
+          "lt": "2.1.251",
+          "id": "CVE-2026-88968",
+          "ghsaId": "GHSA-5xjx-9qx6-jcrv",
+          "cve": "CVE-2026-88968",
+          "cwe": "CWE-59",
+          "sev": "high",
+          "note": "Claude Code: TOCTOU Race in Edit Tool Allows File Writes Outside the Workspace"
         }
       ],
       "kev": false,
@@ -27637,40 +27604,6 @@
       ],
       "kev": false,
       "epss": 0.0044
-    },
-    {
-      "id": "CVE-2026-88968",
-      "ghsaId": "GHSA-5xjx-9qx6-jcrv",
-      "cve": "CVE-2026-88968",
-      "cwe": "CWE-59",
-      "sev": "high",
-      "summary": "Claude Code: TOCTOU Race in Edit Tool Allows File Writes Outside the Workspace",
-      "description": "Claude Code validated Edit tool targets using point-in-time pathname and symlink resolution that was not bound to the underlying directory inodes or file descriptors. On macOS, a process running inside Claude Code's Bash sandbox could exploit the resulting time-of-check to time-of-use window by atomically swapping an in-workspace parent directory with a symlink after validation completed, causing the unsandboxed Edit implementation to overwrite an attacker-selected user-writable file outside the workspace. Exploiting this required the ability to run attacker-controlled code inside the sandbox, such as through a malicious repository or dependency script.\n\nUsers on standard Claude Code auto-update have received this fix automatically. Users performing manual updates are advised to update to the latest version.\n\nClaude Code thanks hackerone.com/mahoraga007 (Sunder Singh) for reporting this issue.",
-      "publishedAt": "2026-11-09T22:42:03Z",
-      "updatedAt": "2026-11-09T22:42:04Z",
-      "url": "https://github.com/advisories/GHSA-5xjx-9qx6-jcrv",
-      "references": [
-        "https://github.com/anthropics/claude-code/security/advisories/GHSA-5xjx-9qx6-jcrv",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-88968",
-        "https://github.com/anthropics/claude-code/releases/tag/v2.1.251",
-        "https://github.com/advisories/GHSA-5xjx-9qx6-jcrv"
-      ],
-      "patchUrls": [],
-      "packages": [
-        {
-          "ecosystem": "npm",
-          "name": "@anthropic-ai/claude-code",
-          "lt": "2.1.251",
-          "id": "CVE-2026-88968",
-          "ghsaId": "GHSA-5xjx-9qx6-jcrv",
-          "cve": "CVE-2026-88968",
-          "cwe": "CWE-59",
-          "sev": "high",
-          "note": "Claude Code: TOCTOU Race in Edit Tool Allows File Writes Outside the Workspace"
-        }
-      ],
-      "kev": false,
-      "epss": 0.004
     },
     {
       "id": "CVE-2026-125115",
@@ -27853,7 +27786,74 @@
         }
       ],
       "kev": false,
-      "epss": 0.0035
+      "epss": 0.0036
+    },
+    {
+      "id": "CVE-2026-46448",
+      "ghsaId": "GHSA-mfg3-p6m3-gjgr",
+      "cve": "CVE-2026-46448",
+      "cwe": "CWE-669",
+      "sev": "medium",
+      "summary": "OpenStack Nova: Nova scheduler hint injection bypasses Placement resource claims and scheduling constraints",
+      "description": "## Affects\n\n- Nova: >=18.0.0 <31.3.1, >=32.0.0 <32.2.1, >=33.0.0 <33.0.2\n\n\n## Description\nErichen from the Institute of Computing Technology, Chinese Academy of \nSciences reported that Nova's server create API does not strip internal \nscheduler hints. An authenticated user can bypass Placement resource \nclaims and scheduling constraint enforcement, including availability \nzone, host aggregate, and image trait restrictions. The resulting \ninstance has no Placement allocation, which can lead to compute node \nresource exhaustion and cross-tenant data persistence on NVMe devices \nafter instance deletion. Deployments running Nova 18.0.0 or later are \naffected.\n\n\n\n## Patches\n\n- https://review.opendev.org/993604 (2025.1/epoxy)\n- https://review.opendev.org/993603 (2025.2/flamingo)\n- https://review.opendev.org/993602 (2026.1/gazpacho)\n- https://review.opendev.org/993601 (2026.2/hibiscus)\n\n\n## Credits\n- Erichen from Institute of Computing Technology, Chinese Academy of \nSciences (CVE-2026-46448)",
+      "publishedAt": "2026-06-16T21:32:01Z",
+      "updatedAt": "2026-11-13T00:31:25Z",
+      "url": "https://github.com/advisories/GHSA-mfg3-p6m3-gjgr",
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-46448",
+        "https://bugs.launchpad.net/nova/+bug/2151252",
+        "https://www.openwall.com/lists/oss-security/2026/06/16/5",
+        "http://www.openwall.com/lists/oss-security/2026/06/16/5",
+        "https://review.opendev.org/993601",
+        "https://review.opendev.org/993602",
+        "https://review.opendev.org/993603",
+        "https://review.opendev.org/993604",
+        "https://github.com/advisories/GHSA-mfg3-p6m3-gjgr",
+        "https://github.com/openstack/nova",
+        "https://github.com/pypa/advisory-database/tree/main/vulns/nova/PYSEC-2026-2686.yaml",
+        "https://pypi.org/project/nova"
+      ],
+      "patchUrls": [],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "nova",
+          "ge": "18.0.0",
+          "le": "31.3.0",
+          "id": "CVE-2026-46448",
+          "ghsaId": "GHSA-mfg3-p6m3-gjgr",
+          "cve": "CVE-2026-46448",
+          "cwe": "CWE-669",
+          "sev": "medium",
+          "note": "OpenStack Nova: Nova scheduler hint injection bypasses Placement resource claims and scheduling constraints"
+        },
+        {
+          "ecosystem": "pip",
+          "name": "nova",
+          "ge": "32.0.0",
+          "lt": "32.2.1",
+          "id": "CVE-2026-46448",
+          "ghsaId": "GHSA-mfg3-p6m3-gjgr",
+          "cve": "CVE-2026-46448",
+          "cwe": "CWE-669",
+          "sev": "medium",
+          "note": "OpenStack Nova: Nova scheduler hint injection bypasses Placement resource claims and scheduling constraints"
+        },
+        {
+          "ecosystem": "pip",
+          "name": "nova",
+          "ge": "33.0.0",
+          "lt": "33.0.2",
+          "id": "CVE-2026-46448",
+          "ghsaId": "GHSA-mfg3-p6m3-gjgr",
+          "cve": "CVE-2026-46448",
+          "cwe": "CWE-669",
+          "sev": "medium",
+          "note": "OpenStack Nova: Nova scheduler hint injection bypasses Placement resource claims and scheduling constraints"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0029
     },
     {
       "id": "CVE-2026-27119",
