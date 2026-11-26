@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-26T01:30:49.998Z",
+  "generatedAt": "2026-11-26T16:20:59.476Z",
   "sources": [
     "github-advisories",
     "cisa-kev",
@@ -9,7 +9,7 @@
   "stats": {
     "total": 1053,
     "kevCount": 156,
-    "highEpssCount": 86,
+    "highEpssCount": 87,
     "byEcosystem": {
       "npm": 326,
       "pip": 191,
@@ -66,7 +66,7 @@
       "cwe": "CWE-59",
       "sev": "high",
       "note": "Claude Code: TOCTOU Race in Edit Tool Allows File Writes Outside the Workspace",
-      "epss": 0.004
+      "epss": 0.0046
     },
     {
       "name": "@apireno/domshell",
@@ -2927,7 +2927,7 @@
       "cwe": "CWE-256",
       "sev": "low",
       "note": "NocoDB has Plaintext Storage of Shared View Passwords",
-      "epss": 0.0038
+      "epss": 0.004
     },
     {
       "name": "nocodb",
@@ -2938,7 +2938,7 @@
       "cwe": "CWE-639",
       "sev": "medium",
       "note": "NocoDB Missing Ownership Validation in MCP Token Operations",
-      "epss": 0.0031
+      "epss": 0.0034
     },
     {
       "name": "nocodb",
@@ -2949,7 +2949,7 @@
       "cwe": "CWE-613",
       "sev": "medium",
       "note": "NocoDB's Refresh Tokens Not Revoked on Password Reset",
-      "epss": 0.0036
+      "epss": 0.0039
     },
     {
       "name": "nocodb",
@@ -2960,7 +2960,7 @@
       "cwe": "CWE-89",
       "sev": "medium",
       "note": "NocoDB Vulnerable to SQL Injection via DATEADD Formula",
-      "epss": 0.0065
+      "epss": 0.0069
     },
     {
       "name": "node-forge",
@@ -3872,7 +3872,7 @@
       "sev": "critical",
       "note": "Xen Orchestra: Empty-object login token",
       "kev": true,
-      "epss": 0.011
+      "epss": 0.3177
     }
   ],
   "pip": [
@@ -4516,7 +4516,7 @@
       "sev": "critical",
       "note": "Marimo: Pre-Auth Remote Code Execution via Terminal WebSocket Authentication Bypass",
       "kev": true,
-      "epss": 0.4426
+      "epss": 0.4499
     },
     {
       "name": "mcp",
@@ -5032,7 +5032,7 @@
       "cwe": "CWE-669",
       "sev": "medium",
       "note": "OpenStack Nova: Nova scheduler hint injection bypasses Placement resource claims and scheduling constraints",
-      "epss": 0.0049
+      "epss": 0.0029
     },
     {
       "name": "nova",
@@ -5044,7 +5044,7 @@
       "cwe": "CWE-669",
       "sev": "medium",
       "note": "OpenStack Nova: Nova scheduler hint injection bypasses Placement resource claims and scheduling constraints",
-      "epss": 0.0049
+      "epss": 0.0029
     },
     {
       "name": "nova",
@@ -5056,7 +5056,7 @@
       "cwe": "CWE-669",
       "sev": "medium",
       "note": "OpenStack Nova: Nova scheduler hint injection bypasses Placement resource claims and scheduling constraints",
-      "epss": 0.0049
+      "epss": 0.0029
     },
     {
       "name": "nova",
@@ -5068,7 +5068,7 @@
       "cwe": "CWE-669",
       "sev": "medium",
       "note": "OpenStack Nova: Nova scheduler hint injection bypasses Placement resource claims and scheduling constraints",
-      "epss": 0.0049
+      "epss": 0.0029
     },
     {
       "name": "openstack-magnum",
@@ -5302,7 +5302,7 @@
       "cwe": "CWE-829",
       "sev": "critical",
       "note": "PraisonAI Vulnerable Untrusted Remote Template Code Execution",
-      "epss": 0.0047
+      "epss": 0.0049
     },
     {
       "name": "PraisonAI",
@@ -5380,7 +5380,7 @@
       "cwe": "CWE-78",
       "sev": "critical",
       "note": "PraisonAIAgents has an OS Command Injection via shell=True in Memory Hooks Executor (memory/hooks.py)",
-      "epss": 0.0035
+      "epss": 0.0036
     },
     {
       "name": "praisonaiagents",
@@ -8486,7 +8486,7 @@
       "cwe": "CWE-409",
       "sev": "high",
       "note": "bep/imagemeta: Unbounded memory allocation decoding PNG `zTXt` \"Raw profile type iptc\" chunks",
-      "epss": 0.0052
+      "epss": 0.0056
     },
     {
       "name": "github.com/cli/cli/v2",
