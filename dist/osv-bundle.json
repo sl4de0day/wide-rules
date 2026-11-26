@@ -1,23 +1,23 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-25T16:45:14.314Z",
+  "generatedAt": "2026-11-26T01:30:49.998Z",
   "sources": [
     "github-advisories",
     "cisa-kev",
     "first-epss"
   ],
   "stats": {
-    "total": 1046,
-    "kevCount": 155,
+    "total": 1053,
+    "kevCount": 156,
     "highEpssCount": 86,
     "byEcosystem": {
       "npm": 326,
       "pip": 191,
       "maven": 198,
       "go": 119,
-      "cargo": 61,
+      "cargo": 62,
       "nuget": 21,
-      "composer": 83,
+      "composer": 89,
       "rubygems": 47
     }
   },
@@ -3871,6 +3871,7 @@
       "cwe": "CWE-287",
       "sev": "critical",
       "note": "Xen Orchestra: Empty-object login token",
+      "kev": true,
       "epss": 0.011
     }
   ],
@@ -9892,6 +9893,18 @@
       "epss": 0.0028
     },
     {
+      "name": "fulgur",
+      "ge": "0.4.4",
+      "lt": "0.28.0",
+      "id": "CVE-2026-68539",
+      "ghsaId": "GHSA-vw2v-g4x7-xcqg",
+      "cve": "CVE-2026-68539",
+      "cwe": "CWE-400",
+      "sev": "high",
+      "note": "fulgur allows Unbounded string-set value accumulation causes memory/CPU exhaustion (denial of service)",
+      "epss": 0.0068
+    },
+    {
       "name": "mise",
       "ge": "2026.3.15",
       "lt": "2026.6.4",
@@ -11402,6 +11415,18 @@
       "epss": 0.0052
     },
     {
+      "name": "petebishwhip/laradocs",
+      "ge": "0.4.0",
+      "lt": "1.0.0",
+      "id": "CVE-2026-65973",
+      "ghsaId": "GHSA-h746-qpxh-ph7g",
+      "cve": "CVE-2026-65973",
+      "cwe": "CWE-78",
+      "sev": "medium",
+      "note": "laradocs Command injection via unescaped Node.js binary path in KaTeX SSR",
+      "epss": 0.0063
+    },
+    {
       "name": "phpmailer/phpmailer",
       "ge": "5.0.0",
       "lt": "5.2.18",
@@ -11413,6 +11438,18 @@
       "note": "Remote code execution in PHPMailer",
       "kev": true,
       "epss": 0.9971
+    },
+    {
+      "name": "power-components/livewire-powergrid",
+      "ge": "6.0.0",
+      "lt": "6.10.4",
+      "id": "CVE-2026-65971",
+      "ghsaId": "GHSA-7fgc-3h6c-698r",
+      "cve": "CVE-2026-65971",
+      "cwe": "CWE-89",
+      "sev": "high",
+      "note": "livewire-powergrid: SQL injection via sortDirection in naturalSort queries",
+      "epss": 0.0035
     },
     {
       "name": "poweradmin/poweradmin",
@@ -11563,6 +11600,46 @@
       "cwe": "CWE-287",
       "sev": "high",
       "note": "SAML2: Incomplete fix of CVE-2026-49283: unsigned embedded Response bypasses HTTP-Artifact signature verification (no embedded-Issuer binding)"
+    },
+    {
+      "name": "tastyigniter/tastyigniter",
+      "lt": "4.3.1",
+      "id": "CVE-2026-69177",
+      "ghsaId": "GHSA-mqg7-fw3f-mhp7",
+      "cve": "CVE-2026-69177",
+      "cwe": "CWE-1395",
+      "sev": "medium",
+      "note": "TastyIgniter allows stored XSS via file upload"
+    },
+    {
+      "name": "tastyigniter/tastyigniter",
+      "lt": "4.3.1",
+      "id": "CVE-2026-69178",
+      "ghsaId": "GHSA-743w-g9pf-8p94",
+      "cve": "CVE-2026-69178",
+      "cwe": "CWE-1336",
+      "sev": "critical",
+      "note": "TastyIgniter mail template editor allows remote code execution via server-side template injection"
+    },
+    {
+      "name": "tastyigniter/tastyigniter",
+      "lt": "4.3.1",
+      "id": "CVE-2026-69179",
+      "ghsaId": "GHSA-7wwv-x6mc-pxqx",
+      "cve": "CVE-2026-69179",
+      "cwe": "CWE-434",
+      "sev": "critical",
+      "note": "TastyIgniter allows Remote Code Execution (RCE) via Unrestricted file upload in Media Manager"
+    },
+    {
+      "name": "tastyigniter/tastyigniter",
+      "lt": "4.3.1",
+      "id": "CVE-2026-69181",
+      "ghsaId": "GHSA-rj59-9f77-mvg5",
+      "cve": "CVE-2026-69181",
+      "cwe": "CWE-23",
+      "sev": "high",
+      "note": "TastyIgniter permits Path Traversal in Media Upload"
     },
     {
       "name": "vrana/adminer",

