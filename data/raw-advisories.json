@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-11-26T16:20:59.476Z",
-  "count": 583,
+  "generatedAt": "2026-11-27T16:05:53.244Z",
+  "count": 585,
   "advisories": [
     {
       "id": "CVE-2025-24893",
@@ -2482,7 +2482,7 @@
         }
       ],
       "kev": true,
-      "epss": 0.2021
+      "epss": 0.2063
     },
     {
       "id": "CVE-2026-42271",
@@ -4575,6 +4575,45 @@
       "epss": 0.0212
     },
     {
+      "id": "CVE-2017-12614",
+      "ghsaId": "GHSA-rv25-9wgj-xg75",
+      "cve": "CVE-2017-12614",
+      "cwe": "CWE-79",
+      "sev": "medium",
+      "summary": "Apache Airflow Reflected Cross-site Scripting vulnerability in 404 Endpoint",
+      "description": "It was noticed an XSS in certain 404 pages that could be exploited to perform an XSS attack. Chrome will detect this as a reflected XSS attempt and prevent the page from loading. However Firefox and other browsers don't, and are vulnerable to this attack. Mitigation: The fix for this is to upgrade to Apache Airflow 1.9.0 or above.",
+      "publishedAt": "2022-05-14T02:57:27Z",
+      "updatedAt": "2026-11-27T15:32:32Z",
+      "url": "https://github.com/advisories/GHSA-rv25-9wgj-xg75",
+      "references": [
+        "https://nvd.nist.gov/vuln/detail/CVE-2017-12614",
+        "https://lists.apache.org/thread.html/2c72480c76619c5e7793f0d213c34082f0598eaa4d212172f068940f@%3Cdev.airflow.apache.org%3E",
+        "https://github.com/apache/airflow/commit/e1a2d74c0045c9231f7a5365c956b8e048dd6af3",
+        "https://devhub.checkmarx.com/cve-details/cve-2017-12614",
+        "https://github.com/pypa/advisory-database/tree/main/vulns/apache-airflow/PYSEC-2018-45.yaml",
+        "https://lists.apache.org/thread.html/2c72480c76619c5e7793f0d213c34082f0598eaa4d212172f068940f%40%3Cdev.airflow.apache.org%3E",
+        "https://github.com/advisories/GHSA-rv25-9wgj-xg75"
+      ],
+      "patchUrls": [
+        "https://github.com/apache/airflow/commit/e1a2d74c0045c9231f7a5365c956b8e048dd6af3"
+      ],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "apache-airflow",
+          "lt": "1.9.0",
+          "id": "CVE-2017-12614",
+          "ghsaId": "GHSA-rv25-9wgj-xg75",
+          "cve": "CVE-2017-12614",
+          "cwe": "CWE-79",
+          "sev": "medium",
+          "note": "Apache Airflow Reflected Cross-site Scripting vulnerability in 404 Endpoint"
+        }
+      ],
+      "kev": false,
+      "epss": 0.02
+    },
+    {
       "id": "CVE-2016-7404",
       "ghsaId": "GHSA-793v-r35j-9rp9",
       "cve": "CVE-2016-7404",
@@ -4613,7 +4652,7 @@
         }
       ],
       "kev": false,
-      "epss": 0.0193
+      "epss": 0.0192
     },
     {
       "id": "CVE-2024-5980",
@@ -5275,6 +5314,57 @@
       ],
       "kev": false,
       "epss": 0.0133
+    },
+    {
+      "id": "CVE-2024-45801",
+      "ghsaId": "GHSA-mmhx-hmjr-r674",
+      "cve": "CVE-2024-45801",
+      "cwe": "CWE-1321",
+      "sev": "high",
+      "summary": "DOMPurify allows tampering by prototype pollution",
+      "description": "It has been discovered that malicious HTML using special nesting techniques can bypass the depth checking added to DOMPurify in recent releases. It was also possible to use Prototype Pollution to weaken the depth check.\n\nThis renders dompurify unable to avoid XSS attack.\n\nFixed by https://github.com/cure53/DOMPurify/commit/1e520262bf4c66b5efda49e2316d6d1246ca7b21 (3.x branch) and https://github.com/cure53/DOMPurify/commit/26e1d69ca7f769f5c558619d644d90dd8bf26ebc (2.x branch).",
+      "publishedAt": "2024-09-16T20:34:26Z",
+      "updatedAt": "2026-11-27T15:32:32Z",
+      "url": "https://github.com/advisories/GHSA-mmhx-hmjr-r674",
+      "references": [
+        "https://github.com/cure53/DOMPurify/security/advisories/GHSA-mmhx-hmjr-r674",
+        "https://github.com/cure53/DOMPurify/commit/1e520262bf4c66b5efda49e2316d6d1246ca7b21",
+        "https://github.com/cure53/DOMPurify/commit/26e1d69ca7f769f5c558619d644d90dd8bf26ebc",
+        "https://nvd.nist.gov/vuln/detail/CVE-2024-45801",
+        "https://lists.debian.org/debian-lts-announce/2026/11/msg00070.html",
+        "https://github.com/advisories/GHSA-mmhx-hmjr-r674"
+      ],
+      "patchUrls": [
+        "https://github.com/cure53/DOMPurify/commit/1e520262bf4c66b5efda49e2316d6d1246ca7b21",
+        "https://github.com/cure53/DOMPurify/commit/26e1d69ca7f769f5c558619d644d90dd8bf26ebc"
+      ],
+      "packages": [
+        {
+          "ecosystem": "npm",
+          "name": "dompurify",
+          "lt": "2.5.4",
+          "id": "CVE-2024-45801",
+          "ghsaId": "GHSA-mmhx-hmjr-r674",
+          "cve": "CVE-2024-45801",
+          "cwe": "CWE-1321",
+          "sev": "high",
+          "note": "DOMPurify allows tampering by prototype pollution"
+        },
+        {
+          "ecosystem": "npm",
+          "name": "dompurify",
+          "ge": "3.0.0",
+          "lt": "3.1.3",
+          "id": "CVE-2024-45801",
+          "ghsaId": "GHSA-mmhx-hmjr-r674",
+          "cve": "CVE-2024-45801",
+          "cwe": "CWE-1321",
+          "sev": "high",
+          "note": "DOMPurify allows tampering by prototype pollution"
+        }
+      ],
+      "kev": false,
+      "epss": 0.013
     },
     {
       "id": "CVE-2024-3829",
@@ -26197,7 +26287,7 @@
         }
       ],
       "kev": false,
-      "epss": 0.016
+      "epss": 0.0158
     },
     {
       "id": "CVE-2024-32880",
@@ -26968,6 +27058,43 @@
       "epss": 0.0061
     },
     {
+      "id": "CVE-2026-40157",
+      "ghsaId": "GHSA-99g3-w8gr-x37c",
+      "cve": "CVE-2026-40157",
+      "cwe": "CWE-22",
+      "sev": "critical",
+      "summary": "PraisonAI vulnerable to arbitrary file write via path traversal in `praisonai recipe unpack`",
+      "description": "| Field | Value |\n|---|---|\n| Severity | Critical |\n| Type | Path traversal -- arbitrary file write via `tar.extract()` without member validation |\n| Affected | `src/praisonai/praisonai/cli/features/recipe.py:1170-1172` |\n\n## Summary\n\n`cmd_unpack` in the recipe CLI extracts `.praison` tar archives using raw `tar.extract()` without validating archive member paths. A `.praison` bundle containing `../../` entries will write files outside the intended output directory. An attacker who distributes a malicious bundle can overwrite arbitrary files on the victim's filesystem when they run `praisonai recipe unpack`.\n\n## Details\n\nThe vulnerable code is in `cli/features/recipe.py:1170-1172`:\n\n```python\nfor member in tar.getmembers():\n    if member.name != \"manifest.json\":\n        tar.extract(member, recipe_dir)\n```\n\nThe only check is whether the member is `manifest.json`. The code never validates member names -- absolute paths, `..` components, and symlinks all pass through. Python's `tarfile.extract()` resolves these relative to the destination, so a member named `../../.bashrc` lands two directories above `recipe_dir`.\n\nThe codebase does contain a safe extraction function (`_safe_extractall` in `recipe/registry.py:131-162`) that rejects absolute paths, `..` segments, and resolved paths outside the destination. It is used by the `pull` and `publish` paths, but `cmd_unpack` does not call it.\n\n```python\n# recipe/registry.py:141-159 -- safe version exists but is not used by cmd_unpack\ndef _safe_extractall(tar: tarfile.TarFile, dest_dir: Path) -> None:\n    dest = str(dest_dir.resolve())\n    for member in tar.getmembers():\n        if os.path.isabs(member.name):\n            raise RegistryError(...)\n        if \"..\" in member.name.split(\"/\"):\n            raise RegistryError(...)\n        resolved = os.path.realpath(os.path.join(dest, member.name))\n        if not resolved.startswith(dest + os.sep):\n            raise RegistryError(...)\n    tar.extractall(dest_dir)\n```\n\n## PoC\n\nBuild a malicious bundle:\n\n```python\nimport tarfile, io, json\n\nmanifest = json.dumps({\"name\": \"legit-recipe\", \"version\": \"1.0.0\"}).encode()\n\nwith tarfile.open(\"malicious.praison\", \"w:gz\") as tar:\n    info = tarfile.TarInfo(name=\"manifest.json\")\n    info.size = len(manifest)\n    tar.addfile(info, io.BytesIO(manifest))\n\n    payload = b\"export EVIL=1  # injected by malicious recipe\\n\"\n    evil = tarfile.TarInfo(name=\"../../.bashrc\")\n    evil.size = len(payload)\n    tar.addfile(evil, io.BytesIO(payload))\n```",
+      "publishedAt": "2026-04-10T19:27:59Z",
+      "updatedAt": "2026-11-16T15:57:15Z",
+      "url": "https://github.com/advisories/GHSA-99g3-w8gr-x37c",
+      "references": [
+        "https://github.com/MervinPraison/PraisonAI/security/advisories/GHSA-99g3-w8gr-x37c",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-40157",
+        "https://github.com/MervinPraison/PraisonAI/releases/tag/v4.5.128",
+        "https://github.com/pypa/advisory-database/tree/main/vulns/praisonai/PYSEC-2026-469.yaml",
+        "https://pypi.org/project/praisonai",
+        "https://github.com/advisories/GHSA-99g3-w8gr-x37c"
+      ],
+      "patchUrls": [],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "PraisonAI",
+          "ge": "2.7.2",
+          "lt": "4.5.128",
+          "id": "CVE-2026-40157",
+          "ghsaId": "GHSA-99g3-w8gr-x37c",
+          "cve": "CVE-2026-40157",
+          "cwe": "CWE-22",
+          "sev": "critical",
+          "note": "PraisonAI vulnerable to arbitrary file write via path traversal in `praisonai recipe unpack`"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0056
+    },
+    {
       "id": "CVE-2025-11183",
       "ghsaId": "GHSA-gxp8-m5rq-3m38",
       "cve": "CVE-2025-11183",
@@ -27030,43 +27157,6 @@
           "cwe": "CWE-306",
           "sev": "critical",
           "note": "PraisonAI Has Missing Authentication in WebSocket Gateway"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0055
-    },
-    {
-      "id": "CVE-2026-40157",
-      "ghsaId": "GHSA-99g3-w8gr-x37c",
-      "cve": "CVE-2026-40157",
-      "cwe": "CWE-22",
-      "sev": "critical",
-      "summary": "PraisonAI vulnerable to arbitrary file write via path traversal in `praisonai recipe unpack`",
-      "description": "| Field | Value |\n|---|---|\n| Severity | Critical |\n| Type | Path traversal -- arbitrary file write via `tar.extract()` without member validation |\n| Affected | `src/praisonai/praisonai/cli/features/recipe.py:1170-1172` |\n\n## Summary\n\n`cmd_unpack` in the recipe CLI extracts `.praison` tar archives using raw `tar.extract()` without validating archive member paths. A `.praison` bundle containing `../../` entries will write files outside the intended output directory. An attacker who distributes a malicious bundle can overwrite arbitrary files on the victim's filesystem when they run `praisonai recipe unpack`.\n\n## Details\n\nThe vulnerable code is in `cli/features/recipe.py:1170-1172`:\n\n```python\nfor member in tar.getmembers():\n    if member.name != \"manifest.json\":\n        tar.extract(member, recipe_dir)\n```\n\nThe only check is whether the member is `manifest.json`. The code never validates member names -- absolute paths, `..` components, and symlinks all pass through. Python's `tarfile.extract()` resolves these relative to the destination, so a member named `../../.bashrc` lands two directories above `recipe_dir`.\n\nThe codebase does contain a safe extraction function (`_safe_extractall` in `recipe/registry.py:131-162`) that rejects absolute paths, `..` segments, and resolved paths outside the destination. It is used by the `pull` and `publish` paths, but `cmd_unpack` does not call it.\n\n```python\n# recipe/registry.py:141-159 -- safe version exists but is not used by cmd_unpack\ndef _safe_extractall(tar: tarfile.TarFile, dest_dir: Path) -> None:\n    dest = str(dest_dir.resolve())\n    for member in tar.getmembers():\n        if os.path.isabs(member.name):\n            raise RegistryError(...)\n        if \"..\" in member.name.split(\"/\"):\n            raise RegistryError(...)\n        resolved = os.path.realpath(os.path.join(dest, member.name))\n        if not resolved.startswith(dest + os.sep):\n            raise RegistryError(...)\n    tar.extractall(dest_dir)\n```\n\n## PoC\n\nBuild a malicious bundle:\n\n```python\nimport tarfile, io, json\n\nmanifest = json.dumps({\"name\": \"legit-recipe\", \"version\": \"1.0.0\"}).encode()\n\nwith tarfile.open(\"malicious.praison\", \"w:gz\") as tar:\n    info = tarfile.TarInfo(name=\"manifest.json\")\n    info.size = len(manifest)\n    tar.addfile(info, io.BytesIO(manifest))\n\n    payload = b\"export EVIL=1  # injected by malicious recipe\\n\"\n    evil = tarfile.TarInfo(name=\"../../.bashrc\")\n    evil.size = len(payload)\n    tar.addfile(evil, io.BytesIO(payload))\n```",
-      "publishedAt": "2026-04-10T19:27:59Z",
-      "updatedAt": "2026-11-16T15:57:15Z",
-      "url": "https://github.com/advisories/GHSA-99g3-w8gr-x37c",
-      "references": [
-        "https://github.com/MervinPraison/PraisonAI/security/advisories/GHSA-99g3-w8gr-x37c",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-40157",
-        "https://github.com/MervinPraison/PraisonAI/releases/tag/v4.5.128",
-        "https://github.com/pypa/advisory-database/tree/main/vulns/praisonai/PYSEC-2026-469.yaml",
-        "https://pypi.org/project/praisonai",
-        "https://github.com/advisories/GHSA-99g3-w8gr-x37c"
-      ],
-      "patchUrls": [],
-      "packages": [
-        {
-          "ecosystem": "pip",
-          "name": "PraisonAI",
-          "ge": "2.7.2",
-          "lt": "4.5.128",
-          "id": "CVE-2026-40157",
-          "ghsaId": "GHSA-99g3-w8gr-x37c",
-          "cve": "CVE-2026-40157",
-          "cwe": "CWE-22",
-          "sev": "critical",
-          "note": "PraisonAI vulnerable to arbitrary file write via path traversal in `praisonai recipe unpack`"
         }
       ],
       "kev": false,
@@ -27302,6 +27392,41 @@
       "epss": 0.0049
     },
     {
+      "id": "CVE-2026-40177",
+      "ghsaId": "GHSA-3mcx-6wxm-qr8v",
+      "cve": "CVE-2026-40177",
+      "cwe": "CWE-287",
+      "sev": "critical",
+      "summary": "ajenti.plugin.core has password bypass when 2FA is activated",
+      "description": "### Impact\n\nIf the 2FA was activated, it was possible to bypass the password authentication\n\n### Patches\n\nThis is fixed in the version 0.112. Users should upgrade to this version as soon as possible.",
+      "publishedAt": "2026-04-10T19:47:31Z",
+      "updatedAt": "2026-11-16T14:41:48Z",
+      "url": "https://github.com/advisories/GHSA-3mcx-6wxm-qr8v",
+      "references": [
+        "https://github.com/ajenti/ajenti/security/advisories/GHSA-3mcx-6wxm-qr8v",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-40177",
+        "https://github.com/pypa/advisory-database/tree/main/vulns/ajenti-plugin-core/PYSEC-2026-266.yaml",
+        "https://pypi.org/project/ajenti-plugin-core",
+        "https://github.com/advisories/GHSA-3mcx-6wxm-qr8v"
+      ],
+      "patchUrls": [],
+      "packages": [
+        {
+          "ecosystem": "pip",
+          "name": "ajenti.plugin.core",
+          "lt": "0.112",
+          "id": "CVE-2026-40177",
+          "ghsaId": "GHSA-3mcx-6wxm-qr8v",
+          "cve": "CVE-2026-40177",
+          "cwe": "CWE-287",
+          "sev": "critical",
+          "note": "ajenti.plugin.core has password bypass when 2FA is activated"
+        }
+      ],
+      "kev": false,
+      "epss": 0.0047
+    },
+    {
       "id": "CVE-2026-40880",
       "ghsaId": "GHSA-xvj8-ph7x-65gf",
       "cve": "CVE-2026-40880",
@@ -27384,41 +27509,6 @@
           "cwe": "CWE-617",
           "sev": "critical",
           "note": "Zebra has rk Identity Point Panic in Transaction Verification"
-        }
-      ],
-      "kev": false,
-      "epss": 0.0046
-    },
-    {
-      "id": "CVE-2026-40177",
-      "ghsaId": "GHSA-3mcx-6wxm-qr8v",
-      "cve": "CVE-2026-40177",
-      "cwe": "CWE-287",
-      "sev": "critical",
-      "summary": "ajenti.plugin.core has password bypass when 2FA is activated",
-      "description": "### Impact\n\nIf the 2FA was activated, it was possible to bypass the password authentication\n\n### Patches\n\nThis is fixed in the version 0.112. Users should upgrade to this version as soon as possible.",
-      "publishedAt": "2026-04-10T19:47:31Z",
-      "updatedAt": "2026-11-16T14:41:48Z",
-      "url": "https://github.com/advisories/GHSA-3mcx-6wxm-qr8v",
-      "references": [
-        "https://github.com/ajenti/ajenti/security/advisories/GHSA-3mcx-6wxm-qr8v",
-        "https://nvd.nist.gov/vuln/detail/CVE-2026-40177",
-        "https://github.com/pypa/advisory-database/tree/main/vulns/ajenti-plugin-core/PYSEC-2026-266.yaml",
-        "https://pypi.org/project/ajenti-plugin-core",
-        "https://github.com/advisories/GHSA-3mcx-6wxm-qr8v"
-      ],
-      "patchUrls": [],
-      "packages": [
-        {
-          "ecosystem": "pip",
-          "name": "ajenti.plugin.core",
-          "lt": "0.112",
-          "id": "CVE-2026-40177",
-          "ghsaId": "GHSA-3mcx-6wxm-qr8v",
-          "cve": "CVE-2026-40177",
-          "cwe": "CWE-287",
-          "sev": "critical",
-          "note": "ajenti.plugin.core has password bypass when 2FA is activated"
         }
       ],
       "kev": false,
