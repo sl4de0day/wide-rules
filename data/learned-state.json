@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-25T12:02:06.362Z",
+  "updatedAt": "2026-11-27T11:42:37.593Z",
   "processed": {
     "CVE-2025-3248": {
       "status": "learned",
@@ -106,6 +106,31 @@
       "status": "skipped",
       "reason": "internal vendor implementation detail handled by OSV SCA",
       "at": "2026-11-25T12:01:14.265Z"
+    },
+    "CVE-2026-133469": {
+      "status": "skipped",
+      "reason": "The vulnerability is due to the absence of proper type validation for authentication tokens within specific functions (getAuthenticationToken, isValidAuthenticationToken). Detecting the absence of a specific code construct (like a 'typeof' check) within a function body using a single-line regex pattern is inherently imprecise and prone to high false positive rates, making it unsuitable for a reliable static detection rule.",
+      "at": "2026-11-27T11:41:54.903Z"
+    },
+    "CVE-2025-8110": {
+      "status": "skipped",
+      "reason": "internal vendor implementation detail handled by OSV SCA",
+      "at": "2026-11-27T11:42:03.096Z"
+    },
+    "CVE-2026-60004": {
+      "status": "skipped",
+      "reason": "The vulnerability depends on the specific context of a bare temporary Git repository setup, which is not reliably detectable by a simple regex pattern on the `git apply` command itself without significant false positives. The fix involves refactoring the temporary repository preparation logic, not directly modifying the vulnerable API call's arguments.",
+      "at": "2026-11-27T11:42:20.809Z"
+    },
+    "CVE-2026-64849": {
+      "status": "skipped",
+      "reason": "internal vendor implementation detail handled by OSV SCA",
+      "at": "2026-11-27T11:42:32.484Z"
+    },
+    "CVE-2025-54313": {
+      "status": "skipped",
+      "reason": "version-only advisory handled by OSV SCA",
+      "at": "2026-11-27T11:42:37.593Z"
     }
   }
 }

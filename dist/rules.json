@@ -1,6 +1,6 @@
 {
   "version": "0.7241126",
-  "generatedAt": "2026-11-25T12:02:06.857Z",
+  "generatedAt": "2026-11-27T11:42:38.137Z",
   "totalRules": 753,
   "categories": {
     "AI_SECURITY": 13,
@@ -15726,12 +15726,13 @@
       ],
       "metadata": {
         "source": "wide-rules-auto-learn",
-        "status": "experimental",
+        "status": "verified",
         "quarantineUntil": "2026-11-26T11:01:40.609Z",
         "kev": true,
         "epss": 0.9748,
         "learnedAt": "2026-11-19T11:01:40.609Z",
-        "advisoryUrl": "https://github.com/advisories/GHSA-2p6p-9rc9-62j9"
+        "advisoryUrl": "https://github.com/advisories/GHSA-2p6p-9rc9-62j9",
+        "promotedAt": "2026-11-27T11:41:34.254Z"
       },
       "tests": {
         "positive": [
@@ -15895,12 +15896,13 @@
       ],
       "metadata": {
         "source": "wide-rules-auto-learn",
-        "status": "experimental",
+        "status": "verified",
         "quarantineUntil": "2026-11-26T11:02:36.668Z",
         "kev": true,
         "epss": 0.9681,
         "learnedAt": "2026-11-19T11:02:36.668Z",
-        "advisoryUrl": "https://github.com/advisories/GHSA-vwmf-pq79-vjvx"
+        "advisoryUrl": "https://github.com/advisories/GHSA-vwmf-pq79-vjvx",
+        "promotedAt": "2026-11-27T11:41:34.254Z"
       },
       "tests": {
         "positive": [
