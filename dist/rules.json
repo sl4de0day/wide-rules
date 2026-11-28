@@ -1,10 +1,10 @@
 {
   "version": "0.7241126",
-  "generatedAt": "2026-11-27T11:42:38.137Z",
-  "totalRules": 753,
+  "generatedAt": "2026-11-28T11:17:43.737Z",
+  "totalRules": 754,
   "categories": {
     "AI_SECURITY": 13,
-    "AUTH": 115,
+    "AUTH": 116,
     "INJECTION": 188,
     "GENERAL": 77,
     "CRYPTO": 26,
@@ -17,7 +17,7 @@
     "XSS": 28
   },
   "severities": {
-    "HIGH": 467,
+    "HIGH": 468,
     "MEDIUM": 154,
     "CRITICAL": 97,
     "LOW": 35
@@ -15953,6 +15953,48 @@
         ],
         "negative": [
           "@router.websocket(\"/ws\")\nasync def websocket_endpoint(websocket: WebSocket) -> None:\n    app_state = AppState(websocket)\n\n    if app_state.enable_auth and not validate_auth(websocket):\n        await websocket.close(\n            WebSocketCodes.UNAUTHORIZED, \"MARIMO_UNAUTHORIZED\"\n        )\n        return\n\n    if app_state.mode != SessionMode.EDIT:\n        await websocket.close(\n            code=1008, reason=\"Terminal only available in edit mode\"\n        )\n        return\n    if not supports_terminal():\n        await websocket.close(\n            code=1008, reason=\"Terminal not supported on this platform\"\n        )\n        return\n    await websocket.accept()\n    # ...\n    child_pid, fd = pty.fork()"
+        ]
+      }
+    },
+    {
+      "id": "wide/vuln-cve-2026-55255",
+      "name": "vuln-cve-2026-55255",
+      "category": "AUTH",
+      "severity": "HIGH",
+      "languages": [
+        "py"
+      ],
+      "cwe": "CWE-639",
+      "cve": "CVE-2026-55255",
+      "pattern": "session\\.get\\(Flow,\\s*flow_id\\)",
+      "confidence": "high",
+      "message": "Insecure Direct Object Reference (IDOR) when fetching Flow by ID without user ownership check.",
+      "why": "The application directly fetches a 'Flow' object using a user-controlled 'flow_id' via 'session.get' without verifying if the authenticated user owns that specific flow, leading to unauthorized access to other users' data.",
+      "remediation": "Ensure all 'Flow' object lookups by ID include a 'user_id' filter to verify ownership. Replace direct 'session.get(Flow, flow_id)' calls with explicit queries like 'session.execute(select(Flow).where(Flow.id == flow_id, Flow.user_id == current_user_id))'.",
+      "references": [
+        "https://github.com/langflow-ai/langflow/security/advisories/GHSA-qrpv-q767-xqq2",
+        "https://github.com/langflow-ai/langflow/pull/12832",
+        "https://nvd.nist.gov/vuln/detail/CVE-2026-55255",
+        "https://github.com/langflow-ai/langflow/commit/2c9f498d664a3c32698b57d7c5e752625291060e",
+        "https://github.com/pypa/advisory-database/tree/main/vulns/langflow/PYSEC-2026-221.yaml",
+        "https://webflow.sysdig.com/blog/understanding-langflow-cve-2026-55255-and-why-higher-cvss-vulnerabilities-arent-always-the-most-exploited"
+      ],
+      "metadata": {
+        "source": "wide-rules-auto-learn",
+        "status": "experimental",
+        "quarantineUntil": "2026-12-05T11:16:35.185Z",
+        "kev": true,
+        "epss": 0.0089,
+        "learnedAt": "2026-11-28T11:16:35.185Z",
+        "advisoryUrl": "https://github.com/advisories/GHSA-qrpv-q767-xqq2"
+      },
+      "tests": {
+        "positive": [
+          "flow = await session.get(Flow, flow_id)"
+        ],
+        "negative": [
+          "flow = await session.execute(select(Flow).where(Flow.id == flow_id, Flow.user_id == user_id))",
+          "flow = await session.execute(select(Flow).where(Flow.endpoint_name == endpoint_name, Flow.user_id == user_id))"
         ]
       }
     },

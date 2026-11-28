@@ -1,5 +1,5 @@
 {
-  "updatedAt": "2026-11-27T11:42:37.593Z",
+  "updatedAt": "2026-11-28T11:17:43.112Z",
   "processed": {
     "CVE-2025-3248": {
       "status": "learned",
@@ -131,6 +131,32 @@
       "status": "skipped",
       "reason": "version-only advisory handled by OSV SCA",
       "at": "2026-11-27T11:42:37.593Z"
+    },
+    "CVE-2026-55255": {
+      "status": "learned",
+      "ruleId": "wide/vuln-cve-2026-55255",
+      "file": "rules/learned/vuln-cve-2026-55255.yml",
+      "at": "2026-11-28T11:16:41.050Z"
+    },
+    "CVE-2026-59822": {
+      "status": "rejected",
+      "reason": "Positive sample #2 did not match pattern",
+      "at": "2026-11-28T11:17:00.001Z"
+    },
+    "CVE-2025-35939": {
+      "status": "skipped",
+      "reason": "internal vendor implementation detail handled by OSV SCA",
+      "at": "2026-11-28T11:17:08.429Z"
+    },
+    "CVE-2023-0297": {
+      "status": "rejected",
+      "reason": "Positive sample #2 did not match pattern",
+      "at": "2026-11-28T11:17:35.532Z"
+    },
+    "CVE-2023-48022": {
+      "status": "skipped",
+      "reason": "The provided patch diff introduces a new utility command (`check_open_ports`) and does not show any changes to the 'job submission API' that would indicate a specific vulnerable code pattern for arbitrary code execution. The vulnerability appears to be related to Ray's deployment context (exposure to untrusted networks) or a version-only fix, rather than a specific insecure API usage pattern in application code.",
+      "at": "2026-11-28T11:17:43.112Z"
     }
   }
 }
