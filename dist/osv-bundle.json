@@ -1,6 +1,6 @@
 {
   "version": 1,
-  "generatedAt": "2026-11-27T16:05:53.244Z",
+  "generatedAt": "2026-11-28T14:59:49.795Z",
   "sources": [
     "github-advisories",
     "cisa-kev",
@@ -2073,7 +2073,7 @@
       "cwe": "CWE-1321",
       "sev": "high",
       "note": "DOMPurify allows tampering by prototype pollution",
-      "epss": 0.013
+      "epss": 0.0132
     },
     {
       "name": "dompurify",
@@ -2085,7 +2085,7 @@
       "cwe": "CWE-1321",
       "sev": "high",
       "note": "DOMPurify allows tampering by prototype pollution",
-      "epss": 0.013
+      "epss": 0.0132
     },
     {
       "name": "dompurify",
@@ -3895,7 +3895,7 @@
       "sev": "critical",
       "note": "Xen Orchestra: Empty-object login token",
       "kev": true,
-      "epss": 0.3177
+      "epss": 0.3332
     }
   ],
   "pip": [
@@ -4644,7 +4644,7 @@
       "cwe": "CWE-409",
       "sev": "medium",
       "note": "Mobile Security Framework (MobSF) Allows Web Server Resource Exhaustion via ZIP of Death Attack",
-      "epss": 0.0078
+      "epss": 0.0079
     },
     {
       "name": "nltk",
